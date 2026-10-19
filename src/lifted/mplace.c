@@ -30,7 +30,7 @@ extern signed char is_daytime;
 extern signed char D_00196293;
 extern signed char time_skip_active;
 extern signed char D_00196299;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern struct map_location *location_here;
 extern char collide_flags[];
 extern int daylight;
@@ -379,7 +379,7 @@ void loan_spawn_collectors(void)
 
 void encounter_tick(int minutes, int forced)
 {
-    if (D_001962A0 != 0) return;
+    if (player_swimming != 0) return;
     if (forced == 0) {
         if (time_skip_active != 0) return;
         if ((((unsigned)minutes) % 12) != 0) return;

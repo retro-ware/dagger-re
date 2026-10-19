@@ -3,7 +3,7 @@
 struct flags5 { unsigned char pad:7; unsigned char b7:1; };
 struct flags6 { unsigned char pad:5; unsigned char b5:1; };
 extern char text_shadow_colour;
-extern char D_0012B508;
+extern char text_colour;
 extern short font_height;
 extern char *screen_buffer;
 extern char str_text_c[];       /* __FILE__ */
@@ -99,9 +99,9 @@ void msgbox_render(char *text, char **out)
     msgbox_w += 10;
     if (text_format_flags & 4)
         msgbox_h += 20;
-    savedcolor = D_0012B508;
+    savedcolor = text_colour;
     text_shadow_colour = 156;
-    D_0012B508 = 145;
+    text_colour = 145;
     x = 160 - (msgbox_w >> 1) + 5;
     xbase = x;
     y = 100 - (msgbox_h >> 1) + 5;
@@ -151,7 +151,7 @@ void msgbox_render(char *text, char **out)
         for (k = 1; k < cols - 1; k++)
             draw(x0 + k * msgbox_tile_w, y0 + n * msgbox_tile_h, msgbox_tile_w, msgbox_tile_h, msgbox_tile_size * mul + msgbox_border_tiles);
     }
-    D_0012B508 = savedcolor;
+    text_colour = savedcolor;
     h = font_height;
     n = 0;
     ((char *)text_buffer)[0] = 0;
@@ -213,7 +213,7 @@ void msgbox_render(char *text, char **out)
             x += font_text_width(((char *)text_buffer));
             ((char *)text_buffer)[0] = 0;
             n = 0;
-            D_0012B508 = *q++;
+            text_colour = *q++;
             break;
         default:
             ((char *)text_buffer)[n++] = c;

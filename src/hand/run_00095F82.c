@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 struct flags8 { unsigned char b0:2; unsigned char b2:1; };
-extern char D_0012B508;
+extern char text_colour;
 extern char str_inven_c[];       /* __FILE__ */
 extern char *D_001832A4;
 extern unsigned char D_001860DA[];
@@ -102,7 +102,7 @@ void func_00095EDB(void)
     if (D_001AA454 == 0)
         return;
     gold_add(D_001AA454);
-    D_0012B508 = 144;
+    text_colour = 144;
     mc_set_location(1688, str_inven_c);
     mc_sprintf(((char *)text_buffer), D_001832A4, D_001AA454);
     msgbox_show_string(((char *)text_buffer), 1);

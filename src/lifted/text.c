@@ -10,7 +10,7 @@ extern int xn_cam_far_z;
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down[];
 extern signed char key_down_esc;
 extern signed char key_down_ctrl;
@@ -58,7 +58,7 @@ extern unsigned char D_00196271;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern signed char D_0019628E;
+extern signed char player_moving;
 extern iptr D_00196DA4;
 extern iptr msgbox_spop_tiles[];
 extern iptr msgbox_mpop_tiles;
@@ -67,7 +67,7 @@ extern char msgbox_image[];
 extern iptr msgbox_saved_screen;
 extern short msgbox_w;
 extern short msgbox_h;
-extern signed char D_0019966C;
+extern signed char msgbox_input_result;
 extern struct record *people_list[];
 extern int people_max;
 extern int people_idle_count;
@@ -165,7 +165,7 @@ void msgbox_show_more_pages(char **image)
             xn_gfx_present_inclusive(0);
         }
         if (msgbox_next_page != 0) {
-            D_0012B508 = 146;
+            text_colour = 146;
             msgbox_render(msgbox_next_page, image);
             while (mouse_buttons != 0) xn_mouse_poll_clamped();
             mouse_buttons_prev = 0;
@@ -317,7 +317,7 @@ void msgbox_update(void)
     if (((int)(unsigned char)msgbox_kind) != 4 && ((int)(unsigned char)game_mode) != 8) {
         return;
     }
-    D_0012B508 = 146;
+    text_colour = 146;
     if (((struct bf8_6_1 *)&D_001940D5)->f != 0) {
         xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), ((int)(short)D_00195F34) - ((int)(short)msgbox_h), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
     } else {
@@ -340,7 +340,7 @@ L3F47F:;
         return;
     }
     if (((int)(unsigned char)msgbox_kind) == 2) {
-        if ((D_0019966C = inpstr_update()) != 0) msgbox_close();
+        if ((msgbox_input_result = inpstr_update()) != 0) msgbox_close();
         return;
     }
     if (((int)(unsigned char)msgbox_kind) == 4 && ((struct bf8_5_1 *)&D_001940D5)->f != 0) {
@@ -521,7 +521,7 @@ int pedestrian_walk(struct record *pedestrian, int player_distance)
 
     retry_count = 0;
     speed = 75;
-    if (creature_count == 0 && player_distance < 192 && ((struct bf8_6_1 *)&D_001940D6)->f == 0 && D_0019628E == 0 && people_idle_count < 3 && ((int)(unsigned short)(pedestrian->npc_flags & 32768)) == 0 && player_character->race < 9) {
+    if (creature_count == 0 && player_distance < 192 && ((struct bf8_6_1 *)&D_001940D6)->f == 0 && player_moving == 0 && people_idle_count < 3 && ((int)(unsigned short)(pedestrian->npc_flags & 32768)) == 0 && player_character->race < 9) {
         people_idle_count++;
         pedestrian->image = (pedestrian->image & -128) + 5;
         if ((pedestrian->image >> 7) == 399) pedestrian->image += 10;

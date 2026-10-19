@@ -53,7 +53,7 @@ extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern signed char D_001940D6;
 extern unsigned char world_state_flags;
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern struct record *wagon_container;
 extern struct record *quest_root;
 extern struct character *text_macro_npc;
@@ -95,7 +95,7 @@ extern signed char player_underwater;
 extern signed char in_dungeon_water;
 extern signed char crime_current;
 extern signed char monster_summon_anywhere;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern signed char D_001962A1;
 extern signed char inv_wagon_reached;
 extern int daylight;
@@ -515,10 +515,10 @@ void shelf_open_stock(struct record *shelf, struct building *shelf_building, int
     count = 0;
     shelf_model_index = model_index;
     if (building_is_open(shelf_building) != 0) {
-        D_001940D9 |= 2;
+        player_view_flags |= 2;
         world_state_flags &= 253;
     } else {
-        D_001940D9 &= 253;
+        player_view_flags &= 253;
         world_state_flags |= 2;
     }
     count = shelf_collect_items(shelf, -1, model_index);
@@ -548,7 +548,7 @@ void shelf_open_stock(struct record *shelf, struct building *shelf_building, int
         object->z = player_object->z;
         item_make(23, 0, &object->data.item);
     }
-    if (((struct bf8_1_1 *)&D_001940D9)->f != 0) {
+    if (((struct bf8_1_1 *)&player_view_flags)->f != 0) {
         inventory_open_container((struct record *)trade_container, 1, 4);
     } else {
         inventory_open_container((struct record *)trade_container, 0, 4);
@@ -1269,7 +1269,7 @@ void footstep_sounds(void)
             if (in_dungeon_water != 0) return;
         }
     }
-    if (D_001962A0 != 0) sound_index = 10;
+    if (player_swimming != 0) sound_index = 10;
     position_history_record();
     if (((int)(unsigned short)(player_character->flags & 1536)) != 0) return;
     if (((struct bf8_6_1 *)&world_state_flags)->f != 0) sound_index++;

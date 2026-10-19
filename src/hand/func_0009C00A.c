@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 struct Q { char pad[4]; char name[28]; };
-extern char D_0012B508;
+extern char text_colour;
 extern char str_travel_c[];
 extern unsigned short travel_options;
 extern short travel_trip_option_marks[];
@@ -31,7 +31,7 @@ void travel_draw_trip_popup(void)
         text_draw_centred_coloured(((char *)text_buffer), 160, 74, 145, 156);
         return;
     }
-    D_0012B508 = 199;
+    text_colour = 199;
     for (i = 0; i < 6; i++) {
         if (travel_options & (1 << i))
             xn_draw_fill_rect(travel_trip_option_marks[i * 4], travel_trip_option_marks[i * 4 + 1], 4, 4);

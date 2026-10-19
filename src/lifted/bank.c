@@ -15,7 +15,7 @@ extern int xn_cam_far_z;
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char xn_tex_cache_full;
 extern int xn_light_ambient;
 extern char xn_cam_rotation[];
@@ -70,7 +70,7 @@ extern char bank_list_top[];
 extern iptr D_001A4140;
 extern iptr bank_saved_screen;
 extern struct ship_for_sale bank_ships_for_sale[];
-extern iptr D_001A41DC;
+extern iptr bank_bought_house_building;
 extern int D_001A41E0;
 extern iptr D_001A41E4;
 extern iptr D_001A41E8;
@@ -564,7 +564,7 @@ void bank_house_bought(void)
     bank_account->balance -= bank_house_price;
     player_character->house = bank_houses_for_sale[(unsigned char)bank_selected].id;
     D_001A41E4 = (iptr)RECORD_FROM_DATA(bank_houses_for_sale[(unsigned char)bank_selected].block);
-    D_001A41DC = (iptr)bank_houses_for_sale[(unsigned char)bank_selected].building;
+    bank_bought_house_building = (iptr)bank_houses_for_sale[(unsigned char)bank_selected].building;
     msgbox_show_rsc(282, 1);
     mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_bank_c, 647);
     mc_strncpy(saved_location_name, (char *)current_location, 32, str_bank_c, 648);
@@ -610,7 +610,7 @@ int bank_input_amount(void)
     char *input;
 
     done = 0;
-    D_0012B508 = 146;
+    text_colour = 146;
     input = scratch_buffer + 55000;
     *input = 0;
     *(signed char *)D_00191020 = 0;

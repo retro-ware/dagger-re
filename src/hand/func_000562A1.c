@@ -3,7 +3,7 @@
 #include "clib.h"
 
 extern struct rect itemmaker_buttons[];
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern short font_height;
 extern char str_itemmakr_c[];
 extern char str_fmt_ld_ld[];
@@ -63,15 +63,15 @@ void itemmaker_draw(void)
     xn_font_select(3);
     for (power_row = side_row = slot = 0; slot < 10; slot++) {
         if (scratch_190ce4[slot] == -1) continue;
-        D_0012B508 = 146;
+        text_colour = 146;
         if (((char *)itemmaker_slot_from_soul)[slot] != 0)
-            D_0012B508 = 193;
+            text_colour = 193;
         if (scratch_190ce4[slot] == 0) {
             ((char *)scratch_190cee)[power_row] = slot;
             itemmaker_power_row_slots[power_row] = 255;
             mc_set_location(179, str_itemmakr_c);
             mc_sprintf(((char *)text_buffer), str_fmt_s_3, enchant_power_names[itemmaker_slots[slot].type]);
-            text_draw_coloured(((char *)text_buffer), 10, power_row * font_height + 60, D_0012B508, 156);
+            text_draw_coloured(((char *)text_buffer), 10, power_row * font_height + 60, text_colour, 156);
             power_row++;
             if (itemmaker_slots[slot].param == -1) {
                 power_row++;
@@ -85,7 +85,7 @@ void itemmaker_draw(void)
                     mc_set_location(191, str_itemmakr_c);
                     mc_sprintf(((char *)text_buffer), str_fmt_s_4, ((char **)enchant_power_params[itemmaker_slots[slot].type])[itemmaker_slots[slot].param]);
                 }
-                text_draw_coloured(((char *)text_buffer), 10, power_row * font_height + 60, D_0012B508, 156);
+                text_draw_coloured(((char *)text_buffer), 10, power_row * font_height + 60, text_colour, 156);
                 power_row += 2;
             }
         } else {
@@ -93,7 +93,7 @@ void itemmaker_draw(void)
             itemmaker_side_row_slots_1[side_row] = 255;
             mc_set_location(200, str_itemmakr_c);
             mc_sprintf(((char *)text_buffer), str_fmt_s_3, enchant_side_effect_names[itemmaker_slots[slot].type]);
-            text_draw_coloured(((char *)text_buffer), 108, side_row * font_height + 60, D_0012B508, 156);
+            text_draw_coloured(((char *)text_buffer), 108, side_row * font_height + 60, text_colour, 156);
             side_row++;
             if (itemmaker_slots[slot].param == -1) {
                 side_row++;
@@ -107,7 +107,7 @@ void itemmaker_draw(void)
                     mc_set_location(212, str_itemmakr_c);
                     mc_sprintf(((char *)text_buffer), str_fmt_s_4, ((char **)enchant_side_effect_params[itemmaker_slots[slot].type])[itemmaker_slots[slot].param]);
                 }
-                text_draw_coloured(((char *)text_buffer), 108, side_row * font_height + 60, D_0012B508, 156);
+                text_draw_coloured(((char *)text_buffer), 108, side_row * font_height + 60, text_colour, 156);
                 side_row += 2;
             }
         }

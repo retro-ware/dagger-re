@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern void xn_timer_tick_callback(void);
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_trade_c[];
 extern char str_the_current_amount_in_the_offering_is[];
 extern char D_00175A6A[];
@@ -34,7 +34,7 @@ extern double D_001A3AC4;
 extern double D_001A3ACC;
 extern double trade_haggle_step_size;
 extern int D_001A3ADC;
-extern struct character *D_001A3AE0;
+extern struct character *trade_haggle_buyer;
 extern struct sound_channel sound_channels[];
 extern int D_001A3F3C;
 extern int timer_tick_count;
@@ -63,7 +63,7 @@ void trade_haggle_step(void);
 void trade_haggle_show_offer(void)
 {
     D_00196271 = 0;
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_button_ids = 1;
     D_00196090 = 2;
     D_00196091 = 12;
@@ -79,7 +79,7 @@ void trade_counter_offer(void)
 {
     char *text;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     text = scratch_buffer + 55000;
     mc_set_location(141, str_trade_c);
     mc_sprintf(text, D_00175A6A);
@@ -109,7 +109,7 @@ int trade_haggle_counter(int offer)
 
 void trade_haggle_step(void)
 {
-    trade_haggle_step_size = ((((D_00175A9E - ((short)(current_building->quality) * D_00175A96)) + (D_001A3AE0->skills[21].value * D_00175AA6)) + (D_001A3AE0->attributes[5] * D_00175AA6)) + (D_001A3AE0->reputation[1] * D_00175AAE)) * (trade_haggle_asking - trade_haggle_minimum);
+    trade_haggle_step_size = ((((D_00175A9E - ((short)(current_building->quality) * D_00175A96)) + (trade_haggle_buyer->skills[21].value * D_00175AA6)) + (trade_haggle_buyer->attributes[5] * D_00175AA6)) + (trade_haggle_buyer->reputation[1] * D_00175AAE)) * (trade_haggle_asking - trade_haggle_minimum);
 }
 
 int sound_init_music(void)

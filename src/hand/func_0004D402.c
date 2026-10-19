@@ -4,7 +4,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern short font_height;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
@@ -67,12 +67,12 @@ void note_update(void)
     xn_draw_image(182, 176, 44, 9, (*(char **)&note_rci + (((int)(unsigned char)note_tool) * 396)));
     xn_draw_image(226, 176, 44, 9, (*(char **)&note_rci + ((((int)(short)*(short *)note_font) * 396) + 1584)));
     xn_draw_image_transparent((((int)(unsigned char)D_001997EB) << 3) + 53, 185, 5, 3, D_001851F0);
-    D_0012B508 = 145;
+    text_colour = 145;
     text_draw_centred_coloured((iptr)itoa((((int)(short)note_page_index) + 1), (char *)text_buffer, 10), 303, 4, 145, 141);
     note_find();
     note_draw_page();
     if (((int)(unsigned char)note_action) == 1) {
-        D_0012B508 = *(signed char *)note_colour;
+        text_colour = *(signed char *)note_colour;
         xn_font_select((int)(short)((unsigned short)(unsigned char)D_00185201[(int)(short)*(short *)note_font]));
         if (inpstr_update() != 0) {
             if (text_rsc_buffer[0] != 0 && ((int)(short)(*(short *)note_text_flags & 32)) == 0) {
@@ -94,7 +94,7 @@ void note_update(void)
             }
         }
     } else if (((int)(unsigned char)note_action) == 2) {
-        D_0012B508 = *(signed char *)note_colour;
+        text_colour = *(signed char *)note_colour;
         D_00142928 = note_cursor_x;
         D_0014292C = note_cursor_y;
         xn_draw_line_to((int)(short)mouse_x, (int)(short)mouse_y);
@@ -128,7 +128,7 @@ void note_update(void)
             note_goto_page((int)(short)(*(short *)inpstr_result - 1));
         }
     }
-    D_0012B508 = 146;
+    text_colour = 146;
     if (mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) {
         return;
     }

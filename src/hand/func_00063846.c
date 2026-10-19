@@ -8,7 +8,7 @@ struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 extern int dungeon_water_level;
 extern char str_monster_c[];
 extern struct collide_probe D_00187B44;
-extern int D_00187CA9;
+extern int player_speed_bonus;
 extern unsigned char world_state_flags;
 extern unsigned char D_001940DA;
 extern struct record *player_object;
@@ -44,7 +44,7 @@ int monster_move_step(struct record *o, struct record *target, int angle)
 
     p = &o->data.character;
     mc_memcpy(&oldpos, &o->x, 12, str_monster_c, 1070, 4);
-    speed = frame_ticks * (p->attributes[ATTR_SPD] - 50 + D_00187CA9) / 1000;
+    speed = frame_ticks * (p->attributes[ATTR_SPD] - 50 + player_speed_bonus) / 1000;
     if (p->fall_velocity != 0)
         dx = dz = 0;
     else

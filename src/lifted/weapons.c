@@ -23,7 +23,7 @@ extern char D_001875B7[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern signed char D_001940D6;
-extern int D_0019597C[];
+extern int right_hand_ready_delay[];
 extern struct building *current_building;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -174,7 +174,7 @@ int weapon_start_swing(int hand)
 void weapon_bow_update(void)
 {
     if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
-    if (D_0019597C[((int)(unsigned char)weapon_active_hand)] != 0) return;
+    if (right_hand_ready_delay[((int)(unsigned char)weapon_active_hand)] != 0) return;
     if (D_001A4A60[((int)(unsigned char)weapon_active_hand)] > 200) {
         D_001A4A60[((int)(unsigned char)weapon_active_hand)] -= frame_ticks;
         if (D_001A4A60[((int)(unsigned char)weapon_active_hand)] < 200) {

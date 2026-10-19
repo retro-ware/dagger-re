@@ -4,7 +4,7 @@
 #include "records.h"
 #include "bitfield.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char D_001940D5;
 extern signed char D_001940DA;
 extern short D_00195F2E;
@@ -15,7 +15,7 @@ extern void msgbox_yes_no_quest(short);
 
 void quest_show_message(struct quest *quest, int message)
 {
-    D_0012B508 = 144;
+    text_colour = 144;
     D_001940D5 &= 254;
     D_00195F2E = 0;
     if (((int)(short)message) == (-1)) return;

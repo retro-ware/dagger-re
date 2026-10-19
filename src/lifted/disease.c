@@ -5,27 +5,27 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_disease_c[];
 extern char str_can_only_be_cast_once_per_day[];
 extern char str_you_feel_the_need_to_hunt_the_innocent[];
 extern char str_you_dream_once_again_of_the_moon[];
 extern char str_curevam_qbn[];
 extern char str_curewer_qbn[];
-extern char D_0018320A[];
+extern char month_moon_phase[];
 extern char monster_category[];
-extern iptr D_00185083;
+extern iptr text_feel_somewhat_bad;
 extern struct disease disease_table[];
 extern short poison_table[];
-extern short D_00186D85[];
-extern short D_00186D87[];
-extern short D_00186D89[];
+extern short poison_damage_max[];
+extern short poison_days_min[];
+extern short poison_days_max[];
 extern signed char lycanthrope_attributes[];
 extern char bio_modifiers[];
 extern int D_0018DDE0;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
-extern signed char D_00190D63;
+extern signed char trade_haggle_shown;
 extern signed char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *scratch_current_object;
@@ -34,23 +34,23 @@ extern char D_00195B08[];
 extern int trade_haggle_result;
 extern int creature_count;
 extern int calendar_month;
-extern int D_00195B44;
+extern int effects_last_minute;
 extern char shared_scratch[];
 extern char inpstr_result[];
 extern struct character *player_character;
 extern struct career *player_class;
 extern int game_minutes;
-extern signed char D_00195F24;
-extern signed char D_00195F25;
+extern signed char lunar_cycle_a;
+extern signed char lunar_cycle_b;
 extern char D_001961F5[];
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char game_mode;
 extern signed char in_dungeon_water;
 extern signed char player_ailment_flags;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern char extra_spell_points[];
-extern int D_001A3AA8;
+extern int magicka_max_modifier;
 extern double trade_haggle_asking;
 
 extern int damage_apply(struct record *, int, struct record *);
@@ -134,17 +134,17 @@ void poison_apply(struct record *target, int poison_id, int no_resist)
     poison_data = &poison->data.disease;
     poison_data->id = *(signed char *)&poison_id;
     poison_id = (poison_id << 2) - 512;
-    poison_data->days_left = rand_range((int)(short)D_00186D87[poison_id], (int)(short)D_00186D89[poison_id]);
+    poison_data->days_left = rand_range((int)(short)poison_days_min[poison_id], (int)(short)poison_days_max[poison_id]);
     poison_data->stage = 0;
-    poison_data->damage_min = rand_range((int)(short)poison_table[poison_id], (int)(short)D_00186D85[poison_id]);
+    poison_data->damage_min = rand_range((int)(short)poison_table[poison_id], (int)(short)poison_damage_max[poison_id]);
 }
 
 void poison_init_record(struct disease *poison, int poison_id)
 {
     poison->id = *(signed char *)&poison_id;
     poison_id = (poison_id << 2) - 512;
-    poison->days_left = rand_range((int)(short)D_00186D87[poison_id], (int)(short)D_00186D89[poison_id]);
-    poison->damage_min = rand_range((int)(short)poison_table[poison_id], (int)(short)D_00186D85[poison_id]);
+    poison->days_left = rand_range((int)(short)poison_days_min[poison_id], (int)(short)poison_days_max[poison_id]);
+    poison->damage_min = rand_range((int)(short)poison_table[poison_id], (int)(short)poison_damage_max[poison_id]);
 }
 
 int poison_tick(struct disease *poison)
@@ -294,7 +294,7 @@ int poison_tick(struct disease *poison)
         poison->stage = 2;
     }
     player_ailment_flags |= 1;
-    hud_message_add(D_00185083);
+    hud_message_add(text_feel_somewhat_bad);
     if (poison->days_left != 0) {
         poison->days_left--;
     } else if (poison->stage == 2) {
@@ -733,24 +733,24 @@ int enchant_spell_points_condition(int condition)
     case 1:
     case 2:
     case 3:
-        if (((int)(unsigned char)*(signed char *)(D_0018320A + calendar_month)) == condition) {
+        if (((int)(unsigned char)*(signed char *)(month_moon_phase + calendar_month)) == condition) {
             return 75;
         }
         break;
     case 4:
-        if (D_00195F24 == 0 || D_00195F25 == 0) return 75;
+        if (lunar_cycle_a == 0 || lunar_cycle_b == 0) return 75;
         break;
     case 5:
-        if (((int)(unsigned char)D_00195F24) == 8 || ((int)(unsigned char)D_00195F25) == 8) {
+        if (((int)(unsigned char)lunar_cycle_a) == 8 || ((int)(unsigned char)lunar_cycle_b) == 8) {
             return 75;
         }
-        if (((int)(unsigned char)D_00195F24) == 24 || ((int)(unsigned char)D_00195F25) == 24) {
+        if (((int)(unsigned char)lunar_cycle_a) == 24 || ((int)(unsigned char)lunar_cycle_b) == 24) {
             return 75;
         }
         break;
     case 6:
         condition += -4;
-        if (((int)(unsigned char)D_00195F24) == 16 || ((int)(unsigned char)D_00195F25) == 16) {
+        if (((int)(unsigned char)lunar_cycle_a) == 16 || ((int)(unsigned char)lunar_cycle_b) == 16) {
             return 75;
         }
         break;
@@ -808,18 +808,18 @@ void effects_tick(void)
     int unused;
     struct item *item;
 
-    D_001A3AA8 = 0;
-    i = (*(int *)D_00195B08 = game_minutes - D_00195B44);
+    magicka_max_modifier = 0;
+    i = (*(int *)D_00195B08 = game_minutes - effects_last_minute);
     if (*(int *)D_00195B08 > 100) {
         i = (*(int *)D_00195B08 = 0);
-        D_00195B44 = game_minutes;
+        effects_last_minute = game_minutes;
     }
     *(int *)D_00195B08 >>= 2;
-    if (*(int *)D_00195B08 != 0) D_00195B44 = game_minutes;
+    if (*(int *)D_00195B08 != 0) effects_last_minute = game_minutes;
     scratch_current_object = 0;
     if (*(int *)D_00195B08 != 0 || i != 0) {
         if (player_class->regeneration_flags != 0 && *(int *)D_00195B08 != 0) {
-            if (((int)(unsigned char)(player_class->regeneration_flags & 4)) != 0 && (in_dungeon_water != 0 || D_001962A0 != 0)) {
+            if (((int)(unsigned char)(player_class->regeneration_flags & 4)) != 0 && (in_dungeon_water != 0 || player_swimming != 0)) {
                 item_enchantment_tick(0, 5, 0);
             }
             if (((int)(unsigned char)(player_class->regeneration_flags & 8)) != 0) {
@@ -855,18 +855,18 @@ void effects_tick(void)
         }
     }
     if (((int)(unsigned short)(player_class->flags & 128)) != 0 && player_in_daylight() == 0) {
-        D_001A3AA8 = -(player_character->max_magicka >> 1);
+        magicka_max_modifier = -(player_character->max_magicka >> 1);
     }
     if (((int)(unsigned short)(player_class->flags & 64)) != 0 && player_in_daylight() == 0) {
-        D_001A3AA8 = -player_character->max_magicka;
+        magicka_max_modifier = -player_character->max_magicka;
     }
     if (((int)(unsigned short)(player_class->flags & 512)) != 0 && player_in_daylight() != 0) {
-        D_001A3AA8 = -(player_character->max_magicka >> 1);
+        magicka_max_modifier = -(player_character->max_magicka >> 1);
     }
     if (((int)(unsigned short)(player_class->flags & 256)) == 0 || player_in_daylight() == 0) {
         return;
     }
-    D_001A3AA8 = -player_character->max_magicka;
+    magicka_max_modifier = -player_character->max_magicka;
 }
 
 void trade_haggle_frame(void)
@@ -876,8 +876,8 @@ void trade_haggle_frame(void)
     if (((int)(unsigned char)game_mode) != 13 && ((int)game_mode_under_popup) != 13) {
         return;
     }
-    D_0012B508 = 146;
-    if (D_00190D63 == 0) {
+    text_colour = 146;
+    if (trade_haggle_shown == 0) {
         if ((signed char)D_00196271 == 0) return;
         if (((int)D_00196271) == 1) {
             trade_haggle_close((int)trade_haggle_asking);
@@ -888,7 +888,7 @@ void trade_haggle_frame(void)
             return;
         }
         if (((int)D_00196271) == 3) {
-            D_00190D63 = 1;
+            trade_haggle_shown = 1;
             trade_counter_offer();
         }
         return;
@@ -903,7 +903,7 @@ void trade_haggle_frame(void)
         trade_haggle_close(agreed_price);
         return;
     }
-    D_00190D63 = 0;
+    trade_haggle_shown = 0;
     trade_haggle_show_offer();
 }
 

@@ -9,7 +9,7 @@ extern struct region regions[];
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern char str_inve00i0_img[];
 extern char str_inve01i0_img[];
@@ -65,12 +65,12 @@ extern char D_00190B44[];
 extern int trade_total_weight;
 extern signed char scratch_190ce4[];
 extern iptr text_macro_map_location;
-extern char D_001913E4[];
+extern char enchant_text[];
 extern signed char D_001940D4;
 extern signed char D_001940D6;
 extern signed char ui_dirty_flags;
 extern signed char player_motion_flags;
-extern int D_0019597C[];
+extern int right_hand_ready_delay[];
 extern int left_hand_ready_delay;
 extern struct record *inventory_containers[];
 extern struct record *D_001959DC;
@@ -498,15 +498,15 @@ void inventory_close(void)
     player_motion_flags &= 127;
     weapon_reload_hand_sprites();
     inv_track_hand_weapons(1);
-    if (D_0019597C[0] > 0 && player_character->equipped[19] != 0) {
+    if (right_hand_ready_delay[0] > 0 && player_character->equipped[19] != 0) {
         text_macro_item = &player_character->equipped[19]->data.item;
-        parse_expand(str_equipping_t, D_001913E4);
-        hud_message_add(D_001913E4);
+        parse_expand(str_equipping_t, enchant_text);
+        hud_message_add(enchant_text);
     }
     if (left_hand_ready_delay > 0 && player_character->equipped[21] != 0) {
         text_macro_item = &player_character->equipped[21]->data.item;
-        parse_expand(str_equipping_t, D_001913E4);
-        hud_message_add(D_001913E4);
+        parse_expand(str_equipping_t, enchant_text);
+        hud_message_add(enchant_text);
     }
     if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
         ui_dirty_flags &= 223;
@@ -705,7 +705,7 @@ int inv_take_item(struct record *object)
     }
     if (D_001AA454 != 0) {
         gold_add(D_001AA454);
-        D_0012B508 = 144;
+        text_colour = 144;
         mc_set_location(1237, str_inven_c);
         mc_sprintf((char *)text_buffer, (char *)D_001832A4, D_001AA454);
         msgbox_show_string((iptr)text_buffer, 1);
@@ -904,7 +904,7 @@ void inv_use_item(void)
     }
     if (used != 0 || object->quest_id != 0) return;
     D_00195F2E = 30;
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_show_string(text_cannot_use_this, 1);
 }
 
@@ -912,7 +912,7 @@ void inv_item_info(struct record *object, struct item *item)
 {
     iptr header;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     scratch_current_object = object;
     text_macro_item = item;
     if (item->enchantments[0].type == 26 && item->enchantments[0].param == 9) {
@@ -1347,7 +1347,7 @@ void shop_quality_message(struct building *building)
 {
     slot16 text_id;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     if (building->quality <= 3) {
         *(int *)&text_id = 270;
     } else if (building->quality <= 7) {
@@ -1719,7 +1719,7 @@ void inv_track_hand_weapons(int closing)
             }
         }
     }
-    D_0019597C[0] += right_delay;
+    right_hand_ready_delay[0] += right_delay;
     left_hand_ready_delay += left_delay;
 }
 

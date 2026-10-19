@@ -13,7 +13,7 @@ extern int xn_cam_z;
 extern int internal_check_failed;
 extern int xn_cam_near_z;
 extern int xn_cam_far_z;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern int dungeon_water_level;
 extern int xn_light_ambient;
 extern iptr xn_fog_table_last;
@@ -38,7 +38,7 @@ extern char str_mjic00c6_cif[];
 extern char str_pois00c6_cif[];
 extern char str_shok00c6_cif[];
 extern char str_books_bok00000_txt[];
-extern short D_001788D3[];
+extern short magery_spell_point_mults[];
 extern unsigned char player_environment;
 extern int mem_check_level;
 extern int frame_checkpoint;
@@ -242,7 +242,7 @@ void debug_show_mem_used(void)
     }
     mc_set_location(47, str_init_c);
     mc_sprintf((char *)text_buffer, str_mem_used_k, mem_used_k);
-    D_0012B508 = 146;
+    text_colour = 146;
     text_draw(text_buffer, 246, 23);
 }
 
@@ -605,7 +605,7 @@ void newgame_init_player(void)
 
 void character_reset_magicka(struct character *character, struct career *career)
 {
-    character->magicka = (character->max_magicka = (character->attributes[ATTR_INT] * ((int)(short)D_001788D3[((career->flags >> 10) & 7)])) / 256);
+    character->magicka = (character->max_magicka = (character->attributes[ATTR_INT] * ((int)(short)magery_spell_point_mults[((career->flags >> 10) & 7)])) / 256);
 }
 
 iptr flats_cfg_find(int image)

@@ -5,7 +5,7 @@
 extern char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern char *screen_buffer;
 extern unsigned char xn_mouse_cursor_drawn;
 extern char str_intro_c[];
@@ -32,7 +32,7 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
     D_001940D4 &= 254;
     while (mouse_buttons != 0)
         xn_mouse_poll_clamped();
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_button_keys = key1;
     D_00196034 = key2;
     msgbox_button_ids = button1;

@@ -7,7 +7,7 @@
 #include "doslow.h"
 
 extern signed char mouse_buttons;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_rest_c[];
 extern char str_anim0002_vid[];
 extern char str_anim0004_vid[];
@@ -15,7 +15,7 @@ extern unsigned char player_environment;
 extern iptr D_00185087;
 extern signed char world_running;
 extern int D_0018DDE4;
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern signed char player_motion_flags;
 extern int last_skill_check_minutes;
 extern char frame_counter[];
@@ -120,7 +120,7 @@ void fatigue_update(void)
         if (rand_range(1, 100) > player_character->skills[17].value) delta = -44;
         skill_add_uses(17, 1);
     }
-    if (((struct bf8_4_1 *)&D_001940D9)->f != 0) delta = -88;
+    if (((struct bf8_4_1 *)&player_view_flags)->f != 0) delta = -88;
     if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) delta = -22;
     fatigue_add(delta);
 }
@@ -137,7 +137,7 @@ void fatigue_add(int amount)
     if (fatigue > max_fatigue) fatigue = max_fatigue;
     player_character->fatigue = fatigue;
     if (fatigue >= 1) return;
-    D_0012B508 = 146;
+    text_colour = 146;
     player_character->fatigue = 0;
     if (creature_count != 0) {
         msgbox_show_rsc(1072, 1);
@@ -185,8 +185,8 @@ void breath_update(void)
         bios_clock4 = (int *)DOS_LOW(0x46C);
         breath_last_tick = *bios_clock4;
     }
-    D_0012B508 = 145;
-    if (((endurance >> 3) + 4) > *(int *)breath_remaining) D_0012B508 = 246;
+    text_colour = 145;
+    if (((endurance >> 3) + 4) > *(int *)breath_remaining) text_colour = 246;
     if (*(int *)breath_remaining != 0) {
         xn_draw_fill_rect(310, (int)(short)(120 - (*(short *)breath_remaining * 2)), 6, (int)(short)(*(short *)breath_remaining * 2));
     }

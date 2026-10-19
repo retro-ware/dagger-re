@@ -8,7 +8,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_pickbook_c[];
@@ -19,7 +19,7 @@ extern struct spell *selected_spell;
 extern struct rect spellbook_buttons[9];
 extern char *spell_effect_names[];
 extern char *spell_effect_subtype_names[][12];
-extern char D_0018320A[];
+extern char month_moon_phase[];
 extern iptr D_00184634;
 extern char monster_category[];
 extern signed char world_running;
@@ -222,7 +222,7 @@ void spellbook_draw_spell(struct spell *spell)
 {
     slot16 i;
 
-    D_0012B508 = 145;
+    text_colour = 145;
     xn_draw_spell_icon(172, 32, spell->icon);
     xn_draw_copy_rect_stride_bytes((char *)((iptr)(*(char **)&magic_window_image + (spell->element * 640)) + 24), (*(char **)&screen_buffer + 10486), 16, 16, 40);
     xn_draw_copy_rect_stride_bytes((*(char **)&magic_window_image + (spell->target * 640)), (char *)&*(signed char *)(*(char **)&screen_buffer + 10445), 24, 16, 40);
@@ -349,7 +349,7 @@ int spell_cost_item_percent(void)
                 case 1:
                 case 2:
                 case 3:
-                    if ((short)*(unsigned char *)(D_0018320A + (((unsigned)game_minutes) / 43200)) == item->enchantments[i].param) {
+                    if ((short)*(unsigned char *)(month_moon_phase + (((unsigned)game_minutes) / 43200)) == item->enchantments[i].param) {
                         percent = 75;
                     }
                     break;

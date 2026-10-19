@@ -39,7 +39,7 @@ extern signed char player_on_ground;
 extern signed char in_dungeon_water;
 extern signed char collide_landed;
 extern signed char collide_stepped;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern int collide_candidate_count;
 extern char collide_segment_start[];
 extern int collide_segment_start_y;
@@ -345,11 +345,11 @@ int collide_step_player(struct record *object, int unused_arg, struct move_reque
     xn_collide_probe->position.z = request->z;
     *(signed char *)collide_flags &= 228;
     found_object = object;
-    D_001962A0 = 0;
+    player_swimming = 0;
     if (((int)player_environment) == 1) {
         collide_height = xn_terrain_height_at(object->x, object->z);
         if (object->y >= collide_height && (signed char)ground_tile_at(request->x, request->z) == 0) {
-            D_001962A0 = 1;
+            player_swimming = 1;
         }
     } else {
         collide_height = object->y + 1000;

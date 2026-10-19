@@ -15,7 +15,7 @@ extern int game_minutes;
 extern int nearest_creature_distance;
 extern struct record *nearest_creature;
 extern char extra_spell_points[];
-extern int D_001A3AA8;
+extern int magicka_max_modifier;
 
 extern int damage_apply(struct record *, int, struct record *);
 extern int player_in_daylight(void);
@@ -36,7 +36,7 @@ void item_enchantment_tick(struct item *item, int enchant_type, int enchant_para
         *(int *)extra_spell_points = 0;
         enchant_extra_spell_points(item, enchant_param);
         player_character->max_magicka += *(short *)extra_spell_points;
-        D_001A3AA8 += *(int *)extra_spell_points;
+        magicka_max_modifier += *(int *)extra_spell_points;
         if (*(int *)extra_spell_points != 0 && enchant_param >= 7 && enchant_param <= 10 && player_character->magicka < player_character->max_magicka) {
             player_character->magicka += *(short *)D_00195B08 * 5;
         }

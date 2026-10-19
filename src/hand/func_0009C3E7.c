@@ -22,7 +22,7 @@ extern unsigned char mouse_buttons_prev;
 extern unsigned char is_daytime;
 extern unsigned char time_skip_active;
 extern unsigned char night_sky_loaded;
-extern unsigned char D_001962A2;
+extern unsigned char health_status_changed;
 extern unsigned char travel_in_progress;
 extern unsigned char quests_suspended;
 extern struct map_location *region_locations;
@@ -54,7 +54,7 @@ void travel_begin_trip(void)
     dir = (((xn_math_angle_to_point(player_object->x, player_object->z, region_locations[travel_selected_location].x_type_flags & 33554431, region_locations[travel_selected_location].z_size & 16777215) >> 2) + 32) & 511) >> 6;
     if (((unsigned char)mouse_buttons & 1) == 0 || ((unsigned char)mouse_buttons_prev & 1) != 0) return;
     r = health_status_text();
-    if (r != 0 || D_001962A2 != 0) {
+    if (r != 0 || health_status_changed != 0) {
         msgbox_yes_no_rsc(1010);
         if (D_00196271 != 1) return;
     }

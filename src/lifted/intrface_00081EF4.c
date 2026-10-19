@@ -13,7 +13,7 @@ extern short player_speed;
 extern struct character *player_character;
 extern signed char mouse_control_mode;
 extern short player_base_speed;
-extern signed char D_0019628E;
+extern signed char player_moving;
 extern int steer_start_tick;
 extern char turn_this_frame[];
 extern int steer_ticks;
@@ -62,6 +62,6 @@ void intrface_steer(int unused, int region, int region_x, int region_y)
         } else {
             moving = 0;
         }
-        D_0019628E = moving;
+        player_moving = moving;
     }
 }

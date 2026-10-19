@@ -3,7 +3,7 @@
 #include "clib.h"
 #include "doslow.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char D_00174F47[];
 extern char D_001850D4[];
 extern iptr D_001850E5[];
@@ -28,7 +28,7 @@ int quest_offer_prompt(struct quest *quest)
     int accepted;
 
     accepted = 0;
-    D_0012B508 = 146;
+    text_colour = 146;
     found_letter = strchr(D_001850D4, toupper(quest->name[0]));
     if (found_letter != 0) {
         accepted = flc_play_with_text(D_001850E5[found_letter - D_001850D4], (iptr)anim, 1000, 1) == 1;
@@ -49,7 +49,7 @@ int quest_offer_prompt(struct quest *quest)
             xn_gfx_present_inclusive(1);
         }
         accepted = D_00196271 == 1;
-        D_0012B508 = 146;
+        text_colour = 146;
         msgbox_show_quest_text(current_quest, accepted ? 1002 : 1001, 1);
         break;
     default:

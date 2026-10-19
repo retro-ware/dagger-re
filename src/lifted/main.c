@@ -14,33 +14,33 @@ extern int xn_cam_y;
 extern int xn_cam_z;
 extern short xn_world_nature_archive;
 extern short xn_world_ground_archive;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern int dungeon_water_level;
 extern signed char xn_tex_cache_full;
 extern char xn_cam_rotation[];
 extern char xn_cam_view_matrix[];
 extern int xn_model_queue_count;
 extern char str_insufficient_texture_memory[];
-extern int D_001788E8[];
-extern int D_00178968[];
+extern int sway_y_offsets[];
+extern int sway_roll_offsets[];
 extern unsigned char player_environment;
 extern iptr text_climbing_mode;
 extern signed char world_running;
-extern int D_0018DBF8;
+extern int screen_shake_yaw;
 extern int frame_checkpoint;
 extern int screen_shake;
-extern int D_0018DC08;
-extern int D_0018DC10;
+extern int model_queue_count_a;
+extern int model_queue_count_b;
 extern int screen_shake_angle;
 extern int screen_shake_timer;
 extern int screen_shake_signs;
-extern int D_0018DC2C;
-extern int D_0018DC30;
+extern int screen_shake_pitch;
+extern int game_frame_last_tick;
 extern signed char player_motion_flags;
 extern char frame_counter[];
 extern int view_look_pitch;
 extern int view_look_yaw;
-extern struct record *D_00195A88;
+extern struct record *player_mount;
 extern struct record *camera_object;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -51,7 +51,7 @@ extern int hud_message_expiry[];
 extern struct character *player_character;
 extern iptr hud_message_ptrs[];
 extern int ceiling_height;
-extern int D_00195CEC;
+extern int sway_phase;
 extern int head_bob_offset;
 extern int player_death_timer;
 extern char trade_container[];
@@ -59,7 +59,7 @@ extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char player_on_ground;
 extern signed char in_dungeon_water;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern signed char model_cache_flush_count;
 extern short ground_texture_archive;
 extern short nature_texture_archive;
@@ -170,11 +170,11 @@ void game_frame(void)
     player_entity->x = player_object->x;
     player_entity->y = player_object->y;
     player_entity->z = player_object->z;
-    if ((iptr)D_00195A88 != 0 && player_on_ground != 0 && (iptr)player_object->parent != (iptr)D_00195A88) {
-        object_reparent(D_00195A88, player_object);
+    if ((iptr)player_mount != 0 && player_on_ground != 0 && (iptr)player_object->parent != (iptr)player_mount) {
+        object_reparent(player_mount, player_object);
     }
     ticks_addr = (int *)DOS_LOW(0x46C);
-    elapsed = *ticks_addr - D_0018DC30;
+    elapsed = *ticks_addr - game_frame_last_tick;
     frame_checkpoint = 101;
     links_update();
     frame_checkpoint = 102;
@@ -187,7 +187,7 @@ void game_frame(void)
         people_spawn_tick();
     }
     frame_checkpoint = 107;
-    D_0012B508 = 146;
+    text_colour = 146;
     xn_font_select(4);
     if (((int)game_mode_under_popup) != 4 || ((int)(unsigned char)game_mode) != 8) {
         reset_container = 1;
@@ -299,7 +299,7 @@ void world_render(void)
         if (player_death_timer > 0) {
             xn_cam_y = ((((xn_cam_y - (player_object->y - 20)) * player_death_timer) / 1000) + player_object->y) - 20;
         }
-        if (D_001962A0 != 0) {
+        if (player_swimming != 0) {
             if (player_death_timer <= 0) {
                 alive = 1;
             } else {
@@ -314,13 +314,13 @@ L10C1B:;
         xn_cam_pitch = (camera_object->angle_x + view_look_pitch) & 2047;
         xn_cam_yaw = (camera_object->yaw + view_look_yaw) & 2047;
         xn_cam_roll = camera_object->angle_z;
-        if (in_dungeon_water != 0 || D_001962A0 != 0) {
-            D_00195CEC += (frame_ticks << 11) / 1000;
-            D_00195CEC &= 8191;
+        if (in_dungeon_water != 0 || player_swimming != 0) {
+            sway_phase += (frame_ticks << 11) / 1000;
+            sway_phase &= 8191;
             if (in_dungeon_water != 0 && (ceiling_height + 5) < xn_cam_y) {
-                xn_cam_y += (D_001788E8[(D_00195CEC >> 8)] * 2) - 3;
+                xn_cam_y += (sway_y_offsets[(sway_phase >> 8)] * 2) - 3;
             }
-            xn_cam_roll += D_00178968[(D_00195CEC >> 8)];
+            xn_cam_roll += sway_roll_offsets[(sway_phase >> 8)];
         }
         if (dungeon_water_level != 10000 && abs(xn_cam_y - dungeon_water_level) < 5) {
             xn_cam_y -= 10;
@@ -350,7 +350,7 @@ L10C1B:;
             xn_terrain_draw();
             frame_checkpoint = 204;
         }
-        D_0018DC10 = xn_model_queue_count;
+        model_queue_count_b = xn_model_queue_count;
         frame_checkpoint = 205;
         if (((int)player_environment) == 1) {
             incomplete = xn_render_frame(2);
@@ -358,7 +358,7 @@ L10C1B:;
             incomplete = xn_render_frame(0);
         }
         frame_checkpoint = 206;
-        D_0018DC08 = xn_model_queue_count;
+        model_queue_count_a = xn_model_queue_count;
         if (incomplete == 0) if (xn_tex_cache_full == 0) break;
         ++retries;
         if (retries != 1) fatal_error(str_insufficient_texture_memory);
@@ -382,8 +382,8 @@ void screen_shake_offset(int *pitch, int *yaw)
     }
     screen_shake_timer -= frame_ticks;
     if (screen_shake_timer > 0) {
-        *pitch = D_0018DC2C;
-        *yaw = D_0018DBF8;
+        *pitch = screen_shake_pitch;
+        *yaw = screen_shake_yaw;
         return;
     }
     screen_shake_timer = 60;
@@ -394,8 +394,8 @@ void screen_shake_offset(int *pitch, int *yaw)
     *yaw = *pitch;
     if (((struct bf8_0_1 *)&screen_shake_signs)->f != 0) *pitch = -(*pitch);
     if (((struct bf8_1_1 *)&screen_shake_signs)->f != 0) *yaw = -(*yaw);
-    D_0018DC2C = *pitch;
-    D_0018DBF8 = *yaw;
+    screen_shake_pitch = *pitch;
+    screen_shake_yaw = *yaw;
 }
 
 void screen_shake_start(int strength)

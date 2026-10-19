@@ -4,7 +4,7 @@
 extern int spell_points_bonus;
 extern int D_00195A08;
 extern int D_00195A0C;
-extern int D_00195A78;
+extern int strength_bonus_end;
 extern struct record *scratch_current_object;
 extern struct character *player_character;
 extern int game_minutes;
@@ -61,7 +61,7 @@ void damage_weapon_strike_effects(struct item *weapon, struct record *attacker, 
                 if (target_character->attributes[ATTR_STR] < 0)
                     target_character->attributes[ATTR_STR] = 0;
                 D_00195A08 += i;
-                D_00195A78 = game_minutes + 12;
+                strength_bonus_end = game_minutes + 12;
             }
         }
     }

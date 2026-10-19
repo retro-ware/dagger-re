@@ -9,7 +9,7 @@ extern signed char mouse_buttons;
 extern signed char mouse_double_click;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
 extern signed char key_down_up;
@@ -298,7 +298,7 @@ void talk_draw(void)
     talk_draw_answer(190, 66, 302, 184);
     talk_clear_question();
     talk_list_max_width = 0;
-    D_0012B508 = 244;
+    text_colour = 244;
     xn_draw_fill_rect(talk_buttons[((int)(unsigned char)talk_tone) + 6].x0, talk_buttons[((int)(unsigned char)talk_tone) + 6].y0, (int)(short)((talk_buttons[((int)(unsigned char)talk_tone) + 6].x1 - talk_buttons[((int)(unsigned char)talk_tone) + 6].x0) + 1), (int)(short)((talk_buttons[((int)(unsigned char)talk_tone) + 6].y1 - talk_buttons[((int)(unsigned char)talk_tone) + 6].y0) + 1));
     xn_draw_image(4, 26, 107, 40, (char *)talk_tabs_image);
     if (talk_question_mode != 0) {

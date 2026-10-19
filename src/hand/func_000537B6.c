@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_0012B508;
+extern char text_colour;
 extern iptr screen_buffer;
 extern char str_custom_c[];
 extern struct rect classmaker_reputation_buttons[];
@@ -34,10 +34,10 @@ void classmaker_draw_reputations(void)
     for (; i < 5; i++) {
         height = player_character->reputation[i] * 5;
         if (player_character->reputation[i] < 0) {
-            D_0012B508 = 0xf6;
+            text_colour = 0xf6;
             xn_draw_fill_rect(classmaker_reputation_buttons[i].x0, 82, width, -height);
         } else if (player_character->reputation[i] > 0) {
-            D_0012B508 = 0xc5;
+            text_colour = 0xc5;
             xn_draw_fill_rect(classmaker_reputation_buttons[i].x0, 81 - height, width, height);
         }
         text_draw_centred_coloured(itoa(player_character->reputation[i], ((char *)text_buffer), 10), i * 33 + 58, 149, 145, 141);

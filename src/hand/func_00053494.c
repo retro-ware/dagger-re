@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern iptr screen_buffer;
 extern char str_custom_c[];
 extern char *skill_names[];
@@ -45,7 +45,7 @@ int classmaker_draw(short show_name)
     if (show_name != 0)
         text_draw_coloured((iptr)player_class->name, 110, 5, 145, 141);
     text_draw_centred_coloured((iptr)itoa(player_class->hp_per_level, (char *)text_buffer, 10), 287, 55, 145, 141);
-    D_0012B508 = 145;
+    text_colour = 145;
     for (i = 0; i < 12; i++) {
         if (player_class->skills[i] < 35)
             text_draw_coloured((iptr)skill_names[player_class->skills[i]], (short)(classmaker_buttons[i + 2].x0 + 2), (short)(classmaker_buttons[i + 2].y0 + 1), 145, 141);

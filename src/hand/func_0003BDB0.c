@@ -3,10 +3,10 @@
 #include "clib.h"
 
 extern char str_sheet_c[];
-extern char D_00170CC0[];
+extern char sheet_hand_to_hand_fmt[];
 extern short msgbox_wrap_width;
 extern signed char text_buffer[];
-extern char D_001903A5;
+extern char text_line_colour;
 extern struct character *player_character;
 extern iptr window_image;
 extern struct career *player_class;
@@ -41,8 +41,8 @@ void sheet_show_career_skills(short first, short all_six)
     }
     if (sheet_hth_damage_line) {
         mc_set_location(327, str_sheet_c);
-        mc_sprintf(((char *)text_buffer), D_00170CC0, player_character->skills[30].value / 10 + 1, player_character->skills[30].value / 5 + 1);
-        D_001903A5 = 96;
+        mc_sprintf(((char *)text_buffer), sheet_hand_to_hand_fmt, player_character->skills[30].value / 10 + 1, player_character->skills[30].value / 5 + 1);
+        text_line_colour = 96;
         func_000A1054(text, ((char *)text_buffer), str_sheet_c, 329, 4);
     }
     text[strlen(text) - 1] = 0;

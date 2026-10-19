@@ -4,7 +4,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_steal_c[];
 extern short msgbox_wrap_width;
 extern iptr D_00183258;
@@ -60,7 +60,7 @@ void pickpocket_attempt(struct record *target)
         return;
     }
     msgbox_wrap_width = 250;
-    D_0012B508 = 145;
+    text_colour = 145;
     gold = (rand() % 5) + 1;
     player_character->gold += gold;
     mc_set_location(155, str_steal_c);

@@ -10,7 +10,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern int xn_anim_ticks;
 extern short frame_ticks_fraction;
 extern signed char key_down[];
@@ -553,7 +553,7 @@ void msgbox_yes_no_quest(short message_id)
     D_00196091 = 0;
     msgbox_button_keys = 21;
     D_00196034 = 49;
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_show_quest_text(current_quest, (int)(short)message_id, 5);
 }
 
@@ -561,7 +561,7 @@ void msgbox_prompt_number(int number, char *prompt)
 {
     char *text;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     text = scratch_buffer + 55000;
     mc_set_location(610, str_support_c);
     mc_sprintf(text, msgbox_number_prompt_fmt, prompt);
@@ -574,7 +574,7 @@ void msgbox_prompt_number_rsc(int number, int text_id)
 {
     int unused;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_show_rsc((int)(short)*(short *)&text_id, 2);
     inpstr_begin_number(number);
 }

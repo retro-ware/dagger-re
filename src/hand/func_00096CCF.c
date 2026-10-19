@@ -5,7 +5,7 @@
 extern char str_inven_c[];
 extern struct record *location_object;
 extern struct spell *spell_records;
-extern int D_00195B44;
+extern int effects_last_minute;
 extern struct character *player_character;
 extern int game_minutes;
 extern int spell_cost(struct spell *, struct character *);
@@ -48,7 +48,7 @@ void item_apply_equip_effects(struct record *object, int slot)
             cast_item_spell_at(spell_object);
             break;
         case 5:
-            D_00195B44 = game_minutes;
+            effects_last_minute = game_minutes;
             break;
         case 9:
             player_character->conditions |= 0x200;

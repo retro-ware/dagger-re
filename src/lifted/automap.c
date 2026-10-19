@@ -14,7 +14,7 @@ extern int xn_cam_far_z;
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char xn_tex_cache_full;
 extern int xn_light_ambient;
 extern char xn_cam_rotation[];
@@ -634,7 +634,7 @@ int town_notes_size(void)
 
 void func_00028210(char *text)
 {
-    D_0012B508 = 146;
+    text_colour = 146;
     if (text != 0) {
         mc_strncpy((char *)text_buffer, text, 160, str_automap_c, 809);
     } else {
@@ -742,9 +742,9 @@ void town_map_draw_notes(void)
         x = ((((int)(unsigned short)*(short *)entry) - town_map_view_x) * 2) + 10;
         y = ((((int)(unsigned short)*(short *)(entry + 2)) - town_map_view_y) * 2) + 10;
         if ((index + 1) == D_00196D94) {
-            D_0012B508 = 244;
+            text_colour = 244;
         } else {
-            D_0012B508 = 146;
+            text_colour = 146;
         }
         if (y < 173) text_draw(note + 4, x, y);
         length = strlen(note + 4);
@@ -800,16 +800,16 @@ void automap_draw_block_overview(void)
             if (location_grid[(row << 5) + column] == 0) continue;
             offset = ((((31 - row) * 640) + 2560) + (column * 2)) + 8;
             if (location_grid[(row << 5) + column] == player_cell) {
-                D_0012B508 = 240;
+                text_colour = 240;
             } else if (location_grid[(row << 5) + column] == start_cell) {
-                D_0012B508 = 132;
+                text_colour = 132;
             } else {
-                D_0012B508 = 145;
+                text_colour = 145;
             }
-            *(signed char *)((char *)(screen_buffer + offset)) = D_0012B508;
-            *(signed char *)((char *)(screen_buffer + offset) + 1) = D_0012B508;
-            *(signed char *)((char *)(screen_buffer + offset) + 320) = D_0012B508;
-            *(signed char *)((char *)(screen_buffer + offset) + 321) = D_0012B508;
+            *(signed char *)((char *)(screen_buffer + offset)) = text_colour;
+            *(signed char *)((char *)(screen_buffer + offset) + 1) = text_colour;
+            *(signed char *)((char *)(screen_buffer + offset) + 320) = text_colour;
+            *(signed char *)((char *)(screen_buffer + offset) + 321) = text_colour;
         }
     }
 }

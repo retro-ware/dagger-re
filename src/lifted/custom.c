@@ -8,7 +8,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern iptr screen_buffer;
 extern signed char xn_mouse_cursor_drawn;
 extern char str_custom_c[];
@@ -551,7 +551,7 @@ void classmaker_reputations_exit(void)
         total += player_character->reputation[(int)(short)*(short *)&i];
     }
     if (total != 0) {
-        D_0012B508 = 145;
+        text_colour = 145;
         msgbox_show_rsc(303, 1);
         return;
     }

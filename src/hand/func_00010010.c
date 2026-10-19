@@ -6,8 +6,8 @@ extern char str_please_run_dagger_exe_to_run_daggerfall[];
 extern char str_arena2_copyfile_dat[];
 extern char str_you_must_run_dagger_exe_from_the_hard[];
 extern int frame_checkpoint;
-extern int D_0018DC0C;
-extern int D_0018DC1C;
+extern int start_tick_plus_18;
+extern int start_tick;
 extern int engine_running;
 extern int frame_counter;
 extern int player_death_timer;
@@ -75,7 +75,7 @@ int func_00010010(short argc, char **argv)
     xn_sys_install_crit_error_handler();
     dpmi_lock_region(func_00010010, 2048000);
     srand(*(int *)DOS_LOW(0x46C));
-    D_0018DC1C = *(int *)DOS_LOW(0x46C);
+    start_tick = *(int *)DOS_LOW(0x46C);
     config_read(argv[1]);
     n = open(str_arena2_copyfile_dat, 546, 384);
     if (n < 0) {
@@ -98,7 +98,7 @@ int func_00010010(short argc, char **argv)
     }
 restart:
     title_menu();
-    D_0018DC0C = *(int *)DOS_LOW(0x46C) + 18;
+    start_tick_plus_18 = *(int *)DOS_LOW(0x46C) + 18;
     time_pass(1);
     xn_timer_fps = 23;
     xn_render_set_mode(8);

@@ -6,7 +6,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
 extern char str_your_time_for_this_room_has_expired[];
@@ -68,7 +68,7 @@ void rest_update(void)
     xn_gfx_clear(0);
     hud_draw();
     D_0019629E = 1;
-    D_0012B508 = 146;
+    text_colour = 146;
     if (rest_room_expired() != 0) {
         msgbox_show_string((iptr)str_your_time_for_this_room_has_expired, 1);
         rest_close();

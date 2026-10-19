@@ -29,7 +29,7 @@ extern int D_00196222;
 extern int D_00196226;
 extern int D_0019622A;
 extern unsigned char interaction_mode;
-extern signed char D_0019628C;
+extern signed char link_axis_state;
 extern signed char D_001A3A80;
 extern signed char D_001A3A81;
 extern int damage_apply(struct record *, int, struct record *);
@@ -342,7 +342,7 @@ int link_step(struct link *link)
             if (((int)interaction_mode) == 1) {
                 if (link->param != 0) link_show_text(link->param + 7700);
             } else {
-                D_0019628C = link->axis;
+                link_axis_state = link->axis;
             }
         }
         bits = link->axis >> 4;

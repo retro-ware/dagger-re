@@ -35,14 +35,14 @@ extern int scratch_190be8;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190cee[];
 extern signed char itemmaker_side_row_slots[];
-extern signed char D_00190D63;
+extern signed char trade_haggle_shown;
 extern char scratch_190d64[];
 extern char scratch_190d66[];
 extern short scratch_190d68;
 extern iptr itemmaker_soul_name_next;
 extern char scratch_190ee4[];
 extern signed char text_rsc_buffer[];
-extern char D_001913E4[];
+extern char enchant_text[];
 extern signed char ui_dirty_flags;
 extern char enchant_reference_character[];
 extern signed char D_001957CD;
@@ -301,7 +301,7 @@ void itemmaker_soul_list_cb(struct record *soul)
     iptr next_name;
 
     if (soul->type != 20 || *(int *)shared_scratch > 62) return;
-    if (D_00190D63 == soul->soul_creature) scratch_object = soul;
+    if (trade_haggle_shown == soul->soul_creature) scratch_object = soul;
     text_rsc_buffer[*(int *)shared_scratch] = (signed char)soul->soul_creature;
     *(iptr *)(scratch_190ee4 + ((*(int *)shared_scratch)++ << PTR_SHIFT)) = itemmaker_soul_name_next;
     mc_strncpy((char *)itemmaker_soul_name_next, monster_names[soul->soul_creature], 4, str_itemmakr_c, 526);
@@ -487,7 +487,7 @@ void itemmaker_consume_soul(void)
     }
     return;
 L57E13:;
-    D_00190D63 = (signed char)itemmaker_slots[slot].param;
+    trade_haggle_shown = (signed char)itemmaker_slots[slot].param;
     *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, itemmaker_soul_list_cb);
     gem = scratch_object->parent;
@@ -685,7 +685,7 @@ iptr enchant_powers_text(struct item *item)
     char *out;
 
     i = 0;
-    out = D_001913E4;
+    out = enchant_text;
     if (((int)(unsigned short)(item->item_flags & 32)) == 0) return (iptr)enchant_text_powers_unknown;
     for (i = 0; i < 10; i++) {
         if (item->enchantments[i].type == (-1)) continue;
@@ -716,5 +716,5 @@ iptr enchant_powers_text(struct item *item)
     }
     out++;
     *out = 0;
-    return (iptr)D_001913E4;
+    return (iptr)enchant_text;
 }

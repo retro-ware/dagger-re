@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern char str_the_monster_would_have_been_dead_but[];
 extern char str_the_soul_has_nowhere_to_go[];
 extern char str_damage_c[];
@@ -68,7 +68,7 @@ found:
                 scratch_object = 0;
                 object_foreach(player_entity->children, damage_find_empty_soul_trap_cb);
                 if (scratch_object == 0 && soul->type == 19) {
-                    D_0012B508 = 146;
+                    text_colour = 146;
                     hud_message_add(str_the_monster_would_have_been_dead_but);
                     hud_message_add(str_the_soul_has_nowhere_to_go);
                     return;

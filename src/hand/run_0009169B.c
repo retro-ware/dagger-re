@@ -6,7 +6,7 @@
 extern char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern short font_height;
 extern char *screen_buffer;
 extern char D_00176F41[];       /* __FILE__ */
@@ -108,7 +108,7 @@ void chargen_draw_attributes(void)
     short x;
 
     xn_draw_image_transparent(44, scratch_190d6a, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
-    D_0012B508 = 146;
+    text_colour = 146;
     x = (chargen_buttons[20].x0 + chargen_buttons[20].x1) >> 1;
     xn_font_select(4);
     for (i = 0; i < 8; i++) {

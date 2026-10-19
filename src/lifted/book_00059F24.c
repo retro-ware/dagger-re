@@ -4,7 +4,7 @@
 #include "ptrint.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
@@ -29,7 +29,7 @@ void book_draw_page(int page)
         lseek((int)(short)book_file, *(int *)((*(char **)&book_page_offsets + (((int)(short)*(short *)&page) << 2))), 0);
         read((int)(short)book_file, (void *)scratch_buffer, 16000);
         text = scratch_buffer;
-        D_0012B508 = 145;
+        text_colour = 145;
         *(short *)scratch_190d64 = 0;
         line_height = font_height;
         D_00142928 = 10;
@@ -45,7 +45,7 @@ void book_draw_page(int page)
                 while (*(signed char *)(text++) != 0);
                 break;
             case 250:
-                D_0012B508 = *(signed char *)(text + 1);
+                text_colour = *(signed char *)(text + 1);
                 text += 2;
                 break;
             case 249:

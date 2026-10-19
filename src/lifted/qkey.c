@@ -53,7 +53,7 @@ extern signed char current_region;
 extern unsigned char D_00196271;
 extern signed char game_mode;
 extern signed char D_0019628D;
-extern signed char D_0019628E;
+extern signed char player_moving;
 extern signed char text_macro_gender;
 extern signed char D_0019629C;
 extern signed char D_001962B2;
@@ -378,10 +378,10 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
                 damage += (player_character->level / 3) + 1;
             }
         }
-        if (((int)(unsigned short)(player_character->flags & 512)) != 0 && D_0019628E != 0) {
+        if (((int)(unsigned short)(player_character->flags & 512)) != 0 && player_moving != 0) {
             damage += (damage << 6) / 256;
         }
-        if (D_0019628E != 0) damage += (damage << 5) / 256;
+        if (player_moving != 0) damage += (damage << 5) / 256;
         if (target_character->race == 15) {
             if (weapon->material == 2) damage <<= 1;
             if (((int)(unsigned short)(weapon->item_flags & 16)) == 0) damage >>= 1;

@@ -10,7 +10,7 @@ extern char disk_last_file_size[];
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern short font_height;
 extern signed char key_down_esc;
 extern short D_00142928;
@@ -111,7 +111,7 @@ void logbook_draw_entry(char *text)
     int unused1;
     slot16 line_height;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     line_height = font_height;
     while (*(signed char *)text != 0) {
         switch (*(unsigned char *)text) {
@@ -124,7 +124,7 @@ void logbook_draw_entry(char *text)
             while (*(signed char *)(text++) != 0);
             break;
         case 250:
-            D_0012B508 = *(signed char *)(text + 1);
+            text_colour = *(signed char *)(text + 1);
             text += 2;
             break;
         case 249:

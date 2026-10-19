@@ -13,7 +13,7 @@ extern short mouse_x_max;
 extern short mouse_y_min;
 extern short mouse_y_max;
 extern signed char text_shadow_colour;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern short font_space_width;
 extern short font_char_spacing;
 extern char *D_0012DA74;
@@ -158,9 +158,9 @@ void book_close(void)
 void book_flush_line(void)
 {
     if (*(short *)scratch_190d66 != 0) {
-        text_draw_centred_coloured((char *)text_buffer, 160, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)D_0012B508), 156);
+        text_draw_centred_coloured((char *)text_buffer, 160, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)text_colour), 156);
     } else {
-        text_draw_coloured((char *)text_buffer, (int)(short)D_00142928, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)D_0012B508), 156);
+        text_draw_coloured((char *)text_buffer, (int)(short)D_00142928, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)text_colour), 156);
     }
     *(short *)scratch_190d66 = 0;
     *(short *)scratch_190d64 = 0;
@@ -217,7 +217,7 @@ void book_goto_page_prompt(void)
 {
     char *prompt;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     prompt = scratch_buffer + 55000;
     mc_set_location(268, str_book_c);
     mc_sprintf(prompt, D_001757D7, D_0017D1E6);
@@ -242,10 +242,10 @@ void text_draw_shadow(char *text, slot16 x, slot16 y)
 {
     unsigned char saved_colour;
 
-    saved_colour = D_0012B508;
-    D_0012B508 = text_shadow_colour;
+    saved_colour = text_colour;
+    text_colour = text_shadow_colour;
     xn_font_draw_string((int)(short)(*(int *)&x + 1), (int)(short)(*(int *)&y + 1), text);
-    D_0012B508 = saved_colour;
+    text_colour = saved_colour;
     xn_font_draw_string((int)(short)x, (int)(short)y, text);
 }
 
@@ -253,10 +253,10 @@ void text_draw_centred_shadow(char *text, int x, int y)
 {
     unsigned char saved_colour;
 
-    saved_colour = D_0012B508;
-    D_0012B508 = text_shadow_colour;
+    saved_colour = text_colour;
+    text_colour = text_shadow_colour;
     text_draw_centred(text, x + 1, y + 1);
-    D_0012B508 = saved_colour;
+    text_colour = saved_colour;
     text_draw_centred(text, x, y);
 }
 

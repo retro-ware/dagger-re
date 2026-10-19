@@ -10,7 +10,7 @@ extern char str_fmt_ld[];
 extern char str_fmt_d_d[];
 extern char *race_names[];
 extern signed char text_buffer[];
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern char D_00195A08[];
 extern struct record *player_entity;
 extern iptr paperdoll_buffer;
@@ -51,17 +51,17 @@ void sheet_draw(void)
     mc_sprintf(((char *)text_buffer), str_fmt_d_d, player_character->fatigue >> 6, player_character->attributes[0] + player_character->attributes[4]);
     text_draw_centred_coloured(((char *)text_buffer), 77, 54, 145, 141);
     x = ((sheet_buttons[13].x0 + sheet_buttons[13].x1) >> 1) + 1;
-    if (((struct bf8_2_1 *)&D_001940D9)->f) attributes = player_character->base_attributes;
+    if (((struct bf8_2_1 *)&player_view_flags)->f) attributes = player_character->base_attributes;
     else attributes = player_character->attributes;
     for (i = 0; i < 8; i++) {
-        if (i == 0 && ((struct bf8_2_1 *)&D_001940D9)->f == 0)
+        if (i == 0 && ((struct bf8_2_1 *)&player_view_flags)->f == 0)
             value = attributes[i] + *(short *)D_00195A08;
         else
             value = attributes[i];
         if (value < player_character->base_attributes[i]) colour = 240;
         else if (value > player_character->base_attributes[i]) colour = 96;
         else colour = 145;
-        if (i == 0 && ((struct bf8_2_1 *)&D_001940D9)->f == 0)
+        if (i == 0 && ((struct bf8_2_1 *)&player_view_flags)->f == 0)
             text_draw_centred_coloured(itoa(attributes[i] + *(int *)D_00195A08, ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);
         else
             text_draw_centred_coloured(itoa(attributes[i], ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);

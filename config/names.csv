@@ -257,7 +257,7 @@ global,0x0012AF38,mouse_y_min,strong,short
 global,0x0012AF3A,mouse_y_max,strong,short
 global,0x0012B500,xn_pal_current,strong,pointer to the palette last set by xn_pal_set; fades and nearest-colour searches start from it; sky_load_day/night read it
 global,0x0012B504,text_shadow_colour,strong,"byte: colour of the +1,+1 shadow (text_draw_shadow); 156 in most callers"
-global,0x0012B508,text_colour,candidate,set to 145/146/199/244 just before text is drawn in all three units
+global,0x0012B508,text_colour,strong,colour of the text drawn next
 global,0x0012B80C,xn_pal_hsv_target,strong,"3 words h s v: xn_pal_find_nearest_hsv's target (12D496-12D4A4 stores bx cx dx; 12D4B8 reads); 12D514 and 12D6AB push, use and pop them"
 global,0x0012B812,xn_pal_ega16_map,candidate,"16 bytes, identity in the file: palette index per EGA colour, rebuilt by the dead 12D970; 0x147820 takes its address"
 global,0x0012B822,xn_pal_ega16_rgb,strong,the 16 standard EGA colours as 6-bit RGB triples (00/15/2A/3F)
@@ -1206,7 +1206,7 @@ global,0x0018DBFC,frame_checkpoint,strong,main()'s loop sets 0-3 around its call
 global,0x0018DC00,screen_shake,strong,"shake amount: screen_shake_start sets it, screen_shake_offset decays it by 2 each 60 ticks, screen_shake_stop clears it"
 global,0x0018DC14,screen_shake_angle,confirmed,"angle stepped by 128 each shake; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: screen_shake_start(40) set it 0; each screen_shake_offset step after the timer ran out made it 128, 256, 384 (offsets (-6,6), (-11,11), (-12,12))"
 global,0x0018DC18,screen_shake_timer,confirmed,ticks until the next shake step (60); audit: build/names/scratch/audit_euw/D/exp_globals.py: screen_shake_start set it 60 and every step of screen_shake_offset reset it to 60
-global,0x0018DC1C,start_tick,candidate,"BIOS tick (0x46C) when main started; audit keep: one write in main from the BIOS tick and no reader; 0 in every save (the emulator boots at tick 0), so nothing tells it apart; a boot on real hardware or a reader would settle it"
+global,0x0018DC1C,start_tick,strong,BIOS tick (0x46C) when main started; no reader
 global,0x0018DC24,engine_running,strong,main sets 1 before the frame loop; game_exit and fatal_error clear it; mem_check_heap runs an XnGine check (CE8D5) while it is set; audit: build/names/scratch/audit_euw/C/s1_survey.py: 1 in 6 running saves; build/names/scratch/audit_euw/C/s6_last.py: fatal_error took it from 1 to 0
 global,0x0018DC28,screen_shake_signs,strong,"random bits 0/1 that flip the x/y shake; audit: build/names/scratch/audit_euw/D/exp_globals.py: screen_shake_start set it to rand() (0x6645: bit 0 set, bit 1 clear) and the offsets came out (-x, +y)"
 global,0x0018DD44,sos_drum_bank,strong,drum.bnk loaded by sos_init
@@ -1215,7 +1215,7 @@ global,0x0018DD94,saved_location_name,strong,"SAVEVARS.DAT 0x1755, 32 bytes: 'Cr
 global,0x0018DDB4,saved_region_name,strong,"SAVEVARS.DAT 0x1775, 32 bytes: 'Wrothgarian Mountains' in save_tlalac_s"
 global,0x0018DDD4,bio_modifiers,strong,"SAVEVARS.DAT 0x30, 64 bytes: DFU reads the biography modifiers (resist disease, magic, avoid hit, resist poison, fatigue) at 0x30"
 global,0x0018DE14,saved_positions,confirmed,"x,y,z (12 bytes) per slot (player_position_save; exp1)"
-global,0x0018DE44,savevars_0f7,candidate,"SAVEVARS.DAT 0xF7, 512 bytes (after travel_options 0xF5), unknown. audit keep: zero in all 18 classic save snapshots (build/names/scratch/audit_euw/B/survey.py) and only savevars_read/savevars_write touch it; a save with non-zero bytes there or a reader would settle it"
+global,0x0018DE44,savevars_0f7,strong,"SAVEVARS.DAT 0xF7, 512 bytes, unknown"
 global,0x0018E044,book_list,strong,"{u16 id, u16 level} per book found by books_scan; book_pick_random and item_init_book read it. New: exp_equip: 91 entries in save_tlalac_s; book_pick_random(level) only returned entries whose level <= level"
 global,0x0018F044,regions,confirmed,"the 80-byte region records (struct region), one per region; was region_event_values, the first record's first field (+0x00, 29 event values). 29 bytes per 80-byte region record (index region*80 + flag): region_flag_set stores random(min,max) there; exp1: 7 for flag 2. The record starts here, not at region_politics (0x18F060)"
 global,0x0018F061,region_event_flags,confirmed,"29 flags at region record +0x1D; exp1: region_flag_set(20, 2) set +0x1F"
@@ -1237,7 +1237,7 @@ global,0x00190BE8,scratch_190be8,strong,"shared by unrelated units (consistency 
 global,0x00190BEC,scratch_190bec,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): the automap camera, chargen, classmaker, itemmaker"
 global,0x00190BF0,automap_pitch,confirmed,"512 looking straight down, 128 in the perspective view: the grid button switched it 512 -> 128 in save_mord"
 global,0x00190BF4,automap_yaw,confirmed,the rotate buttons add/subtract 16 a frame (0 -> 512 after a click in save_mord)
-global,0x00190C34,training_state,candidate,"training_update state: 1234 ask to pay, 1235 done, 1236 skill chosen. Keep: code only (training_offer, training_update)"
+global,0x00190C34,training_state,strong,"training_update state: 1234 ask to pay, 1235 done, 1236 skill chosen"
 global,0x00190CAC,scratch_190cac,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): the fine, the travel blink timer, career, %gtp"
 global,0x00190CE4,scratch_190ce4,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): itemmakr 10 bytes of slot kinds (-1 empty, 0 power, 1 side effect); travel.c the region shown (region+1, 0 world; 16 functions); object.c the type/quest key of object_find_quest/object_delete_type/object_random_child_of_type; chargen roll arrays; collide_line_of_sight flag; climate texture set; inv_count_cart_cb; was itemmaker_slot_kinds"
 global,0x00190CE5,scratch_190ce5,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): travel, town notes, climate textures"
@@ -1261,7 +1261,7 @@ global,0x00190D76,classmaker_screen,confirmed,"short: 0 main, 1 reputations, 2 a
 global,0x00190D7E,classmaker_special_counts,confirmed,2 bytes: advantages and disadvantages picked (max 7); experiment: 0 -> 1 -> 2
 global,0x00190D82,classmaker_special_list,strong,"short: 0 advantages, 1 disadvantages (the screen being edited)"
 global,0x00190D86,classmaker_hp_repeat,strong,frames before the HP arrows repeat (20 after each step)
-global,0x00190D8C,levelup_attribute_floor,candidate,"copy of character+0x30 taken when the sheet opens; sheet_levelup_adjust won't lower an attribute below it. Keep: code only (sheet_open, sheet_levelup_adjust); a level-up session would settle it"
+global,0x00190D8C,levelup_attribute_floor,strong,copy of the base attributes taken when the sheet opens; level-up won't go below it
 global,0x00190DC8,court_prison_days,confirmed,"short: days of prison (3 per lost coin toss, more for an unpaid fine; halved by a guilty plea); %dip in 8055; experiment: 33 -> 16"
 global,0x00190DCA,court_extra_days,strong,"build/names/scratch/audit_tq/exp_final.py save_tlalac_s: = 5 -> %pdg ""5""; crime.c sets it to (fine - gold)/40 + 1"
 global,0x00190DDC,guild_search_faction,strong,faction id the membership searches look for: guild_find_membership_by_faction (confirmed) stores its argument here and guild_match_membership compares membership +0x03 with it. New: the confirmed caller returns the player's membership for that faction
@@ -1278,7 +1278,7 @@ global,0x00190EAC,text_macro_map_location,strong,"build/names/scratch/audit_tq/e
 global,0x00190EE4,scratch_190ee4,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): spfx_dispel's spell list and the itemmaker/classmaker lists"
 global,0x00190FE4,text_rsc_buffer,strong,"the text expansion buffer: macro handlers write their result here (71 parse.c uses), talk copies its answers from it, quest and rumor texts; also borrowed as a plain buffer by savevars_read/write, save_game/load_game, town_load, building_name and as monster_alloc_anim_slot's 128-byte slot bitmap (combat agent)"
 global,0x001910E4,qrc_name,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s/build/names/scratch/audit_tq/exp_small.py: after quest_load_text: ""s0000008"" (the quest name), or ""00001234"" with quest+0x04 = 1234"
-global,0x001913E4,enchant_text,candidate,text buffer built by enchant_powers_text. Keep: code only (enchant_powers_text)
+global,0x001913E4,enchant_text,strong,text buffer built by enchant_powers_text; reused for messages
 global,0x001917E4,arena2_path,strong,"config_read stores the Z.CFG path value here (audit_tq/exp_globals.py, save_tlalac_s); disk_* prefix it to every ARENA2 file name. audit keep: 'C:\ARENA2\' in all 18 save snapshots (build/names/scratch/audit_euw/B/survey.py); sky_load_day opened C:\ARENA2\sky05.dat. Already strong; a changed Z.CFG path moving the reads would make it confirmed"
 global,0x00191834,arena2_cd_path,confirmed,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: config_read stores the Z.CFG ""pathcd"" value here (the CD directory); quest_start and quests_start_initial try it after arena2_path; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: config_read of 'path C:\HD\ / pathcd D:\CDROM\' put 'D:\CDROM\' here and 'C:\HD\' in arena2_path; 'C:\ARENA2\' in all 18 saves"
 global,0x00191884,cfg_last_path,confirmed,"config_read copies each 'path' / 'pathcd' value here too ('C:\ARENA2\' in save_tlalac_s); audit: build/names/scratch/audit_euw/D/exp_globals.py: config_read with path then pathcd left pathcd's value ('D:\CDROM\'), with pathcd then path left path's ('C:\Y', without the trailing backslash the others get); nothing reads it"
@@ -1296,7 +1296,7 @@ global,0x0019532C,ai_characters,strong,"entity+0x47 (character record) per AI in
 global,0x0019552C,ai_entities,strong,"copy of creature_list (entity pointers) per AI index, made by ai_update_creatures each frame; ai_pick_target and weapon code index it"
 global,0x0019572C,text_macro_fcn,strong,%fcn text (parse.c 47815): name of the nearest town with the asked-for group (talk_find_regional)
 global,0x0019574C,enchant_reference_character,strong,a character record whose 35 skills enchant_spell_cost sets to 50 before costing a spell. Keep: code only (enchant_spell_cost)
-global,0x0019597C,right_hand_ready_delay,candidate,accumulates the ready time of a changed right-hand weapon (inv_track_hand_weapons); >0 at close gives 'Equipping %it'. Keep: code only; swapping the right-hand weapon and closing the inventory ('Equipping %it') would settle it
+global,0x0019597C,right_hand_ready_delay,strong,ready time left of a changed right-hand weapon
 global,0x00195980,left_hand_ready_delay,confirmed,"accumulates the ready time of a changed left-hand weapon (equipped[21], inv_track_hand_weapons); player_frame_update counts it down by frame_ticks; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: set to 1, player_frame_update brought it to 0 and called hud_message_add with 'Left hand equipped.' (0x17008C); at 0 no message"
 global,0x00195984,quest_passed_items,candidate,code reading (opcode 75)
 global,0x00195998,last_skill_check_minutes,strong,"game_minutes of the last skill check after a trip or rest: travel_begin_trip and rest_close run raise_skills again after 360 minutes; init 523530; audit: savevars_read reads it at SAVEVARS.DAT 0x179A, which is DFU SaveVars.lastSkillCheckTimeOffset (0x179A, 'LastSkillCheckTime'); build/names/scratch/audit_euw/C/s1_survey.py: game_minutes minus it is 109-799 in 6 saves"
@@ -1309,7 +1309,7 @@ global,0x001959B0,logbook_object,confirmed,"object whose data (+0x47) is the log
 global,0x001959B4,options_object,strong,"type-23 record (DFU 'Options', fixsave 'user options'), 6 bytes of data; init.c creates it, savetree_register_record sets it"
 global,0x001959B8,view_look_pitch,confirmed,"+-256: LOOK UP/DOWN (Ins/Del) add -+32, CENTER VIEW (Home) sets 32, LOOK AROUND moves it with the mouse; exp_steer.py: Ins -> -256, Home -> 32"
 global,0x001959BC,view_look_yaw,confirmed,"+-512: LOOK AROUND (Alt held) adds horizontal mouse motion (player_mouse_look); CENTER VIEW zeroes it; audit: build/names/scratch/audit_euw/D/exp_dungeon.py save_blades: set to 256, the XnGine view yaw D_000C23BC became camera yaw 1569 + 256 = 1825 and the view turned while the player's heading (compass) stayed (shots/D_look_yaw_0.png, D_look_yaw_256.png)"
-global,0x001959C4,savevars_0e1,candidate,"SAVEVARS.DAT 0xE1, 20 bytes (after quest_faces), unknown. audit keep: zero in all 18 classic save snapshots (build/names/scratch/audit_euw/B/survey.py); only savevars_read/write touch it; a save with data there or a reader would settle it"
+global,0x001959C4,savevars_0e1,strong,"SAVEVARS.DAT 0xE1, 20 bytes, unknown"
 global,0x001959D8,inventory_containers,confirmed,"9 container slots (objects agent): 0-3 the inventory tabs, 4 the wagon, 5-8 house, ship, rented rooms, items in repair; 5 container objects (record type 52) under player_entity: tabs 0 weapons/armor, 1 magic items, 2 clothing/misc, 3 ingredients, 4 wagon; exp: tab click lists inventory_containers[tab]"
 global,0x001959E8,wagon_container,confirmed,inventory_containers[4]: exp: WAGON lists it on the right; capacity 3000 (750 kg) and '%s / 750'
 global,0x001959EC,house_container,strong,build/names/scratch/audit_tq/exp_final.py save_tlalac_s: a type-52 container with +0x1B = 5; location_store_objects stores the house contents in it when player_character->house is in the town
@@ -1325,7 +1325,7 @@ global,0x00195A14,quest_faces,strong,"10 slots of 10 bytes, the escort faces dra
 global,0x00195A15,quest_faces_quest,strong,build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: quest_faces_after_load freed slot 1 because its quest id here (99) had no quest
 global,0x00195A16,quest_faces_object,strong,build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: quest_face_replace_object_id changed it 0x12345678 -> 0x0BADF00D
 global,0x00195A1A,quest_faces_image,strong,build/names/scratch/audit_tq/exp_quest.py save_tlalac_s/build/names/scratch/audit_tq/exp_final.py save_tlalac_s: quest_faces_after_load wrote record 1 of quest_face_images[0] (0x1302144) for face bits 0x01
-global,0x00195A78,strength_bonus_end,candidate,game_minutes + 12 when strength_bonus ends (damage_expire_drain_bonuses)
+global,0x00195A78,strength_bonus_end,strong,game_minutes + 12 when the strength bonus ends
 global,0x00195A7C,detect_target,confirmed,"object the Detect arrow points at (detect_consider); read by 5DB95 and detect_arrow_frame; exp5 (scratch/text/exp5.py save_mord, Detect bit and character+0x221 set, world_collect_objects called): the creature / loot pile / item by kind, 0 with Detect off"
 global,0x00195A80,text_macro_item,strong,"build/names/scratch/audit_tq/exp_parse.py save_tlalac_s/build/names/scratch/audit_tq/exp_parse2.py save_tlalac_s: %cti, %itr and %mit read the item it points at"
 global,0x00195A84,text_macro_npc,strong,"build/names/scratch/audit_tq/exp_final.py save_tlalac_s: a record with race byte +0x43 = 0, 1, 2 -> %oth ""By the Hoarfather"", ""Desert Sun"", ""Spirit Sword"""
@@ -1473,8 +1473,8 @@ global,0x00195E7F,view_cursor_active,confirmed,"toggled by ACTIVATE CURSOR (Ente
 global,0x00195E80,joystick_threshold,strong,"CENTER THRESHOLD: 10 LOW, 20 MED, 40 HIGH"
 global,0x00195EB0,key_map,strong,"action -> scan code table (action 27 travel map = W, 12 rest = R, 24 logbook, 26 automap); matches Options > CONTROLS (travel play agent)"
 global,0x00195F22,book_count,strong,"u16 number of books found by books_scan (book_list entries). New: exp_equip: 91 in save_tlalac_s, the bound book_pick_random walks"
-global,0x00195F24,lunar_cycle_a,candidate,calendar_update: day % 22; disease.c (lycanthropy) compares it with 0/8/16/24. Keep: code only; a calendar experiment (calendar_update over several days) would settle the day % 22 claim
-global,0x00195F25,lunar_cycle_b,candidate,calendar_update: day & 15; disease.c compares it with lunar_cycle_a's values. Keep: code only; as lunar_cycle_a
+global,0x00195F24,lunar_cycle_a,strong,day % 22 (calendar_update); magery and lycanthropy compare it
+global,0x00195F25,lunar_cycle_b,strong,day & 15 (calendar_update)
 global,0x00195F30,spell_effect_slot,strong,"short: effect slot (0-2) being edited/costed: the cost formulas, settings spinners and spell_cost index the spell with it"
 global,0x00195F36,text_cursor_x,strong,build/names/scratch/audit_tq/exp_note.py save_dorian: note_click_page on a text set it to the element's x (10)
 global,0x00195F38,text_cursor_y,strong,build/names/scratch/audit_tq/exp_note.py save_dorian: note_click_page set it to the element's y (12)
@@ -1503,7 +1503,7 @@ global,0x00196268,current_region,strong,"byte region index of the player: the wo
 global,0x00196269,previous_region,candidate,"copied from current_region at the end of faction_politics_update. Keep: code only (faction_politics_update, region_enter)"
 global,0x0019626A,weapon_active_hand,strong,"0 right, 1 left: indexes right_hand + hand*8 (character+0x1BB/+0x1C3), weapon_hand_* arrays and the strike slot 19+2*hand"
 global,0x0019626B,cfg_user,strong,config key 'user'
-global,0x0019626C,sheet_selected_attribute,candidate,attribute index 0..7 set by sheet_select_attribute (button-13); the level-up spinner changes this attribute. Keep: code only; a click on an attribute box in level-up mode would settle it
+global,0x0019626C,sheet_selected_attribute,strong,attribute index 0..7 set by sheet_select_attribute; level-up changes this one
 global,0x0019626F,game_mode_under_popup,strong,mode a popup (game_mode 8) returns to (mode_pop)
 global,0x00196270,msgbox_kind,strong,"byte: kind of the message box up: 0 none, 1 click/Enter closes, 2 text input, 4 closes on D_001940D5 bit 5, 5 buttons (popup_answer); set by msgbox_show_*, cleared by msgbox_close"
 global,0x00196271,popup_answer,candidate,yes/no answer: training cancels on 2; travel_map_update starts the trip on 1 after 'Do you wish to travel to %tcn?'
@@ -1802,7 +1802,7 @@ global,0x001A3A7C,active_link_count,strong,number of active_links entries
 global,0x001A3A80,link_combo_set,candidate,byte OR'd into a combination link's state (+0x0B combination) before the test (link_step); links_resolve zeroes it; audit keep: code only; save_blades has no combination (action 129) links; a switch-puzzle dungeon with one would settle it
 global,0x001A3A81,link_combo_mask,candidate,byte AND'd (| 0xF0) into a combination link's state (link_step); links_resolve zeroes it; audit keep: code only; a switch-puzzle dungeon with an action 129 link would settle it
 global,0x001A3AA4,extra_spell_points,strong,enchant_extra_spell_points accumulates 75 per active ExtraSpellPts enchantment. New: Daggerfall Unity ExtraSpellPts: 'Adds +75 to maximum spell points' (maxIncrease = 75)
-global,0x001A3AA8,magicka_max_modifier,candidate,"effects_tick: -max/2 or -max magicka for darkness/light-powered magery, plus extra spell points. Keep: code only (effects_tick)"
+global,0x001A3AA8,magicka_max_modifier,strong,added to max magicka: -max/2 or -max for light/darkness-powered magery
 global,0x001A3AAC,trade_haggle_minimum,strong,"double: the lowest price the merchant takes in the unused haggling window. New: exp_haggle: 214.8 for an asking price of 300; a counter offer below it -> -1, each concession raises it by the step"
 global,0x001A3AB4,trade_haggle_asking,strong,"double: the merchant's asking price (price*quantity at the start), shown by trade_haggle_show_offer, lowered by the steps; set by 0x684E9 (named shrine_donation, really the haggle start)"
 global,0x001A3AD4,trade_haggle_step_size,strong,double: concession per haggling round (trade_haggle_step). New: exp_haggle: 17.9; a refused counter offer moved asking down and the minimum up by it
@@ -1825,7 +1825,7 @@ global,0x001A3FAC,bank_houses_for_sale,strong,"20 x 20 bytes: +0 building record
 global,0x001A413C,bank_list_top,strong,first house row shown; bank_house_list_up/down move it
 global,0x001A4144,bank_saved_screen,strong,"64000-byte copy of the screen taken by bank_open, redrawn under the window by bank_draw"
 global,0x001A4148,bank_ships_for_sale,strong,"2 x 74 bytes model entries: +0 model 415, +4 model, +0x42 ship id (0x3E00001 / 0x3E10001), +0x46 price (100000 / 200000); experiment dump"
-global,0x001A41DC,bank_bought_house_building,candidate,building entry of the house just bought (bank_house_bought). Keep: code only (bank_house_bought)
+global,0x001A41DC,bank_bought_house_building,strong,building entry of the house just bought
 global,0x001A41E0,bank_preview_distance,candidate,"camera distance of the 3D preview, 1500 at open, keys move it by 8 within 100..2000. Keep: code only (bank preview)"
 global,0x001A41E4,bank_bought_house,candidate,"record of the house just bought (bank_house_bought), 0 at open. Keep: code only (bank_house_bought)"
 global,0x001A41EC,bank_account,confirmed,"pointer to this region's account (bank_accounts+0x47+region*13), set by bank_open; every handler changes it (experiments)"
@@ -1844,9 +1844,9 @@ global,0x001A4A0C,save_file_handle,strong,"file handle of the save file being re
 global,0x001A4A10,guild_saved_screen,strong,64000-byte copy of the screen under the guild menu / spell shop
 global,0x001A4A14,guild_membership,strong,the player's membership record for the current guild (or 0); experiment at the Mages Guild: rank 9 kind 1 faction 40
 global,0x001A4A18,spellshop_saved_seed,candidate,RNG seed saved while the spell shop is open. Keep: code only (spellshop_open/close)
-global,0x001A4A1A,guild_npc_seed,candidate,high word of the NPC's record id; seeds the spell shop list. Keep: code only (spellshop_open)
-global,0x001A4A1C,guild_map_pending,candidate,was guild_gift_pending. Set by guild_give_map (the Thieves Guild rank 6/8 and Dark Brotherhood promotion map); guild_service_dispatch then opens the trade container holding it. Renamed with the function; still code only
-global,0x001A4A1D,guild_join_asked,candidate,counter: guild_join_or_promote asks the join question only when it becomes 1; building_enter and building_exit reset it; audit keep: 0 in 6 saves; a traced guild visit (talk to the guild master twice) would settle it
+global,0x001A4A1A,guild_npc_seed,strong,high word of the NPC's record id; seeds the spell shop list
+global,0x001A4A1C,guild_map_pending,strong,set by guild_give_map; guild_service_dispatch then opens the container holding the map
+global,0x001A4A1D,guild_join_asked,strong,counter: the join question is asked when it becomes 1
 global,0x001A4A20,rest_ticks_per_hour,confirmed,"BIOS ticks per rested hour: REST and REST UNTIL HEALED set 9, LOITER 32 (rest_update); audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: rest_open, then a click on LOITER (200,70) set it 32; resting with 32 passed an hour at tick +33, with 9 every 10 ticks"
 global,0x001A4A24,breath_last_tick,confirmed,"BIOS tick of the last breath decrement; audit: build/names/scratch/audit_euw/D/exp_dungeon.py: breath_update set it to the BIOS tick of each decrement (+19, +40, +60) and left it between"
 global,0x001A4A28,rest_image,strong,"rest01i0.img/rest02i0.img loaded by rest_update, freed by rest_close"
@@ -7472,3 +7472,101 @@ global,0x001A4FBC,footstep_last_x,strong,x of the last footstep
 global,0x001A4FC4,footstep_last_z,strong,z of the last footstep
 global,0x001A4FCC,position_history_count,strong,positions recorded into position_history
 global,0x001A4FD4,ground_position_history_count,strong,positions recorded into ground_position_history
+global,0x00170C79,sheet_rename_prompt_fmt,strong,"""%s : "" plus 0xF8 text end; sheet_rename formats prompt_enter_new_name with it"
+global,0x00170CA7,sheet_affiliation_fmt,strong,"text record format "" %s<tab>%s"" for one affiliation line (sheet_affiliation_line)"
+global,0x00170CB1,sheet_affiliations_header_fmt,strong,"text record format of the affiliations header ""%s ... Rank"" (sheet_show_affiliations)"
+global,0x00170CC0,sheet_hand_to_hand_fmt,strong,"text record "" Hand-to-Hand dmg: %d-%d"""
+global,0x00170CDB,sheet_skill_fmt,strong,"text record format of one skill line ""%s %d%% %s"" (sheet_format_skill)"
+global,0x00170CEC,sheet_misc_skill_left_fmt,strong,text record format of the left misc skill column (sheet_show_misc_skills)
+global,0x00170CFD,sheet_misc_skill_right_fmt,strong,text record format of the right misc skill column
+global,0x00170D0F,sheet_text_end,strong,text record end 0xFD; health_status_text closes its text with it
+global,0x00170D11,skill_advance_scale,strong,double 1/65536 applied with the class advancement multiplier (skill_ready_to_advance)
+global,0x00170D19,skill_advance_mul,strong,double 2.0 (skill_ready_to_advance)
+global,0x00170D21,skill_advance_div,strong,double 5.0 (skill_ready_to_advance)
+global,0x00182682,text_affiliation,strong,"pointer to ""Affiliation"" (sheet_show_affiliations)"
+global,0x00184225,text_distribute_bonus_points,strong,"pointer to ""You must distribute all bonus points."" (sheet_close)"
+global,0x00185073,text_skill_improved,strong,"pointer to ""Your %s skill has improved."" (raise_skills)"
+global,0x001903A5,text_line_colour,strong,colour byte of the next text line (sheet skills set it)
+global,0x001940D9,player_view_flags,strong,"bit flags: bit 2 sheet shows base attributes, bit 4 swimming view; kludge and shelves use others"
+global,0x001962A2,health_status_changed,strong,"set by health_status_add, cleared by health_status_text; stops travel_begin_trip"
+global,0x001962A7,health_status_disease_shown,strong,set once a staged disease was added to the health status text
+global,0x0019963C,sheet_affiliations_text,strong,write pointer into the affiliations text (scratch_buffer + 55000)
+global,0x001789E8,music_guild_factions_good,strong,8 faction ids whose buildings play the good guild song (music_choose_song)
+global,0x001789F0,music_guild_factions_bad,strong,8 faction ids whose buildings play the bad guild song
+global,0x0018767C,head_bob_offsets,strong,int per 100 ms of the step cycle: head bob offset
+global,0x001876E8,music_general_gm,strong,"General MIDI general songs (gday___d.hmi, swimming.hmi, ...)"
+global,0x00187734,music_sneaking_gm,strong,"General MIDI sneaking songs (gsneak2.hmi, sneaking.hmi)"
+global,0x00187750,music_guild_gm,strong,"General MIDI guild songs (ggood.hmi, gbad.hmi, ...)"
+global,0x00187770,music_buildings_gm,strong,"General MIDI building songs (square_2.hmi, tavern.hmi, ...)"
+global,0x001877DC,music_general_fm,strong,"FM general songs (fday___d.hmi, fm_swim2.hmi, ...)"
+global,0x00187828,music_sneaking_fm,strong,"FM sneaking songs (fsneak2.hmi, ...)"
+global,0x00187844,music_guild_fm,strong,"FM guild songs (fgood.hmi, fbad.hmi, ...)"
+global,0x00187864,music_buildings_fm,strong,"FM building songs (fm_sqr_2.hmi, ...)"
+global,0x00187878,music_court_fm,strong,"FM court songs (11fm.hmi, ...)"
+global,0x00195F5E,building_music_seed,strong,random seed building_enter picks; music_choose_song srands with it
+global,0x0019628E,player_moving,strong,"set while the player moves; head bob, steering, attacks read it"
+global,0x001A4FA0,music_court,strong,current court song list (court_open)
+global,0x001A4FA4,music_guild,strong,current guild song list
+global,0x001A4FA8,music_general,strong,current general song list
+global,0x001A4FAC,music_sneaking,strong,current sneaking song list
+global,0x001A4FB0,music_dungeon,strong,current dungeon song list (15 songs)
+global,0x001A4FB4,music_buildings,strong,current building song list (by day % 5)
+global,0x001A4FD0,head_bob_time,strong,ms into the step cycle (0-999)
+global,0x001A4FD8,head_bob_last_time,strong,head_bob_time of the last frame
+global,0x001788D3,magery_spell_point_mults,strong,short per magery class flag: INT x this / 256 = max magicka
+global,0x001788E8,sway_y_offsets,strong,int per sway step: camera y offset (world_render)
+global,0x00178968,sway_roll_offsets,strong,int per sway step: camera roll (world_render)
+global,0x00187CA9,player_speed_bonus,strong,int 200 added to the speed attribute (keys_world_actions toggles 1300)
+global,0x0018DBF8,screen_shake_yaw,strong,yaw kept by screen_shake_offset
+global,0x0018DC08,model_queue_count_a,strong,xn_model_queue_count saved by world_render
+global,0x0018DC0C,start_tick_plus_18,strong,BIOS tick + 18 when main started
+global,0x0018DC10,model_queue_count_b,strong,xn_model_queue_count saved again by world_render
+global,0x0018DC2C,screen_shake_pitch,strong,pitch kept by screen_shake_offset
+global,0x0018DC30,game_frame_last_tick,strong,tick of the last game frame
+global,0x00195A88,player_mount,strong,object the player rides or stands on (reparented under it)
+global,0x00195C4C,player_attack_delay,strong,ms between attacks from speed (70-800)
+global,0x00195CEC,sway_phase,strong,0-8191 phase of the swimming / riding camera sway
+global,0x00195D8C,player_hurt_timer,strong,ms left of a timed player state (player_frame_update counts it down)
+global,0x0019628C,link_axis_state,strong,axis of the last link step; > 5 means trespassing
+global,0x001962A0,player_swimming,strong,"set while swimming outdoors; blocks jump and crouch, footsteps splash"
+global,0x00175A08,trade_haggle_exp_rate,strong,double exponent rate of the quantity discount (trade_haggle_start)
+global,0x00175A10,trade_haggle_exp_scale,strong,double scale of the quantity discount
+global,0x00175A18,trade_haggle_attr_factor,strong,double 0.001 per personality / reputation point
+global,0x00175A20,trade_haggle_skill_factor,strong,double 0.002 per mercantile skill point
+global,0x00175A28,trade_haggle_factor_c,strong,double 0.005 in the haggle minimum
+global,0x0018320A,month_moon_phase,strong,"per month a phase / condition byte (enchant_spell_points_condition, spell_cost_item_percent)"
+global,0x00185083,text_feel_somewhat_bad,strong,"pointer to ""You feel somewhat bad."""
+global,0x00186D85,poison_damage_max,strong,short per poison: max damage (poison_table has the min)
+global,0x00186D87,poison_days_min,strong,short per poison: min days
+global,0x00186D89,poison_days_max,strong,short per poison: max days
+global,0x00190D63,trade_haggle_shown,strong,set once trade_haggle_frame has shown the offer
+global,0x00195B44,effects_last_minute,strong,game minute effects_tick last ran
+global,0x001A3ABC,trade_haggle_discount,strong,quantity discount computed by trade_haggle_start
+global,0x001A3AE0,trade_haggle_buyer,strong,character record of the buyer
+global,0x001A3AE4,trade_haggle_seller,strong,character record of the seller
+global,0x00176911,str_wildcard,strong,"""*.*"" (save_game deletes the save directory's files)"
+global,0x001769BC,saveload_prompt_fmt,strong,"""%s : "" plus 0xF8 text end; saveload_confirm formats prompt_enter_description"
+global,0x00178A18,savevars_version,strong,2 bytes at SAVEVARS.DAT start
+global,0x001846F8,prompt_enter_description,strong,"pointer to ""Enter description"""
+global,0x00186503,building_type_odds,strong,"per building type pointer to (id, weight) pairs ending 0xFF"
+global,0x00187F28,last_unloaded_location,strong,location id last unloaded (savevars)
+global,0x001903A8,saveload_slot_digit,strong,'0' + slot shown by saveload_menu
+global,0x001952EE,load_requeue_flag_a,strong,cleared by load_requeue_s0000021
+global,0x00195303,load_requeue_flag_b,strong,load_requeue_s0000021 needs it set
+global,0x0019530D,load_requeue_flag_c,strong,load_requeue_s0000021 needs it clear
+global,0x00195AAC,savevars_4_bytes,strong,4 bytes kept in SAVEVARS.DAT
+global,0x00196265,savevars_byte,strong,1 byte kept in SAVEVARS.DAT
+global,0x0019966C,msgbox_input_result,strong,result of inpstr_update kept by msgbox_update (2 cancel)
+global,0x001832B0,text_pick_item_to_identify,strong,"pointer to ""Pick up item to be identified..."""
+global,0x00186F37,training_skills_1,strong,"skills a guild trains (0xFF end), training_offer"
+global,0x00186F4C,training_skills_2,strong,skills a guild trains
+global,0x00186F5F,training_skills_3,strong,skills a guild trains
+global,0x00186F74,training_skills_4,strong,skills a guild trains
+global,0x00186F88,training_skills_5,strong,skills a guild trains
+global,0x00186F9E,training_skills_6,strong,skills a guild trains
+global,0x00186FB6,training_skills_7,strong,skills a guild trains
+global,0x00186FC9,training_skills_8,strong,skills a guild trains
+global,0x00186FDB,training_skills_9,strong,skills a guild trains
+global,0x00186FEE,training_skills_10,strong,skills a guild trains
+global,0x00187001,training_skills_11,strong,skills a guild trains
+global,0x00187017,training_skills_12,strong,skills a guild trains

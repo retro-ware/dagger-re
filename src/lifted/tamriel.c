@@ -7,7 +7,7 @@
 #include "doslow.h"
 
 extern struct region regions[];
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_tamriel_c[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
@@ -20,7 +20,7 @@ extern int frame_checkpoint;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
 extern signed char ui_dirty_flags;
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern struct record *quest_root;
 extern struct record *bank_accounts;
 extern struct record *player_entity;
@@ -38,8 +38,8 @@ extern int game_minutes;
 extern int realtime_clock_tick;
 extern struct record *quest_tick_object;
 extern int player_death_timer;
-extern signed char D_00195F24;
-extern signed char D_00195F25;
+extern signed char lunar_cycle_a;
+extern signed char lunar_cycle_b;
 extern signed char current_region;
 extern signed char game_mode;
 extern signed char crime_current;
@@ -140,7 +140,7 @@ void time_update_realtime(void)
     bios_clock2 = (int *)DOS_LOW(0x46C);
     minutes = ((unsigned)(*bios_clock2 - realtime_clock_tick)) / 90;
     realtime_clock_tick += minutes * 90;
-    if (((struct bf8_4_1 *)&D_001940D9)->f != 0 && ((int)(unsigned short)(player_character->flags & 1536)) == 0) {
+    if (((struct bf8_4_1 *)&player_view_flags)->f != 0 && ((int)(unsigned short)(player_character->flags & 1536)) == 0) {
         skill_add_uses(21, 1);
     }
     if (minutes == 0) return;
@@ -272,8 +272,8 @@ void calendar_update(void)
     calendar_weekday = ((unsigned)(((unsigned)game_minutes) / 1440)) % 7;
     calendar_hour = ((unsigned)(((unsigned)game_minutes) / 60)) % 24;
     calendar_minute = ((unsigned)game_minutes) % 60;
-    D_00195F24 = ((unsigned)(((unsigned)game_minutes) / 1440)) % 22;
-    D_00195F25 = (((unsigned)game_minutes) / 1440) & 15;
+    lunar_cycle_a = ((unsigned)(((unsigned)game_minutes) / 1440)) % 22;
+    lunar_cycle_b = (((unsigned)game_minutes) / 1440) & 15;
 }
 
 int player_in_daylight(void)
@@ -422,7 +422,7 @@ void holiday_announce(void)
 
     holiday = holiday_today(game_minutes, (int)(unsigned char)current_region);
     if (holiday == 0) return;
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_show_rsc((int)(short)(holiday + 8349), 1);
 }
 

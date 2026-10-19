@@ -7,7 +7,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down[];
 extern signed char key_down_esc;
 extern iptr screen_buffer;
@@ -142,7 +142,7 @@ void options_draw(void)
     mc_memcpy((void *)screen_buffer, (void *)options_saved_screen, 64000, str_options_c, 176, 4);
     image = (struct image *)options_image;
     xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
-    D_0012B508 = 246;
+    text_colour = 246;
     for (i = 0; i < 2; i++) {
         if ((game_settings->view_flags & (1 << i)) != 0) {
             box = &options_buttons[i + 6];
@@ -294,7 +294,7 @@ void options_controls_draw(int editing, iptr background)
         if (editing == action) continue;
         colour = 146;
         if (options_controls_is_duplicate(action) != 0) colour = 244;
-        D_0012B508 = *(signed char *)&colour;
+        text_colour = *(signed char *)&colour;
         if (((int)(unsigned char)*(signed char *)(key_map + action)) < 200) {
             text_draw_centred(key_names[((int)(unsigned char)*(signed char *)(key_map + action))], (controls_buttons[action].x1 + controls_buttons[action].x0) / 2, (int)(iptr)&*(signed char *)((char *)(iptr)(controls_buttons[action].y0) + 2));
         } else {
@@ -374,7 +374,7 @@ void options_mouse_draw(iptr background)
     image = (struct image *)background;
     mc_memcpy((void *)screen_buffer, (void *)options_saved_screen, 64000, str_options_c, 480, 4);
     xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
-    D_0012B508 = 246;
+    text_colour = 246;
     xn_draw_fill_rect((int)(short)((mouse_control_mode == 0) ? 134 : 220), 47, 5, 5);
     for (i = 0; ((int)(unsigned char)mouse_sensitivity_x) > i; i++) {
         xn_draw_image((i * 7) + 139, 108, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
@@ -488,7 +488,7 @@ void options_joystick_draw(int calibrating, iptr background)
     mc_memcpy((void *)screen_buffer, (void *)options_saved_screen, 64000, str_options_c, 593, 4);
     xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
     if (((int)(unsigned char)joystick_setting) == 2) {
-        D_0012B508 = 246;
+        text_colour = 246;
         xn_draw_fill_rect(138, 42, 5, 5);
     }
     index = (int)(short)joystick_threshold;

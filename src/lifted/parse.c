@@ -144,7 +144,7 @@ extern signed char text_macro_imperial;
 extern signed char local_province;
 extern signed char current_region;
 extern signed char D_00196269;
-extern signed char D_0019626C;
+extern signed char sheet_selected_attribute;
 extern signed char text_macro_gender;
 extern signed char inv_weight_container_only;
 extern char talk_key_text[];
@@ -255,9 +255,9 @@ iptr macro_ark_attribute_rating(void)
 {
     short rating;
 
-    rating = player_character->attributes[(int)(unsigned char)D_0019626C] / 10;
+    rating = player_character->attributes[(int)(unsigned char)sheet_selected_attribute] / 10;
     if (((int)(short)rating) >= 10) rating = 9;
-    return attribute_rating_names[((((int)(unsigned char)D_0019626C) * 10) + ((int)(short)rating))];
+    return attribute_rating_names[((((int)(unsigned char)sheet_selected_attribute) * 10) + ((int)(short)rating))];
 }
 
 iptr macro_adj_painting_adjective(void)

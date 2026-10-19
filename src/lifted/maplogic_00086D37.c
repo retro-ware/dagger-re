@@ -7,7 +7,7 @@
 extern int dungeon_water_level;
 extern char str_maplogic_c[];
 extern unsigned char player_environment;
-extern int D_00187F28;
+extern int last_unloaded_location;
 extern int D_00187F2C;
 extern struct record *creature_list[];
 extern struct record *camera_object;
@@ -76,14 +76,14 @@ void location_unload(int image)
             mc_memset(terrain_cell_dirty, 0, 16, str_maplogic_c, 477, 16);
             mc_memset(terrain_cell_ids, 0, 16, str_maplogic_c, 478, 16);
             camera_object->yaw = player_object->yaw;
-            if ((location_id - 65536) == D_00187F28) {
+            if ((location_id - 65536) == last_unloaded_location) {
                 mc_memcpy(player_object, saved_player_object, RECORD_LINKS_OFFSET, str_maplogic_c, 483, 4);
             } else {
                 D_00187F2C++;
             }
             move_settle_frames = 5;
         }
-        D_00187F28 = location_id;
+        last_unloaded_location = location_id;
         func_0008EB52();
         sound_stop_ambient();
     }

@@ -30,7 +30,7 @@ extern char screen_active;
 extern unsigned char game_mode;
 extern char D_0019629C;
 extern int court_reputation_change;
-extern struct res *D_001A4FA0;
+extern struct res *music_court;
 extern void crime_remove_monster(struct record *);
 extern void court_reputation_restore(void);
 extern void court_close(void);
@@ -63,7 +63,7 @@ int court_open(int crime)
         return 1;
     if (crime != 0) {
         crime--;
-        music_play(D_001A4FA0->f4);
+        music_play(music_court->f4);
         D_0019629C = 1;
         scratch_190d17 = crime;
         court_reputation_change = crime_reputation_loss[crime] >> 1;

@@ -1,6 +1,6 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0007D62B */
 extern char mouse_buttons;
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern unsigned char D_001940D4;
 extern unsigned char msgbox_button_keys;
 extern unsigned char D_00196034;
@@ -18,7 +18,7 @@ void msgbox_choice_rsc(short text_id, short button_1, short button_2, short butt
     D_001940D4 |= 1;
     while (mouse_buttons != 0)
         xn_mouse_poll_clamped();
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_button_keys = key_1;
     D_00196034 = key_2;
     msgbox_hotkey = key_3;

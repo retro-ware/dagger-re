@@ -19,7 +19,7 @@ extern unsigned int game_minutes;
 extern unsigned char D_00196271;
 extern struct faction *found_faction;
 extern struct membership *guild_membership;
-extern unsigned char D_001A4A1D;
+extern unsigned char guild_join_asked;
 extern void msgbox_show_rsc(int, int);
 extern int guild_join_check(int);
 extern int guild_rank_for_skills(int);
@@ -43,20 +43,20 @@ extern char str_my_services_are_reserved_for_members_8[];
 extern char str_my_services_are_reserved_for_members_9[];
 extern char str_my_services_are_reserved_for_members_10[];
 extern int trade_price_scale;
-extern iptr D_001832B0;
+extern iptr text_pick_item_to_identify;
 extern char *region_names[];
-extern char D_00186F37[];
-extern char D_00186F4C[];
-extern char D_00186F5F[];
-extern char D_00186F74[];
-extern char D_00186F88[];
-extern char D_00186F9E[];
-extern char D_00186FB6[];
-extern char D_00186FC9[];
-extern char D_00186FDB[];
-extern char D_00186FEE[];
-extern char D_00187001[];
-extern char D_00187017[];
+extern char training_skills_1[];
+extern char training_skills_2[];
+extern char training_skills_3[];
+extern char training_skills_4[];
+extern char training_skills_5[];
+extern char training_skills_6[];
+extern char training_skills_7[];
+extern char training_skills_8[];
+extern char training_skills_9[];
+extern char training_skills_10[];
+extern char training_skills_11[];
+extern char training_skills_12[];
 extern char saved_location_name[];
 extern char saved_region_name[];
 extern signed char text_buffer[];
@@ -70,11 +70,11 @@ extern iptr shelf_open_object;
 extern signed char current_region;
 extern signed char forced_material;
 extern struct house_for_sale bank_houses_for_sale[];
-extern iptr D_001A41DC;
+extern iptr bank_bought_house_building;
 extern struct record *D_001A41E4;
 extern signed char bank_house_count;
-extern short D_001A4A1A;
-extern signed char D_001A4A1C;
+extern short guild_npc_seed;
+extern signed char guild_map_pending;
 extern struct faction *faction_find(short);
 extern void daedra_summon(struct record *);
 extern int spellmaker_open(int);
@@ -121,8 +121,8 @@ void guild_join_or_promote(int guild, int joining)
     expelled = 0;
     guild &= 63;
     if (guild_membership == 0 && joining != 0) {
-        D_001A4A1D++;
-        if (D_001A4A1D != (char)1)
+        guild_join_asked++;
+        if (guild_join_asked != (char)1)
             return;
         if ((kind & 64) && guild_find_membership_by_bits(64) != 0)
             return;
@@ -202,14 +202,14 @@ void guild_service_dispatch(struct record *npc)
 
     refusal_text = 0;
     not_served = 0;
-    D_001A4A1C = 0;
+    guild_map_pending = 0;
     object_free_children((iptr)trade_container);
     found_faction = faction_find(current_building->faction_id);
     guild_membership = guild_find_membership_by_faction(current_building->faction_id);
     guild = guild_kind_of_faction(found_faction);
     scratch_object = npc;
     guild_join_or_promote(guild, 0);
-    D_001A4A1A = ((unsigned)npc->id) >> 16;
+    guild_npc_seed = ((unsigned)npc->id) >> 16;
     label = guild_service_label((int)(short)npc->data.person.faction_id);
     if (label == 0) {
         npc_talk(npc);
@@ -258,7 +258,7 @@ void guild_service_dispatch(struct record *npc)
         if (guild_membership != 0) {
             switch (npc->data.person.faction_id) {
             case 839:
-                training_offer((iptr)D_00186F37);
+                training_offer((iptr)training_skills_1);
                 break;
             case 841:
                 if ((guild_membership->rank) >= 1) {
@@ -309,7 +309,7 @@ void guild_service_dispatch(struct record *npc)
             }
             switch (npc->data.person.faction_id) {
             case 61:
-                training_offer((iptr)D_00186F5F);
+                training_offer((iptr)training_skills_3);
                 break;
             case 64:
                 spellmaker_open(1);
@@ -363,7 +363,7 @@ void guild_service_dispatch(struct record *npc)
                 }
                 break;
             case 801:
-                hud_message_add(D_001832B0);
+                hud_message_add(text_pick_item_to_identify);
                 object_free_children((iptr)trade_container);
                 trade_price_scale = ((10 - (guild_membership->rank)) << 8) / 10;
                 inventory_open_container((iptr)trade_container, 4, 8);
@@ -377,7 +377,7 @@ void guild_service_dispatch(struct record *npc)
         if (guild_membership != 0) {
             switch (npc->data.person.faction_id) {
             case 849:
-                training_offer((iptr)D_00186F74);
+                training_offer((iptr)training_skills_4);
                 break;
             case 850:
                 trade_price_scale = ((10 - (guild_membership->rank)) << 8) / 10;
@@ -413,7 +413,7 @@ void guild_service_dispatch(struct record *npc)
         } else {
             switch ((unsigned short)(npc->data.person.faction_id - 803)) {
             case 0:
-                training_offer((iptr)D_00186F4C);
+                training_offer((iptr)training_skills_2);
                 break;
             case 1:
                 if (npc->quest_id == 0) {
@@ -489,7 +489,7 @@ void guild_service_dispatch(struct record *npc)
                 choice = rand_range(0, (unsigned char)bank_house_count - 1);
                 player_character->house = bank_houses_for_sale[choice].id;
                 D_001A41E4 = RECORD_FROM_DATA(bank_houses_for_sale[choice].block);
-                D_001A41DC = (iptr)bank_houses_for_sale[choice].building;
+                bank_bought_house_building = (iptr)bank_houses_for_sale[choice].building;
                 msgbox_show_rsc(462, 1);
                 mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_guilds_c, 413);
                 mc_strncpy(saved_location_name, (char *)current_location, 32, str_guilds_c, 414);
@@ -559,7 +559,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 241:
-                training_offer((iptr)D_00186F88);
+                training_offer((iptr)training_skills_5);
                 break;
             case 240:
                 guild_temple_quest();
@@ -609,7 +609,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 243:
-                training_offer((iptr)D_00186F9E);
+                training_offer((iptr)training_skills_6);
                 break;
             case 810:
                 guild_donate();
@@ -662,7 +662,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 245:
-                training_offer((iptr)D_00186FB6);
+                training_offer((iptr)training_skills_7);
                 break;
             case 810:
                 guild_donate();
@@ -715,7 +715,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 247:
-                training_offer((iptr)D_00186FC9);
+                training_offer((iptr)training_skills_8);
                 break;
             case 810:
                 guild_donate();
@@ -768,7 +768,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 249:
-                training_offer((iptr)D_00186FDB);
+                training_offer((iptr)training_skills_9);
                 break;
             case 810:
                 guild_donate();
@@ -821,7 +821,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 250:
-                training_offer((iptr)D_00186FEE);
+                training_offer((iptr)training_skills_10);
                 break;
             case 810:
                 guild_donate();
@@ -874,7 +874,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 252:
-                training_offer((iptr)D_00187001);
+                training_offer((iptr)training_skills_11);
                 break;
             case 810:
                 guild_donate();
@@ -927,7 +927,7 @@ L6E949:;
         if (not_served != 0) {
             switch (npc->data.person.faction_id) {
             case 254:
-                training_offer((iptr)D_00187017);
+                training_offer((iptr)training_skills_12);
                 break;
             case 810:
                 guild_donate();
@@ -947,7 +947,7 @@ L6E949:;
         }
     }
     if (refusal_text != 0) msgbox_show_rsc((int)(short)*(short *)&refusal_text, 1);
-    if (D_001A4A1C == 0 || shelf_open_object == 0) return;
-    D_001A4A1C = 0;
+    if (guild_map_pending == 0 || shelf_open_object == 0) return;
+    guild_map_pending = 0;
     inventory_open_container((iptr)trade_container, 0, 6);
 }

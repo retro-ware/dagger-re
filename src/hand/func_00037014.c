@@ -5,7 +5,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_spells_c[];
@@ -71,7 +71,7 @@ void spellmaker_update(void)
     xn_draw_copy_rect_stride_bytes(*(char **)&magic_window_image + selected_spell->target * 640, *(char **)&screen_buffer + selected_spell->target * 5120 + 36755, 24, 16, 40);
     xn_draw_spell_icon(288, 94, selected_spell->icon);
     xn_font_select(1);
-    *((char *)&D_0012B508) = 146;
+    *((char *)&text_colour) = 146;
     for (i = 0; i < 3; i++) {
         if (selected_spell->effects[i].type == 255)
             continue;

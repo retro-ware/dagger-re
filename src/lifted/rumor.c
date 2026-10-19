@@ -4,7 +4,7 @@
  * ordinary source: edit them here. Keep each function where it is: Watcom aligns switch
  * tables from the start of the file, so moving functions can change the code. */
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_rumor_c[];
 extern iptr marquee_owned_text;
 extern char region_event_flag_groups[];
@@ -27,7 +27,7 @@ void marquee_update(void)
     int count;
 
     if (marquee_text == 0) return;
-    D_0012B508 = 146;
+    text_colour = 146;
     count = (320 - marquee_x) / 4;
     if (count > 80) count = 80;
     mc_memcpy(text_buffer, (void *)marquee_text, count, str_rumor_c, 35, 160);

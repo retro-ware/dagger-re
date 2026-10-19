@@ -4,7 +4,7 @@
 
 #define FREED ((void *)(iptr)-1751672937)
 #define FREE(p, line) if ((p) != 0 && (p) != FREED) { mc_free((p), D_00176F41, (line)); (p) = FREED; }
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern char str_tamriel_img[];
 extern char str_char00i0_img[];
 extern char D_00176F41[];       /* __FILE__ */
@@ -69,7 +69,7 @@ int chargen_name_character(void)
     D_00190DEA = scratch_190dec = D_00190DEE = scratch_190d64 = chargen_selected_attribute = 0;
     scratch_190be8 = 0;
     player_character->name[0] = 0;
-    D_0012B508 = 146;
+    text_colour = 146;
     for (i = 0; i < 8; i++) {
         player_character->attributes[i] -= 5;
         player_character->base_attributes[i] -= 5;

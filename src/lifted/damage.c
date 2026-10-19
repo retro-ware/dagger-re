@@ -24,7 +24,7 @@ extern signed char quest_global_states[];
 extern int spell_points_bonus;
 extern char D_00195A08[];
 extern int D_00195A0C;
-extern int D_00195A78;
+extern int strength_bonus_end;
 extern struct record *player_object;
 extern struct record *scratch_current_object;
 extern struct record *location_object;
@@ -227,7 +227,7 @@ void damage_expire_drain_bonuses(void)
     if (D_00195A0C != 0 && ((unsigned)game_minutes) > D_00195A0C) {
         spell_points_bonus = 0;
     }
-    if (D_00195A78 == 0 || ((unsigned)game_minutes) <= D_00195A78) return;
+    if (strength_bonus_end == 0 || ((unsigned)game_minutes) <= strength_bonus_end) return;
     *(int *)D_00195A08 = 0;
 }
 

@@ -2,7 +2,7 @@
 #include "ptrint.h"
 #include "clib.h"
 #include "doslow.h"
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
@@ -25,7 +25,7 @@ int inpstr_update(void)
     char x;
     char y;
 
-    D_0012B508 += 5;
+    text_colour += 5;
     D_00142928 = inpstr_text_width(inpstr_text, inpstr_cursor) + text_cursor_x;
     D_0014292C = text_cursor_y;
     {
@@ -35,7 +35,7 @@ int inpstr_update(void)
         if (*clk & 4)
             xn_draw_line(D_00142928, D_0014292C, D_00142928, (short)(D_0014292C + font_height - 1));
     }
-    D_0012B508 -= 5;
+    text_colour -= 5;
     text_draw(inpstr_text, text_cursor_x, text_cursor_y);
     c = inpstr_read_key();
     if (c == 0)

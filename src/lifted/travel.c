@@ -9,7 +9,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_enter;
 extern short D_00142928;
 extern short D_0014292C;
@@ -206,7 +206,7 @@ void travel_map_update(void)
                 blink_ticks = (int *)DOS_LOW(0x46C);
                 if (((struct bf8_3_1 *)blink_ticks)->f != 0) {
                     if (scratch_190ce4[0] != 0) {
-                        D_0012B508 = 244;
+                        text_colour = 244;
                         D_00142928 = *(short *)travel_marker_x;
                         D_0014292C = 12;
                         xn_draw_line_to((int)(short)*(short *)travel_marker_x, 172);
@@ -569,14 +569,14 @@ void travel_toggle_option(int button)
         *(signed char *)travel_options ^= 12;
         if (((int)(unsigned short)(*(short *)travel_options & 8)) != 0 && player_character->ship_owned == 0 && gold_can_afford(travel_trip_cost()) == 0) {
             *(signed char *)travel_options ^= 12;
-            D_0012B508 = 146;
+            text_colour = 146;
             msgbox_show_rsc(454, 1);
         }
     } else {
         *(signed char *)travel_options ^= 48;
         if (((int)(unsigned short)(*(short *)travel_options & 16)) != 0 && gold_can_afford(travel_trip_cost()) == 0) {
             *(signed char *)travel_options ^= 48;
-            D_0012B508 = 146;
+            text_colour = 146;
             msgbox_show_rsc(454, 1);
         }
     }
@@ -609,7 +609,7 @@ void travel_button_find(void)
     if (scratch_190ce4[0] == 0) return;
     travel_zoomed = 0;
     sound_play(203, player_object, 110);
-    D_0012B508 = 145;
+    text_colour = 145;
     xn_kbd_flush();
     prompt = (iptr)scratch_buffer + 55000;
     mc_set_location(807, str_travel_c);

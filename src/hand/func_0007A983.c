@@ -15,10 +15,10 @@ extern char str_bio_dat_2[];
 extern char str_savetree_dat[];
 extern char str_invalid_save_game_format[];
 extern char str_dagger_grd[];
-extern short D_001788D3[];
+extern short magery_spell_point_mults[];
 extern unsigned char player_environment;
 extern unsigned short spell_last_cast_id;
-extern iptr D_00186503[];
+extern iptr building_type_odds[];
 extern int screen_shake;
 extern signed char text_rsc_buffer[];
 extern char arena2_path[];
@@ -29,7 +29,7 @@ extern struct building *current_building;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
-extern int D_00195B44;
+extern int effects_last_minute;
 extern struct location *current_location;
 extern struct character *player_character;
 extern struct career *player_class;
@@ -167,7 +167,7 @@ int load_game(char *name)
     if (player_environment == 3)
         automap_restore_seen();
     if (player_environment == 2)
-        D_00195D84 = D_00186503[(current_building = object_building(player_object))->type];
+        D_00195D84 = building_type_odds[(current_building = object_building(player_object))->type];
     if ((int)(unsigned short)(game_settings->view_flags & 1) != 0)
         xn_cam_set_view_window(160, 100, 160, 100);
     else
@@ -194,11 +194,11 @@ int load_game(char *name)
     }
     sound_stop_ambient();
     object_foreach(location_object, func_00028F8B);
-    D_00195B44 = game_minutes;
+    effects_last_minute = game_minutes;
     mem_check_now(1003);
     l20 = object_tree_size(location_object);
     l20 = object_tree_size(nonworld_root);
-    player_character->max_magicka = player_character->attributes[ATTR_INT] * D_001788D3[(player_class->flags >> 10) & 7] / 256;
+    player_character->max_magicka = player_character->attributes[ATTR_INT] * magery_spell_point_mults[(player_class->flags >> 10) & 7] / 256;
     if (player_character->magicka < 0)
         player_character->magicka = 0;
     return 1;

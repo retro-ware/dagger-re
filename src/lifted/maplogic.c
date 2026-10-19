@@ -22,12 +22,12 @@ extern unsigned char player_environment;
 extern struct spell *selected_spell;
 extern iptr D_0018461C;
 extern iptr D_00185097;
-extern iptr D_00186503[];
+extern iptr building_type_odds[];
 extern int D_00187F30[];
 extern char D_00187F44[];
 extern char D_00187F46[];
 extern signed char text_buffer[];
-extern signed char D_001903A5;
+extern signed char text_line_colour;
 extern signed char D_001903A6;
 extern char scratch_190ee4[];
 extern signed char D_001940D5;
@@ -50,7 +50,7 @@ extern struct record *floor_object;
 extern iptr haze_table_0;
 extern iptr D_00195D84;
 extern char D_00195F28[];
-extern short D_00195F5E;
+extern short building_music_seed;
 extern char saved_player_object[];
 extern char D_00196120[];
 extern signed char current_region;
@@ -59,7 +59,7 @@ extern signed char current_climate;
 extern signed char crime_current;
 extern signed char is_daytime;
 extern signed char world_loading;
-extern signed char D_0019628C;
+extern signed char link_axis_state;
 extern signed char D_001962A3;
 extern struct dungeon_block dungeon_blocks[];
 extern signed char D_001967A1;
@@ -72,10 +72,10 @@ extern int blocks_bsa;
 extern signed char dungeon_block_count;
 extern iptr D_00196DA4;
 extern signed char monsters_woken;
-extern iptr D_001A41DC;
+extern iptr bank_bought_house_building;
 extern iptr D_001A41E4;
 extern struct membership *guild_membership;
-extern signed char D_001A4A1D;
+extern signed char guild_join_asked;
 extern int stocked_shop_count;
 extern int D_001A4C94;
 extern int D_001A94C0;
@@ -283,7 +283,7 @@ void dungeon_load(int dungeon_index)
     links_resolve();
     dungeon_grid_build();
     dungeon_choose_textures();
-    D_0019628C = 0;
+    link_axis_state = 0;
     floor_object = 0;
     player_environment = 3;
     dungeon_water_level = 10000;
@@ -307,7 +307,7 @@ void dungeon_load(int dungeon_index)
     D_001950E8 = marker_count(location_object, 16);
     xn_light_ambient = 0;
     xn_tex_cache_flush();
-    text_buffer[0] = (D_001903A5 = (D_001903A6 = 0));
+    text_buffer[0] = (text_line_colour = (D_001903A6 = 0));
     xn_pal_set_range_8bit((char *)text_buffer, 255, 1);
 }
 
@@ -392,10 +392,10 @@ void building_enter(struct building *building)
         hud_message_add((iptr)str_this_house_has_nothing_of_value_3);
         return;
     }
-    D_00195F5E = rand();
+    building_music_seed = rand();
     if (building_try_enter(building) == 0) return;
     current_building = building;
-    D_00195D84 = D_00186503[building->type];
+    D_00195D84 = building_type_odds[building->type];
     object_free_children((struct record *)D_00196120);
     if (building->id != player_character->house) {
         building_grant_access(building, 5, (int)(iptr)(((char *)(iptr)game_minutes) + building_minutes_to_close(building)));
@@ -409,7 +409,7 @@ void building_enter(struct building *building)
     player_environment = 2;
     D_001940D5 |= 2;
     floor_object = 0;
-    D_001A4A1D = 0;
+    guild_join_asked = 0;
     if (world_loading == 0) building_update_open_state();
     if (building->id == D_001A4C94) return;
     stocked_shop_count = 0;
@@ -431,12 +431,12 @@ void building_exit(void)
     position_history_reset();
     player_environment = 1;
     D_001940D5 |= 2;
-    D_001A4A1D = 0;
+    guild_join_asked = 0;
     current_building = 0;
     guild_membership = 0;
     sound_stop_ambient();
     if (D_001A41E4 == 0) return;
-    town_map_note_building(D_001A41E4, D_001A41DC);
+    town_map_note_building(D_001A41E4, bank_bought_house_building);
     D_001A41E4 = 0;
 }
 

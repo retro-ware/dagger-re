@@ -5,7 +5,7 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern iptr xn_tex_archives[];
 extern signed char key_down_minus;
 extern signed char key_down_equals;
@@ -40,7 +40,7 @@ extern char arena2_path[];
 extern char arena2_cd_path[];
 extern signed char D_001940D4;
 extern signed char D_001940D6;
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern signed char D_001940DA;
 extern struct record *inventory_containers[];
 extern struct record *D_001959DC;
@@ -179,7 +179,7 @@ void kludge_jump_month(void)
 
 void kludge_advance_level(void)
 {
-    D_001940D9 |= 4;
+    player_view_flags |= 4;
     sheet_open(1);
 }
 
@@ -216,7 +216,7 @@ void kludge_make_test_character(int full)
 
     saved_seed = rand();
     srand(12345);
-    D_001940D9 |= 8;
+    player_view_flags |= 8;
     if (cfg_gender != 0 && full != 0) player_character->flags = 1;
     if (((int)(unsigned short)(player_character->flags & 1)) != 0) {
         *(int *)clothing_gender_group = 12;
@@ -334,7 +334,7 @@ void kludge_make_test_character(int full)
     item = &object->data.item;
     item_make_artifact(item, (int)(unsigned char)cfg_artifact);
     player_refresh_paperdoll();
-    D_001940D9 &= 247;
+    player_view_flags &= 247;
     srand(saved_seed);
 }
 
@@ -344,7 +344,7 @@ void starting_equipment_give(void)
     int unused2;
     struct record *weapon;
 
-    D_001940D9 |= 8;
+    player_view_flags |= 8;
     if (((int)(unsigned short)(player_character->flags & 1)) != 0) {
         *(int *)clothing_gender_group = 12;
     } else {
@@ -370,7 +370,7 @@ void starting_equipment_give(void)
     item_add_to_container(D_001959DC, 27, 0, 0);
     starting_spells_give(object_find_item(player_entity->children, 27, 0));
     player_refresh_paperdoll();
-    D_001940D9 &= 247;
+    player_view_flags &= 247;
 }
 
 struct record *item_add_to_container(struct record *container, int group, int item_index, int equip)
@@ -455,7 +455,7 @@ void kludge_show_memory(void)
     int total;
     iptr block;
 
-    D_0012B508 = 146;
+    text_colour = 146;
     i = 0;
     row = i;
     total = row;
@@ -468,7 +468,7 @@ void kludge_show_memory(void)
         row++;
         total += ((struct tex_block *)block)->size;
     }
-    D_0012B508 = 245;
+    text_colour = 245;
     mc_set_location(494, str_kludge_c);
     mc_sprintf((char *)text_buffer, str_total_memory, total);
     text_draw((iptr)text_buffer, (row / 25) * 160, (row % 25) << 3);

@@ -13,8 +13,8 @@ extern char str_sheet_c[];
 extern signed char world_running;
 extern char scratch_190be4[];
 extern char scratch_190d64[];
-extern short D_00190D8C[];
-extern signed char D_001940D9;
+extern short levelup_attribute_floor[];
+extern signed char player_view_flags;
 extern struct record *player_object;
 extern struct image *D_00195B5C;
 extern struct character *player_character;
@@ -25,7 +25,7 @@ extern short list_popup_height;
 extern short list_popup_y;
 extern short list_popup_x;
 extern short list_popup_width;
-extern signed char D_0019626C;
+extern signed char sheet_selected_attribute;
 extern unsigned char game_mode_under_popup;
 extern signed char screen_active;
 extern signed char game_mode;
@@ -56,7 +56,7 @@ int sheet_open(short opening)
         list_popup_y = 100 - (D_00199638->height >> 1);
         list_popup_width = D_00199638->width;
         list_popup_height = D_00199638->height;
-        if (((struct bf8_2_1 *)&D_001940D9)->f != 0) {
+        if (((struct bf8_2_1 *)&player_view_flags)->f != 0) {
             hp_gain = (rand_range(player_class->hp_per_level >> 1, player_class->hp_per_level) + (player_character->attributes[4] / 10)) - 5;
             if (hp_gain < 1) hp_gain = 1;
             player_character->max_health += hp_gain;
@@ -64,15 +64,15 @@ int sheet_open(short opening)
             sound_play(364, player_object, 100);
         }
         if (((int)(short)opening) == 50) {
-            D_001940D9 |= 4;
+            player_view_flags |= 4;
             *(short *)scratch_190d64 = 30;
         } else {
             *(short *)scratch_190d64 = rand_range(4, 6);
         }
         *(int *)scratch_190be4 = 0;
-        mc_memcpy(D_00190D8C, (signed char *)&player_character->base_attributes[0], 16, str_sheet_c, 97, 4);
+        mc_memcpy(levelup_attribute_floor, (signed char *)&player_character->base_attributes[0], 16, str_sheet_c, 97, 4);
         sheet_place_spinner(13);
-        D_0019626C = 0;
+        sheet_selected_attribute = 0;
         world_running = 0;
     }
     if (((int)(unsigned char)game_mode) == 3) {

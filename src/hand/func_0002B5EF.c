@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern short font_height;
 extern char str_qcom_c[];
 extern char str_true[];
@@ -32,7 +32,7 @@ extern int xn_font_select(int);
 #pragma aux mc_set_location parm routine [];
 
 
-#define COLOR (*(unsigned char *)&D_0012B508)
+#define COLOR (*(unsigned char *)&text_colour)
 #define LINEH (font_height)
 #define CUR (*(struct quest **)&quest_debug_data)
 #define NEXTLINE() \

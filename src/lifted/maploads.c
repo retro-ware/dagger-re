@@ -9,7 +9,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr big_buffer;
 extern char D_001704CC[];
@@ -484,7 +484,7 @@ void tavern_frame(void)
 
     if (tavern_open(0) == 0) return;
     xn_font_select(4);
-    D_0012B508 = 146;
+    text_colour = 146;
     if (((struct bf8_2_1 *)&D_001940D4)->f != 0 && (row = list_popup_update()) > (-1)) {
         tavern_buy_food(row);
     }

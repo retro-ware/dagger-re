@@ -4,7 +4,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern char str_potions_c[];
 extern char str_your_potion_has_been_mixed[];
@@ -314,7 +314,7 @@ void potion_drink(struct record *recipe)
 
 void potion_make(struct item *recipe_item)
 {
-    D_0012B508 = 146;
+    text_colour = 146;
     if (potion_have_recipe_ingredients(recipe_item) != 0) {
         potion_load_recipe(recipe_item);
         return;

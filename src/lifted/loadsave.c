@@ -9,7 +9,7 @@ extern signed char mouse_buttons;
 extern signed char mouse_double_click;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern int dungeon_water_level;
 extern iptr big_buffer;
 extern char str_loadsave_c[];
@@ -20,7 +20,7 @@ extern char str_fmt_s_s_4[];
 extern char str_error_writing_to_drive[];
 extern char str_savename_txt[];
 extern char str_save[];
-extern char D_00176911[];
+extern char str_wildcard[];
 extern char str_rumor_dat_2[];
 extern char str_bio_dat_2[];
 extern char str_savetree_dat[];
@@ -30,38 +30,38 @@ extern char str_load00i0_img[];
 extern char str_save00i0_img[];
 extern char str_savex_image_raw[];
 extern char str_savex_savename_txt[];
-extern char D_001769BC[];
+extern char saveload_prompt_fmt[];
 extern char str_savevars_dat[];
 extern char str_invalid_quest_object[];
 extern unsigned char player_environment;
 extern char travel_options[];
 extern char D_00178A10[];
 extern int guards_timer;
-extern char D_00178A18[];
-extern iptr D_001846F8;
+extern char savevars_version[];
+extern iptr prompt_enter_description;
 extern struct rect saveload_buttons[];
 extern char savetree_version[];
-extern int D_00187F28;
+extern int last_unloaded_location;
 extern char saved_location_name[];
 extern char saved_region_name[];
 extern char bio_modifiers[];
 extern char saved_positions[];
-extern char D_0018DE44[];
+extern char savevars_0f7[];
 extern struct region regions[62];
 extern signed char text_buffer[];
-extern signed char D_001903A8;
+extern signed char saveload_slot_digit;
 extern signed char scratch_190d16;
 extern signed char text_rsc_buffer[];
-extern char D_001913E4[];
+extern char enchant_text[];
 extern char arena2_path[];
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern unsigned char world_state_flags;
 extern signed char ui_dirty_flags;
 extern signed char quest_global_states[];
-extern signed char D_001952EE;
-extern signed char D_00195303;
-extern signed char D_0019530D;
+extern signed char load_requeue_flag_a;
+extern signed char load_requeue_flag_b;
+extern signed char load_requeue_flag_c;
 extern int last_skill_check_minutes;
 extern char loan_collectors_next[];
 extern int bank_ship_price;
@@ -71,7 +71,7 @@ extern char frame_counter[];
 extern struct record *logbook_object;
 extern struct record *options_object;
 extern int view_look_pitch;
-extern char D_001959C4[];
+extern char savevars_0e1[];
 extern struct record *inventory_containers[9];
 extern int spell_points_bonus;
 extern struct record *quest_root;
@@ -79,19 +79,19 @@ extern struct record *bank_accounts;
 extern char D_00195A08[];
 extern int D_00195A0C;
 extern struct quest_face quest_faces[10];
-extern int D_00195A78;
+extern int strength_bonus_end;
 extern int jump_velocity;
 extern struct record *camera_object;
 extern struct building *current_building;
 extern struct record *player_entity;
 extern struct record *player_object;
-extern char D_00195AAC[];
+extern char savevars_4_bytes[];
 extern int vertical_velocity;
 extern struct record *location_object;
 extern char cheat_flags[];
 extern char clothing_gender_group[];
 extern char clothing_gender_offset[];
-extern int D_00195B44;
+extern int effects_last_minute;
 extern struct image *D_00195B5C;
 extern char shared_scratch[];
 extern int hud_message_expiry[];
@@ -114,7 +114,7 @@ extern short spell_ready_cost;
 extern char saved_player_object[];
 extern char D_001961F5[];
 extern signed char in_knightly_order_hall;
-extern char D_00196265[];
+extern char savevars_byte[];
 extern signed char text_macro_imperial;
 extern signed char current_region;
 extern signed char weapon_active_hand;
@@ -126,7 +126,7 @@ extern char people_witness_flags[];
 extern signed char is_daytime;
 extern signed char world_loading;
 extern signed char night_sky_loaded;
-extern signed char D_0019966C;
+extern signed char msgbox_input_result;
 extern iptr quest_debug_data;
 extern int daylight;
 extern int save_file_handle;
@@ -459,9 +459,9 @@ void load_drop_spawned_markers(void)
 void save_write_image(void)
 {
     mc_set_location(494, str_loadsave_c);
-    mc_sprintf(D_001913E4, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_image_raw);
-    unlink(D_001913E4);
-    if ((save_file_handle = open(D_001913E4, 546, 384)) < 0) {
+    mc_sprintf(enchant_text, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_image_raw);
+    unlink(enchant_text);
+    if ((save_file_handle = open(enchant_text, 546, 384)) < 0) {
         fatal_error(str_error_writing_to_drive);
     }
     write(save_file_handle, (void *)(big_buffer + 24000), 4000);
@@ -471,9 +471,9 @@ void save_write_image(void)
 int save_write_name(char *name)
 {
     mc_set_location(516, str_loadsave_c);
-    mc_sprintf(D_001913E4, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savename_txt);
-    unlink(D_001913E4);
-    save_file_handle = open(D_001913E4, 546, 384);
+    mc_sprintf(enchant_text, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savename_txt);
+    unlink(enchant_text);
+    save_file_handle = open(enchant_text, 546, 384);
     write(save_file_handle, name, 32);
     close(save_file_handle);
     return 0;
@@ -486,7 +486,7 @@ int save_game(int slot, char *name)
     mem_check_now(1000);
     mc_set_location(540, str_loadsave_c);
     mc_sprintf((char *)text_buffer, str_save, slot);
-    disk_delete_matching(text_buffer, D_00176911);
+    disk_delete_matching(text_buffer, str_wildcard);
     save_write_image();
     save_write_name(name);
     savevars_write(slot);
@@ -543,9 +543,9 @@ void load_requeue_s0000021(void)
         }
         object = object->next;
     }
-    if (count != 0 || D_00195303 == 0 || D_0019530D != 0) return;
+    if (count != 0 || load_requeue_flag_b == 0 || load_requeue_flag_c != 0) return;
     mc_strncpy(D_001961F5, str_s0000021_qbn, 13, str_loadsave_c, 616);
-    D_001952EE = 0;
+    load_requeue_flag_a = 0;
 }
 
 void saveload_menu(int saving)
@@ -565,7 +565,7 @@ void saveload_menu(int saving)
     mc_memset((void *)scratch_buffer, 0, 256, str_loadsave_c, 862, 4);
     mc_strncpy((char *)text_buffer, str_savex_image_raw, 160, str_loadsave_c, 864);
     for (i = 0; i < 6; i++) {
-        D_001903A8 = *(signed char *)&i + 48;
+        saveload_slot_digit = *(signed char *)&i + 48;
         handle = open((char *)text_buffer, 512);
         if (handle < 1) continue;
         read(handle, (*(char **)&big_buffer + (i * 4000)), 4000);
@@ -574,7 +574,7 @@ void saveload_menu(int saving)
     }
     mc_strncpy((char *)text_buffer, str_savex_savename_txt, 160, str_loadsave_c, 874);
     for (i = 0; i < 6; i++) {
-        D_001903A8 = *(signed char *)&i + 48;
+        saveload_slot_digit = *(signed char *)&i + 48;
         *(signed char *)((scratch_buffer + (i << 5))) = 0;
         handle = open((char *)text_buffer, 512);
         if (handle < 1) continue;
@@ -632,16 +632,16 @@ int saveload_confirm(int button, int saving, int slot, int used_slots)
 
     if (saving != 0) {
         mc_strncpy((char *)text_rsc_buffer, (scratch_buffer + (slot << 5)), 2048, str_loadsave_c, 948);
-        D_0012B508 = 146;
+        text_colour = 146;
         prompt = (iptr)scratch_buffer + 55000;
         mc_set_location(951, str_loadsave_c);
-        mc_sprintf((char *)prompt, D_001769BC, D_001846F8);
+        mc_sprintf((char *)prompt, saveload_prompt_fmt, prompt_enter_description);
         *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
         xn_kbd_flush();
         inpstr_begin_text(text_rsc_buffer, 31);
         mouse_buttons = (mouse_buttons_prev = 0);
         msgbox_show_string(prompt, 2);
-        if (((int)(unsigned char)D_0019966C) == 2) return 0;
+        if (((int)(unsigned char)msgbox_input_result) == 2) return 0;
         save_game(slot, (char *)text_rsc_buffer);
     } else {
         load_game(slot);
@@ -668,15 +668,15 @@ void savevars_read(iptr slot)
     read(save_file_handle, &view_look_pitch, 12);
     read(save_file_handle, &text_macro_imperial, 1);
     PORT_READ_QUEST_FACES(save_file_handle, quest_faces, 100);
-    read(save_file_handle, D_001959C4, 20);
+    read(save_file_handle, savevars_0e1, 20);
     read(save_file_handle, travel_options, 2);
-    read(save_file_handle, D_0018DE44, 512);
-    read(save_file_handle, D_00196265, 1);
+    read(save_file_handle, savevars_0f7, 512);
+    read(save_file_handle, savevars_byte, 1);
     PORT_READ_HEADER(save_file_handle, saved_player_object, 71);
     read(save_file_handle, &spell_points_bonus, 4);
     read(save_file_handle, D_00195A08, 4);
     read(save_file_handle, &D_00195A0C, 4);
-    read(save_file_handle, &D_00195A78, 4);
+    read(save_file_handle, &strength_bonus_end, 4);
     read(save_file_handle, quest_global_states, 64);
     read(save_file_handle, &spell_ready_cost, 2);
     read(save_file_handle, &is_daytime, 1);
@@ -702,9 +702,9 @@ void savevars_read(iptr slot)
     read(save_file_handle, &current_region, 1);
     read(save_file_handle, cheat_flags, 4);
     read(save_file_handle, &vertical_velocity, 4);
-    read(save_file_handle, D_00195AAC, 4);
+    read(save_file_handle, savevars_4_bytes, 4);
     read(save_file_handle, &jump_velocity, 4);
-    read(save_file_handle, D_00178A18, 2);
+    read(save_file_handle, savevars_version, 2);
     read(save_file_handle, &bank_house_price, 4);
     read(save_file_handle, &bank_ship_price, 4);
     read(save_file_handle, saved_location_name, 32);
@@ -715,7 +715,7 @@ void savevars_read(iptr slot)
     read(save_file_handle, &climate_index, 4);
     read(save_file_handle, climate_weathers, 6);
     read(save_file_handle, &dungeon_water_level, 4);
-    read(save_file_handle, &D_00187F28, 4);
+    read(save_file_handle, &last_unloaded_location, 4);
     read(save_file_handle, &recall_anchor_environment, 4);
     read(save_file_handle, &recall_anchor_location, 4);
     read(save_file_handle, &recall_anchor_region, 4);
@@ -740,15 +740,15 @@ void savevars_write(int slot)
     write(save_file_handle, &view_look_pitch, 12);
     write(save_file_handle, &text_macro_imperial, 1);
     PORT_WRITE_QUEST_FACES(save_file_handle, quest_faces, 100);
-    write(save_file_handle, D_001959C4, 20);
+    write(save_file_handle, savevars_0e1, 20);
     write(save_file_handle, travel_options, 2);
-    write(save_file_handle, D_0018DE44, 512);
-    write(save_file_handle, D_00196265, 1);
+    write(save_file_handle, savevars_0f7, 512);
+    write(save_file_handle, savevars_byte, 1);
     PORT_WRITE_HEADER(save_file_handle, saved_player_object, 71);
     write(save_file_handle, &spell_points_bonus, 4);
     write(save_file_handle, D_00195A08, 4);
     write(save_file_handle, &D_00195A0C, 4);
-    write(save_file_handle, &D_00195A78, 4);
+    write(save_file_handle, &strength_bonus_end, 4);
     write(save_file_handle, quest_global_states, 64);
     write(save_file_handle, &spell_ready_cost, 2);
     write(save_file_handle, &is_daytime, 1);
@@ -774,9 +774,9 @@ void savevars_write(int slot)
     write(save_file_handle, &current_region, 1);
     write(save_file_handle, cheat_flags, 4);
     write(save_file_handle, &vertical_velocity, 4);
-    write(save_file_handle, D_00195AAC, 4);
+    write(save_file_handle, savevars_4_bytes, 4);
     write(save_file_handle, &jump_velocity, 4);
-    write(save_file_handle, D_00178A18, 2);
+    write(save_file_handle, savevars_version, 2);
     write(save_file_handle, &bank_house_price, 4);
     write(save_file_handle, &bank_ship_price, 4);
     write(save_file_handle, saved_location_name, 32);
@@ -787,7 +787,7 @@ void savevars_write(int slot)
     write(save_file_handle, &climate_index, 4);
     write(save_file_handle, climate_weathers, 6);
     write(save_file_handle, &dungeon_water_level, 4);
-    write(save_file_handle, &D_00187F28, 4);
+    write(save_file_handle, &last_unloaded_location, 4);
     write(save_file_handle, &recall_anchor_environment, 4);
     write(save_file_handle, &recall_anchor_location, 4);
     write(save_file_handle, &recall_anchor_region, 4);
@@ -817,7 +817,7 @@ void load_reset_state(void)
     night_sky_loaded = 0;
     mc_memset(hud_message_ptrs, 0, 68, str_loadsave_c, 1188, 68);
     mc_memset(hud_message_expiry, 0, 68, str_loadsave_c, 1189, 68);
-    D_00195B44 = game_minutes;
+    effects_last_minute = game_minutes;
     world_state_flags |= 1;
     D_001940D5 |= 2;
     ui_dirty_flags |= 8;
@@ -938,10 +938,10 @@ void text_draw_centred_black_shadow(int text, int x, int y)
 {
     int colour;
 
-    *(short *)&colour = (int)(unsigned char)D_0012B508;
-    D_0012B508 = 0;
+    *(short *)&colour = (int)(unsigned char)text_colour;
+    text_colour = 0;
     text_draw_centred(text, (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&x) + 1), (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&y) + 1));
-    D_0012B508 = *(signed char *)&colour;
+    text_colour = *(signed char *)&colour;
     text_draw_centred(text, (int)(short)*(short *)&x, (int)(short)*(short *)&y);
 }
 
@@ -949,10 +949,10 @@ void text_draw_colour15_shadow(int text, int x, int y)
 {
     int colour;
 
-    *(short *)&colour = (int)(unsigned char)D_0012B508;
-    D_0012B508 = 15;
+    *(short *)&colour = (int)(unsigned char)text_colour;
+    text_colour = 15;
     text_draw(text, (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&x) + 1), (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&y) + 1));
-    D_0012B508 = *(signed char *)&colour;
+    text_colour = *(signed char *)&colour;
     text_draw(text, (int)(short)*(short *)&x, (int)(short)*(short *)&y);
 }
 
@@ -960,10 +960,10 @@ void text_draw_black_shadow(int text, int x, int y)
 {
     int colour;
 
-    *(short *)&colour = (int)(unsigned char)D_0012B508;
-    D_0012B508 = 0;
+    *(short *)&colour = (int)(unsigned char)text_colour;
+    text_colour = 0;
     text_draw(text, (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&x) + 1), (int)(iptr)&*(signed char *)((char *)(iptr)((int)(short)*(short *)&y) + 1));
-    D_0012B508 = *(signed char *)&colour;
+    text_colour = *(signed char *)&colour;
     text_draw(text, (int)(short)*(short *)&x, (int)(short)*(short *)&y);
 }
 

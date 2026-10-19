@@ -9,7 +9,7 @@ extern char D_001875B7[];
 extern signed char D_001940D6;
 extern signed char D_001940DA;
 extern signed char player_motion_flags;
-extern int D_0019597C[];
+extern int right_hand_ready_delay[];
 extern struct record *player_entity;
 extern struct record *player_object;
 extern int frame_ticks;
@@ -46,7 +46,7 @@ void weapon_player_update(void)
     iptr cif;
     int unused;
 
-    if (D_0019597C[((int)(unsigned char)weapon_active_hand)] != 0) return;
+    if (right_hand_ready_delay[((int)(unsigned char)weapon_active_hand)] != 0) return;
     if ((player_character->conditions & 0x1) != 0) return;
     if (cast_anim_state >= 0 || (iptr)spell_ready_missile != 0 || screen_active != 0 || ((struct bf8_6_1 *)&D_001940DA)->f != 0) {
         return;

@@ -5,7 +5,7 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern char str_spfx_c[];
 extern char str_trap_will_not_work_on_humanoids[];
 extern char str_trap_active[];
@@ -21,7 +21,7 @@ extern iptr D_00184634;
 extern iptr D_00184638;
 extern iptr D_0018463C;
 extern iptr D_00184640;
-extern iptr D_00185083;
+extern iptr text_feel_somewhat_bad;
 extern iptr D_00185097;
 extern signed char undead_daedra_ids[];
 extern char spell_resist_flags[];
@@ -737,7 +737,7 @@ int spfx_disease_daily(struct disease *disease)
             }
         }
     }
-    hud_message_add(D_00185083);
+    hud_message_add(text_feel_somewhat_bad);
     return 1;
 }
 
@@ -848,7 +848,7 @@ void spfx_popup_update(void)
     int choice;
 
     if (spfx_popup_handler == 0) return;
-    D_0012B508 = 146;
+    text_colour = 146;
     if (spfx_popup_handler == 1 && ((int)(unsigned char)game_mode) != 8) {
         if (((int)D_00196271) == 1) {
             recall_anchor_environment = (int)player_environment;

@@ -9,7 +9,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_guilds_c[];
@@ -35,7 +35,7 @@ extern short D_00190DD0;
 extern short guild_search_faction;
 extern signed char D_001940D4;
 extern signed char ui_dirty_flags;
-extern signed char D_001940D9;
+extern signed char player_view_flags;
 extern struct building *current_building;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -57,14 +57,14 @@ extern signed char player_on_ground;
 extern signed char mouse_buttons_prev;
 extern signed char in_dungeon_water;
 extern signed char D_00196299;
-extern signed char D_001962A0;
+extern signed char player_swimming;
 extern signed char inv_from_guild_shop;
 extern struct faction *found_faction;
 extern iptr guild_saved_screen;
 extern struct membership *guild_membership;
 extern short D_001A4A18;
-extern short D_001A4A1A;
-extern signed char D_001A4A1C;
+extern short guild_npc_seed;
+extern signed char guild_map_pending;
 extern struct image *rest_image;
 extern signed char rest_loitering;
 extern char shared_picklist[];
@@ -172,7 +172,7 @@ void guild_buy_magic_items(void)
         shop_stock_magic((iptr)trade_container, 0, 1, 1);
     }
     srand(seed);
-    D_001940D9 |= 2;
+    player_view_flags |= 2;
     if (holiday_today(game_minutes, (int)(unsigned char)current_region) == 38) {
         trade_price_scale = 128;
     }
@@ -183,7 +183,7 @@ void guild_buy_magic_items(void)
 void spellshop_open(void)
 {
     D_001A4A18 = rand();
-    srand((int)(short)D_001A4A1A);
+    srand((int)(short)guild_npc_seed);
     game_mode = 5;
     ui_dirty_flags &= 254;
     ui_dirty_flags |= 2;
@@ -240,7 +240,7 @@ void spellshop_draw_spell(struct spell *spell)
     int price;
     slot16 i;
 
-    D_0012B508 = 145;
+    text_colour = 145;
     xn_draw_spell_icon(172, 32, spell->icon);
     xn_draw_copy_rect_stride_bytes((char *)((iptr)(*(char **)&magic_window_image + (spell->element * 640)) + 24), (*(char **)&screen_buffer + 10486), 16, 16, 40);
     xn_draw_copy_rect_stride_bytes((*(char **)&magic_window_image + (spell->target * 640)), (char *)&*(signed char *)(*(char **)&screen_buffer + 10445), 24, 16, 40);
@@ -459,7 +459,7 @@ void guild_give_map(int brotherhood)
 {
     struct record *map;
 
-    D_001A4A1C = 1;
+    guild_map_pending = 1;
     map = object_create_child(location_object, 0, 107);
     map->type = 2;
     item_make(11, 0, &map->data.item);
@@ -523,18 +523,18 @@ void rest_open(void)
         return;
     }
     if (creature_count != 0 && ((struct bf8_5_1 *)&cheat_flags)->f == 0) {
-        D_0012B508 = 146;
+        text_colour = 146;
         msgbox_show_rsc(354, 1);
         return;
     }
     if (vertical_velocity != 0) return;
-    if (in_dungeon_water != 0 || D_001962A0 != 0) {
-        D_0012B508 = 146;
+    if (in_dungeon_water != 0 || player_swimming != 0) {
+        text_colour = 146;
         msgbox_show_rsc(355, 1);
         return;
     }
     if ((player_character->conditions & 0x8) != 0 && player_on_ground == 0) {
-        D_0012B508 = 146;
+        text_colour = 146;
         msgbox_show_rsc(355, 1);
         return;
     }

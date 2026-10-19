@@ -6,7 +6,7 @@ extern signed char mouse_buttons;
 extern signed char mouse_double_click;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char key_down_esc;
 extern struct rect itemmaker_buttons[];
 extern signed char D_001940D4;
@@ -38,7 +38,7 @@ void itemmaker_update(void)
 
     if (itemmaker_open(0) == 0) return;
     xn_tex_cache_begin_frame();
-    D_0012B508 = 146;
+    text_colour = 146;
     xn_draw_fullscreen_overlay_shaded((char *)window_image);
     xn_font_select(4);
     itemmaker_draw();

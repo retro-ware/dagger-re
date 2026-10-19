@@ -6,7 +6,7 @@
 extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern iptr screen_buffer;
 extern signed char xn_mouse_cursor_drawn;
 extern char str_intro_c[];
@@ -162,7 +162,7 @@ L3A496:;
                 if (pick == 0) pick = 255;
                 if (pick > 0) {
                     while (mouse_buttons != 0) xn_mouse_poll_clamped();
-                    D_0012B508 = 146;
+                    text_colour = 146;
                     msgbox_button_ids = 4;
                     D_00196090 = 5;
                     msgbox_button_keys = 21;

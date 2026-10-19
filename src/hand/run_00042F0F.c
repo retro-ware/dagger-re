@@ -8,7 +8,7 @@ struct bits8 {
 extern unsigned char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern unsigned char key_down_minus;
 extern unsigned char key_down_equals;
 extern unsigned char key_down_ctrl;
@@ -23,11 +23,11 @@ extern char *D_0018323C;
 extern char *D_00183240;
 extern char *D_00183244;
 extern char *D_00184876;
-extern short D_00187CA9;
+extern short player_speed_bonus;
 extern signed char text_buffer[];
 extern struct bits8 D_001940D5;
 extern struct bits8 D_001940D6;
-extern struct bits8 D_001940D9;
+extern struct bits8 player_view_flags;
 extern struct bits8 D_001940DA;
 extern unsigned char player_motion_flags;
 extern int D_001950E4;
@@ -54,7 +54,7 @@ extern unsigned char screen_active;
 extern unsigned char game_mode;
 extern unsigned char interaction_mode;
 extern unsigned char in_dungeon_water;
-extern unsigned char D_001962A0;
+extern unsigned char player_swimming;
 extern int cheat_marker_index;
 extern int D_001A4A70;
 extern int D_001A4A74;
@@ -154,7 +154,7 @@ void keys_world_actions(void)
             mc_set_location(96, str_keys_c);
             mc_sprintf(((char *)text_buffer), D_0018323C, weapon_active_hand ? D_00183240 : D_00183244);
             D_00195F2E = 20;
-            D_0012B508 = 146;
+            text_colour = 146;
             hud_message_add(((char *)text_buffer));
         }
     }
@@ -171,10 +171,10 @@ void keys_world_actions(void)
         interaction_mode = 3;
     if (interaction_mode != view)
         interaction_mode_cycle(0);
-    if (key_action_held(11) && (player_character->flags & 1536) == 0 && !in_dungeon_water && !D_001962A0)
-        D_001940D9.b4 = 1;
+    if (key_action_held(11) && (player_character->flags & 1536) == 0 && !in_dungeon_water && !player_swimming)
+        player_view_flags.b4 = 1;
     else
-        D_001940D9.b4 = 0;
+        player_view_flags.b4 = 0;
     if (key_action_held(31))
         magic_items_open();
     if (key_action_pressed(19))
@@ -182,7 +182,7 @@ void keys_world_actions(void)
     if (key_action_held(13))
         transport_menu();
     if (key_pressed_once(2) && cheat_mode)
-        D_00187CA9 ^= 1300;
+        player_speed_bonus ^= 1300;
     if (mouse_control_mode == 0) {
         if (key_action_pressed(22) || D_001940DA.b6 && (mouse_buttons & 1)) {
             view_look_pitch = 32;
@@ -214,7 +214,7 @@ void keys_world_actions(void)
         view_look_pitch = -256;
     else if (view_look_pitch > 256)
         view_look_pitch = 256;
-    if ((player_character->flags & 1536) == 0 && key_action_pressed(9) && !D_001962A0)
+    if ((player_character->flags & 1536) == 0 && key_action_pressed(9) && !player_swimming)
         player_motion_flags ^= 4;
     saved = cheat_flags;
     if (key_down_ctrl && key_pressed_once(59))

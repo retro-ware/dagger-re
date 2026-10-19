@@ -2,7 +2,7 @@
  * ordinary source: edit them here. Keep each function where it is: Watcom aligns switch
  * tables from the start of the file, so moving functions can change the code. */
 
-extern signed char D_0012B508;
+extern signed char text_colour;
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
 extern signed char msgbox_button_ids;
@@ -20,6 +20,6 @@ void msgbox_yes_no_rsc(int text_id)
     D_00196091 = 0;
     msgbox_button_keys = 21;
     D_00196034 = 49;
-    D_0012B508 = 146;
+    text_colour = 146;
     msgbox_show_rsc((int)(short)text_id, 5);
 }

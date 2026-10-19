@@ -1,5 +1,5 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0008C2D7 */
-extern unsigned char D_0012B508;
+extern unsigned char text_colour;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
@@ -37,15 +37,15 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
     for (;;) {
         key = inpstr_read_key();
         if (key == 0) {
-            old = D_0012B508;
-            D_0012B508 = 0;
+            old = text_colour;
+            text_colour = 0;
             xn_draw_fill_rect(x, y, w, h);
-            D_0012B508 = 12;
+            text_colour = 12;
             D_00142928 = x + inpstr_text_width(inpstr_text, inpstr_cursor);
             D_0014292C = y;
             if (*(int *)DOS_LOW(0x46C) & 32)
                 xn_draw_line(D_00142928, D_0014292C, D_00142928, D_0014292C + font_height - 1);
-            D_0012B508 = old;
+            text_colour = old;
             text_draw(inpstr_text, x, y);
             xn_gfx_present_inclusive(1);
             xn_gfx_wait_vretrace_start();

@@ -68,7 +68,7 @@ extern signed char screen_active;
 extern signed char player_on_ground;
 extern signed char mouse_buttons_prev;
 extern signed char in_dungeon_water;
-extern signed char D_0019628E;
+extern signed char player_moving;
 extern signed char collide_landed;
 extern int collide_height;
 extern char collide_flags[];
@@ -480,7 +480,7 @@ void player_movement_update(void)
     steer_turn_speed_max = (((int)(unsigned char)(mouse_turn_rate & 127)) * 2) + 4;
     player_mouse_look();
     intrface_poll_controls();
-    D_0019628E = 0;
+    player_moving = 0;
     if (hud_update() != 0) return;
     region = intrface_region_at((int)(short)mouse_x, (int)(short)mouse_y, &region_x, &dy);
     cursor_draw((int)(short)*(short *)&region);
