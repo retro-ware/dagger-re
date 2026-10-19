@@ -37,7 +37,7 @@ extern char itemmaker_soul_side_codes_code[];
 extern struct enchantment itemmaker_slots[];
 extern signed char itemmaker_slot_from_soul[];
 extern void msgbox_show_string(char *, short);
-extern void func_00057147(short, short, short, short, short, short, short);
+extern void itemmaker_set_exclusions(short, short, short, short, short, short, short);
 extern int itemmaker_free_slot(void);
 extern int itemmaker_free_slot_count(void);
 
@@ -97,20 +97,20 @@ void itemmaker_add_soul_powers(int soul)
             ((char *)scratch_190ce4)[slot] = 0;
             j = *(unsigned char *)(enchant_power_exclusion_rows + type);
             if (j == 0)
-                func_00057147(slot, type, param, -1, -1, -1, -1);
+                itemmaker_set_exclusions(slot, type, param, -1, -1, -1, -1);
             else {
                 j--;
-                func_00057147(slot, type, param, *(unsigned char *)(enchant_power_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param2 + j * 20 + param * 4));
+                itemmaker_set_exclusions(slot, type, param, *(unsigned char *)(enchant_power_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param2 + j * 20 + param * 4));
             }
         } else {
             ((char *)scratch_190ce4)[slot] = 1;
             itemmaker_slots[slot].type -= 15;
             j = *(unsigned char *)(enchant_side_effect_exclusion_rows + type);
             if (j == 0)
-                func_00057147(slot, type, param, -1, -1, -1, -1);
+                itemmaker_set_exclusions(slot, type, param, -1, -1, -1, -1);
             else {
                 j--;
-                func_00057147(slot, type, param, *(unsigned char *)(enchant_side_effect_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param2 + j * 20 + param * 4));
+                itemmaker_set_exclusions(slot, type, param, *(unsigned char *)(enchant_side_effect_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param2 + j * 20 + param * 4));
             }
         }
         ((char *)itemmaker_slot_exclusions_6)[slot * 10] = ((char *)enchant_soul_codes_kind)[soul_row * 4];

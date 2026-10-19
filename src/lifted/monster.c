@@ -47,7 +47,7 @@ extern int spell_player_has_spell(unsigned char);
 extern int ai_turn_toward(struct record *, int);
 extern int ai_stealth_check(int, int, int, int);
 extern int monster_move_step(struct record *, struct record *, int);
-extern int func_00063FCF(struct record *, int, int);
+extern int monster_move_to(struct record *, int, int);
 extern int sound_play(int, iptr, int);
 extern int spawn_find_point(struct record *, int, int);
 extern int rand_range(int, int);
@@ -66,12 +66,12 @@ extern void object_apply_gravity(struct record *, struct character *);
 extern void object_foreach(struct record *, void (*)());
 int monster_set_action_seducer(struct record *, int, int);
 struct record *monster_spell_list(struct record *);
-int func_0006379A(struct record *, struct record *);
-int func_00063ED8(struct record *, int);
-void func_0006243B(struct record *, struct record *, int);
+int ai_octant_toward(struct record *, struct record *);
+int ai_center_in_corridor(struct record *, int);
+void monster_move_in_direction(struct record *, struct record *, int);
 void monster_mark_anim_slot_cb(struct record *);
 
-void func_000622EB(struct record *monster, struct record *target, int heading, int turn_dir)
+void monster_move_detour(struct record *monster, struct record *target, int heading, int turn_dir)
 {
     struct character *monster_char;
     int detour_offset;
@@ -79,7 +79,7 @@ void func_000622EB(struct record *monster, struct record *target, int heading, i
     monster_char = &monster->data.character;
     mc_memcpy(monster_header_backup, monster, RECORD_HEADER_SIZE, str_monster_c, 426, 4);
     if (monster_char->detour_steps == 1000) {
-        func_0006243B(monster, target, heading);
+        monster_move_in_direction(monster, target, heading);
         if (((int)(short)(*(short *)collide_flags & 10)) == 0) {
             monster_char->detour_steps = 1000;
             return;
@@ -103,10 +103,10 @@ void func_000622EB(struct record *monster, struct record *target, int heading, i
         monster_char->detour_side ^= 1;
     }
     mc_memcpy(monster, monster_header_backup, RECORD_HEADER_SIZE, str_monster_c, 457, 4);
-    func_0006243B(monster, target, monster_char->detour_yaw & 2047);
+    monster_move_in_direction(monster, target, monster_char->detour_yaw & 2047);
 }
 
-void func_0006243B(struct record *monster, struct record *target, int heading)
+void monster_move_in_direction(struct record *monster, struct record *target, int heading)
 {
     int saved_velocity;
     int dx;
@@ -325,7 +325,7 @@ int ai_pick_touch_spell(int creature_index)
     return 1;
 }
 
-int func_00062C15(int creature_index)
+int ai_pick_any_spell(int creature_index)
 {
     struct character *monster_char;
 
@@ -337,7 +337,7 @@ int func_00062C15(int creature_index)
     return ((ai_chosen_spell != 0) ? 1 : 0);
 }
 
-int func_00062CB6(int creature_index)
+int ai_pick_any_spell_2(int creature_index)
 {
     struct character *monster_char;
 
@@ -478,7 +478,7 @@ L635C5:;
     if (((int)(unsigned short)(monster_char->flags & 256)) != 0 && monster_char->nav_turn_count == 0) {
         monster_char->nav_blocked &= 254;
     }
-    octant = func_0006379A(monster, target);
+    octant = ai_octant_toward(monster, target);
     switch (monster_char->nav_direction) {
     case 2:
         nav_angle = ai_octant_angles[octant];
@@ -490,7 +490,7 @@ L635C5:;
         nav_angle = (ai_octant_angles[octant] + 1536) & 2047;
     }
     if (((int)(unsigned char)(monster_char->nav_blocked & 1)) == 0) return;
-    if (angle_diff <= 256 && func_00063ED8(monster, (target_angle + 256) / 512) != 0) return;
+    if (angle_diff <= 256 && ai_center_in_corridor(monster, (target_angle + 256) / 512) != 0) return;
     if (ai_turn_toward(monster, nav_angle) != 0) return;
     if (monster_char->nav_turn_count != 0) monster_char->nav_turn_count--;
     if ((monster_char->nav_blocked & monster_char->nav_direction) != 0) {
@@ -509,7 +509,7 @@ L635C5:;
     monster_char->nav_blocked |= monster_char->nav_direction;
 }
 
-int func_0006379A(struct record *from, struct record *to)
+int ai_octant_toward(struct record *from, struct record *to)
 {
     int west;
     int south;
@@ -589,7 +589,7 @@ void monster_apply_gravity(void)
     mc_memcpy(monster_move_pos, &saved_pos, 12, str_monster_c, 1201, 4);
 }
 
-void func_00063DDC(struct record *source)
+void ai_alert_creatures(struct record *source)
 {
     int i;
     int dist;
@@ -607,7 +607,7 @@ void func_00063DDC(struct record *source)
     }
 }
 
-int func_00063ED8(struct record *monster, int quadrant)
+int ai_center_in_corridor(struct record *monster, int quadrant)
 {
     int *across;
     int *along;
@@ -636,11 +636,11 @@ int func_00063ED8(struct record *monster, int quadrant)
         pos += 8;
     }
     pos += *across & -64;
-    if (quadrant == 0 || quadrant == 2) return func_00063FCF(monster, pos, *along);
-    return func_00063FCF(monster, *along, pos);
+    if (quadrant == 0 || quadrant == 2) return monster_move_to(monster, pos, *along);
+    return monster_move_to(monster, *along, pos);
 }
 
-int func_000641CD(iptr id)
+int links_has_id(iptr id)
 {
     int i;
 
@@ -650,7 +650,7 @@ int func_000641CD(iptr id)
     return 0;
 }
 
-void func_00064301(void)
+void links_reset(void)
 {
     link_count = 0;
     *(int *)&floor_object = (*(int *)&moving_model = 0);

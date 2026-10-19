@@ -27,7 +27,7 @@ extern struct faction *faction_find_type_in_region(short, short);
 extern struct faction *faction_find(short);
 extern struct faction *faction_random_of_type(unsigned char);
 extern struct qbn_person *quest_record(struct quest *, int, int);
-extern int func_000339B2(struct location_door *, struct qbn_person *, struct building *, int);
+extern int quest_person_fits(struct location_door *, struct qbn_person *, struct building *, int);
 extern struct faction *pick_random_of_three(struct faction **);
 extern int faction_random_hostile_id(void);
 extern int quest_object_in_use(int);
@@ -229,16 +229,16 @@ retry:
         quest_init_local = rand() & 1;
     if ((int)(short)(qbn_person->flags & 0x100) == 0) {
         for (candidate_count = i = 0, door = doors; i < door_count; i++, door++) {
-            if (door->building_index != 65535 && func_000339B2(door, qbn_person, &location->buildings[door->building_index], 0) != 0)
+            if (door->building_index != 65535 && quest_person_fits(door, qbn_person, &location->buildings[door->building_index], 0) != 0)
                 candidates[candidate_count++] = (door->building_index << 16) + door->id;
         }
     }
     if (qbn_person->kind != -6 && candidate_count == 0 || (int)(short)(qbn_person->flags & 0x100) != 0) {
         any_building = 1;
         for (i = 0, door = doors; i < door_count; i++, door++) {
-            if ((int)(short)(qbn_person->flags & 0x100) != 0 && func_000339B2(door, qbn_person, &location->buildings[door->building_index], 1) != 0)
+            if ((int)(short)(qbn_person->flags & 0x100) != 0 && quest_person_fits(door, qbn_person, &location->buildings[door->building_index], 1) != 0)
                 candidates[candidate_count++] = (door->building_index << 16) + door->id;
-            else if (door->building_index != 65535 && func_000339B2(door, qbn_person, &location->buildings[door->building_index], 1) != 0)
+            else if (door->building_index != 65535 && quest_person_fits(door, qbn_person, &location->buildings[door->building_index], 1) != 0)
                 candidates[candidate_count++] = (door->building_index << 16) + door->id;
         }
     }

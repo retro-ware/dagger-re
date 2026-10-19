@@ -202,7 +202,7 @@ extern void file_index_build(void);
 extern void file_index_free(void);
 extern void weapon_reload_hand_sprites(void);
 extern void weapon_free_sprites(void);
-extern void func_0007EF20(void);
+extern void swift_close(void);
 extern void intrface_free(void);
 extern void player_compute_jump_velocity(void);
 extern void model_heap_free_all(void);
@@ -327,7 +327,7 @@ void shutdown_free_all(void)
     model_heap_free_all();
     object_heap_shutdown();
     intrface_free();
-    func_0007EF20();
+    swift_close();
     if ((iptr)hud_portrait != 0 && (iptr)hud_portrait != (-1751672937)) {
         mc_free((void *)hud_portrait, str_init_c, 326);
         *(iptr *)&hud_portrait = -1751672937;

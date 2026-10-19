@@ -3,9 +3,9 @@
 #include "clib.h"
 extern char str_support_c[];
 extern signed char swift_present;
-extern int func_0007EF86(int, int);
+extern int swift_call(int, int);
 
-void func_0007EED8(void)
+void swift_poll(void)
 {
     union REGS regs;
     struct SREGS sregs;
@@ -14,5 +14,5 @@ void func_0007EED8(void)
 
     if (*((char *)&swift_present) == 0) return;
     mc_memset(&sregs, 0, 12, str_support_c, 1044, 4);
-    func_0007EF86(0x5301, 0);
+    swift_call(0x5301, 0);
 }

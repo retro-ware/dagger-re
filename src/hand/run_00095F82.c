@@ -89,7 +89,7 @@ void inv_draw_right_list(struct rect *rects)
     inv_right_count = inv_right_item_count;
 }
 
-void func_00095EDB(void)
+void inv_store_and_equip_selected(void)
 {
     int unused1;
     int unused2;

@@ -785,7 +785,7 @@ int item_artifact_equipped(int artifact_id)
     return 0;
 }
 
-void func_00067CA4(int artifact_id, int damage)
+void item_damage_artifact(int artifact_id, int damage)
 {
     int slot;
     struct item *item;

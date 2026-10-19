@@ -147,8 +147,8 @@ extern void cast_spell_on(iptr, iptr, int);
 extern void text_draw_coloured(iptr, int, int, int, unsigned char);
 extern void text_draw_centred_coloured(iptr, int, int, int, unsigned char);
 extern void detect_consider_creature(struct record *, int);
-extern void func_0007E815(struct record *, void (*)());
-extern void func_0007F0F3(int);
+extern void dungeon_grid_visit_near(struct record *, void (*)());
+extern void town_note_faction_buildings(int);
 extern void marker_make_clutter(struct record *, struct building *);
 extern void marker_make_loot_pile(struct record *, iptr);
 extern void inpstr_begin_number(int);
@@ -175,15 +175,15 @@ void spell_cast_queued_run(void);
 void world_collect_object(struct record *);
 void detect_consider(struct record *);
 void town_grid_visit_near(struct record *, void (*)());
-void func_0007F093(struct record *);
+void guild_note_halls_cb(struct record *);
 void gold_sum_credit_cb(struct record *);
 void gold_make_credit_letter(int);
 void gold_delete_credit_cb(struct record *);
-void func_0007F671(void);
-void func_0007FCBF(struct record *);
-void func_0007FD7E(struct record *);
-void func_0007FDEA(struct record *);
-void func_0007FEB9(struct record *);
+void pit_timer_start(void);
+void store_room_loot_cb(struct record *);
+void restore_room_loot_cb(struct record *);
+void store_house_object_cb(struct record *);
+void restore_house_object_cb(struct record *);
 void store_repair_item_cb(struct record *);
 void restore_repair_item_cb(struct record *);
 #pragma aux mc_set_location parm routine [];
@@ -529,7 +529,7 @@ void world_collect_objects(void)
             object = next_object;
         }
     } else {
-        func_0007E815(player_object, world_collect_object);
+        dungeon_grid_visit_near(player_object, world_collect_object);
         object = location_object->children;
         while (object != 0) {
             next_object = object->next;
@@ -601,9 +601,9 @@ int objects_within(struct record *object, struct record *other, int distance)
     return ((xn_math_approx_dist2d(object->x, object->z, other->x, other->z) < distance) ? 1 : 0);
 }
 
-void func_0007E066(void)
+void frame_timer_init(void)
 {
-    func_0007F671();
+    pit_timer_start();
     frame_timer_start = frame_timer_ms;
     frame_timer_last = frame_timer_ms;
 }
@@ -748,7 +748,7 @@ void save_thumbnail_capture(void)
     }
 }
 
-int func_0007EEAF(void)
+int swift_init(void)
 {
     int unused_1;
     int unused_2;
@@ -766,7 +766,7 @@ int func_0007EEAF(void)
     return 0;
 }
 
-void func_0007EF20(void)
+void swift_close(void)
 {
     union REGS regs;
     struct SREGS sregs;
@@ -779,15 +779,15 @@ void func_0007EF20(void)
     swift_present = 0;
 }
 
-void func_0007F093(struct record *object)
+void guild_note_halls_cb(struct record *object)
 {
     if (object->type != 10) return;
-    func_0007F0F3(object->data.membership.faction);
+    town_note_faction_buildings(object->data.membership.faction);
 }
 
-void func_0007F0C9(void)
+void guild_note_halls(void)
 {
-    object_foreach(player_entity->children, func_0007F093);
+    object_foreach(player_entity->children, guild_note_halls_cb);
 }
 
 void gold_add(int amount)
@@ -920,7 +920,7 @@ void gold_remove_all(void)
     object_foreach(player_entity->children, gold_delete_credit_cb);
 }
 
-void func_0007F671(void)
+void pit_timer_start(void)
 {
     int *bios_ticks;
 
@@ -929,7 +929,7 @@ void func_0007F671(void)
     frame_bios_now = *bios_ticks;
 }
 
-void func_0007F6A4(void)
+void pit_frame_ticks_update(void)
 {
     int pit_elapsed;
     int i;
@@ -989,12 +989,12 @@ void location_restore_stored(void)
             }
             stored = next_stored;
         }
-        object_foreach_skip_player(room_storage_container->children, func_0007FD7E);
+        object_foreach_skip_player(room_storage_container->children, restore_room_loot_cb);
     }
     if (house_container != 0 && player_character->house != 0 && (((unsigned)player_character->house) >> 16) == (((unsigned)location_object->id) >> 16)) {
-        object_foreach_skip_player(house_container->children, func_0007FEB9);
+        object_foreach_skip_player(house_container->children, restore_house_object_cb);
     } else if (ship_container != 0 && player_character->ship_owned != 0 && ((unsigned)(((unsigned)location_object->id) >> 16)) < 1000) {
-        object_foreach_skip_player(ship_container->children, func_0007FEB9);
+        object_foreach_skip_player(ship_container->children, restore_house_object_cb);
     }
     arrival_delay = 10;
 }
@@ -1010,7 +1010,7 @@ void location_store_objects(void)
     object_foreach_skip_player(location_object->children, store_repair_item_cb);
     if (room_storage_container != 0) {
         scratch_object = room_storage_container;
-        object_foreach_skip_player(location_object, func_0007FCBF);
+        object_foreach_skip_player(location_object, store_room_loot_cb);
         building = current_location->buildings;
         for (building_index = 0; current_location->building_count > building_index; building_index++, building++) {
             if (building->type == 15 && ((int)(unsigned char)(building->flags & 2)) != 0 && ((unsigned)building->rent_expires) > game_minutes) {
@@ -1030,7 +1030,7 @@ void location_store_objects(void)
             house_container->flags = 3;
             house_container->container_index = 5;
         }
-        object_foreach_skip_player(object_find_by_id(location_object, player_character->house)->children, func_0007FDEA);
+        object_foreach_skip_player(object_find_by_id(location_object, player_character->house)->children, store_house_object_cb);
     } else if (player_character->ship_owned != 0 && ((unsigned)(((unsigned)location_object->id) >> 16)) < 1000) {
         object_free_children(ship_container);
         if ((*(iptr *)&scratch_object = (iptr)ship_container) == 0) {
@@ -1039,12 +1039,12 @@ void location_store_objects(void)
             ship_container->flags = 3;
             ship_container->container_index = 6;
         }
-        object_foreach_skip_player(object_find_by_id(location_object, location_object->id)->children, func_0007FDEA);
+        object_foreach_skip_player(object_find_by_id(location_object, location_object->id)->children, store_house_object_cb);
     }
     object_free_pending();
 }
 
-void func_0007FCBF(struct record *object)
+void store_room_loot_cb(struct record *object)
 {
     struct building *building;
 
@@ -1061,7 +1061,7 @@ void func_0007FCBF(struct record *object)
     object->id = object_new_id(100);
 }
 
-void func_0007FD7E(struct record *object)
+void restore_room_loot_cb(struct record *object)
 {
     struct record *home;
 
@@ -1076,7 +1076,7 @@ void func_0007FD7E(struct record *object)
     object->type = 33;
 }
 
-void func_0007FDEA(struct record *object)
+void store_house_object_cb(struct record *object)
 {
     struct building *building;
 
@@ -1090,7 +1090,7 @@ void func_0007FDEA(struct record *object)
     object->id = object_new_id(100);
 }
 
-void func_0007FEB9(struct record *object)
+void restore_house_object_cb(struct record *object)
 {
     struct record *home;
 

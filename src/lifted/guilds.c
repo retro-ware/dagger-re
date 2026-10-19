@@ -118,7 +118,7 @@ void guild_match_membership(struct record *);
 void guild_match_membership_bits(struct record *);
 void guild_heal_cleanup(struct record *);
 
-int func_0006F484(int guild)
+int guild_rank_roll(int guild)
 {
     struct membership *membership;
 

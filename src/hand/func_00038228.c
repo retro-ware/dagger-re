@@ -14,7 +14,7 @@ extern short spell_effect_slot;
 extern char spell_effect_cost_current[];
 extern short spellmaker_drag_accum;
 extern char spellmaker_settings_kind[];
-extern int func_00037AB7(void);
+extern int spellmaker_effects_allow_element(void);
 extern int spellmaker_allowed_targets(void);
 extern void spellmaker_pick_subtype_cb(int);
 extern int spellmaker_find_effect(short);
@@ -25,7 +25,7 @@ void spellmaker_pick_effect_cb(short effect_type)
     short j;
 
     selected_spell->effects[spell_effect_slot = spellmaker_find_effect(255)].type = effect_type;
-    if (func_00037AB7() == 0)
+    if (spellmaker_effects_allow_element() == 0)
         selected_spell->element = 4;
     j = spellmaker_allowed_targets();
     if (j != 2) {

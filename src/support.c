@@ -4,4 +4,4 @@
 
 void diminution_stub(void) { }
 
-void func_0007F896(void) { }
+void support_empty(void) { }

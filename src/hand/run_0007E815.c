@@ -1,4 +1,4 @@
-/* matched by the real Watcom C32 10.0a (-d2): func_0007E815 has a switch table, which 10.0a
+/* matched by the real Watcom C32 10.0a (-d2): dungeon_grid_visit_near has a switch table, which 10.0a
  * aligns to 4 bytes from the start of the code segment, so it is compiled with the run of its
  * unit's functions from building_access_level (the nearest one at a multiple of 4) */
 #include "records.h"
@@ -50,7 +50,7 @@ void building_grant_access(struct building *building, unsigned char access_level
     target->rent_expires = expires;
 }
 
-int func_0007E441(int mode)
+int interior_restriction_at_player(int mode)
 {
     struct block *block;
     struct block_section3 *entry;
@@ -146,7 +146,7 @@ void town_grid_build(void)
     }
 }
 
-void func_0007E815(struct record *object, void (*callback)())
+void dungeon_grid_visit_near(struct record *object, void (*callback)())
 {
     int cell_x;
     int cell_z;

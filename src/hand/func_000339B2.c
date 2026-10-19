@@ -4,7 +4,7 @@
 extern char quest_init_local;
 extern struct faction *faction_find(short);
 
-int func_000339B2(struct location_door *door, struct qbn_person *qbn_person, struct building *building, int any_building)
+int quest_person_fits(struct location_door *door, struct qbn_person *qbn_person, struct building *building, int any_building)
 {
     struct faction *faction;
 

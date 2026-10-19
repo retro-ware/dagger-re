@@ -32,13 +32,13 @@ extern int link_count;
 extern int spellmaker_new(void);
 extern iptr disk_read_file(char *, iptr);
 short rdb_object_id_by_offset(int);
-void func_000361B7(struct rdb_model *);
+void rdb_model_find_action(struct rdb_model *);
 void rdb_build_action_chain(int);
 void action_record_add(struct rdb_model *, struct rdb_action *, struct rdb_flat *, unsigned char);
 void action_record_add_chained(struct rdb_model *, struct rdb_action *, struct rdb_flat *, unsigned char);
 void action_axis_to_translation(struct link *);
 
-void func_000361B7(struct rdb_model *model)
+void rdb_model_find_action(struct rdb_model *model)
 {
     struct rdb_unknown_entry *entry;
     int key;
@@ -64,7 +64,7 @@ void rdb_link_actions(struct record *quarter, struct rdb_object *rdb_object, int
         switch (rdb_object->type) {
         case 1:
             if ((rdb_model_resource = (struct rdb_model *)(rdb_data + rdb_object->resource_offset))->action_offset < 0) {
-                func_000361B7(rdb_model_resource);
+                rdb_model_find_action(rdb_model_resource);
             }
             if (rdb_model_resource->trigger_flag_starting_lock != 0) {
                 rdb_action_resource = (struct rdb_action *)(rdb_data + rdb_model_resource->action_offset);
@@ -121,7 +121,7 @@ void rdb_build_action_chain(int resource_type)
         switch (rdb_object->type) {
         case 1:
             if ((rdb_model_resource = (struct rdb_model *)(rdb_data + rdb_object->resource_offset))->action_offset < 0) {
-                func_000361B7(rdb_model_resource);
+                rdb_model_find_action(rdb_model_resource);
             }
             rdb_action_resource = (struct rdb_action *)(rdb_data + rdb_model_resource->action_offset);
             action_record_add_chained(rdb_model_resource, rdb_action_resource, 0, 0);

@@ -147,16 +147,16 @@ void automap_find_record(void);
 void automap_match_record(struct record *);
 void automap_delete_note(void);
 void automap_init_view(void);
-void func_00028210(char *);
+void town_note_input(char *);
 void town_note_delete(int);
-void func_00028547(void);
+void town_map_click(void);
 void town_map_note_building(struct record *, struct building *);
 void automap_draw_block_overview(void);
-void func_00028DDB(struct record *);
-void func_00028DFD(void);
-void func_00028ED1(struct record *);
+void automap_clear_mark(struct record *);
+void automap_clear_marks(void);
+void automap_restore_seen_one(struct record *);
 void automap_restore_seen(void);
-void func_00028F8B(struct record *);
+void automap_unmark_seen_one(struct record *);
 void unequip_object(struct record *);
 #pragma aux mc_set_location parm routine [];
 
@@ -254,8 +254,8 @@ void automap_open(void)
     } else {
         xn_cam_set_view_window(160, 77, 160, 77);
     }
-    object_foreach(location_object, func_00028F8B);
-    func_00028DFD();
+    object_foreach(location_object, automap_unmark_seen_one);
+    automap_clear_marks();
     screen_active = *(signed char *)&saved_screen_active;
     cfg_show_markers = *(signed char *)&saved_show_markers;
     automap_is_open = 0;
@@ -463,7 +463,7 @@ int automap_button_map_click(void)
     struct pick_result pick;
 
     if (((int)player_environment) == 1) {
-        func_00028547();
+        town_map_click();
         return 0;
     }
     engine_pick_object((int)(short)mouse_x, (int)(short)mouse_y, &pick);
@@ -632,7 +632,7 @@ int town_notes_size(void)
     return size + 4;
 }
 
-void func_00028210(char *text)
+void town_note_input(char *text)
 {
     text_colour = 146;
     if (text != 0) {
@@ -687,7 +687,7 @@ int town_note_exists(char *text)
     return 0;
 }
 
-void func_00028547(void)
+void town_map_click(void)
 {
     int note_index;
     char *note;
@@ -716,12 +716,12 @@ void func_00028547(void)
         scratch_190d6a = *(short *)(entry + 2);
         mc_strncpy((char *)text_buffer, note + 4, 160, str_automap_c, 921);
         town_note_delete(note_index - 1);
-        func_00028210((char *)text_buffer);
+        town_note_input((char *)text_buffer);
         if (text_buffer[0] != 0) town_note_add((char *)text_buffer);
         return;
     }
     mc_memset(text_buffer, 0, 80, str_automap_c, 928, 160);
-    func_00028210((char *)text_buffer);
+    town_note_input((char *)text_buffer);
     if (text_buffer[0] == 0) return;
     town_note_add((char *)text_buffer);
 }
@@ -860,23 +860,23 @@ void town_map_note_secret_guild_halls(void)
     }
 }
 
-void func_00028DDB(struct record *object)
+void automap_clear_mark(struct record *object)
 {
     object->flags &= ~0x400;
 }
 
-void func_00028DFD(void)
+void automap_clear_marks(void)
 {
-    object_foreach(location_object, func_00028DDB);
+    object_foreach(location_object, automap_clear_mark);
 }
 
-void func_00028EAA(void)
+void automap_reattach_record(void)
 {
     automap_find_record();
     automap_record = found_object;
 }
 
-void func_00028ED1(struct record *object)
+void automap_restore_seen_one(struct record *object)
 {
     char *seen_bits;
 
@@ -890,10 +890,10 @@ void func_00028ED1(struct record *object)
 void automap_restore_seen(void)
 {
     if ((iptr)automap_record == 0) automap_find_record();
-    object_foreach(location_object, func_00028ED1);
+    object_foreach(location_object, automap_restore_seen_one);
 }
 
-void func_00028F8B(struct record *object)
+void automap_unmark_seen_one(struct record *object)
 {
     object->flags &= ~0x80;
 }
@@ -1029,7 +1029,7 @@ int qcond_op02_foe_killed(struct quest *quest, struct qbn_op *op)
     return 0;
 }
 
-void func_0002956B(struct record *object)
+void quest_resource_unplace(struct record *object)
 {
     if (object->twin == 0) return;
     object->id = object_new_id(location_object->id >> 16);

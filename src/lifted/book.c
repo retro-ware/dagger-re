@@ -76,7 +76,7 @@ extern void spfx_effect_end(struct spell *, int, struct record *);
 extern void spfx_effect_tick(struct record *, struct record *, int);
 extern void inpstr_begin_number(int);
 void book_close(void);
-void func_0005A230(void);
+void book_free_images(void);
 void book_prev_page(void);
 void book_next_page(void);
 void spell_tick_spell(struct record *, struct record *);
@@ -92,7 +92,7 @@ void book_open(short book_id)
     book_page_offsets = (iptr)mc_malloc(((int)(short)book_page_count) << 2, str_book_c, 43);
     read((int)(short)book_file, (void *)book_page_offsets, ((int)(short)book_page_count) << 2);
     window_image = disk_read_file(str_book00i0_img, 0);
-    func_0005A230();
+    book_free_images();
     book_page = 0;
     scratch_190d68 = 0;
     game_mode = 11;
@@ -145,7 +145,7 @@ void book_close(void)
         mc_free((void *)book_page_offsets, str_book_c, 102);
         book_page_offsets = -1751672937;
     }
-    func_0005A230();
+    book_free_images();
     book_file = 0;
     game_mode = 0;
     screen_active = 0;
@@ -167,14 +167,14 @@ void book_flush_line(void)
     text_buffer[0] = 0;
 }
 
-void func_0005A1C8(char *name)
+void book_load_image(char *name)
 {
     mc_set_location(218, str_book_c);
     mc_sprintf((char *)text_buffer, str_books, name);
     book_images[((int)(short)(book_image_count)++)] = disk_read_file(text_buffer, 0);
 }
 
-void func_0005A230(void)
+void book_free_images(void)
 {
     int i;
 
@@ -187,7 +187,7 @@ void func_0005A230(void)
     book_image_count = 0;
 }
 
-void func_0005A2BE(void)
+void book_draw_images(void)
 {
     struct image *image;
     slot16 i;

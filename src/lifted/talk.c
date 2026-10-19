@@ -168,7 +168,7 @@ extern iptr building_name(iptr);
 extern int xn_mouse_poll_clamped(void);
 extern void xn_draw_fill_rect(int, int, int, int);
 extern void xn_draw_image(int, int, int, int, char *);
-extern void func_000164EF(void);
+extern void talk_prostitute_service(void);
 extern void talk_load_face(int);
 extern void talk_draw_answer(int, int, int, int);
 extern void talk_draw_question(int, int, int, int);
@@ -185,9 +185,9 @@ extern void msgbox_yes_no_rsc(int);
 extern void location_free(struct loaded_location *);
 extern void location_pick_random_with_service(struct loaded_location *, int, int);
 int talk_ask_news(void);
-int func_000164AB(void);
-int func_000164CD(void);
-iptr func_000169D4(iptr);
+int talk_okay_hook(void);
+int talk_prostitute_available(void);
+iptr talk_garble_word(iptr);
 int talk_next_word(signed char **);
 iptr talk_alloc_line(void);
 iptr building_category(struct building *);
@@ -420,7 +420,7 @@ void talk_start(struct record *npc)
     }
     talk_prostitute_offer = 0;
     if (talk_npc_record->faction_id == 512) {
-        if ((((int)(unsigned short)((short)player_character->flags & 1)) ^ ((int)(unsigned short)(talk_npc_record->flags & 1))) != 0 && ((int)(unsigned short)(game_settings->view_flags & 4)) == 0 && func_000164CD() != 0) {
+        if ((((int)(unsigned short)((short)player_character->flags & 1)) ^ ((int)(unsigned short)(talk_npc_record->flags & 1))) != 0 && ((int)(unsigned short)(game_settings->view_flags & 4)) == 0 && talk_prostitute_available() != 0) {
             talk_prostitute_offer = 1;
             talk_prostitute_state = 0;
             return;
@@ -462,7 +462,7 @@ L15B7E:;
             if (((int)popup_answer) == 2) {
                 talk_open(talk_npc_object);
             } else {
-                func_000164EF();
+                talk_prostitute_service();
                 time_pass(player_character->attributes[4]);
                 talk_open(talk_npc_object);
             }
@@ -659,7 +659,7 @@ void talk_answer_scroll_down(void)
 
 void talk_button_okay(void)
 {
-    if (func_000164AB() != 0) return;
+    if (talk_okay_hook() != 0) return;
     if (talk_question_mode != 0 && talk_topic_tab == 0 && talk_showing_categories != 0) {
         talk_list_click(100);
         return;
@@ -715,17 +715,17 @@ void talk_button_okay(void)
     talk_say_text((int)(short)*(short *)(talk_where_answers + (((talk_npc_knows * 30) + (talk_npc_speech_style * 6)) + (talk_npc_attitude * 2))));
 }
 
-void func_0001647E(iptr text_ids)
+void talk_say_indexed(iptr text_ids)
 {
     talk_say_text(*(int *)((char *)((talk_answer_kind << 2) + text_ids)));
 }
 
-int func_000164AB(void)
+int talk_okay_hook(void)
 {
     return 0;
 }
 
-int func_000164CD(void)
+int talk_prostitute_available(void)
 {
     return 1;
 }
@@ -761,7 +761,7 @@ iptr talk_macro_hint(int variant)
     return (iptr)text_rsc_buffer;
 }
 
-void func_00016907(signed char *src, signed char *dest)
+void talk_translate(signed char *src, signed char *dest)
 {
     int length;
     int in_word;
@@ -777,7 +777,7 @@ void func_00016907(signed char *src, signed char *dest)
                 text_buffer[length] = 0;
                 in_word = 0;
                 length = in_word;
-                mc_strncpy(dest, (char *)func_000169D4((iptr)text_buffer), 4, str_talk_c, 1038);
+                mc_strncpy(dest, (char *)talk_garble_word((iptr)text_buffer), 4, str_talk_c, 1038);
                 dest += strlen(dest);
             }
             *dest++ = *src++;
@@ -785,7 +785,7 @@ void func_00016907(signed char *src, signed char *dest)
     }
 }
 
-iptr func_000169D4(iptr word)
+iptr talk_garble_word(iptr word)
 {
     int count;
     int i;
@@ -1271,7 +1271,7 @@ int town_has_category(iptr category)
     return 0;
 }
 
-void func_00018339(void)
+void talk_mark_quest_buildings(void)
 {
     int i;
     struct building *building;
@@ -1491,7 +1491,7 @@ struct faction *faction_find_r(struct faction *faction, short id)
     return 0;
 }
 
-void func_000193DD(struct faction *faction)
+void faction_relation_flags_r(struct faction *faction)
 {
     int unused;
     int i;
@@ -1502,7 +1502,7 @@ void func_000193DD(struct faction *faction)
             if ((iptr)faction->allies[i] == *(iptr *)scratch_190be4) *(signed char *)shared_scratch |= 1;
             if ((iptr)faction->enemies[i] == *(iptr *)scratch_190be4) *(signed char *)shared_scratch |= 2;
         }
-        if (faction->child != 0) func_000193DD(faction->child);
+        if (faction->child != 0) faction_relation_flags_r(faction->child);
         faction = faction->next;
     }
 }
@@ -1713,7 +1713,7 @@ void region_reset_war(struct faction *faction)
     regions[faction->region].flags[3] = 0;
 }
 
-void func_0001B2ED(struct faction *faction)
+void region_set_war_ongoing(struct faction *faction)
 {
     if (faction->type != 7 || faction->region == 255) return;
     regions[faction->region].groups[0] = 1;
@@ -1721,7 +1721,7 @@ void func_0001B2ED(struct faction *faction)
     regions[faction->region].flags[1] = 1;
 }
 
-void func_0001B36A(struct faction *faction, int index)
+void region_set_war_result(struct faction *faction, int index)
 {
     if (faction->type != 7 || faction->region == 255) return;
     regions[faction->region].values[0] = 0;

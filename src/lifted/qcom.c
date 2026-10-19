@@ -82,14 +82,14 @@ extern void quest_set_state(struct quest *, struct qbn_op *, slot16);
 extern void quest_set_arg_state(struct quest *, struct qbn_op *, int, int);
 extern void qaction_op04_give_reward(struct quest *, struct qbn_op *);
 extern void qaction_op19_reveal_location(struct quest *, struct qbn_op *, int);
-extern void func_0003077F(struct record *, int);
+extern void quest_object_delete(struct record *, int);
 extern void quest_give_item_to_player(struct record *);
 extern void qaction_op37_repute_exceeds(struct quest *, struct qbn_op *);
 extern void quest_face_add(struct record *, int, int, int);
 extern void quest_face_remove(int);
-extern void func_00030F63(struct quest *, struct qbn_op *);
+extern void qaction_op68_restrain_foe(struct quest *, struct qbn_op *);
 extern void qaction_op69_cast_spell_on_foe(struct quest *, struct qbn_op *);
-extern void func_00031658(struct quest *, struct qbn_op *, int);
+extern void qaction_op76_give_pc_item_later(struct quest *, struct qbn_op *, int);
 extern void qaction_op83_teleport_pc(struct qbn_op *);
 extern void quest_show_message(struct quest *, int);
 extern void quest_op_done(struct quest *, struct qbn_op *);
@@ -100,9 +100,9 @@ extern void qaction_give_item_to_foe(struct quest *, struct qbn_op *);
 extern void msgbox_show_quest_text(struct quest *, short, int);
 extern void quest_end(struct quest *);
 extern void qaction_op46_hide_npc(struct quest *, struct qbn_op *);
-extern void func_0004C874(struct quest *, struct qbn_op *);
+extern void qaction_op45_nop(struct quest *, struct qbn_op *);
 extern void qaction_op48_restore_npc(struct quest *, struct qbn_op *);
-extern void func_0004C8CF(struct quest *, struct qbn_op *);
+extern void qaction_op47_nop(struct quest *, struct qbn_op *);
 extern void quest_add_questor_rumor(struct quest *, int);
 extern void palette_restore(void);
 extern void fatal_error(char *);
@@ -347,7 +347,7 @@ void quest_run_opcodes(struct quest *quest)
             case 36:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
                     quest_op_done(quest, op);
-                    if (op->args[1].object != 0) func_0003077F(op->args[1].object, 1);
+                    if (op->args[1].object != 0) quest_object_delete(op->args[1].object, 1);
                     ((struct qbn_item *)op->args[1].record)->object = 0;
                 }
                 break;
@@ -387,14 +387,14 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 44:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    func_0003077F(op->args[1].object, 1);
+                    quest_object_delete(op->args[1].object, 1);
                     ((struct qbn_person *)op->args[1].record)->object = 0;
                     quest_op_done(quest, op);
                 }
                 break;
             case 45:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    func_0004C874(quest, op);
+                    qaction_op45_nop(quest, op);
                     quest_op_done(quest, op);
                 }
                 break;
@@ -406,7 +406,7 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 47:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    func_0004C8CF(quest, op);
+                    qaction_op47_nop(quest, op);
                     quest_op_done(quest, op);
                 }
                 break;
@@ -464,7 +464,7 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 54:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    func_0003077F(op->args[1].object, 0);
+                    quest_object_delete(op->args[1].object, 0);
                     ((struct qbn_item *)op->args[1].record)->object = 0;
                     quest_op_done(quest, op);
                 }
@@ -603,7 +603,7 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 68:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    func_00030F63(quest, op);
+                    qaction_op68_restrain_foe(quest, op);
                     quest_op_done(quest, op);
                 }
                 break;
@@ -652,9 +652,9 @@ void quest_run_opcodes(struct quest *quest)
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
                     if (((int)(unsigned char)game_mode) == 19) {
                         travel_button_exit(100);
-                        func_00031658(quest, op, 1);
+                        qaction_op76_give_pc_item_later(quest, op, 1);
                     } else {
-                        func_00031658(quest, op, 0);
+                        qaction_op76_give_pc_item_later(quest, op, 0);
                     }
                 }
                 break;

@@ -2,9 +2,9 @@
 
 #include "dagger.h"
 
-void func_000164EF(void) { }
+void talk_prostitute_service(void) { }
 
-int func_00016507(int unused) { return 0; }
+int talk_stub_false(int unused) { return 0; }
 
 int building_distance(char *building)
 {
@@ -23,10 +23,10 @@ iptr faction_find(short id)
 }
 
 /* between the talk.c and faction.c runs: unit not certain */
-int func_0001939C(int target, int faction)
+int faction_relation_flags(int target, int faction)
 {
     scratch_190be4 = target;
     shared_scratch = 0;
-    func_000193DD(faction);
+    faction_relation_flags_r(faction);
     return shared_scratch;
 }

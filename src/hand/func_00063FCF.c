@@ -32,7 +32,7 @@ extern int collide_move_object(struct record *, int, struct Hit *, int);
 extern struct record *object_delete(struct record *);
 extern int xn_math_approx_dist2d(int, int, int, int);
 
-int func_00063FCF(struct record *m, int dest_x, int dest_z)
+int monster_move_to(struct record *m, int dest_x, int dest_z)
 {
     struct Hit hit;
     struct vec3 unused1;

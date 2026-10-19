@@ -92,7 +92,7 @@ void sound_volume_pan(int *listener, int *source, int *volume, int *pan, struct 
     *volume = (*volume * ((int)(short)game_settings->sound_volume)) / 128;
 }
 
-int func_00069281(iptr sample, int length)
+int sound_play_sample_loud(iptr sample, int length)
 {
     int channel;
     int volume;
@@ -213,7 +213,7 @@ void music_stop(void)
     music_song_buffer = 0;
 }
 
-void func_0006987B(void)
+void sound_apply_volume(void)
 {
     if (sound_enabled == 0) return;
     if (sos_midi_device == (-1)) return;

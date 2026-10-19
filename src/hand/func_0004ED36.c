@@ -130,8 +130,8 @@ extern int disk_file_exists(char *);
 extern void music_select_tables(void);
 extern void automap_delete_files(void);
 extern int rand_range(int, int);
-extern void func_0007E066(void);
-extern int func_0007EEAF(void);
+extern void frame_timer_init(void);
+extern int swift_init(void);
 extern void intrface_init(void);
 extern void intrface_set_regions(void);
 extern void model_heap_init(int);
@@ -219,7 +219,7 @@ void init_game_data(void)
     model_heap_init(819200);
     intrface_set_regions();
     color_init_remap_tables();
-    func_0007EEAF();
+    swift_init();
     xn_joy_init();
     xn_joy_reset_range();
     joystick_status = 1;
@@ -274,7 +274,7 @@ void init_game_data(void)
     disk_read_file(str_haze_001, haze_table_1 = xn_mem_align_up(haze_buffer_1, 256));
     xn_shade_init_reserved();
     realtime_clock_tick = *(int *)DOS_LOW(0x46C);
-    func_0007E066();
+    frame_timer_init();
     if (cfg_helmet != 0) {
         if (cfg_helmet == 1)
             xn_helmet_open(1, 4);

@@ -2,7 +2,7 @@
 #include "records.h"
 
 extern unsigned char player_environment;
-extern void func_0007E815(struct record *, iptr);
+extern void dungeon_grid_visit_near(struct record *, iptr);
 extern void town_grid_visit_near(struct record *, iptr);
 extern void object_foreach_open(struct record *, iptr);
 
@@ -17,6 +17,6 @@ void collide_for_each_nearby(struct record *object, iptr callback)
         else
             town_grid_visit_near(object, callback);
     } else {
-        func_0007E815(object, callback);
+        dungeon_grid_visit_near(object, callback);
     }
 }

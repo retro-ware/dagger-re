@@ -137,14 +137,14 @@ void travel_draw_locations(void);
 void travel_open_region(int);
 void travel_mark_player(int);
 void travel_draw_hover_name(void);
-void func_0009BE38(void);
+void travel_close_region(void);
 void travel_popup_exit(void);
 void travel_button_find(void);
 void travel_open_trip(void);
 void travel_check_transport_item(struct record *);
 void travel_load_region_part(void);
 void travel_toggle_zoom(void);
-void func_0009D5AC(char *, char *, int);
+void travel_draw_zoom(char *, char *, int);
 void travel_draw_buttons(void);
 #pragma aux mc_set_location parm routine [];
 
@@ -171,7 +171,7 @@ void travel_map_update(void)
     travel_draw_buttons();
     if (scratch_190ce4[0] != 0) {
         if (travel_zoomed != 0) {
-            func_0009D5AC(*(char **)&screen_buffer + 3840, travel_region_image->pixels, 51200);
+            travel_draw_zoom(*(char **)&screen_buffer + 3840, travel_region_image->pixels, 51200);
         } else {
             mc_memcpy((*(char **)&screen_buffer + 3840), travel_region_image->pixels, 51200, str_travel_c, 208, 4);
             xn_draw_image_transparent(travel_map_border_image->x, travel_map_border_image->y, travel_map_border_image->width, travel_map_border_image->height, travel_map_border_image->pixels);
@@ -302,7 +302,7 @@ void travel_button_exit(int button)
         return;
     }
     if (scratch_190ce4[0] != 0) {
-        func_0009BE38();
+        travel_close_region();
         return;
     }
     sound_play(203, player_object, 110);
@@ -544,7 +544,7 @@ void travel_button_map(void)
     travel_open_region((int)(unsigned char)travel_selected_region);
 }
 
-void func_0009BE38(void)
+void travel_close_region(void)
 {
     if ((iptr)travel_region_image != 0) {
         if ((iptr)travel_region_image != 0 && (iptr)travel_region_image != (-1751672937)) {
@@ -594,7 +594,7 @@ void travel_popup_exit(void)
     scratch_190ce5 = 0;
 }
 
-void func_0009C27F(void)
+void travel_teleport_no(void)
 {
     travel_popup_exit();
 }
@@ -730,7 +730,7 @@ void travel_open_trip(void)
     *(signed char *)travel_options ^= 12;
 }
 
-int func_0009CD32(int type)
+int travel_nearest_location_of_type(int type)
 {
     struct map_location *location;
     struct map_location *nearest;
@@ -855,7 +855,7 @@ void travel_toggle_zoom(void)
     *(short *)scratch_190d66 = 108;
 }
 
-void func_0009D5AC(char *dest, char *source, int unused)
+void travel_draw_zoom(char *dest, char *source, int unused)
 {
     int row;
 
@@ -946,7 +946,7 @@ void travel_button_filter(void)
     travel_open_region(((int)(signed char)scratch_190ce4[0]) - 1);
 }
 
-int func_0009D960(int unused1, int unused2)
+int travel_stub(int unused1, int unused2)
 {
     return 0;
 }

@@ -14,7 +14,7 @@ extern int collide_height;
 extern short collide_flags;
 extern void collide_for_each_nearby(struct record *, void (*)(iptr));
 extern void collide_gather_cb(iptr);
-extern int func_00023FA5(struct record *, int, struct move_request *);
+extern int collide_step_object(struct record *, int, struct move_request *);
 extern void object_set_position(struct record *, int, int, int, int, int, int);
 extern int xn_terrain_height_at(int, int);
 extern void xn_vec_normalize_ptr(struct vec3 *);
@@ -54,7 +54,7 @@ int collide_move_object(struct record *object, int unused_arg, struct move_reque
     }
     flags = collide_flags;
     player_on_ground = 1;
-    result = func_00023FA5(object, unused_arg, request);
+    result = collide_step_object(object, unused_arg, request);
     world_state_flags &= 223;
     floor_object = saved_cb8;
     moving_model = saved_c70;
@@ -98,7 +98,7 @@ int collide_move_object(struct record *object, int unused_arg, struct move_reque
     request->z = object->z + dz;
     flags = collide_flags;
     player_on_ground = 1;
-    result = func_00023FA5(object, unused_arg, request);
+    result = collide_step_object(object, unused_arg, request);
     floor_object = saved_cb8;
     moving_model = saved_c70;
     if (!(result & 10) || !(flags & 4))

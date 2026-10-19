@@ -17,7 +17,7 @@ extern short book_file;
 
 extern int xn_font_select(int);
 extern void book_flush_line(void);
-extern void func_0005A1C8(char *);
+extern void book_load_image(char *);
 
 void book_draw_page(int page)
 {
@@ -41,7 +41,7 @@ void book_draw_page(int page)
                 text += 3;
                 break;
             case 247:
-                func_0005A1C8(text + 1);
+                book_load_image(text + 1);
                 while (*(signed char *)(text++) != 0);
                 break;
             case 250:

@@ -4,7 +4,7 @@
 extern struct spell *selected_spell;
 extern unsigned char spell_effect_elemental[];
 
-int func_00037AB7(void)
+int spellmaker_effects_allow_element(void)
 {
     short elemental;
 

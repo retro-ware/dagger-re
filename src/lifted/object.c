@@ -76,7 +76,7 @@ void object_foreach_pre(struct record *, void (*)(struct record *));
 void object_foreach_post(struct record *, void (*)(struct record *));
 void object_foreach(struct record *, void (*)(struct record *));
 void object_delete_block_cb(struct record *);
-void func_0008EB25(struct record *);
+void object_twin_check_cb(struct record *);
 void object_delete_quest_cb(struct record *);
 void object_tree_size_cb(struct record *);
 void object_delete_type_cb(struct record *);
@@ -525,7 +525,7 @@ void object_delete_block(struct record *root, int block_id)
     object_foreach_post(root, object_delete_block_cb);
 }
 
-void func_0008EB25(struct record *object)
+void object_twin_check_cb(struct record *object)
 {
     struct record *twin;
 
@@ -533,10 +533,10 @@ void func_0008EB25(struct record *object)
     twin = object->twin;
 }
 
-void func_0008EB52(void)
+void object_twin_check_all(void)
 {
-    object_foreach_pre(location_object, func_0008EB25);
-    object_foreach_pre(nonworld_root, func_0008EB25);
+    object_foreach_pre(location_object, object_twin_check_cb);
+    object_foreach_pre(nonworld_root, object_twin_check_cb);
 }
 
 int object_new_id(int id_high)

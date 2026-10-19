@@ -137,7 +137,7 @@ extern void links_trigger(struct record *, int);
 extern void sound_stop_channel(int);
 extern void fatigue_add(int);
 extern void click_world_object(struct pick_result *, struct record *);
-extern void func_0007EED8(void);
+extern void swift_poll(void);
 extern void cursor_draw(short);
 extern void player_mouse_look(void);
 extern void intrface_steer(int, int, int, int);
@@ -145,7 +145,7 @@ int intrface_key_region(void);
 int player_climb_probe(void);
 char *string_last_char(char *);
 void intrface_set_regions(void);
-void func_0008066F(int);
+void player_add_push(int);
 void click_activate(int);
 void object_apply_gravity(struct record *, struct character *);
 void camera_roll_turn(int);
@@ -205,7 +205,7 @@ void cursor_restore_background(void)
     xn_draw_image_transparent(cursor_saved_x, cursor_saved_y, 10, 10, cursor_saved_background);
 }
 
-void func_0008066F(int distance)
+void player_add_push(int distance)
 {
     int dx;
     int dz;
@@ -222,13 +222,13 @@ void func_0008066F(int distance)
     move_dz_total += dz;
 }
 
-void func_000806DD(int distance, int yaw_offset)
+void player_add_push_angle(int distance, int yaw_offset)
 {
     slot16 saved_yaw;
 
     saved_yaw = player_object->yaw;
     player_object->yaw += yaw_offset;
-    func_0008066F(distance);
+    player_add_push(distance);
     player_object->yaw = *(int *)&saved_yaw;
 }
 
@@ -436,7 +436,7 @@ void intrface_poll_controls(void)
 
     mouse_buttons_prev = mouse_buttons;
     xn_mouse_poll_clamped();
-    func_0007EED8();
+    swift_poll();
     xn_joy_poll();
     if (((int)(short)(steer_key_region = intrface_key_region())) != (-1)) {
         if (steer_key_region != 0 && ((int)(short)steer_key_region) != 2 && ((int)(short)steer_key_region) != 3 && ((int)(short)steer_key_region) != 5) {

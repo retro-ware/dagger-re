@@ -15,7 +15,7 @@ extern int rumor_added_count;
 extern struct faction *macro_faction2;
 extern struct faction *found_faction;
 extern int faction_player_related(struct faction *);
-extern int func_0001D66C(struct rumor *);
+extern int rumor_flags_for_kind(struct rumor *);
 extern void parse_rsc_text(int, int, int);
 extern int rand_range(int, int);
 
@@ -57,7 +57,7 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
         rumor.faction2 = 0;
     rumor.kind = kind;
     rumor.region = region;
-    rumor.flags = func_0001D66C(&rumor);
+    rumor.flags = rumor_flags_for_kind(&rumor);
     rumor.quest_id = 0;
     mc_memset(rumor.quest_name, 0, 9, str_faction_c, 1606, 9);
     rumor.message = 0;

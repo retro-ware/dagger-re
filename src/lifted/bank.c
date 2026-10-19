@@ -118,7 +118,7 @@ void bank_close(void);
 void bank_add_house_for_sale(struct record *);
 void bank_init_ships(void);
 void bank_deposit_letter(struct record *);
-void func_0006CB02(void);
+void bank_restore_houses(void);
 #pragma aux mc_set_location parm routine [];
 
 int bank_open(int opening)
@@ -178,7 +178,7 @@ void bank_close(void)
         bank_house_image = -1751672937;
     }
     mc_memset(text_rsc_buffer, 0, 2048, str_bank_c, 116, 2048);
-    func_0006CB02();
+    bank_restore_houses();
     game_mode = 0;
     screen_active = 0;
     world_running = 1;
@@ -627,7 +627,7 @@ int bank_input_amount(void)
     return atoi(bank_amount_text);
 }
 
-void func_0006CB02(void)
+void bank_restore_houses(void)
 {
     int i;
 

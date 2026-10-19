@@ -14,7 +14,7 @@ extern unsigned char item_template_rarity;
 extern unsigned char item_template_capacity;
 extern void fatal_error(char *);
 extern void item_set_race_image(struct item *, int);
-extern void func_0005E636(struct item *);
+extern void item_roll_style(struct item *);
 extern void item_roll_material(struct item *);
 extern void item_roll_armor_type(struct item *);
 extern void item_init_book(struct item *, int);
@@ -110,7 +110,7 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     if (group == 27 && index == 4)
         item->stack_count = rand() % 20;
     if (group == 6 || group == 12 || group == 2) {
-        func_0005E636(item);
+        item_roll_style(item);
         item_set_race_image(item, player_character->race);
     }
     if (group == 3)

@@ -51,11 +51,11 @@ extern char terrain_cell_ids[];
 extern char terrain_cell_dirty[];
 extern int climate_at(int, int);
 extern void automap_restore_seen(void);
-extern void func_00028F8B(struct record *);
+extern void automap_unmark_seen_one(struct record *);
 extern void quests_relink_all(iptr);
 extern void quest_faces_after_load(void);
 extern void building_update_open_state(void);
-extern void func_0004C759(void);
+extern void quests_link_world(void);
 extern void player_refresh_paperdoll(void);
 extern void fatal_error(char *);
 extern void links_load(int);
@@ -163,7 +163,7 @@ int load_game(char *name)
     player_refresh_paperdoll();
     load_requeue_s0000021();
     quests_relink_all(quest_root);
-    func_0004C759();
+    quests_link_world();
     if (player_environment == 3)
         automap_restore_seen();
     if (player_environment == 2)
@@ -193,7 +193,7 @@ int load_game(char *name)
         blood_archive = 380;
     }
     sound_stop_ambient();
-    object_foreach(location_object, func_00028F8B);
+    object_foreach(location_object, automap_unmark_seen_one);
     effects_last_minute = game_minutes;
     mem_check_now(1003);
     l20 = object_tree_size(location_object);

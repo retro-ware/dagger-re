@@ -25,8 +25,8 @@ extern char forced_material;
 extern struct faction *faction_find(short);
 extern unsigned short bio_person_add(struct character *, char *, int);
 extern unsigned char *career_skip_word(unsigned char *);
-extern void func_000252C7(int);
-extern void func_000252E2(int);
+extern void career_effect_mi_plus(int);
+extern void career_effect_mi_minus(int);
 extern void parse_expand(char *, struct character *);
 extern void item_make(unsigned short, int, struct item *);
 extern iptr disk_read_file(char *, char *);
@@ -59,9 +59,9 @@ unsigned char *career_answer_effect(unsigned char *text)
     else if (*(unsigned short *)text == 0x494D) {
         text = career_skip_word(text);
         if (*text == '+')
-            func_000252C7(atoi(text));
+            career_effect_mi_plus(atoi(text));
         else
-            func_000252E2(atoi(text));
+            career_effect_mi_minus(atoi(text));
     } else if (*(unsigned short *)text == 0x5252)
         player_character->reputation_mod += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x4452)

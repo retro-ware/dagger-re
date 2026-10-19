@@ -228,11 +228,11 @@ void career_apply_answer(int question)
     }
 }
 
-void func_000252C7(int unused)
+void career_effect_mi_plus(int unused)
 {
 }
 
-void func_000252E2(int unused)
+void career_effect_mi_minus(int unused)
 {
 }
 

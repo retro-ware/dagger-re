@@ -5,23 +5,23 @@
 
 extern struct enchantment itemmaker_slots[];
 
-extern void func_00058AF7(void);
+extern void itemmaker_swap_side_offsets(void);
 
 int itemmaker_power_excluded(int power)
 {
     int slot;
 
-    func_00058AF7();
+    itemmaker_swap_side_offsets();
     for (slot = 0; slot < 10; slot++) {
         if (power == 25 && (itemmaker_slots[slot].type) == 25 && (itemmaker_slots[slot].param) == 5) {
-            func_00058AF7();
+            itemmaker_swap_side_offsets();
             return 1;
         }
         if (power == 14 && (itemmaker_slots[slot].type) == 14 && (itemmaker_slots[slot].param) == 5) {
-            func_00058AF7();
+            itemmaker_swap_side_offsets();
             return 1;
         }
     }
-    func_00058AF7();
+    itemmaker_swap_side_offsets();
     return 0;
 }

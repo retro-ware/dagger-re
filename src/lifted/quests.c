@@ -43,7 +43,7 @@ extern char quest_test_file[];
 
 extern struct faction *faction_find(short);
 extern void *quest_section(struct quest *, int);
-extern struct record *func_000310E1(struct record *, struct record *);
+extern struct record *quest_object_instantiate(struct record *, struct record *);
 extern int quest_init_resources(struct quest *);
 extern int quest_offer_prompt(struct quest *);
 extern int quest_pick_file(unsigned char, unsigned char, unsigned char, unsigned char, unsigned char);
@@ -68,8 +68,8 @@ int quest_free_id(void);
 int quest_is_active(char *);
 int item_armor_value(struct item *);
 int armor_value_for_part(struct record *, int);
-void func_0004C588(struct record *);
-void func_0004C759(void);
+void quest_link_object_cb(struct record *);
+void quests_link_world(void);
 void quest_mark_giver_cb(struct record *);
 void quest_pick_for_npc(struct record *);
 void quest_count_givers_cb(struct record *);
@@ -129,7 +129,7 @@ iptr quest_start(char *file_name)
         return 0;
     }
     logbook_prune_quests();
-    func_0004C759();
+    quests_link_world();
     quest_debug_data = (iptr)current_quest;
     rumor_add_quest(current_quest, 1005, 0, 4);
     return (iptr)quest;
@@ -166,7 +166,7 @@ iptr quest_match_person_cb(struct record *object)
     return 0;
 }
 
-void func_0004C588(struct record *object)
+void quest_link_object_cb(struct record *object)
 {
     struct record *twin;
 
@@ -193,7 +193,7 @@ void func_0004C588(struct record *object)
     if ((location_object->id >> 16) != (((unsigned)object->id) >> 16)) return;
     twin = object_find_by_id(location_object, object->id);
     if (twin == 0 || object->type != twin->type) {
-        func_000310E1(object, twin);
+        quest_object_instantiate(object, twin);
         return;
     }
     twin->quest_id = object->quest_id;
@@ -203,10 +203,10 @@ void func_0004C588(struct record *object)
     twin->flags |= 0xA00;
 }
 
-void func_0004C759(void)
+void quests_link_world(void)
 {
     object_quest_filter = 0;
-    object_foreach_open(nonworld_root, func_0004C588);
+    object_foreach_open(nonworld_root, quest_link_object_cb);
 }
 
 int quest_free_id(void)
@@ -241,7 +241,7 @@ void qaction_op46_hide_npc(struct quest *quest, struct qbn_op *op)
     npc->twin->flags |= 0xA00;
 }
 
-void func_0004C874(struct quest *quest, struct qbn_op *op)
+void qaction_op45_nop(struct quest *quest, struct qbn_op *op)
 {
 }
 
@@ -255,7 +255,7 @@ void qaction_op48_restore_npc(struct quest *quest, struct qbn_op *op)
     npc->twin->flags &= ~0xA00;
 }
 
-void func_0004C8CF(struct quest *quest, struct qbn_op *op)
+void qaction_op47_nop(struct quest *quest, struct qbn_op *op)
 {
 }
 
@@ -347,7 +347,7 @@ iptr quest_find_potential_questor(void)
     return (iptr)found_object;
 }
 
-int func_0004CD10(struct record *npc)
+int quest_npc_offers_quest(struct record *npc)
 {
     int saved_seed;
 
@@ -364,7 +364,7 @@ int func_0004CD10(struct record *npc)
     return 0;
 }
 
-int func_0004CD80(struct person *person)
+int quest_start_test_quest(struct person *person)
 {
     if (quest_test_started != 0) return 0;
     if (person->faction_id != 510) return 0;

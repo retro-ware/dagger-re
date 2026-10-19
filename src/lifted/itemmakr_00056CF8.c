@@ -13,7 +13,7 @@ extern int itemmaker_pick_param_list(iptr);
 extern int itemmaker_free_slot(void);
 extern void msgbox_show_rsc(int, int);
 extern void itemmaker_set_side_effect_param_cb(slot16);
-extern void func_00057147(short, short, short, short, short, short, short);
+extern void itemmaker_set_exclusions(short, short, short, short, short, short, short);
 extern void itemmaker_show_param_list(iptr, short);
 
 void itemmaker_add_side_effect_cb(int side_effect)
@@ -40,8 +40,8 @@ void itemmaker_add_side_effect_cb(int side_effect)
         list_popup_callback = (iptr)itemmaker_set_side_effect_param_cb;
         return;
     }
-    if (((int)(short)*(short *)&side_effect) == 8) func_00057147((int)(short)slot, 11, -1, 23, -1, -1, -1);
-    if (((int)(short)*(short *)&side_effect) == 9) func_00057147((int)(short)slot, 12, -1, 24, -1, -1, -1);
+    if (((int)(short)*(short *)&side_effect) == 8) itemmaker_set_exclusions((int)(short)slot, 11, -1, 23, -1, -1, -1);
+    if (((int)(short)*(short *)&side_effect) == 9) itemmaker_set_exclusions((int)(short)slot, 12, -1, 24, -1, -1, -1);
     itemmaker_slots[(short)slot].type = side_effect;
     itemmaker_slots[(short)slot].param = 65535;
 }

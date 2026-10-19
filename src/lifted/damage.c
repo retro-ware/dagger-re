@@ -183,7 +183,7 @@ void damage_spawn_splash(struct record *target, int image_record, int alt_image_
     flat_anim_restart(splash);
 }
 
-void func_0002F62C(struct record *target, int force, int angle, int amount)
+void damage_knockback_2(struct record *target, int force, int angle, int amount)
 {
     int weight;
     int unused;
@@ -278,7 +278,7 @@ void monster_wake_all(void)
     object_foreach(location_object, monster_wake_cb);
 }
 
-void func_0002FD75(struct record *object)
+void quest_run_object_cb(struct record *object)
 {
     struct quest *quest;
 
@@ -287,7 +287,7 @@ void func_0002FD75(struct record *object)
     quest_run_opcodes(quest);
 }
 
-void func_0002FDB0(struct record *object)
+void quest_find_by_id_cb(struct record *object)
 {
     struct quest *quest;
 
@@ -298,14 +298,14 @@ void func_0002FDB0(struct record *object)
     quest_event_object = object;
 }
 
-void func_0002FE02(struct record *object)
+void quest_item_release_cb(struct record *object)
 {
     if (object->quest_id == 0 || ((int)(unsigned short)(object->flags & 32768)) == 0) return;
     object->quest_id = 0;
     object->flags &= ~0x8000;
 }
 
-void func_0002FE4B(struct record *object)
+void quest_restrain_foe_cb(struct record *object)
 {
     short foe_id;
 

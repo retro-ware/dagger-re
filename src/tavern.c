@@ -2,4 +2,4 @@
 
 #include "dagger.h"
 
-void func_0001F4E6(void) { }
+void tavern_stub(void) { }

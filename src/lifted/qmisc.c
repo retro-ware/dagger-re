@@ -64,8 +64,8 @@ extern struct record *object_find_quest(struct record *, unsigned char);
 extern void xn_draw_image_transparent(int, int, int, int, char *);
 extern void maploads_load_region(int);
 extern void tavern_close(void);
-extern void func_0002FE02(struct record *);
-extern void func_0002FE4B(struct record *);
+extern void quest_item_release_cb(struct record *);
+extern void quest_restrain_foe_cb(struct record *);
 extern void quest_cast_spell_on_foe_cb(struct record *);
 extern void quest_show_message(struct quest *, int);
 extern void quest_reward_faction(struct quest *);
@@ -76,7 +76,7 @@ extern void map_goto_location(int, int, int, int);
 extern void object_free_children(iptr);
 extern void object_foreach(struct record *, void (*)());
 extern void inv_store_item(struct record *);
-struct record *func_000310E1(struct record *, struct record *);
+struct record *quest_object_instantiate(struct record *, struct record *);
 void quest_give_item_to_player(struct record *);
 void quest_face_replace_object_id(int, int);
 void quest_faces_remove_quest(unsigned char);
@@ -131,7 +131,7 @@ void qaction_op04_give_reward(struct quest *quest, struct qbn_op *op)
     }
 }
 
-void func_0003077F(struct record *object, int delete_twin)
+void quest_object_delete(struct record *object, int delete_twin)
 {
     struct record *twin;
     struct location_door *door;
@@ -165,7 +165,7 @@ void quest_give_item_to_player(struct record *quest_item)
         container = inventory_containers[(int)(unsigned char)item_group_tab[item_data->group]];
     }
     container = object_create_child(container, 0, 0);
-    given_item = func_000310E1(quest_item, container);
+    given_item = quest_object_instantiate(quest_item, container);
     object_delete(container);
     inv_store_item(given_item);
 }
@@ -304,10 +304,10 @@ int qcond_op57_item_used(struct quest *quest, struct qbn_op *op)
 
 void quest_items_release_on_close(void)
 {
-    object_foreach(player_entity->children, func_0002FE02);
+    object_foreach(player_entity->children, quest_item_release_cb);
 }
 
-void func_00030F63(struct quest *quest, struct qbn_op *op)
+void qaction_op68_restrain_foe(struct quest *quest, struct qbn_op *op)
 {
     struct qbn_foe *foe;
     struct record *foe_object;
@@ -323,7 +323,7 @@ void func_00030F63(struct quest *quest, struct qbn_op *op)
     } else {
         foe_object->data.character.flags &= ~0x8000;
     }
-    object_foreach(location_object, func_0002FE4B);
+    object_foreach(location_object, quest_restrain_foe_cb);
 }
 
 void qaction_op69_cast_spell_on_foe(struct quest *quest, struct qbn_op *op)
@@ -347,7 +347,7 @@ void qaction_op69_cast_spell_on_foe(struct quest *quest, struct qbn_op *op)
     object_delete(spell_object);
 }
 
-struct record *func_000310E1(struct record *object, struct record *target)
+struct record *quest_object_instantiate(struct record *object, struct record *target)
 {
     struct record *twin;
     struct record *child_twin;
@@ -471,7 +471,7 @@ struct record *func_000310E1(struct record *object, struct record *target)
     return twin;
 }
 
-void func_00031658(struct quest *quest, struct qbn_op *op, int immediate)
+void qaction_op76_give_pc_item_later(struct quest *quest, struct qbn_op *op, int immediate)
 {
     op->flags |= 2;
     if (immediate == 0) {

@@ -120,7 +120,7 @@ extern void sky_apply_sunlight(void);
 extern void weapon_missile_orient(struct record *);
 extern void object_free_pending(void);
 extern void spell_cast_queued_run(void);
-extern void func_0007E815(struct record *, void (*)());
+extern void dungeon_grid_visit_near(struct record *, void (*)());
 extern void town_grid_visit_near(struct record *, void (*)());
 extern void player_light_draw(void);
 extern void object_foreach_open(struct record *, void (*)());
@@ -288,7 +288,7 @@ void world_draw_objects(void)
                 xn_light_add(player_object->x, player_object->y - 60, player_object->z, 16, 128, 0);
             }
         }
-        func_0007E815(player_object, object_draw_cb);
+        dungeon_grid_visit_near(player_object, object_draw_cb);
         block = location_object->children;
         while (block != 0) {
             next = block->next;

@@ -153,7 +153,7 @@ void item_set_race_image(struct item *item, int race)
     item->inventory_image += ((unsigned short)(unsigned char)race_image_rows[race]) << 7;
 }
 
-void func_0005E636(struct item *item)
+void item_roll_style(struct item *item)
 {
     int unused;
     int variant;
@@ -213,7 +213,7 @@ void item_next_clothing_style(struct item *item)
     item->inventory_image++;
 }
 
-void func_0005E7FC(struct item *item)
+void item_first_clothing_style(struct item *item)
 {
     int style;
     int unused;
@@ -413,7 +413,7 @@ void shelf_stock_items(struct record *container, int list_index, int quality)
     }
 }
 
-int func_0005F0A0(int group)
+int item_group_has_styles(int group)
 {
     {
         int result;
@@ -810,7 +810,7 @@ void shop_generate_stock(struct record *container, int variant, int quality, int
     }
 }
 
-int func_000612A1(void)
+int shop_count_stock(void)
 {
     struct record *item;
     int count;
@@ -1129,7 +1129,7 @@ int ai_turn_toward(struct record *monster, int angle)
     return 1;
 }
 
-void func_0006228A(struct record *monster, int unused, int angle)
+void ai_turn_away(struct record *monster, int unused, int angle)
 {
     int angle_delta;
     int turn_dir;

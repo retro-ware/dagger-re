@@ -6,7 +6,7 @@ extern int link_axis_override_keys[];
 extern int link_axis_override_axes[];
 
 
-int func_000658CA(int id_hundreds, int id_rest)
+int link_model_axis_override(int id_hundreds, int id_rest)
 {
     int model_id;
     int i;

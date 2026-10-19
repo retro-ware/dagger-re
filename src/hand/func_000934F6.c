@@ -22,7 +22,7 @@ extern unsigned char *color_remap_tables;
 
 extern void text_draw_coloured(char *, short, short, int, unsigned char);
 extern void inv_draw_item_image(char *, struct rect *, short);
-extern void func_00093BD9(char *, struct rect *, int);
+extern void inv_draw_cart_cell(char *, struct rect *, int);
 extern void inv_draw_cell_mark(int, int, struct rect *, int);
 #pragma aux mc_set_location parm routine [];
 
@@ -76,7 +76,7 @@ int inv_draw_item_cell(char *object, short cell, struct rect *rects)
         (*(short *)(item + 50))++;
     }
     if (U16(item, 32) == 23 && U16(item, 34) == 0)
-        func_00093BD9(item, rects, cell);
+        inv_draw_cart_cell(item, rects, cell);
     else
         inv_draw_item_image(item, rects, cell);
     *(short *)(item + 50) -= image_bump;

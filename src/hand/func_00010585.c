@@ -49,11 +49,11 @@ extern void play_death_video(void);
 extern void msgbox_close(void);
 extern void guards_summon(int);
 extern void spell_remove_effect_type(struct record *, int);
-extern void func_0006987B(void);
+extern void sound_apply_volume(void);
 extern void sound_update_ambient(void);
 extern iptr hud_message_add(char *);
 extern int building_access_level(struct building *);
-extern int func_0007E441(int);
+extern int interior_restriction_at_player(int);
 extern void xn_draw_cif_rle_frame(iptr, int, int, int);
 extern void xn_tex_archive_set_translucent(int);
 extern void xn_mouse_poll_clamped(void);
@@ -72,7 +72,7 @@ void player_frame_update(void)
         trespassing = 0;
         break;
     case 2:
-        trespassing = func_0007E441(2) - building_access_level(0);
+        trespassing = interior_restriction_at_player(2) - building_access_level(0);
         if (trespassing < 0)
             trespassing = 0;
         break;
@@ -173,6 +173,6 @@ void player_frame_update(void)
         player_character->shield_points = 0;
     }
     if (frame_counter.lo == 0)
-        func_0006987B();
+        sound_apply_volume();
     sound_update_ambient();
 }

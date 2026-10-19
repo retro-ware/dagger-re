@@ -55,7 +55,7 @@ extern int disk_file_exists(iptr);
 extern int xn_font_select(int);
 extern void quest_load_text(struct quest *, int, short, int);
 extern void book_flush_line(void);
-extern void func_0005A1C8(char *);
+extern void book_load_image(char *);
 int logbook_close(void);
 void logbook_draw_entry(char *);
 void logbook_build_entries(void);
@@ -120,7 +120,7 @@ void logbook_draw_entry(char *text)
             text += 3;
             break;
         case 247:
-            func_0005A1C8(text + 1);
+            book_load_image(text + 1);
             while (*(signed char *)(text++) != 0);
             break;
         case 250:

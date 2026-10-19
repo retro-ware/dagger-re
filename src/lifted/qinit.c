@@ -34,7 +34,7 @@ extern struct faction *faction_find(short);
 extern int faction_player_related(struct faction *);
 extern iptr quest_section(struct quest *, int);
 extern iptr quest_record(struct quest *, int, int);
-extern struct record *func_000310E1(struct record *, struct record *);
+extern struct record *quest_object_instantiate(struct record *, struct record *);
 extern int quest_init_person(struct qbn_person *);
 extern int quest_init_place(struct qbn_place *);
 extern int spawn_find_point(struct record *, int, int);
@@ -265,7 +265,7 @@ void qaction_place_foe(struct qbn_op *op, struct qbn_place *place)
     monster_init_gear(foe_object);
 }
 
-int func_000337AD(struct location_door *door, struct qbn_place *place, struct building *building)
+int quest_building_fits(struct location_door *door, struct qbn_place *place, struct building *building)
 {
     if (place->p2 > (-1)) {
         if (place->p2 >= 17 && place->p2 <= 20 && building->type >= 17 && building->type <= 20) {
@@ -301,7 +301,7 @@ int quest_place_object(struct record *object, struct qbn_place *place)
             site->x = object->x;
             site->y = object->y;
             site->z = object->z;
-            func_000310E1(object, site);
+            quest_object_instantiate(object, site);
             object_free_single(site);
             return object->id;
         }
@@ -322,7 +322,7 @@ int quest_place_object(struct record *object, struct qbn_place *place)
         mc_memcpy(&object->data, &place->object->data, 26, str_qinit_c, 924, 4);
         object->data.building.faction_id = *(int *)&saved_faction_id;
     }
-    if ((((unsigned)object->id) >> 16) == (((unsigned)location_object->id) >> 16)) object = func_000310E1(object, 0);
+    if ((((unsigned)object->id) >> 16) == (((unsigned)location_object->id) >> 16)) object = quest_object_instantiate(object, 0);
     return object->id;
 }
 

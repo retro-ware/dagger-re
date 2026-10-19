@@ -36,7 +36,7 @@ extern int rand_range(int, int);
 extern int object_find(struct record *, iptr);
 extern void *xn_render_pick(int, int);
 extern void shop_generate_stock(iptr, int, int, int, int);
-extern void func_0007E815(struct record *, iptr);
+extern void dungeon_grid_visit_near(struct record *, iptr);
 extern void town_grid_visit_near(struct record *, iptr);
 extern void object_foreach_open(struct record *, void (*)());
 struct arch3d_plane *arch3d_plane_at(iptr, short);
@@ -255,7 +255,7 @@ void world_for_each_object(iptr callback)
         if (automap_is_open != 0) {
             object_find(location_object, callback);
         } else {
-            func_0007E815(player_object, callback);
+            dungeon_grid_visit_near(player_object, callback);
         }
         object = location_object->children;
         while (object != 0) {

@@ -11,7 +11,7 @@ extern struct faction *faction_find(short);
 extern int quest_dispatch_event(struct quest *);
 extern void *quest_section(struct quest *, int);
 
-int func_00031843(short event_code, struct record *event_object, struct record *event_object2)
+int quest_event_individual_npc(short event_code, struct record *event_object, struct record *event_object2)
 {
     short faction_id;
     int unused;

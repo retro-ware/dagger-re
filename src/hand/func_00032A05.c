@@ -18,7 +18,7 @@ extern struct record *quest_location_object;
 extern struct location *quest_location_location;
 extern struct quest *current_quest;
 extern struct faction *faction_find_type_in_region(short, short);
-extern int func_000337AD(struct location_door *, struct qbn_place *, struct building *);
+extern int quest_building_fits(struct location_door *, struct qbn_place *, struct building *);
 extern int quest_object_in_use(int);
 extern void location_free(short *);
 extern void quest_pick_location(short *, unsigned short, short, int);
@@ -72,7 +72,7 @@ retry:
     candidate_count = 0;
     if (place->p1 == 0) {
         for (candidate_count = i = 0, door = doors; i < door_count; i++, door++) {
-            if (func_000337AD(door, place, &location->buildings[door->building_index]))
+            if (quest_building_fits(door, place, &location->buildings[door->building_index]))
                 candidates[candidate_count++] = (door->building_index << 16) + door->id;
         }
     } else {

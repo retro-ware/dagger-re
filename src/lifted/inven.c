@@ -253,7 +253,7 @@ int trade_adjust_price(int, int);
 int trade_settle_offer(void);
 int trade_base_price(int);
 int trade_pay_spell_points(void);
-int func_00098B91(struct record *);
+int item_select_quest(struct record *);
 iptr potion_recipe_text(signed char *);
 void inventory_load_images(void);
 void inventory_free_images(void);
@@ -270,7 +270,7 @@ void trade_make_offer(void);
 void inv_wagon_button(void);
 void inv_claim_items(void);
 void inv_read_map_scrap(struct record *);
-void func_00098F1D(struct record *);
+void item_sync_twin_id(struct record *);
 void inv_close_assign_ids(void);
 void inv_track_hand_weapons(int);
 void item_refresh_magic_value_cb(struct record *);
@@ -541,7 +541,7 @@ void inv_draw_container_icon(int button, int icon)
     inv_weight_container_only = 0;
 }
 
-void func_00093BD9(iptr unused, struct rect *buttons, int button)
+void inv_draw_cart_cell(iptr unused, struct rect *buttons, int button)
 {
     struct image *image;
     slot16 centre_x;
@@ -685,7 +685,7 @@ int inv_take_item(struct record *object)
     found_gold = 0;
     object->id = object_new_id(100);
     if (object->twin != 0) object->twin->id = object->id;
-    func_00098F1D(object);
+    item_sync_twin_id(object);
     item = &object->data.item;
     if (item->group == 28 && item->index == 0) {
         if (object != inv_right_container) found_gold += item->value;
@@ -863,7 +863,7 @@ void inv_use_item(void)
         }
     }
     if (item->group == 9 && item->index == 5 && (short)item->message != 0) {
-        if (func_00098B91(inv_selected_item) != 0) {
+        if (item_select_quest(inv_selected_item) != 0) {
             msgbox_show_quest_text(current_quest, (int)(short)(short)item->message, 1);
         } else {
             msgbox_show_qrc_text(item->name + 10, (int)(unsigned short)(short)item->message, 1);
@@ -1184,7 +1184,7 @@ void inv_store_item(struct record *object)
 
     object->id = object_new_id(100);
     if (object->twin != 0) object->twin->id = object->id;
-    func_00098F1D(object);
+    item_sync_twin_id(object);
     object->caster = 0;
     item = &object->data.item;
     if (item->enchantments[0].type != (-1) || (item->group == 27 && item->index == 0)) {
@@ -1579,7 +1579,7 @@ void trade_total_identify(void)
     trade_price = trade_total;
 }
 
-void func_00098A15(void)
+void transport_toggle_ship(void)
 {
     int location;
 
@@ -1602,7 +1602,7 @@ void func_00098A15(void)
     player_to_nearest_marker(location_object, 8);
 }
 
-int func_00098B20(void)
+int player_on_ship(void)
 {
     int on_992;
     int on_993;
@@ -1623,7 +1623,7 @@ int func_00098B20(void)
     return result;
 }
 
-int func_00098B91(struct record *object)
+int item_select_quest(struct record *object)
 {
     if (object->twin != 0 && object->quest_id != 0) {
         current_quest = (struct quest *)quest_find_by_id((int)(short)((unsigned short)object->quest_id));
@@ -1676,7 +1676,7 @@ int item_forbidden_for_class(struct item *item)
     return 0;
 }
 
-void func_00098F1D(struct record *object)
+void item_sync_twin_id(struct record *object)
 {
     int unused;
 

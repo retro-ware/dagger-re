@@ -53,8 +53,8 @@ iptr rumor_copy(iptr, struct rumor *);
 void faction_link_relations(struct faction *);
 void faction_free(void);
 void faction_save_r(int, struct faction *);
-void func_0001CB3C(struct record *);
-void func_0001DA9C(struct rumor *, iptr);
+void faction_membership_related_cb(struct record *);
+void rumor_drop_oldest_npc(struct rumor *, iptr);
 #pragma aux mc_set_location parm routine [];
 
 void faction_link_relations(struct faction *faction)
@@ -354,7 +354,7 @@ void faction_parse_rank(struct faction *faction, signed char **cursor, int *ally
     *cursor = text;
 }
 
-iptr func_0001C7D6(int kind, int index)
+iptr bio_person_get(int kind, int index)
 {
     struct record *object;
     struct character *character;
@@ -377,7 +377,7 @@ iptr func_0001C7D6(int kind, int index)
     return 0;
 }
 
-int func_0001C8DE(int career_id, int kind)
+int bio_person_count(int career_id, int kind)
 {
     struct record *object;
     struct character *character;
@@ -448,7 +448,7 @@ void faction_load(int file)
     }
 }
 
-void func_0001CB3C(struct record *object)
+void faction_membership_related_cb(struct record *object)
 {
     struct faction *faction;
 
@@ -467,7 +467,7 @@ int faction_player_related(struct faction *faction)
     if (faction == 0) return 0;
     found_faction = faction;
     *(int *)shared_scratch = 0;
-    object_foreach(player_entity->children, func_0001CB3C);
+    object_foreach(player_entity->children, faction_membership_related_cb);
     return *(int *)shared_scratch;
 }
 
@@ -631,7 +631,7 @@ iptr rumor_pick_news(short faction_id)
     return (iptr)scratch_buffer;
 }
 
-iptr func_0001D46A(int target)
+iptr rumor_find_for_npc(int target)
 {
     struct rumor *rumor;
     iptr end;
@@ -651,7 +651,7 @@ iptr func_0001D46A(int target)
     return 0;
 }
 
-int func_0001D66C(struct rumor *rumor)
+int rumor_flags_for_kind(struct rumor *rumor)
 {
     int flags;
 
@@ -702,7 +702,7 @@ void rumor_file_purge(void)
                 if (((int)(unsigned char)(rumor->flags & 32)) == 0) {
                     npc_count++;
                     out = rumor_copy(out, rumor);
-                    if (npc_count > 200) func_0001DA9C((struct rumor *)scratch_buffer, out);
+                    if (npc_count > 200) rumor_drop_oldest_npc((struct rumor *)scratch_buffer, out);
                 }
             }
         }
@@ -719,7 +719,7 @@ iptr rumor_copy(iptr out, struct rumor *rumor)
     return (out + 34) + rumor->text_length;
 }
 
-void func_0001DA9C(struct rumor *rumor, iptr end)
+void rumor_drop_oldest_npc(struct rumor *rumor, iptr end)
 {
     while (((uptr)rumor) < end) {
         if (((int)(unsigned char)(rumor->flags & 2)) != 0) {

@@ -54,10 +54,10 @@ extern void talk_say_text(int);
 extern void talk_say_string(iptr);
 extern void talk_init_text(void);
 extern void talk_build_place_topics(void);
-extern void func_00018339(void);
+extern void talk_mark_quest_buildings(void);
 extern int talk_faction_greeting(int);
 extern int talk_roll_attitude(void);
-extern iptr func_0001D46A(int);
+extern iptr rumor_find_for_npc(int);
 extern void msgbox_show_rsc(short, int);
 extern void guards_summon(int);
 extern void npc_load_face(struct record *, iptr);
@@ -104,7 +104,7 @@ int talk_open(struct record *npc)
         talk_attitude_cache = talk_attitude_cache_2 = talk_etiquette_counted = 0;
         talk_where_target = &talk_where;
         talk_place_topics = (struct talk_place_topic *)(scratch_buffer + 64768);
-        func_00018339();
+        talk_mark_quest_buildings();
         talk_showing_categories = 1;
         talk_build_place_topics();
         talk_flags |= 2;
@@ -114,7 +114,7 @@ int talk_open(struct record *npc)
         talk_rand_seed = rand();
         if (talk_face_loaded == 0)
             npc_load_face(talk_npc_object, talk_face_image);
-        rumor_text = func_0001D46A(talk_npc_object->id);
+        rumor_text = rumor_find_for_npc(talk_npc_object->id);
         if (talk_npc_own_faction->type == 15 || talk_npc_own_faction->type == 14)
             greeting = talk_npc_own_faction->id;
         else

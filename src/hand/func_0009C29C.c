@@ -18,11 +18,11 @@ extern int sound_play(int, struct record *, int);
 extern void location_place_player_at_edge(unsigned int);
 extern void map_goto_location(int, int, int, int);
 extern void travel_button_exit(int);
-extern void func_0009BE38(void);
+extern void travel_close_region(void);
 extern int travel_route(int, int, int, int, int);
 extern int xn_math_angle_to_point(int, int, int, int);
 
-void func_0009C29C(void)
+void travel_teleport_yes(void)
 {
     int unused;
     int minutes;
@@ -34,13 +34,13 @@ void func_0009C29C(void)
         return;
     sound_play(203, player_object, 110);
     scratch_190ce5 = 0;
-    func_0009BE38();
+    travel_close_region();
     quests_suspended = 1;
     time_skip_active = 1;
     world_running = 1;
     saved_fatigue = player_character->fatigue;
     minutes = travel_route(player_object->x, player_object->z, travel_dest_x, travel_dest_z, 1);
-    func_0009BE38();
+    travel_close_region();
     travel_button_exit(100);
     if (minutes != -1)
         map_goto_location(travel_selected_region, 1, travel_selected_location, 0);

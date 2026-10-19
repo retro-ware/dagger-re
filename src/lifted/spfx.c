@@ -639,7 +639,7 @@ int spfx_wall_of_fire(struct record *spell, int slot, struct record *target)
     return 0;
 }
 
-int func_0008A858(struct record *object, int effect_type, int with_roll)
+int spfx_entity_has_effect(struct record *object, int effect_type, int with_roll)
 {
     struct spell *spell_data;
     int found_slot;
@@ -741,7 +741,7 @@ int spfx_disease_daily(struct disease *disease)
     return 1;
 }
 
-int func_0008AC0E(struct record *spell, struct record *target, int slot)
+int spfx_caster_level_roll(struct record *spell, struct record *target, int slot)
 {
     struct spell *spell_data;
     struct character *target_char;

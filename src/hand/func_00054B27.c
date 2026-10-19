@@ -19,7 +19,7 @@ extern void classmaker_set_disadvantage(int, int);
 extern void text_draw_coloured(char *, short, short, int, unsigned char);
 extern void xn_mouse_poll_clamped(void);
 
-void func_00054B27(void)
+void classmaker_specials_sublist_click(void)
 {
     short top;
     short row;

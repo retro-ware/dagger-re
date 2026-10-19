@@ -33,7 +33,7 @@ extern iptr color_remap_tables;
 extern void character_update_armor_values(struct record *);
 extern void paperdoll_add_item(struct item *, int);
 extern void paperdoll_draw_items(int, int);
-extern void func_0005E7FC(char *);
+extern void item_first_clothing_style(char *);
 extern struct image *disk_read_file(char *, iptr);
 extern void xn_draw_get_rect(int, int, int, int, iptr, int);
 extern void xn_draw_image(int, int, int, int, char *);
@@ -139,7 +139,7 @@ void paperdoll_draw(int x, int y)
                         if ((n == 6 && (sub == 13 || sub == 14)) || (n == 12 && (sub == 9 || sub == 10))) {
                             found = 1;
                             buf[66] = 0;
-                            func_0005E7FC(buf);
+                            item_first_clothing_style(buf);
                             paperdoll_add_item((struct item *)buf, i);
                         }
                     }

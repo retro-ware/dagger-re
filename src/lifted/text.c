@@ -112,7 +112,7 @@ extern void guards_summon(int);
 extern void pedestrian_pick_sprite(struct record *);
 extern void keys_world_actions(void);
 extern void game_exit(char *);
-extern void func_0006987B(void);
+extern void sound_apply_volume(void);
 extern void monster_init(struct record *, int);
 extern void mode_push(void);
 extern void mode_pop(void);
@@ -299,7 +299,7 @@ void msgbox_wait(void)
         msgbox_update();
         player_movement_update();
         xn_gfx_present_inclusive(1);
-        if (((struct bf8_0_4 *)&frame_counter)->f == 0) func_0006987B();
+        if (((struct bf8_0_4 *)&frame_counter)->f == 0) sound_apply_volume();
     }
     bios_ticks = (int *)DOS_LOW(0x46C);
     realtime_clock_tick = *bios_ticks;

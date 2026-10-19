@@ -1044,7 +1044,7 @@ iptr macro_nt_nearby_tavern(void)
     return parse_town_building_name(15);
 }
 
-int func_00048765(void)
+int macro_ncl_name(void)
 {
     return parse_value_195ac0 + 28;
 }
@@ -1585,7 +1585,7 @@ iptr macro_tem_town_temple(void)
     return parse_town_building_name(14);
 }
 
-iptr func_00049AE7(void)
+iptr macro_tgm_thieves_faction(void)
 {
     return (iptr)faction_find_type_in_region(talk_where_target->region, 13)->child->name;
 }

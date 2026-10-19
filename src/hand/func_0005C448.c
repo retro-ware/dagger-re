@@ -11,7 +11,7 @@ extern int shared_scratch;
 extern struct record *collide_hit_object;
 extern unsigned char collide_flags;
 extern int collide_move_missile(struct record *, struct vec3 *, struct vec3 *);
-extern void func_0005C856(struct record *, struct record *);
+extern void spell_missile_hit(struct record *, struct record *);
 extern void links_trigger(struct record *, int);
 extern int sound_play(int, struct record *, int);
 extern struct record *monster_nearest_to_point(int, int, int);
@@ -52,7 +52,7 @@ int spell_missile_update(struct record *m, int launch)
         m->image2 = 0x8000;
         m->children->light_radius <<= 2;
         if ((hit & 8) && m->data.spell.target == 2)
-            func_0005C856(m, collide_hit_object);
+            spell_missile_hit(m, collide_hit_object);
     }
     obj = monster_nearest_to_point(m->x, m->y, m->z);
     if (obj == 0)
@@ -64,6 +64,6 @@ int spell_missile_update(struct record *m, int launch)
     m->missile_texture |= 1;
     m->image2 = 0x8000;
     m->children->light_radius <<= 2;
-    func_0005C856(m, obj);
+    spell_missile_hit(m, obj);
     return 0;
 }

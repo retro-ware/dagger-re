@@ -101,9 +101,9 @@ struct spell *spell_find_active_effect(struct record *, int, int *, int *);
 int spell_apply_effect(struct record *, int, struct record *);
 void spellbook_find_last_cast_cb(struct record *);
 void spell_compute_values(struct spell *, uslot16, int);
-void func_0005C856(struct record *, struct record *);
+void spell_missile_hit(struct record *, struct record *);
 void cast_anim_start(int);
-void func_0005CA28(struct record *);
+void spell_name_from_book_cb(struct record *);
 void spell_lookup_name(struct spell *);
 
 int cast_item_strike_spell(int spell_id, struct record *target)
@@ -455,7 +455,7 @@ void cast_fire_missile(struct record *missile)
             missile->missile_texture |= 1;
             missile->image2 = 32768;
             missile->children->light_radius <<= 2;
-            func_0005C856(missile, collide_hit_object);
+            spell_missile_hit(missile, collide_hit_object);
             if (spell->target == 2 || spell->target == 4) cast_anim_start(spell->element);
             return;
         }
@@ -523,7 +523,7 @@ void cast_creature_missile(struct record *missile, struct record *caster, struct
         missile->missile_texture |= 1;
         missile->image2 = 32768;
         missile->children->light_radius <<= 2;
-        func_0005C856(missile, collide_hit_object);
+        spell_missile_hit(missile, collide_hit_object);
         return;
     }
     spell_missile_update(missile, 1);
@@ -547,7 +547,7 @@ void spell_area_effect(struct record *spell)
         if (xn_math_approx_hypot(spell->y - creature_list[i]->y, xn_math_approx_dist2d(spell->x, spell->z, creature_list[i]->x, creature_list[i]->z)) < radius) {
             if (collide_line_of_sight(spell, creature_list[i]) == 0) continue;
             damage_knockback(creature_list[i], radius * 30, xn_math_angle_to_point(spell->x, spell->z, creature_list[i]->x, creature_list[i]->z), radius);
-            func_0005C856(spell, creature_list[i]);
+            spell_missile_hit(spell, creature_list[i]);
         }
     }
     if (xn_math_approx_hypot(spell->y - player_object->y, xn_math_approx_dist2d(spell->x, spell->z, player_object->x, player_object->z)) >= radius) return;
@@ -555,7 +555,7 @@ void spell_area_effect(struct record *spell)
     spell_cast_queue(spell, player_entity);
 }
 
-void func_0005C856(struct record *spell, struct record *target)
+void spell_missile_hit(struct record *spell, struct record *target)
 {
     spell_lookup_name(&spell->data.spell);
     if (target->type != 18) return;
@@ -605,7 +605,7 @@ int spell_player_has_spell(unsigned char spell_id)
     return 0;
 }
 
-void func_0005CA28(struct record *object)
+void spell_name_from_book_cb(struct record *object)
 {
     if (object->type != 9) return;
     if ((signed char)spell_scratch->id != (signed char)object->data.spell.id) return;
@@ -624,7 +624,7 @@ void spell_lookup_name(struct spell *spell)
     if (i >= 128) {
         spellbook = object_find_item(player_entity->children, 27, 0);
         spell_scratch = spell;
-        object_foreach(spellbook->children, func_0005CA28);
+        object_foreach(spellbook->children, spell_name_from_book_cb);
         return;
     }
     mc_strncpy(spell->name, (char *)(signed char *)&spell_records[i].name[0], 25, str_runspell_c, 974);

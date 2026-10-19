@@ -32,8 +32,8 @@ extern iptr hud_message_add(char *);
 extern int gold_can_afford(int);
 extern void cursor_draw_arrow(void);
 extern void player_horse_sounds_stop(void);
-extern int func_00098B20(void);
-extern void func_00098A15(void);
+extern int player_on_ship(void);
+extern void transport_toggle_ship(void);
 extern void travel_find_transport(void);
 extern void xn_gfx_present_inclusive(int);
 extern void xn_mouse_poll_clamped(void);
@@ -90,7 +90,7 @@ void transport_menu(void)
     screen_image_2 = disk_read_file(str_move01i0_img, 0);
     scratch_190d16 = 0;
     travel_find_transport();
-    if (func_00098B20() != 0) {
+    if (player_on_ship() != 0) {
         enabled = 24;
     } else {
         if ((scratch_190d16 & 2) && player_environment == 1)
@@ -159,7 +159,7 @@ void transport_choose(int button)
         break;
     case 3:
         player_character[65] &= 249;
-        func_00098A15();
+        transport_toggle_ship();
         player_horse_sounds_stop();
         break;
     }

@@ -24,7 +24,7 @@ extern void town_map_note_secret_guild_halls(void);
 extern void people_spawn_tick(void);
 extern void people_clear(void);
 extern void parse_rsc_text(int, int, int);
-extern void func_0004C759(void);
+extern void quests_link_world(void);
 extern void quest_mark_givers(void);
 extern void sound_stop_ambient(void);
 extern void position_history_reset(void);
@@ -36,7 +36,7 @@ extern void town_door_roll_unlock(struct record *);
 extern void location_set_discovered(int, int);
 extern void object_foreach(struct record *, void (*)());
 extern void object_delete_block(iptr, int);
-extern void func_0008EB52(void);
+extern void object_twin_check_all(void);
 extern int player_to_nearest_marker(struct record *, int);
 extern int xn_terrain_height_at(int, int);
 #pragma aux mc_set_location parm routine [];
@@ -46,7 +46,7 @@ void town_load(int location_index)
     if (location_object->image == location_index)
         return;
     sound_stop_ambient();
-    func_0008EB52();
+    object_twin_check_all();
     if (location_object->image == 65535)
         object_delete_block((iptr)location_object->children, location_object->id);
     location_load_exterior(&loaded_location, location_index);
@@ -67,7 +67,7 @@ void town_load(int location_index)
     }
     if (world_loading == 0) {
         people_spawn_tick();
-        func_0004C759();
+        quests_link_world();
         location_restore_stored();
         town_map_note_secret_guild_halls();
         switch ((location_here->x_type_flags << 2) >> 27) {
@@ -90,5 +90,5 @@ void town_load(int location_index)
     sky_loaded_frame = 10000;
     dungeon_water_level = 10000;
     loan_collectors_next = game_minutes + rand_range(1400, 1700);
-    func_0008EB52();
+    object_twin_check_all();
 }

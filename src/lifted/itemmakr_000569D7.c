@@ -15,7 +15,7 @@ extern int itemmaker_pick_param_list(iptr);
 extern int itemmaker_free_slot(void);
 extern void msgbox_show_rsc(int, int);
 extern void itemmaker_set_power_param_cb(int);
-extern void func_00057147(short, short, short, short, short, short, short);
+extern void itemmaker_set_exclusions(short, short, short, short, short, short, short);
 extern void itemmaker_show_param_list(iptr, short);
 
 void itemmaker_add_power_cb(int power)
@@ -43,10 +43,10 @@ void itemmaker_add_power_cb(int power)
         list_popup_callback = (iptr)itemmaker_set_power_param_cb;
     } else {
         if (((int)(short)*(short *)&power) == 11) {
-            func_00057147((int)(short)slot, 23, -1, 11, -1, -1, -1);
+            itemmaker_set_exclusions((int)(short)slot, 23, -1, 11, -1, -1, -1);
         }
         if (((int)(short)*(short *)&power) == 12) {
-            func_00057147((int)(short)slot, 24, -1, 12, -1, -1, -1);
+            itemmaker_set_exclusions((int)(short)slot, 24, -1, 12, -1, -1, -1);
         }
         itemmaker_slots[(short)slot].type = power;
         itemmaker_slots[(short)slot].param = 65535;

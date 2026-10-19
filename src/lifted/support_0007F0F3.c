@@ -9,7 +9,7 @@ extern struct location *current_location;
 extern struct record *object_find_by_id(struct record *, iptr);
 extern void town_map_note_building(struct record *, struct building *);
 
-void func_0007F0F3(int faction_id)
+void town_note_faction_buildings(int faction_id)
 {
     int building_index;
     struct building *building;

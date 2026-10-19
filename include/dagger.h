@@ -26,7 +26,7 @@ extern short qbn_record_sizes[];
 /* code */
 extern void door_key_match_cb();
 extern iptr faction_find_r(iptr, int);
-extern void func_000193DD(iptr);
+extern void faction_relation_flags_r(iptr);
 extern unsigned char climate_lookup(int, int);
 extern iptr quest_section(char *, short);
 extern void item_make_random(unsigned short, char *);

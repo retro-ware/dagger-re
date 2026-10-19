@@ -12,7 +12,7 @@ extern char enchant_power_exclusion_rows[];
 extern char scratch_190d64[];
 extern char scratch_190d66[];
 
-extern void func_00057147(short, short, short, short, short, short, short);
+extern void itemmaker_set_exclusions(short, short, short, short, short, short, short);
 
 void itemmaker_set_power_param_cb(int param)
 {
@@ -21,9 +21,9 @@ void itemmaker_set_power_param_cb(int param)
     itemmaker_slots[(int)(short)*(short *)scratch_190d64].param = param;
     *(int *)&exclusion_row = (int)(unsigned char)*(signed char *)(enchant_power_exclusion_rows + ((int)(short)*(short *)scratch_190d66));
     if ((short)exclusion_row == 0) {
-        func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)*(short *)scratch_190d66, (int)(short)*(short *)&param, -1, -1, -1, -1);
+        itemmaker_set_exclusions((int)(short)*(short *)scratch_190d64, (int)(short)*(short *)scratch_190d66, (int)(short)*(short *)&param, -1, -1, -1, -1);
         return;
     }
     (*(int *)&exclusion_row)--;
-    func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)*(short *)scratch_190d66, (int)(short)*(short *)&param, (int)(short)((int)(unsigned char)*(signed char *)(enchant_power_excludes_type1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_param1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_type2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_param2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))));
+    itemmaker_set_exclusions((int)(short)*(short *)scratch_190d64, (int)(short)*(short *)scratch_190d66, (int)(short)*(short *)&param, (int)(short)((int)(unsigned char)*(signed char *)(enchant_power_excludes_type1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_param1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_type2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_power_excludes_param2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)*(short *)&param) << 2)))));
 }

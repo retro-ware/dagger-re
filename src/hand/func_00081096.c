@@ -19,7 +19,7 @@ extern char game_mode;
 extern char player_on_ground;
 extern char in_dungeon_water;
 extern int key_action_held(int);
-extern void func_0007EED8(void);
+extern void swift_poll(void);
 
 void player_mouse_look(void)
 {
@@ -30,7 +30,7 @@ void player_mouse_look(void)
         return;
     if (mouse_control_mode == 1) {
         if (!view_cursor_active && !key_action_held(33)) {
-            func_0007EED8();
+            swift_poll();
             if (!game_mode && (player_on_ground || in_dungeon_water || (player_motion_flags & 0x20) || (player_character->conditions & 8) ? 1 : 0)) {
                 dy = mouse_motion_x;
                 dx = mouse_motion_y;

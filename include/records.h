@@ -178,7 +178,7 @@ struct character {
     };
     union {
         int last_shapechange_time;          /* +0x201: player */
-        int detour_yaw;                     /* +0x201: creatures: heading of a detour (func_000622EB) */
+        int detour_yaw;                     /* +0x201: creatures: heading of a detour (monster_move_detour) */
     };
     union {
         int last_meal_time;                 /* +0x205: player */
@@ -749,7 +749,7 @@ struct block_section3 {
     int x;                          /* +0x00 */
     int y;                          /* +0x04 */
     int z;                          /* +0x08 */
-    int data;                       /* +0x0C: func_0007E441 takes byte 0 (or 1, mode 2) of the
+    int data;                       /* +0x0C: interior_restriction_at_player takes byte 0 (or 1, mode 2) of the
                                        nearest one's (DFU Unknown1, Unknown2, Unknown3) */
 };                                  /* +0x10 */
 RECORD_SIZE(block_section3, 16);
@@ -1230,7 +1230,7 @@ struct move_request {
     int yaw;                        /* +0x10 */
     int angle_z;                    /* +0x14 */
     struct collide_probe *probe;    /* +0x18: the mover's shape (xn_collide_probe while it is tested) */
-    unsigned short flags;           /* +0x1C: bit 0 (func_00023FA5) */
+    unsigned short flags;           /* +0x1C: bit 0 (collide_step_object) */
 };                                  /* +0x1E */
 RECORD_SIZE_P(move_request, 30);
 

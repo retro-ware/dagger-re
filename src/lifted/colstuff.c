@@ -83,7 +83,7 @@ int collide_creature_near(struct record *, struct move_request *);
 int collide_creature_within(struct record *, int *, int);
 void collide_segment_model_cb(struct record *);
 void collide_vertical_cb(struct record *);
-void func_00022174(struct record *);
+void collide_sphere_cb(struct record *);
 
 int collide_move_missile(struct record *object, int *position, int *angles)
 {
@@ -243,7 +243,7 @@ void collide_vertical_cb(struct record *object)
     }
 }
 
-void func_00022174(struct record *object)
+void collide_sphere_cb(struct record *object)
 {
     char **model;
     struct block *block;
@@ -414,7 +414,7 @@ int collide_step_player(struct record *object, int unused_arg, struct move_reque
         xn_collide_probe->position.y = collide_segment_start_y;
     }
     for (i = 0; i < collide_candidate_count; i++) {
-        func_00022174(collide_candidates[i]);
+        collide_sphere_cb(collide_candidates[i]);
     }
     if (collide_creature_near(object, request) != 0) *(signed char *)collide_flags |= 8;
     if (((int)(short)(*(short *)collide_flags & 10)) != 0 && ((int)(short)(*(short *)collide_flags & 4)) != 0) {
@@ -655,7 +655,7 @@ int collide_creature_within(struct record *object, int *position, int radius)
     return 0;
 }
 
-int func_00023FA5(struct record *object, int unused_arg, struct move_request *request)
+int collide_step_object(struct record *object, int unused_arg, struct move_request *request)
 {
     int unused2;
     int landed;
@@ -736,7 +736,7 @@ int func_00023FA5(struct record *object, int unused_arg, struct move_request *re
         xn_collide_probe->position.y = collide_segment_start_y;
     }
     for (i = 0; i < collide_candidate_count; i++) {
-        func_00022174(collide_candidates[i]);
+        collide_sphere_cb(collide_candidates[i]);
     }
     if (((int)player_environment) != 2 && collide_creature_near(object, request) != 0) {
         *(signed char *)collide_flags |= 8;

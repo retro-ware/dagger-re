@@ -13,7 +13,7 @@ extern short swift_dos_segment;
 extern short swift_dos_selector_seg;
 extern int func_000A2EC5(void __far *, void __far *, unsigned, char *, int, int);
 
-int func_0007EF86(int ax_value, int bx_value)
+int swift_call(int ax_value, int bx_value)
 {
     union REGS regs;
     struct SREGS sregs;

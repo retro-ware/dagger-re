@@ -308,7 +308,7 @@ int player_in_temple(void)
     return 0;
 }
 
-void func_0004B25B(struct record *object)
+void find_person_cb(struct record *object)
 {
     if (object->type != 8) return;
     scratch_190ce4[0] = 1;

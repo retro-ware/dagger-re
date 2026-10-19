@@ -130,16 +130,16 @@ extern int tavern_open(short);
 extern int climate_category(void);
 extern int collide_line_of_sight(struct record *, struct record *);
 extern int quest_event_clicked_faction(unsigned short);
-extern int func_00031843(short, struct record *, struct record *);
+extern int quest_event_individual_npc(short, struct record *, struct record *);
 extern int list_popup_poll(void);
 extern int pedestrian_spawn_spot_ok(struct record *, int, int);
 extern struct record *item_add_to_container(struct record *, int, int, int);
 extern int building_is_open(struct building *);
 extern int quest_raise_event(int, struct record *, struct record *);
 extern int quest_pick_file(int, int, int, int, int);
-extern int func_0004CD80(struct person *);
+extern int quest_start_test_quest(struct person *);
 extern iptr npc_talk_record_build(struct record *);
-extern int func_000612A1(void);
+extern int shop_count_stock(void);
 extern int ai_angle_diff(int, int, int *);
 extern int sound_play(int, struct record *, int);
 extern int sound_play_at_point(int, int, int, int, int);
@@ -600,7 +600,7 @@ void npc_click_service(struct record *npc)
             }
         }
     }
-    if (npc->quest_id == 0 && func_0004CD80(person) != 0) return;
+    if (npc->quest_id == 0 && quest_start_test_quest(person) != 0) return;
     if (person->faction_id != 0 && person->faction_id != 65535 && faction_find((int)(short)person->faction_id)->type == 8) {
         coven_menu_open(1);
         return;
@@ -700,8 +700,8 @@ void npc_talk(struct record *npc)
 
     text_macro_npc = (struct character *)npc_talk_record_build(npc);
     faction_id = npc->data.person.faction_id;
-    handled = func_00031843(28, npc, 0);
-    handled |= func_00031843(1, 0, npc);
+    handled = quest_event_individual_npc(28, npc, 0);
+    handled |= quest_event_individual_npc(1, 0, npc);
     handled |= quest_raise_event(28, npc, 0);
     handled |= quest_raise_event(71, npc, 0);
     handled |= quest_raise_event(1, 0, npc);
@@ -965,7 +965,7 @@ void click_interior_model(struct pick_result *hit, struct record *object)
             return;
         }
         building = object_building(object);
-        if (building != 0 && picked_block_model != 0 && (picked_block_model->id == 418 || (picked_block_model->id == 410 && furniture_is_container(picked_block_model->variant + (picked_block_model->id << 7)) != 0)) && (stock_count = func_000612A1()) != 0) {
+        if (building != 0 && picked_block_model != 0 && (picked_block_model->id == 418 || (picked_block_model->id == 410 && furniture_is_container(picked_block_model->variant + (picked_block_model->id << 7)) != 0)) && (stock_count = shop_count_stock()) != 0) {
             if (building->id == player_character->house) {
                 display_flags |= 4;
                 inventory_open_container((struct record *)furniture_container_1, 0, 4);

@@ -29,13 +29,13 @@ extern void xn_world_reload(void);
 extern void automap_free_town_map(void);
 extern void automap_save(void);
 extern void people_clear(void);
-extern void func_00064301(void);
+extern void links_reset(void);
 extern void sound_stop_ambient(void);
 extern void location_store_objects(void);
 extern void location_free(struct loaded_location *);
 extern void object_foreach(struct record *, void (*)());
 extern void object_delete_block(iptr, int);
-extern void func_0008EB52(void);
+extern void object_twin_check_all(void);
 extern void inv_assign_item_id(struct record *);
 
 void location_unload(int image)
@@ -45,7 +45,7 @@ void location_unload(int image)
         int location_id;
 
         if (((int)(unsigned short)*(short *)&image) == 65535) return;
-        func_0008EB52();
+        object_twin_check_all();
         location_store_objects();
         if (location_object->twin != 0) {
             location_object->twin->twin = 0;
@@ -71,7 +71,7 @@ void location_unload(int image)
             player_environment = 1;
             dungeon_water_level = 10000;
             terrain_cell_at_player = -1;
-            func_00064301();
+            links_reset();
             xn_world_reload();
             mc_memset(terrain_cell_dirty, 0, 16, str_maplogic_c, 477, 16);
             mc_memset(terrain_cell_ids, 0, 16, str_maplogic_c, 478, 16);
@@ -84,7 +84,7 @@ void location_unload(int image)
             move_settle_frames = 5;
         }
         last_unloaded_location = location_id;
-        func_0008EB52();
+        object_twin_check_all();
         sound_stop_ambient();
     }
 }

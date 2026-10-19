@@ -144,7 +144,7 @@ extern int return_environment;
 extern struct record *inv_left_container;
 extern int return_location;
 
-extern int func_000641CD(struct record *);
+extern int links_has_id(struct record *);
 extern int sound_play(int, struct record *, int);
 extern int mem_block_size(iptr);
 extern iptr disk_read_file(char *, iptr);
@@ -284,7 +284,7 @@ struct record *savetree_attach_record(struct record *root, struct record *record
 int savetree_should_save(struct record *object)
 {
     if (object->quest_id != 0) return 1;
-    if (func_000641CD(object) != 0) return 1;
+    if (links_has_id(object) != 0) return 1;
     switch (object->type) {
     case 8:
         return object->flags & 512;

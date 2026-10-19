@@ -56,7 +56,7 @@ extern char spellmaker_settings_kind[];
 extern signed char spellmaker_allowed_target_class;
 extern signed char spellbook_find_id;
 
-extern int func_00037AB7(void);
+extern int spellmaker_effects_allow_element(void);
 extern int spell_effect_text_index(short);
 extern int sound_play(int, struct record *, int);
 extern iptr disk_read_file(char *, iptr);
@@ -147,7 +147,7 @@ int spellmaker_element_fire(void)
         msgbox_show_rsc(1801, 1);
         return 0;
     }
-    if (func_00037AB7() > 0) selected_spell->element = 0;
+    if (spellmaker_effects_allow_element() > 0) selected_spell->element = 0;
     return 0;
 }
 
@@ -158,7 +158,7 @@ int spellmaker_element_frost(void)
         msgbox_show_rsc(1802, 1);
         return 0;
     }
-    if (func_00037AB7() > 0) selected_spell->element = 1;
+    if (spellmaker_effects_allow_element() > 0) selected_spell->element = 1;
     return 0;
 }
 
@@ -169,7 +169,7 @@ int spellmaker_element_poison(void)
         msgbox_show_rsc(1803, 1);
         return 0;
     }
-    if (func_00037AB7() > 0) selected_spell->element = 2;
+    if (spellmaker_effects_allow_element() > 0) selected_spell->element = 2;
     return 0;
 }
 
@@ -180,7 +180,7 @@ int spellmaker_element_shock(void)
         msgbox_show_rsc(1804, 1);
         return 0;
     }
-    if (func_00037AB7() > 0) selected_spell->element = 3;
+    if (spellmaker_effects_allow_element() > 0) selected_spell->element = 3;
     return 0;
 }
 

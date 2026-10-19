@@ -28,7 +28,7 @@ extern int creatures_guard_mix(void);
 extern void guards_summon(int);
 extern void pedestrian_killed(struct record *);
 extern int ai_angle_diff(int, int, int *);
-extern void func_00063DDC(struct record *);
+extern void ai_alert_creatures(struct record *);
 extern void links_trigger(struct record *, int);
 extern int sound_play(int, struct record *, int);
 extern void door_try_open(struct record *, int);
@@ -79,7 +79,7 @@ void weapon_melee_strike(struct record *attacker)
             res = 1;
         if (res < 200 && collide_line_of_sight(attacker, other)) {
             if (attacker == player_entity) {
-                func_00063DDC(other);
+                ai_alert_creatures(other);
                 damage_resolve_attack(attacker, other, weapon_active_hand * 2 + 19);
                 count++;
             } else
@@ -132,7 +132,7 @@ void weapon_melee_strike(struct record *attacker)
     }
     if (obj->type != 43) {
         skill_add_uses(16, 1);
-        func_00063DDC(0);
+        ai_alert_creatures(0);
         if (obj->lock_level <= 19 && rand_range(1, 100) <= 20 - obj->lock_level && door_start_swing(obj, 0))
             obj->flags |= 320;
         if (obj->id >> 16 == 50027 || obj->id >> 16 == 50029 || obj->id >> 16 == 50033)

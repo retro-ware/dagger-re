@@ -91,7 +91,7 @@ extern void msgbox_show_rsc(int, int);
 extern void player_refresh_paperdoll(void);
 extern void itemmaker_add_power_cb(int);
 extern void itemmaker_add_side_effect_cb(int);
-extern void func_00057147(short, short, short, short, short, short, short);
+extern void itemmaker_set_exclusions(short, short, short, short, short, short, short);
 extern void itemmaker_show_param_list(iptr, short);
 extern void itemmaker_add_soul_powers(int);
 extern void list_popup_open(iptr);
@@ -112,8 +112,8 @@ void itemmaker_show_list(iptr *, int);
 void itemmaker_consume_soul(void);
 void itemmaker_write_item_file(void);
 void itemmaker_clear_soul_slots(void);
-void func_000585D6(struct record *, int);
-void func_00058AF7(void);
+void itemmaker_draw_item_cb(struct record *, int);
+void itemmaker_swap_side_offsets(void);
 #pragma aux mc_set_location parm routine [];
 
 void itemmaker_reset(void)
@@ -202,11 +202,11 @@ void itemmaker_set_side_effect_param_cb(slot16 param)
     itemmaker_slots[(int)(short)*(short *)scratch_190d64].param = *(int *)&param;
     *(int *)&exclusion_row = (int)(unsigned char)*(signed char *)(enchant_side_effect_exclusion_rows + ((int)(short)*(short *)scratch_190d66));
     if ((short)exclusion_row == 0) {
-        func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, -1, -1, -1, -1);
+        itemmaker_set_exclusions((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, -1, -1, -1, -1);
         return;
     }
     (*(int *)&exclusion_row)--;
-    func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))));
+    itemmaker_set_exclusions((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))));
 }
 
 void itemmaker_add_side_effects(void)
@@ -544,7 +544,7 @@ void itemmaker_clear_soul_slots(void)
     mc_memset(itemmaker_soul_codes, -1, 20, str_itemmakr_c, 942, 4);
 }
 
-void func_0005852D(int cells)
+void itemmaker_draw_item_list(int cells)
 {
     struct record *item;
 
@@ -556,13 +556,13 @@ void func_0005852D(int cells)
     }
     item = inv_left_container->children;
     while (item != 0) {
-        func_000585D6(item, cells + 12);
+        itemmaker_draw_item_cb(item, cells + 12);
         item = item->next;
     }
     inv_left_count = inv_left_item_count;
 }
 
-void func_000585D6(struct record *item, int cells)
+void itemmaker_draw_item_cb(struct record *item, int cells)
 {
     int unused;
 
@@ -630,7 +630,7 @@ int itemmaker_param_excluded(int type, int param)
 {
     int slot;
 
-    func_00058AF7();
+    itemmaker_swap_side_offsets();
     if (type == 25) {
         for (slot = 0; slot < 10; slot++) {
             if ((itemmaker_slots[slot].type) == 25 && (itemmaker_slots[slot].param) != 5 && param == 5) {
@@ -656,14 +656,14 @@ int itemmaker_param_excluded(int type, int param)
             }
         }
     }
-    func_00058AF7();
+    itemmaker_swap_side_offsets();
     return 0;
 L58A19:;
-    func_00058AF7();
+    itemmaker_swap_side_offsets();
     return 1;
 }
 
-void func_00058AF7(void)
+void itemmaker_swap_side_offsets(void)
 {
     int slot;
 

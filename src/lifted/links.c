@@ -20,7 +20,7 @@ extern iptr active_links[64];
 extern int link_count;
 extern int active_link_count;
 
-extern int func_000658CA(int, int);
+extern int link_model_axis_override(int, int);
 extern iptr hud_message_add(char *);
 extern int spfx_damage(struct record *, int, struct record *);
 extern struct record *object_delete(struct record *);
@@ -169,7 +169,7 @@ void link_start(struct link *link)
         if (((int)(unsigned char)(link->flags & 2)) != 0) link->speed = -link->speed;
         ticks_addr2 = (int *)DOS_LOW(0x46C);
         link->start_tick = *ticks_addr2;
-        if (((int)(unsigned char)(link->flags & 32)) == 0 && (axis = func_000658CA(link->object->image2, link->object->image)) != 0) {
+        if (((int)(unsigned char)(link->flags & 32)) == 0 && (axis = link_model_axis_override(link->object->image2, link->object->image)) != 0) {
             link->flags |= 32;
             if (((int)(unsigned char)(link->axis & 1)) != 0) axis++;
             link->axis = *(signed char *)&axis;

@@ -15,7 +15,7 @@ extern struct rdb_file *rdb_loaded_file;
 extern struct dungeon_block *rdb_dungeon_block;
 extern struct rdb_model *rdb_model_resource;
 extern int rdb_object_id_count;
-extern void func_000361B7(struct rdb_model *);
+extern void rdb_model_find_action(struct rdb_model *);
 extern void rdb_model_id_from_name(struct record *, char *);
 extern void fatal_error(char *);
 extern int rand_range(int, int);
@@ -45,7 +45,7 @@ void rdb_create_objects(struct record *quarter, struct rdb_object *rdb_object, i
         case 1:
             rdb_model_resource = (struct rdb_model *)(rdb_data + rdb_object->resource_offset);
             if (rdb_model_resource->action_offset <= 0)
-                func_000361B7(rdb_model_resource);
+                rdb_model_find_action(rdb_model_resource);
             object = object_create_in_block(quarter, 6, MODEL_INSTANCE_DATA_SIZE, 0, block_index);
             rdb_model_id_from_name(object, rdb_loaded_file->model_references[rdb_model_resource->model_index].model_id);
             if ((object->image2 == 703 || object->image2 == 704) && (rdb_dungeon_block->x || rdb_dungeon_block->z)) {

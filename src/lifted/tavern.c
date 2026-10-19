@@ -67,17 +67,17 @@ extern void object_foreach(struct record *, void (*)());
 extern void trade_make_offer(void);
 int tavern_room_rented(void);
 int tavern_room_days_left(void);
-iptr func_0001FA3A(struct record *);
-int func_0001FBF5(struct record *);
+iptr tavern_match_rooms_record(struct record *);
+int tavern_item_in_rented_room(struct record *);
 void tavern_close(void);
 void tavern_rent(int);
 void tavern_extend_room(int);
-void func_0001F6E2(struct record *);
-void func_0001F7B3(struct record *);
-void func_0001FAB2(void);
-void func_0001FB3F(void);
-void func_0001FD7C(struct record *);
-void func_0001FE4D(void);
+void tavern_store_room_item(struct record *);
+void tavern_restore_room_item(struct record *);
+void tavern_collect_saved_rooms(void);
+void tavern_collect_rented_rooms(void);
+void tavern_purge_expired(struct record *);
+void tavern_purge_expired_records(void);
 
 void tavern_close(void)
 {
@@ -255,12 +255,12 @@ void tavern_extend_room(int minutes)
     tavern_building->rent_expires += minutes;
 }
 
-void func_0001F6E2(struct record *object)
+void tavern_store_room_item(struct record *object)
 {
     struct record *stored;
 
     if (object->type != 2) return;
-    if (func_0001FBF5(object) == 0) return;
+    if (tavern_item_in_rented_room(object) == 0) return;
     stored = object_create_child(nonworld_root, 0, 107);
     stored->type = 58;
     mc_memcpy(&stored->x, &object->x, 12, str_tavern_c, 317, 4);
@@ -271,7 +271,7 @@ void func_0001F6E2(struct record *object)
     mc_memcpy(RECORD_DATA(stored), RECORD_DATA(object), 107, str_tavern_c, 322, 4);
 }
 
-void func_0001F7B3(struct record *stored)
+void tavern_restore_room_item(struct record *stored)
 {
     struct record *object;
 
@@ -287,15 +287,15 @@ void func_0001F7B3(struct record *stored)
     object_delete(stored);
 }
 
-void func_0001F89F(void)
+void tavern_save_rooms(void)
 {
     struct record *stored;
 
-    func_0001FE4D();
+    tavern_purge_expired_records();
     tavern_room_list = (struct building *)scratch_buffer;
     *(int *)shared_scratch = 0;
-    func_0001FB3F();
-    func_0001FAB2();
+    tavern_collect_rented_rooms();
+    tavern_collect_saved_rooms();
     if (*(int *)shared_scratch != 0) {
         object_delete(found_object);
         stored = object_create_child(nonworld_root, 0, *(int *)shared_scratch * 26);
@@ -304,18 +304,18 @@ void func_0001F89F(void)
         stored->id = location_object->id;
         mc_memcpy(RECORD_DATA(stored), tavern_room_list, *(int *)shared_scratch * 26, str_tavern_c, 369, 4);
     }
-    object_foreach(location_object, func_0001F6E2);
+    object_foreach(location_object, tavern_store_room_item);
 }
 
-void func_0001F958(void)
+void tavern_restore_rooms(void)
 {
     int i;
     int j;
 
-    func_0001FE4D();
+    tavern_purge_expired_records();
     tavern_room_list = (struct building *)scratch_buffer;
     *(int *)shared_scratch = 0;
-    func_0001FAB2();
+    tavern_collect_saved_rooms();
     for (i = 0; i < *(int *)shared_scratch; i++) {
         for (j = 0; current_location->building_count > j; j++) {
             if (current_location->buildings[j].id == tavern_room_list[i].id) {
@@ -324,10 +324,10 @@ void func_0001F958(void)
             }
         }
     }
-    object_foreach(nonworld_root, func_0001F7B3);
+    object_foreach(nonworld_root, tavern_restore_room_item);
 }
 
-iptr func_0001FA3A(struct record *object)
+iptr tavern_match_rooms_record(struct record *object)
 {
     if (found_object != 0) return 0;
     if (object->type != 57) return 0;
@@ -338,17 +338,17 @@ iptr func_0001FA3A(struct record *object)
     return 0;
 }
 
-void func_0001FAB2(void)
+void tavern_collect_saved_rooms(void)
 {
     *(int *)shared_scratch = 0;
     found_object = 0;
-    object_find(nonworld_root, func_0001FA3A);
+    object_find(nonworld_root, tavern_match_rooms_record);
     if (found_object == 0) return;
     mc_memcpy(&tavern_room_list[*(int *)shared_scratch], RECORD_DATA(found_object), found_object->owner * 26, str_tavern_c, 417, 4);
     *(int *)shared_scratch += found_object->owner;
 }
 
-void func_0001FB3F(void)
+void tavern_collect_rented_rooms(void)
 {
     int i;
 
@@ -359,7 +359,7 @@ void func_0001FB3F(void)
     }
 }
 
-int func_0001FBF5(struct record *object)
+int tavern_item_in_rented_room(struct record *object)
 {
     int i;
     struct building *building;
@@ -381,7 +381,7 @@ int func_0001FBF5(struct record *object)
     return (((((int)(unsigned char)(building->flags & 2)) != 0) && (((unsigned)building->rent_expires) > game_minutes)) ? 1 : 0);
 }
 
-void func_0001FD7C(struct record *object)
+void tavern_purge_expired(struct record *object)
 {
     int i;
     int live_count;
@@ -400,9 +400,9 @@ void func_0001FD7C(struct record *object)
     object_delete(object);
 }
 
-void func_0001FE4D(void)
+void tavern_purge_expired_records(void)
 {
-    object_foreach(nonworld_root, func_0001FD7C);
+    object_foreach(nonworld_root, tavern_purge_expired);
 }
 
 void region_load_tables(void)
