@@ -9,7 +9,7 @@ extern signed char tavern_state;
 extern struct building *current_building;
 extern struct building *tavern_building;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern iptr tavern_menu_image;
 
@@ -28,7 +28,7 @@ int tavern_open(short opening)
         tavern_state = 0;
         tavern_menu_image = disk_read_file(str_tvrn00i0_img, 0);
         game_mode = 20;
-        D_00196272 = 1;
+        screen_active = 1;
         *(iptr *)&tavern_building = (iptr)current_building;
     }
     if (((int)(unsigned char)game_mode) == 20) {

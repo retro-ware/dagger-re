@@ -56,7 +56,7 @@ extern char D_001913E4[];
 extern char arena2_path[];
 extern signed char D_001940D4;
 extern signed char D_001940D5;
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char ui_dirty_flags;
 extern signed char quest_global_states[];
 extern signed char D_001952EE;
@@ -818,7 +818,7 @@ void load_reset_state(void)
     mc_memset(hud_message_ptrs, 0, 68, str_loadsave_c, 1188, 68);
     mc_memset(hud_message_expiry, 0, 68, str_loadsave_c, 1189, 68);
     D_00195B44 = game_minutes;
-    D_001940D7 |= 1;
+    world_state_flags |= 1;
     D_001940D5 |= 2;
     ui_dirty_flags |= 8;
     current_building = 0;

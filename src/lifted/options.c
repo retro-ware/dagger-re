@@ -47,10 +47,10 @@ extern signed char mouse_sensitivity_x;
 extern signed char mouse_sensitivity_y;
 extern signed char joystick_setting;
 extern short joystick_threshold;
-extern char D_00195E82[];
+extern char joy_calibration_saved[];
 extern char key_map[];
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern struct image *controls_view_image;
@@ -125,7 +125,7 @@ int options_close(void)
         mc_free((void *)options_image, str_options_c, 164);
         options_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     if (options_saved_screen != 0 && options_saved_screen != (-1751672937)) {
         mc_free((void *)options_saved_screen, str_options_c, 166);
         options_saved_screen = -1751672937;
@@ -339,7 +339,7 @@ void options_controls_screen(void)
         controls_view_image = (struct image *)(iptr)-1751672937;
     }
     file = disk_create(controls_file);
-    mc_memcpy(D_00195E82, xn_joy_calibration, 46, str_options_c, 405, 4);
+    mc_memcpy(joy_calibration_saved, xn_joy_calibration, 46, str_options_c, 405, 4);
     write(file, &mouse_control_mode, 54);
     write(file, key_map, 38);
     close(file);

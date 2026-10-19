@@ -17,7 +17,7 @@ extern struct record *player_object;
 extern struct record *location_object;
 extern struct location *current_location;
 extern int game_minutes;
-extern iptr D_001AA5FC;
+extern iptr color_remap_buffer;
 extern unsigned char *color_remap_tables;    /* 32 tables of 256 */
 extern struct record *doors_moving[];
 
@@ -34,8 +34,8 @@ void color_init_remap_tables(void)
     int table;
     int colour;
 
-    D_001AA5FC = (iptr)mc_malloc(8448, str_color_c, 59);
-    color_remap_tables = (unsigned char *)xn_mem_align_up(D_001AA5FC, 256);
+    color_remap_buffer = (iptr)mc_malloc(8448, str_color_c, 59);
+    color_remap_tables = (unsigned char *)xn_mem_align_up(color_remap_buffer, 256);
     for (table = 0; table < 32; table++) {
         for (colour = 0; colour < 256; colour++) {
             color_remap_tables[colour + (table << 8)] = *(signed char *)&colour;

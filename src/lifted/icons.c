@@ -34,7 +34,7 @@ extern struct settings *game_settings;
 extern struct image *magic_items_image;
 extern signed char mouse_control_mode;
 extern signed char view_cursor_active;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char mouse_buttons_prev;
 extern signed char player_ailment_flags;
 extern iptr magic_items_saved_screen;
@@ -212,7 +212,7 @@ void magic_items_open(void)
     ui_dirty_flags &= 254;
     D_001940D4 |= 32;
     magic_items_image = (struct image *)disk_read_file(str_main02i0_img, 0);
-    D_00196272 = 1;
+    screen_active = 1;
     magic_items_saved_screen = (iptr)mc_malloc(64000, str_icons_c, 358);
     mc_memcpy((void *)magic_items_saved_screen, (void *)screen_buffer, 64000, str_icons_c, 359, 4);
 }
@@ -248,7 +248,7 @@ void magic_items_close(void)
         magic_items_image = (struct image *)(iptr)-1751672937;
     }
     picklist_free(&shared_picklist);
-    D_00196272 = 0;
+    screen_active = 0;
     world_running = 1;
     if (magic_items_saved_screen == 0 || magic_items_saved_screen == (-1751672937)) {
         return;
@@ -259,7 +259,7 @@ void magic_items_close(void)
 
 int hud_update(void)
 {
-    if (((int)(short)mouse_y) >= 154 && D_00196272 == 0 && ((int)(unsigned short)(game_settings->view_flags & 1)) == 0) {
+    if (((int)(short)mouse_y) >= 154 && screen_active == 0 && ((int)(unsigned short)(game_settings->view_flags & 1)) == 0) {
         if (((int)(unsigned char)(mouse_buttons & 3)) != 0 && ((int)(unsigned char)(mouse_buttons_prev & 3)) == 0) {
             hud_buttons_click(0);
         }

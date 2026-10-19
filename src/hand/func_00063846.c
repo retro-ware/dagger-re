@@ -9,7 +9,7 @@ extern int dungeon_water_level;
 extern char str_monster_c[];
 extern struct collide_probe D_00187B44;
 extern int D_00187CA9;
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern unsigned char D_001940DA;
 extern struct record *player_object;
 extern int frame_ticks;
@@ -72,7 +72,7 @@ int monster_move_step(struct record *o, struct record *target, int angle)
     saved_c74 = ceiling_height;
     collide_flags |= 4;
     r = (vertical_velocity = p->fall_velocity);
-    D_001940D7 |= 128;
+    world_state_flags |= 128;
     mv.probe = &D_00187B44;
     mv.flags &= 65534;
     mc_memcpy(&saved, &D_00196D54, 12, str_monster_c, 1114, 4);

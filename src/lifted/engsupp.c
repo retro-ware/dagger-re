@@ -19,7 +19,7 @@ extern struct image *hud_bar_image;
 extern struct settings *game_settings;
 extern struct xn_pick_hit *pick_hit;
 extern iptr grid_visit_func;
-extern struct block_model *D_00195D3C;
+extern struct block_model *picked_block_model;
 extern char picked_model_index[];
 extern struct arch3d_plane *click_face_texture;
 extern char D_00196120[];
@@ -113,7 +113,7 @@ int pick_model_cb(struct record *object)
         for (i = 0; block->model_count > i; i++, block_model++) {
             if ((iptr)&block_model->model == D_0019647C) {
                 *(int *)picked_model_index = i;
-                D_00195D3C = block_model;
+                picked_block_model = block_model;
                 pick_result->flags |= 13;
                 pick_result->object = object;
                 pick_result->plane = (i << 8) + arch3d_plane_index(D_0019647C, click_face_texture);

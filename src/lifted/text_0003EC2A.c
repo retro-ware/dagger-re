@@ -10,7 +10,7 @@ extern char str_text_c[];
 extern short msgbox_wrap_width;
 extern signed char msgbox_kind;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern char msgbox_image[];
@@ -55,7 +55,7 @@ void msgbox_show_string(char *text, short kind)
     msgbox_kind = kind;
     mode_push();
     game_mode = 8;
-    D_00196272 = 1;
+    screen_active = 1;
     mouse_buttons_prev = mouse_buttons;
     xn_mouse_poll_clamped();
     msgbox_wait();

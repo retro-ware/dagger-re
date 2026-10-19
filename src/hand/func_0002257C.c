@@ -2,14 +2,14 @@
 #include "records.h"
 
 extern unsigned char player_environment;
-extern struct collide_probe D_00179F48;
-extern unsigned char D_001940D7;
-extern iptr D_00195C70;
-extern iptr D_00195CB8;
+extern struct collide_probe collide_object_probe;
+extern unsigned char world_state_flags;
+extern iptr moving_model;
+extern iptr floor_object;
 extern unsigned char player_on_ground;
 extern int collide_candidate_count;
-extern struct collide_probe *D_00196D4C;
-extern struct collide_hits *D_00196D50;
+extern struct collide_probe *xn_collide_probe;
+extern struct collide_hits *xn_slide_planes;
 extern int collide_height;
 extern short collide_flags;
 extern void collide_for_each_nearby(struct record *, void (*)(iptr));
@@ -36,14 +36,14 @@ int collide_move_object(struct record *object, int unused_arg, struct move_reque
     iptr saved_cb8;
     iptr saved_c70;
 
-    saved_cb8 = D_00195CB8;
-    saved_c70 = D_00195C70;
-    D_00196D50 = 0;
+    saved_cb8 = floor_object;
+    saved_c70 = moving_model;
+    xn_slide_planes = 0;
     collide_candidate_count = 0;
-    D_00196D4C = &D_00179F48;
-    D_00196D4C->position.x = request->x;
-    D_00196D4C->position.y = request->y;
-    D_00196D4C->position.z = request->z;
+    xn_collide_probe = &collide_object_probe;
+    xn_collide_probe->position.x = request->x;
+    xn_collide_probe->position.y = request->y;
+    xn_collide_probe->position.z = request->z;
     collide_for_each_nearby(object, collide_gather_cb);
     if (player_environment != 1 && collide_candidate_count == 0)
         return 0;
@@ -55,38 +55,38 @@ int collide_move_object(struct record *object, int unused_arg, struct move_reque
     flags = collide_flags;
     player_on_ground = 1;
     result = func_00023FA5(object, unused_arg, request);
-    D_001940D7 &= 223;
-    D_00195CB8 = saved_cb8;
-    D_00195C70 = saved_c70;
+    world_state_flags &= 223;
+    floor_object = saved_cb8;
+    moving_model = saved_c70;
     if (!(result & 10) || !(flags & 4))
         return 0;
     direction.x = request->x - object->x;
     direction.y = request->y - object->y;
     direction.z = request->z - object->z;
     xn_vec_normalize_ptr(&direction);
-    if (D_00196D50 == 0)
+    if (xn_slide_planes == 0)
         return 1;
-    if (D_00196D50->count > 1) {
+    if (xn_slide_planes->count > 1) {
         best = 0;
         mindot = 1000000;
-        for (i = 0; i < D_00196D50->count; i++) {
-            dot = direction.x * D_00196D50->hits[i].nx + direction.z * D_00196D50->hits[i].nz;
+        for (i = 0; i < xn_slide_planes->count; i++) {
+            dot = direction.x * xn_slide_planes->hits[i].nx + direction.z * xn_slide_planes->hits[i].nz;
             if (dot < mindot) {
                 mindot = dot;
                 best = i;
             }
         }
     } else {
-        mindot = direction.x * D_00196D50->hits[0].nx + direction.z * D_00196D50->hits[0].nz;
+        mindot = direction.x * xn_slide_planes->hits[0].nx + direction.z * xn_slide_planes->hits[0].nz;
         best = 0;
     }
-    dx = (request->x - object->x) * D_00196D50->hits[best].nx;
-    dy = (request->y - object->y) * D_00196D50->hits[best].ny;
-    dz = (request->z - object->z) * D_00196D50->hits[best].nz;
+    dx = (request->x - object->x) * xn_slide_planes->hits[best].nx;
+    dy = (request->y - object->y) * xn_slide_planes->hits[best].ny;
+    dz = (request->z - object->z) * xn_slide_planes->hits[best].nz;
     dx = dz + (dx + dy);
-    dy = dx * D_00196D50->hits[best].ny;
-    dz = dx * D_00196D50->hits[best].nz;
-    dx = dx * D_00196D50->hits[best].nx;
+    dy = dx * xn_slide_planes->hits[best].ny;
+    dz = dx * xn_slide_planes->hits[best].nz;
+    dx = dx * xn_slide_planes->hits[best].nx;
     dx >>= 8;
     dy >>= 8;
     dz >>= 8;
@@ -99,8 +99,8 @@ int collide_move_object(struct record *object, int unused_arg, struct move_reque
     flags = collide_flags;
     player_on_ground = 1;
     result = func_00023FA5(object, unused_arg, request);
-    D_00195CB8 = saved_cb8;
-    D_00195C70 = saved_c70;
+    floor_object = saved_cb8;
+    moving_model = saved_c70;
     if (!(result & 10) || !(flags & 4))
         return 0;
     return 1;

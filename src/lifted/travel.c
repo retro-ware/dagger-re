@@ -67,7 +67,7 @@ extern int sky_loaded_frame;
 extern iptr text_macro_travel_city;
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char climate_is_ocean;
@@ -363,7 +363,7 @@ void travel_button_exit(int button)
         travel_region_image = (struct image *)(iptr)-1751672937;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void travel_draw_locations(void)

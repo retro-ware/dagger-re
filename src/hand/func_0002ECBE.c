@@ -11,7 +11,7 @@ struct pic { short file, rec; };
 extern struct pic monster_corpse_textures[];
 extern struct collide_probe D_00187B44;
 extern signed char text_buffer[];
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *found_object;
@@ -104,7 +104,7 @@ found:
         creature->image = (D_00195DA0 << 7) + 1;
     }
     collide_flags = 0;
-    D_001940D7 |= 32;
+    world_state_flags |= 32;
     mc_memcpy(&move, &creature->x, 12, str_damage_c, 605, 4);
     mc_memset(&move.angle_x, 0, 12, str_damage_c, 606, 4);
     move.probe = &D_00187B44;

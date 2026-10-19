@@ -27,7 +27,7 @@ extern short list_popup_x;
 extern short list_popup_width;
 extern signed char D_0019626C;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern struct image *D_00199638;
 
@@ -51,7 +51,7 @@ int sheet_open(short opening)
         window_image = disk_read_file(str_info00i0_img, 0);
         D_00199638 = (struct image *)disk_read_file(str_popu00i0_img, 0);
         D_00195B5C = (struct image *)disk_read_file(str_cust09i0_img_3, 0);
-        D_00196272 = 1;
+        screen_active = 1;
         list_popup_x = 160 - (D_00199638->width >> 1);
         list_popup_y = 100 - (D_00199638->height >> 1);
         list_popup_width = D_00199638->width;

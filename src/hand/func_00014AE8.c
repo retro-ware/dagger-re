@@ -14,7 +14,7 @@ extern char *scratch_buffer;
 extern struct talk_where *talk_where_target;
 extern int talk_disposition;
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196272;
+extern unsigned char screen_active;
 extern unsigned char game_mode;
 extern unsigned char crime_current;
 extern unsigned char people_witness_flags;
@@ -89,7 +89,7 @@ int talk_open(struct record *npc)
         talk_tabs_image = disk_read_file(str_talk02i0_img, 0);
         talk_mode_image = disk_read_file(str_talk03i0_img, 0);
         talk_saved_screen = mc_malloc(64000, str_talk_c, 225);
-        D_00196272 = 1;
+        screen_active = 1;
         talk_logbook_ready = 0;
         talk_tone = 1;
         talk_question_mode = 1;

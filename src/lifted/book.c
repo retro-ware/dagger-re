@@ -46,7 +46,7 @@ extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern int trade_mode;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char inv_right_icon;
@@ -96,7 +96,7 @@ void book_open(short book_id)
     book_page = 0;
     scratch_190d68 = 0;
     game_mode = 11;
-    D_00196272 = 1;
+    screen_active = 1;
     world_running = 0;
     sound_play(237, player_object, 100);
 }
@@ -148,7 +148,7 @@ void book_close(void)
     func_0005A230();
     book_file = 0;
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     world_running = 1;
     if (((struct bf8_7_1 *)&ui_dirty_flags)->f == 0) return;
     ui_dirty_flags &= 127;

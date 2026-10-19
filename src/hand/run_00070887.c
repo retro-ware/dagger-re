@@ -12,7 +12,7 @@ extern struct character *player_character;
 extern int game_minutes;
 extern int trade_total;
 extern int trade_price;
-extern char D_001960D9[];
+extern char trade_container[];
 extern char D_001961F5[];
 extern struct membership *guild_membership;
 extern void msgbox_show_rsc(short, int);
@@ -91,9 +91,9 @@ int guild_confirm_price(int price)
 
 void guild_buy_soulgems(void)
 {
-    object_free_children((iptr)D_001960D9);
-    shop_stock_soul_traps((iptr)D_001960D9);
-    inventory_open_container((iptr)D_001960D9, 1, 4);
+    object_free_children((iptr)trade_container);
+    shop_stock_soul_traps((iptr)trade_container);
+    inventory_open_container((iptr)trade_container, 1, 4);
 }
 
 void guild_cure_diseases(void)

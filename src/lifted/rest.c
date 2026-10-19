@@ -32,7 +32,7 @@ extern char breath_remaining[];
 extern int sky_loaded_frame;
 extern int player_death_timer;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char in_dungeon_water;
 extern signed char crime_current;
@@ -74,7 +74,7 @@ void rest_close(void)
         mc_free((void *)rest_image, str_rest_c, 271);
         *(iptr *)&rest_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     game_mode = 0;
     game_mode_under_popup = 16;
     world_running = 1;

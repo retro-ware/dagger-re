@@ -39,7 +39,7 @@ extern struct image *hud_bar_image;
 extern int game_minutes;
 extern struct settings *game_settings;
 extern char *scratch_buffer;
-extern iptr D_00195CF4;
+extern iptr haze_table_0;
 extern int sky_loaded_frame;
 extern signed char climate_weathers[];
 extern signed char D_00196286;
@@ -248,7 +248,7 @@ void sky_load_day(int minutes)
     mc_memcpy((xn_pal_current + 3), (void *)scratch_buffer, 93, D_00170A86, 565, 4);
     sky_set_time_colour(game_minutes);
     lseek(fd, (frame << 14) + 24832, 0);
-    read(fd, (void *)D_00195CF4, 16384);
+    read(fd, (void *)haze_table_0, 16384);
     lseek(fd, (int)(iptr)&*(signed char *)((char *)(iptr)(frame * 112640) + 549120), 0);
     read(fd, (void *)sky_image_a, 112640);
     lseek(fd, (frame * 112640) + 4153600, 0);

@@ -9,7 +9,7 @@ extern iptr screen_buffer;
 extern char str_optn00i0_img[];
 extern char str_options_c[];
 extern signed char world_running;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern iptr options_image;
 extern iptr options_saved_screen;
@@ -29,7 +29,7 @@ int options_open(short force)
         world_running = 0;
         game_mode = 7;
         options_image = disk_read_file(str_optn00i0_img, 0);
-        D_00196272 = 1;
+        screen_active = 1;
         options_saved_screen = (iptr)mc_malloc(64000, str_options_c, 120);
         mc_memcpy((void *)options_saved_screen, (void *)screen_buffer, 64000, str_options_c, 121, 4);
         logbook_prune_quests();

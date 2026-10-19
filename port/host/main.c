@@ -47,7 +47,7 @@ static char *game_argv[3];
    and pitches the player (player_mouse_look), ACTIVATE CURSOR toggles a cursor for the HUD. */
 extern unsigned char key_map[38], default_key_map[38];
 extern unsigned char mouse_control_mode, view_cursor_active, game_mode;
-extern unsigned char D_00196272;            /* screen_active: the sheet, travel map, automap */
+extern unsigned char screen_active;            /* screen_active: the sheet, travel map, automap */
 extern unsigned char world_running;            /* world_running: 0 while the inventory is open */
 extern int xn_cam_centre_x, xn_cam_centre_y;
 
@@ -111,7 +111,7 @@ static int view_probe(int *cx, int *cy)
     }
     if (now - moved > 200000000ull)
         return 0;
-    if (mouse_control_mode != 1 || view_cursor_active || game_mode || D_00196272 ||
+    if (mouse_control_mode != 1 || view_cursor_active || game_mode || screen_active ||
         !world_running)
         return 0;
     *cx = xn_cam_centre_x;

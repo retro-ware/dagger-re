@@ -55,7 +55,7 @@ extern struct character *player_character;
 extern struct career *player_class;
 extern int game_minutes;
 extern int spell_record_count;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char cfg_artifact;
 extern signed char forced_material;
@@ -147,7 +147,7 @@ void kludge_menu_open(void)
     list_popup_open((iptr)(char *)D_0017BB01);
     kludge_menu_active = 1;
     game_mode = 200;
-    D_00196272 = 1;
+    screen_active = 1;
 }
 
 void kludge_menu_update(void)
@@ -158,7 +158,7 @@ void kludge_menu_update(void)
     if (((struct bf8_2_1 *)&D_001940D4)->f == 0 || (row = list_popup_poll()) <= (-1)) return;
     kludge_menu_active = 0;
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     xn_spell_kludge_menu_dispatch(row);
 }
 

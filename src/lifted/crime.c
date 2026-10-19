@@ -26,7 +26,7 @@ extern int player_death_timer;
 extern short D_00195F34;
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char crime_current;
 extern signed char D_001962B2;
@@ -201,7 +201,7 @@ void court_close(void)
     player_character->fatigue = *(int *)&fatigue;
     world_running = 1;
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_crime_c, 350);
         window_image = -1751672937;

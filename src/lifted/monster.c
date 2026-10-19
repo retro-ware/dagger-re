@@ -15,7 +15,7 @@ extern struct record *creature_list[];
 extern iptr D_00190704[];
 extern char scratch_190de4[];
 extern signed char text_rsc_buffer[];
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char D_001940DA;
 extern struct record *nonworld_root;
 extern struct record *player_object;
@@ -25,15 +25,15 @@ extern struct record *location_object;
 extern struct record *ai_chosen_spell;
 extern int creature_count;
 extern struct character *player_character;
-extern struct record *D_00195C70;
+extern struct record *moving_model;
 extern int ceiling_height;
-extern struct record *D_00195CB8;
+extern struct record *floor_object;
 extern int ai_monster_flags;
 extern char D_00196167[];
 extern signed char player_on_ground;
 extern char D_00196D54[];
-extern int D_00196D58;
-extern int D_00196D5C;
+extern int collide_previous_y;
+extern int collide_previous_z;
 extern char collide_flags[];
 extern int D_00199D74;
 extern struct link links[1024];
@@ -153,7 +153,7 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
         saved_ceiling = ceiling_height;
         *(signed char *)collide_flags |= 4;
         fall_start = (vertical_velocity = saved_pos.character->fall_velocity);
-        D_001940D7 |= 128;
+        world_state_flags |= 128;
         move.probe = &D_00187B44;
         if ((saved_pos.character->flags & 2080) != 0) {
             move.flags |= 1;
@@ -162,8 +162,8 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
         }
         mc_memcpy(&saved_pos.position, D_00196D54, 12, str_monster_c, 512, 4);
         *(int *)D_00196D54 = monster->x;
-        D_00196D58 = monster->y - (vertical_velocity / 256);
-        D_00196D5C = monster->z;
+        collide_previous_y = monster->y - (vertical_velocity / 256);
+        collide_previous_z = monster->z;
         if ((move.y - 90) < saved_pos.character->ceiling_y) {
             move.y = saved_pos.character->ceiling_y + 90;
         }
@@ -653,5 +653,5 @@ int func_000641CD(iptr id)
 void func_00064301(void)
 {
     link_count = 0;
-    *(int *)&D_00195CB8 = (*(int *)&D_00195C70 = 0);
+    *(int *)&floor_object = (*(int *)&moving_model = 0);
 }

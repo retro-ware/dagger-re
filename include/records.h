@@ -1229,7 +1229,7 @@ struct move_request {
     int angle_x;                    /* +0x0C */
     int yaw;                        /* +0x10 */
     int angle_z;                    /* +0x14 */
-    struct collide_probe *probe;    /* +0x18: the mover's shape (D_00196D4C while it is tested) */
+    struct collide_probe *probe;    /* +0x18: the mover's shape (xn_collide_probe while it is tested) */
     unsigned short flags;           /* +0x1C: bit 0 (func_00023FA5) */
 };                                  /* +0x1E */
 RECORD_SIZE_P(move_request, 30);

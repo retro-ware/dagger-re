@@ -631,7 +631,7 @@ global,0x00153004,xn_draw_line_dy,strong,y1 - y0 of the line being clipped (1532
 global,0x00153400,xn_helmet_port,candidate,serial port number given to 153500 (the game passes 1) and read by the drivers
 global,0x00153404,cfg_helmet,strong,config key 'helmet'; init_game_data switches an XnGine mode (153500) by it
 global,0x00153408,xn_helmet_active,candidate,1 after the driver opened; cast_fire_missile adds the helmet angles only when set
-global,0x00153409,xn_helmet_smoothing,candidate,number of samples averaged by 1535A4 (<= 7); init_game_data sets 4
+global,0x00153409,xn_helmet_smoothing,strong,number of samples averaged (<= 7); init_game_data sets 4
 global,0x0015340D,xn_helmet_pitch,candidate,smoothed angle added to the missile's angle_x by cast_fire_missile
 global,0x00153411,xn_helmet_yaw,candidate,smoothed angle added to the missile's yaw by cast_fire_missile (the one with the wrap fix)
 global,0x00153415,xn_helmet_roll,candidate,third smoothed angle from 15356C
@@ -1177,7 +1177,7 @@ global,0x00187A62,monster_language_skill,strong,"language skill per monster type
 global,0x00187A90,saveload_buttons,strong,"14 x {short x0, y0, x1, y1; handler}: 6 slot pictures and 6 name bars (saveload_click_slot), [12] the load/save button (saveload_confirm), [13] exit (saveload_exit)"
 global,0x00187B38,savetree_version,strong,u32 294 (0x126) that save_game writes first in SAVETREE.DAT (DFU checks 0x126)
 global,0x00187B3C,fire_flat_records,strong,"8 TEXTURE.210 record numbers that burn: 0, 1, 6, 16-20"
-global,0x00187C86,player_move_request,candidate,struct move_request the player's movement passes to collide_move_object (phase 3 struct pass: intrface/colstuff read it as one 30-byte request)
+global,0x00187C86,player_move_request,strong,struct move_request the player's movement passes to collide_move_object
 global,0x00187CA4,player_momentum,strong,"last speed, kept while airborne (no steering off the ground); player_horse_sounds and ai_stealth_check read it. audit: build/names/scratch/audit_euw/B/exp_run.py walk (save_tlalac_s): 0 standing, 8-9 (= player_speed) while Up was held, 15-18 riding (character flags 0x200), back to 0 when the key was released; 0 in all 18 save snapshots"
 global,0x00187CA8,world_running,strong,"byte cleared while a modal screen (talk, court, bank, inventory) is open, set at close; sky_update, weather and ai return while 0"
 global,0x00187CAD,mem_check_level,strong,"non-zero turns the heap checks on (mem_check_heap, mem_check_crt_heap); args.c prints 'Memory checking is active for this session.' when set; mem_check_now raises it around a forced check; fatal_error and game_exit clear it"
@@ -1396,10 +1396,10 @@ global,0x00195BF8,game_settings,confirmed,"pointer to the settings record (setti
 global,0x00195BFC,hud_message_ptrs,strong,16 pointers to the top messages' text
 global,0x00195C40,realtime_clock_tick,confirmed,"SAVEVARS.DAT 0x3CD; load_game, init and title_menu set it to the BIOS tick (0x46C), msgbox_wait too. audit: time_update_realtime adds a game minute per 90 BIOS ticks past it and moves it on by 90 (was load_tick); build/names/scratch/audit_euw/B/exp_run.py clock (save_tlalac_s): 705 while the BIOS tick went 714-791, then 795 with game_minutes 589 -> 590 when the BIOS tick passed 795"
 global,0x00195C44,scratch_buffer,strong,"pointer to a large work buffer: +4 the town-map notes (50000 bytes), +55000 popup text, +60000 the health status list. New: exp_misc: the town notes were read and written at *scratch_buffer+4; exp_inven: potion_recipe_text built its text at +55000"
-global,0x00195C48,collide_hit_object,candidate,object a collision test hit (model or creature). Keep: code only (collision tests)
+global,0x00195C48,collide_hit_object,strong,object a collision test hit (model or creature); missiles and arrows trigger it
 global,0x00195C50,cfg_map_file,strong,"config key 'mapfile' (12 characters, config flag 4); a name starting with 'd' starts in a dungeon (environment 3)"
 global,0x00195C5C,cfg_item_file,strong,config key 'item' (20 characters)
-global,0x00195C70,moving_model,candidate,the moving model being collided (collision; consistency pass notes; a GLOBAL_TYPES record pointer)
+global,0x00195C70,moving_model,strong,the moving model being collided
 global,0x00195C74,ceiling_height,confirmed,"y (downwards) an object's head may rise to: the model surface found 60-120 units above its feet by the collision steps' upward scan when rising, levitating or in water (collide_step_player/collide_step_object), else y-120; for a creature in water the water level; object_apply_gravity stops upward velocity at y-80 above it, floating up stops at y-100; saved/restored around test moves; audit: build/names/scratch/audit_euw/A/ceiling.py: levitating up in save_blades it stayed y-120 until the player reached y -1276, where it held -1376 (the ceiling) and the player stopped 100 below it; the floor is collide_height. Old name floor_height (monster+0x9F floor_y stores the same value)"
 global,0x00195C78,trespassing,strong,"int: the main loop's trespass test (interior restriction - building access > 0, or dungeon flag): crime 2 or 3 and guards"
 global,0x00195C7C,hud_vital_bar_images,confirmed,"3 image pointers: main03i0.img, main04i0.img, main05i0.img (init_game_data), the health, fatigue and magicka bars hud_draw draws in part; audit: build/names/scratch/audit_euw/C/s3_engine.py save_morthag1: after hud_draw the screen at x 49/57/65 rows 161-192 held these images' rows: all 32 for full health, 30 and 5 for the partly empty fatigue and magicka"
@@ -1408,7 +1408,7 @@ global,0x00195C90,flats_cfg_count,strong,number of flats_cfg records
 global,0x00195C94,classmaker_file,strong,"custom class file name from the command line ('custom NAME', args.c 82A63): classmaker_run loads the class from it, classmaker_save_file writes it"
 global,0x00195CB0,ai_los_index,strong,"round-robin AI index: only that creature re-tests line of sight (23C72) this frame, setting/clearing character+0x40 bit 7; ai_update_creatures advances it mod creature_count"
 global,0x00195CB4,sound_last_size,confirmed,size of the sample sound_cache_load returned: 1433 for 203 ButtonClick (exp_chain)
-global,0x00195CB8,floor_object,candidate,the object under the player's feet (collision; consistency pass notes; a GLOBAL_TYPES record pointer)
+global,0x00195CB8,floor_object,strong,the object under the player's feet
 global,0x00195CBC,spell_cast_anim_fire,strong,fire00c6.cif (spell_cast_anims_load)
 global,0x00195CC0,spell_cast_anim_frost,strong,frst00c6.cif
 global,0x00195CC4,spell_cast_anim_poison,strong,pois00c6.cif
@@ -1420,14 +1420,14 @@ global,0x00195CE0,location_grid_x,strong,"x offset added before dividing by 1024
 global,0x00195CE4,location_grid_z,strong,"z offset added before dividing by 1024 to index location_grid; audit_tq/exp_inside.py: recomputed 4096. audit keep: build/names/scratch/audit_euw/B/survey.py: 0 in the Mantellan Crux saves (blocks z 0..1), 4096 in save_mord (blocks z -2..1)"
 global,0x00195D00,quest_tick_object,strong,build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: after quests_run_all = quest_tick_data - 0x47 (the quest object)
 global,0x00195D04,quest_face_images,strong,"face00i0.cif, then face01i0, face10i0, face11i0 (+4, +8, +12): escort face sets by gender and name bank (quest_face_add, quest_faces_after_load); build/names/scratch/audit_tq/exp_final.py save_tlalac_s; audit keep: already strong; the file names are init_game_data's strings"
-global,0x00195D14,quest_face_images_special,candidate,code reading (faction 514 persons); not tested
-global,0x00195D18,haze_table_1,candidate,"the game's haze.001 table, 64 rows of 256 (src/hand/func_0004ED36.c init_game_data: disk_read_file(..., D_00195D18 = xn_mem_align_up(D_00195CF8, 256))); xn_shade_init_reserved (0C9EF8) maps colour 255 to 77h in each row; src/lifted/init.c update_fog uses D_00195D18 + 16128 (its last row) as xn_fog_table_last"
+global,0x00195D14,quest_face_images_special,strong,"kids00i0.cif, faces used by quest_face_add / quest_faces_after_load"
+global,0x00195D18,haze_table_1,strong,"haze.001 table, 64 rows of 256"
 global,0x00195D28,talk_where_target,strong,points at the struct talk_where (talk_where) the where-is macros read
 global,0x00195D2C,trade_total,strong,"trade total (the 'cost'): trade_total_buy/sell/repair/identify set it, inventory_draw shows it at (77,15). New: exp_inven/exp_inven2/exp_inven3: each trade_total_* left its total here; Daggerfall Unity DaggerfallTradeWindow keeps the same 'cost' (UpdateCostAndGold) and ShowTradePopup compares the price with cost>>1 and cost-(cost>>2) as trade_make_offer does"
 global,0x00195D30,trade_price,strong,"price after trade_adjust_price (the merchant's offer), paid or received when accepted. New: exp_inven: set by trade_total_*; exp_glob: trade_settle_offer returned it (900) on YES; Daggerfall Unity's tradePrice (CalculateTradePrice)"
 global,0x00195D34,talk_disposition,strong,"faction rep + player rep with the sgroup + temple rank + PER/5...; < -20 'You get no response'; greeting 7206-7209 by <0, <10, <30, more; experiment value 99"
 global,0x00195D38,trade_mode,strong,"0 inventory, 1 buy, 2 sell, 3 repair, 4 identify: selects the button set D_00188281[mode], the trade total and payment; callers pass 4 for the identify spell and guild identify"
-global,0x00195D3C,picked_block_model,candidate,the block model engine_pick_object picked (struct pick_result's block model; phase 3 struct pass)
+global,0x00195D3C,picked_block_model,strong,the block model engine_pick_object picked
 global,0x00195D40,magic_def_count,strong,number of magic.def entries (first dword of magic.def)
 global,0x00195D44,inventory_action,confirmed,"1 info, 2 equip/select, 3 remove, 4 use, 5 hide; exp: INFO/EQUIP/REMOVE/USE set 1/2/3/4; 2 when the inventory opens"
 global,0x00195D48,sky_loaded_frame,confirmed,"SKY file*32+frame last loaded by sky_load_day; 10000 forces a reload (town_load, rest_close, loads). audit: build/names/scratch/audit_euw/B/exp_glob.py (save_tlalac_s 09:49): set to 10000, sky_load_day(game_minutes) opened C:\ARENA2\sky05.dat and left 191 (SKY05, frame 31); a second call opened nothing; survey.py: 127/319/651/892/767/191 in the outdoor saves, the frame matching each save's hour"
@@ -1480,7 +1480,7 @@ global,0x00195F36,text_cursor_x,strong,build/names/scratch/audit_tq/exp_note.py 
 global,0x00195F38,text_cursor_y,strong,build/names/scratch/audit_tq/exp_note.py save_dorian: note_click_page set it to the element's y (12)
 global,0x00195F4E,player_base_speed,strong,"short: (speed * frame_ticks)/1000 from player_frame_update: SPD-based speed (+225 riding, +100 cart, running, swimming) per frame; intrface_steer starts player_speed from it; picks the horse sound. audit: build/names/scratch/audit_euw/B/exp_run.py walk (save_tlalac_s, SPD 100): 7-8 walking, 13-16 with character flags 0x200 (riding); 3-8 in the 18 saves"
 global,0x00195F58,shelf_model_index,strong,"short: the shelf whose items the shop list shows: shelf_open, shelf_open_books and shelf_open_stock store their third argument here, and click_world_face passes D_00195D54, which pick_model_cb sets to the index of the picked model in its interior block (the same index as pick_result+12, confirmed by group C); shelf items (type 36) get it as shelf_owner (+0x1B), and unpaid goods get D_00195D54 as owner (+0x17). Was shelf_shop_id: it identifies the shelf model, not the shop. audit (group A, A/town.py shelf, save_morthag1): shelf_open_books(..., 777) / (..., 778) stored 777 / 778, and the items inventory_close returned got shelf_owner 778"
-global,0x00195F5A,collide_wall_cos,candidate,the cosine of the wall being collided with (engine/UI/world audit)
+global,0x00195F5A,collide_wall_cos,strong,cosine of the wall being collided with (climbing needs it)
 global,0x00195F5C,text_macro_n_text,strong,text id the %n macro uses when nonzero (parse.c 4878B); %1com sets it to 7221-7223 (friend/stranger/buddy)
 global,0x00195F62,spell_ready_cost,strong,"short magicka cost of the readied spell: spellbook_frame charges and stores it, cast_recast_last spends it again, the cancel key and spfx_identify refund it; SAVEVARS. audit: build/play/magic1 steps 10->11 (double-click on a spell in the spellbook): magicka 28 -> 14 and this 79 -> 14; 4-84 in the 18 saves"
 global,0x00195F64,mouse_motion_x,strong,"horizontal mouse motion: added to the player's yaw in view mode (player_mouse_look), to view_look_yaw when looking around"
@@ -1492,8 +1492,8 @@ global,0x00195FF8,list_popup_picklist,strong,"the picklist struct of the list po
 global,0x00196033,msgbox_button_keys,strong,"3 scan codes that press the box's buttons (msgbox_yes_no_rsc: 21 Y, 49 N)"
 global,0x00196036,spellmaker_spell,strong,89-byte spell being made: spellmaker_new points spellshop_spell at it and clears it; potion_mix_unknown also builds its spell here
 global,0x0019608F,msgbox_button_ids,strong,"3 button image numbers (4 YES, 5 NO; 0 none) drawn by msgbox_draw_buttons; exp2: YES/NO shown"
-global,0x00196092,furniture_container_1,candidate,"a bare record header used as a furniture container; three of them 0x47 apart at 0x196092, 0x1960D9, 0x196120 (UI struct agent); clicking can never open them (engine/UI/world audit)"
-global,0x001960D9,trade_container,candidate,item list the guild services stock (shop_stock_*) and hand to the trade window (generate.c func_000922F6)
+global,0x00196092,furniture_container_1,strong,a bare record header used as a furniture container
+global,0x001960D9,trade_container,strong,item list the guild services stock and hand to the trade window
 global,0x00196120,furniture_container_3,candidate,see furniture_container_1
 global,0x001961F5,pending_quest_file,candidate,"13-char quest file name queued by guild_check_invitations (o0a0al00.qbn, l0a01l00.qbn)"
 global,0x0019621B,link_caster,candidate,the static spell caster of link action 9 (engine/UI/world audit)
@@ -1507,7 +1507,7 @@ global,0x0019626C,sheet_selected_attribute,candidate,attribute index 0..7 set by
 global,0x0019626F,game_mode_under_popup,strong,mode a popup (game_mode 8) returns to (mode_pop)
 global,0x00196270,msgbox_kind,strong,"byte: kind of the message box up: 0 none, 1 click/Enter closes, 2 text input, 4 closes on D_001940D5 bit 5, 5 buttons (popup_answer); set by msgbox_show_*, cleared by msgbox_close"
 global,0x00196271,popup_answer,candidate,yes/no answer: training cancels on 2; travel_map_update starts the trip on 1 after 'Do you wish to travel to %tcn?'
-global,0x00196272,screen_active,candidate,"set to 1 when the sheet, travel map or automap opens and back to 0 (or its old value) when it closes"
+global,0x00196272,screen_active,strong,"set while a screen (sheet, map, talk, ...) is open"
 global,0x00196274,game_mode,strong,"which screen has the input: 0 world, 3 sheet, 4 inventory, 5 spellbook, 7 options, 14 logbook, 16 rest, 19 travel map; same from 3 saves (fallstate screens); hand code already calls it MODE"
 global,0x00196275,info_popup_saved_state,strong,"info_popup_open saves the byte of D_00196272 here, info_popup_update restores it"
 global,0x00196276,interaction_mode,strong,"0 grab F2, 1 info F3, 2 steal F1, 3 talk F4; same from 3 saves (fallstate modes)"
@@ -1650,9 +1650,9 @@ global,0x00196B04,climate_pak,confirmed,CLIMATE.PAK loaded by region_load_tables
 global,0x00196B08,court_reputation_change,confirmed,"crime_reputation_loss[crime]/2 set by court_open, used by court_reputation_restore; experiment: 4 for assault, legal reputation +3 per call"
 global,0x00196B0C,collide_candidate_count,strong,entries in collide_candidates
 global,0x00196B40,collide_candidates,strong,"up to 128 model objects near the move (collide_gather_cb, 'Exceeded maximum collisions.')"
-global,0x00196D48,xn_collide_result,candidate,XnGine's last collision result (struct collide_hit view); read after collide_move_object (phase 3 struct pass)
-global,0x00196D4C,xn_collide_probe,candidate,the struct collide_probe * being tested by the XnGine collision code (phase 3 struct pass)
-global,0x00196D50,xn_slide_planes,candidate,the planes the mover slides along after a collision (phase 3 struct pass)
+global,0x00196D48,xn_collide_result,strong,XnGine's last collision result (struct collide_hits)
+global,0x00196D4C,xn_collide_probe,strong,the struct collide_probe being tested
+global,0x00196D50,xn_slide_planes,strong,planes the mover slides along after a collision
 global,0x00196D60,collide_height,strong,"y (downwards) the vertical collision probes found: collide_vertical_cb keeps a surface here; the collision steps snap the object onto it (the floor) within 30, start it at the terrain height outside and y+1000 indoors; collide_floor_height returns it; audit: equal to the player's y (standing on the floor) in 17 of the 18 saves (build/names/scratch/audit_euw/A/peek.py); build/names/scratch/audit_euw/A/ceiling.py: levitating in save_blades with no floor in reach it was y+1000; build/names/scratch/audit_euw/A/dungeon.py: collide_floor_height(@player) = -550 = the player's y"
 global,0x00196D64,collide_flags,strong,"result bits of a collision move: 1 floor, 2 wall/model, 4 slide, 8 creature, 16 nothing near"
 global,0x00196D68,career_bio_line,candidate,first line number shown. Keep: code only (biography paging)
@@ -1883,7 +1883,7 @@ global,0x001A59E8,info_popup_text,confirmed,text of the info popup (info_popup_o
 global,0x001A5A52,mode_stack_depth,strong,short
 global,0x001A5A68,cursor_saved_background,strong,"10x10 background saved under the arrow by cursor_draw_arrow, put back by cursor_restore_background. audit: build/names/scratch/audit_euw/B/exp_glob.py (save_tlalac_s, mouse 150,80): after cursor_draw_arrow its 100 bytes equal screen_buffer's rect from before the arrow (48 pixels changed by the arrow)"
 global,0x001A5ACC,cursor_saved_y,strong,y of the saved background (cursor_draw_arrow). audit: build/names/scratch/audit_euw/B/exp_glob.py: 80 after cursor_draw_arrow with mouse_y 80
-global,0x001A5AD0,riding_sound,candidate,"handle of the looping horse sound, -1 none (player_horse_sounds, sound_stop_all). audit keep: build/names/scratch/audit_euw/B/exp_run.py walk: stayed -1 while riding (character flags 0x200) and walking 100 ticks: the emulator gives sound_play_loop no handle; a run with digital sound would settle it"
+global,0x001A5AD0,riding_sound,strong,"handle of the looping horse sound, -1 none"
 global,0x001A5AF4,turn_this_frame,strong,"yaw change set by the turning regions, applied and cleared by player_movement_update"
 global,0x001A5B08,move_angle_offset,confirmed,"added to the yaw for this frame's move: 0 forward, 1024 back, -512/512 slide (exp_steer.py)"
 global,0x001A5B14,cursor_saved_x,strong,x of the saved background (cursor_draw_arrow). audit: build/names/scratch/audit_euw/B/exp_glob.py: 150 after cursor_draw_arrow with mouse_x 150
@@ -7388,3 +7388,87 @@ global,0x00190CF2,item_init_count,strong,counted up by item_init_from_template
 global,0x00195DC4,painting_index,strong,random painting 0-179 (item_info_painting); file paint letter and frame
 global,0x0019615F,equip_scratch_item,strong,item func_000612A1 reads
 global,0x0019626E,item_template_capacity,strong,capacity of the last item template (potionmaker stores it per slot)
+global,0x00179F48,collide_object_probe,strong,struct collide_probe collide_move_object and collide_move_player point xn_collide_probe at
+global,0x001940D7,world_state_flags,strong,"bit flags: bit 5 cleared by collision moves, set by place_settle_creature; also click, monster, parse use bits"
+global,0x00195CD4,collide_side_hit,strong,pointer to the side hit (collide_hits entry) of the last player move; player_movement_update copies it
+global,0x00195CD8,collide_floor_hit,strong,pointer to the floor hit of the last player move (collide_vertical_cb)
+global,0x00196296,collide_landed,strong,set by collide_step_player; collide_move_player clears it once on ground
+global,0x00196297,collide_stepped,strong,"set by collide_step_player, cleared by func_00023FA5; door_start_swing triggers the door's link while set"
+global,0x00196B10,collide_segment_start,strong,"segment start {x, y, z} for xn_collide_segment_model"
+global,0x00196B14,collide_segment_start_y,strong,collide_segment_start+4
+global,0x00196B18,collide_segment_start_z,strong,collide_segment_start+8
+global,0x00196B1C,collide_vertical_end,strong,"vertical segment end {x, y, z} (collide_vertical_cb, line of sight)"
+global,0x00196B20,collide_vertical_end_y,strong,collide_vertical_end+4
+global,0x00196B24,collide_vertical_end_z,strong,collide_vertical_end+8
+global,0x00196B28,collide_target,strong,"target position {x, y, z} of a move, then angles at +12 (collide_move_missile)"
+global,0x00196B2C,collide_target_y,strong,collide_target+4
+global,0x00196B30,collide_target_z,strong,collide_target+8
+global,0x00196B34,collide_target_angle_x,strong,collide_target+12: angles copied by collide_move_missile
+global,0x00196B38,collide_target_yaw,strong,collide_target+16
+global,0x00196B3C,collide_target_angle_z,strong,collide_target+20
+global,0x00196D58,collide_previous_y,strong,"y before the move (collide_step_player, monster code)"
+global,0x00196D5C,collide_previous_z,strong,z before the move
+global,0x00190908,compass_frames_1,strong,"cmpa01i0.bss, compass frames (hud_draw_compass)"
+global,0x0019090C,compass_frames_2,strong,"cmpa02i0.bss, second compass frames"
+global,0x00190910,compass_frame_image,strong,cmpa03i0.img drawn by hud_draw_compass
+global,0x00195AD0,init_location_object,strong,location_object saved by init_world_objects
+global,0x00195B64,paperdoll_buffer,strong,"24625-byte paper doll pixels (125x197), drawn by the sheet and inventory"
+global,0x00195C80,main_image_4,strong,main04i0.img loaded by init_game_data
+global,0x00195C84,main_image_5,strong,main05i0.img loaded by init_game_data
+global,0x00195CF4,haze_table_0,strong,haze.000 table (256-aligned in haze_buffer_0); fog and sky colour
+global,0x00195CF8,haze_buffer_1,strong,16640-byte allocation behind haze_table_1
+global,0x00195D08,face_images_1,strong,face01i0.cif
+global,0x00195D0C,face_images_10,strong,face10i0.cif
+global,0x00195D10,face_images_11,strong,face11i0.cif
+global,0x00195D20,shade_table_63,strong,xn_shade_table_63() kept for update_fog
+global,0x00195D24,haze_buffer_0,strong,16640-byte allocation behind haze_table_0
+global,0x00195E82,joy_calibration_saved,strong,46 bytes of joystick calibration copied to and from xn_joy_calibration
+global,0x0019625E,link_caster_location,strong,location_object saved by init_link_caster
+global,0x001997F0,translucent_buffer,strong,4352-byte allocation behind xn_shade_translucent_table
+global,0x001997F4,palette_buffer,strong,768-byte pal.raw palette (init_video)
+global,0x001997FC,mouse_saved_sensitivity_x,strong,"mouse sensitivity saved at start, restored at shutdown"
+global,0x00199800,mouse_saved_sensitivity_y,strong,second mouse sensitivity value saved at start
+global,0x00199804,water_tint_buffer,strong,512-byte allocation behind xn_water_tint_table (water.tbl)
+global,0x001A3F9C,mem_used_k,strong,memory used in KB (debug_show_mem_used)
+global,0x001AA5FC,color_remap_buffer,strong,8448-byte allocation behind color_remap_tables
+global,0x001789FD,view_width,strong,short 320: width the steering regions divide by 3 (intrface_set_regions)
+global,0x001789FF,view_height,strong,short 200 (or the view's): height the steering regions divide by 3
+global,0x001845C8,text_climbing_mode,strong,"pointer to ""Climbing mode."""
+global,0x00187BB8,player_probe_climb,strong,collide probe used while climbing
+global,0x00187C12,player_probe_crouched,strong,collide probe used while player_motion_flags b2 (crouched)
+global,0x00187C3C,player_probe_riding,strong,collide probe used while character flags 0x600 (riding)
+global,0x00195DB8,move_settle_frames,strong,frames after a location unload (5) before player_movement_update moves normally
+global,0x00195E30,collide_floor_hit_copy,strong,30-byte copy of the floor hit kept by player_movement_update
+global,0x00195E4E,collide_side_hit_copy,strong,30-byte copy of the side hit kept by player_movement_update
+global,0x00195F44,player_jumping,strong,set while a jump rises; checked against the ceiling
+global,0x001A5A60,move_remainder_z,strong,sub-32 remainder of the player's z movement
+global,0x001A5A64,move_remainder_x,strong,sub-32 remainder of the player's x movement
+global,0x001A5ADC,riding_sound_id,strong,the horse sound playing
+global,0x001A5AE4,move_last_tick,strong,BIOS tick of the last periodic movement step
+global,0x001A5AE8,steer_start_tick,strong,BIOS tick steering started
+global,0x001A5AFC,steer_ticks,strong,"ticks steering has gone on, capped; scales the turn"
+global,0x001A5B00,move_last_minute,strong,game minute of the last movement step
+global,0x001A5B04,move_distance_total,strong,"distance moved, summed by func_0008066F"
+global,0x001A5B0C,move_dx_total,strong,"x moved, summed by func_0008066F"
+global,0x001A5B10,move_dz_total,strong,"z moved, summed by func_0008066F"
+global,0x001A5B30,player_climbing,strong,set while climbing (player_movement_update)
+global,0x001A5B34,camera_roll_disabled,strong,camera_roll_turn returns while set
+global,0x0017CA14,text_too_far_away,strong,"pointer to ""You are too far away..."""
+global,0x00183248,vowels_text,strong,"pointer to ""euioa"": click_describe picks ""an"" for these"
+global,0x0018324C,text_you_see_an,strong,"pointer to ""You see an %s."""
+global,0x00183250,text_you_see_a,strong,"pointer to ""You see a %s."""
+global,0x00183254,text_you_see,strong,"pointer to ""You see %s."""
+global,0x00184329,text_you_see_a_dead,strong,"pointer to ""You see a dead %s."""
+global,0x001845CC,text_body_no_treasure,strong,"pointer to ""The body has no treasure."""
+global,0x00185093,text_dead_person,strong,"pointer to ""You see a dead person."""
+global,0x001878AC,dungeon_songs,strong,"pointers to the dungeon songs d1.hmi, d2.hmi, ..."
+global,0x001878D4,dungeon_songs_fm,strong,"pointers to the FM dungeon songs d1fm.hmi, ..."
+global,0x00196118,shelf_open_object,strong,"shelf whose books or items are shown (shelf_open_books, shelf_return_items)"
+global,0x001A4CA4,position_history_y,strong,position_history+4
+global,0x001A4CA8,position_history_z,strong,position_history+8
+global,0x001A4E24,ground_position_history_y,strong,ground_position_history+4
+global,0x001A4E28,ground_position_history_z,strong,ground_position_history+8
+global,0x001A4FBC,footstep_last_x,strong,x of the last footstep
+global,0x001A4FC4,footstep_last_z,strong,z of the last footstep
+global,0x001A4FCC,position_history_count,strong,positions recorded into position_history
+global,0x001A4FD4,ground_position_history_count,strong,positions recorded into ground_position_history

@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0007CD98 */
 extern unsigned char mouse_buttons;
 extern signed char text_buffer[];
-extern unsigned char D_00196272;
+extern unsigned char screen_active;
 extern unsigned char info_popup_saved_state;
 extern unsigned char mouse_buttons_prev;
 extern char *info_popup_text;
@@ -41,8 +41,8 @@ void info_popup_update(void)
         text = xn_str_copy_line(((char *)text_buffer), text);
         text_draw(((char *)text_buffer), x, y);
     }
-    if (D_00196272 == 1 && (mouse_buttons & 1) == 0 && (mouse_buttons_prev & 1) != 0) {
-        D_00196272 = info_popup_saved_state;
+    if (screen_active == 1 && (mouse_buttons & 1) == 0 && (mouse_buttons_prev & 1) != 0) {
+        screen_active = info_popup_saved_state;
         info_popup_text = 0;
     }
 }

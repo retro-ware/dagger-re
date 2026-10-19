@@ -24,7 +24,7 @@ extern char str_insufficient_texture_memory[];
 extern int D_001788E8[];
 extern int D_00178968[];
 extern unsigned char player_environment;
-extern iptr D_001845C8;
+extern iptr text_climbing_mode;
 extern signed char world_running;
 extern int D_0018DBF8;
 extern int frame_checkpoint;
@@ -54,7 +54,7 @@ extern int ceiling_height;
 extern int D_00195CEC;
 extern int head_bob_offset;
 extern int player_death_timer;
-extern char D_001960D9[];
+extern char trade_container[];
 extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char player_on_ground;
@@ -195,8 +195,8 @@ void game_frame(void)
         reset_container = 0;
     }
     if (reset_container != 0 && ((int)(unsigned char)game_mode) != 4) {
-        inv_right_container = (struct record *)D_001960D9;
-        inv_right_container_base = (struct record *)D_001960D9;
+        inv_right_container = (struct record *)trade_container;
+        inv_right_container_base = (struct record *)trade_container;
     }
     loan_collectors_update();
     weather_draw_precipitation();
@@ -256,7 +256,7 @@ void game_frame(void)
     guild_check_invitations();
     frame_checkpoint = 117;
     if (((struct bf8_4_1 *)&player_motion_flags)->f != 0) {
-        hud_message_ptrs[0] = D_001845C8;
+        hud_message_ptrs[0] = text_climbing_mode;
         hud_message_expiry[0] = 2;
     }
     creatures_find_nearest();

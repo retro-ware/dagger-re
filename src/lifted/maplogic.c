@@ -46,8 +46,8 @@ extern struct career *player_class;
 extern int game_minutes;
 extern char *scratch_buffer;
 extern struct xn_pick_hit *pick_hit;
-extern struct record *D_00195CB8;
-extern iptr D_00195CF4;
+extern struct record *floor_object;
+extern iptr haze_table_0;
 extern iptr D_00195D84;
 extern char D_00195F28[];
 extern short D_00195F5E;
@@ -284,7 +284,7 @@ void dungeon_load(int dungeon_index)
     dungeon_grid_build();
     dungeon_choose_textures();
     D_0019628C = 0;
-    D_00195CB8 = 0;
+    floor_object = 0;
     player_environment = 3;
     dungeon_water_level = 10000;
     quest_mark_givers();
@@ -298,7 +298,7 @@ void dungeon_load(int dungeon_index)
     position_history_reset();
     dungeon_roll_monster_tables();
     monsters_woken = 0;
-    disk_read_file(str_haze_000_2, D_00195CF4);
+    disk_read_file(str_haze_000_2, haze_table_0);
     mc_memset((void *)scratch_buffer, 0, 93, str_maplogic_c, 290, 4);
     xn_pal_set_range_8bit(scratch_buffer, 1, 31);
     if (world_loading == 0) func_0004C759();
@@ -408,7 +408,7 @@ void building_enter(struct building *building)
     position_history_reset();
     player_environment = 2;
     D_001940D5 |= 2;
-    D_00195CB8 = 0;
+    floor_object = 0;
     D_001A4A1D = 0;
     if (world_loading == 0) building_update_open_state();
     if (building->id == D_001A4C94) return;

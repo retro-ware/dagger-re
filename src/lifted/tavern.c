@@ -35,7 +35,7 @@ extern struct record *D_00195CE8;
 extern int trade_price;
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern struct building *D_00196ABC;
@@ -91,7 +91,7 @@ void tavern_close(void)
         mc_free((void *)tavern_menu_image, str_tavern_c, 117);
         tavern_menu_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void tavern_rent_room(void)

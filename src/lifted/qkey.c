@@ -36,7 +36,7 @@ extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern char D_00190B44[];
 extern signed char text_rsc_buffer[];
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern char D_00195A08[];
 extern struct item *text_macro_item;
 extern struct record *player_entity;
@@ -589,7 +589,7 @@ int damage_apply(struct record *target, int damage, struct record *weapon)
     } else if (damage != 0) {
         quest_raise_event(21, target, 0);
     }
-    D_001940D7 |= 8;
+    world_state_flags |= 8;
     return damage;
 }
 

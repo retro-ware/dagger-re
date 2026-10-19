@@ -7,7 +7,7 @@ extern struct bits D_001940D4;
 extern struct bits D_001940D5;
 extern unsigned char mouse_control_mode;
 extern char view_cursor_active;
-extern char D_00196272;
+extern char screen_active;
 extern char *cursor_region_images;
 extern void cursor_draw_arrow(void);
 extern void xn_draw_image_transparent(int, int, int, int, char *);
@@ -19,7 +19,7 @@ void cursor_draw(short region)
     char unused6;
 
     if (D_001940D5.b2) return;
-    if (D_00196272 || D_001940D4.b2) {
+    if (screen_active || D_001940D4.b2) {
         cursor_draw_arrow();
         return;
     }

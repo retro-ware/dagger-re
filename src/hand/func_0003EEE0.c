@@ -7,7 +7,7 @@ extern char *screen_buffer;
 extern char str_text_c[];        /* __FILE__ */
 extern char msgbox_kind;
 extern char D_00196271;
-extern char D_00196272;
+extern char screen_active;
 extern char game_mode;
 extern char mouse_buttons_prev;
 extern char msgbox_image[];
@@ -40,7 +40,7 @@ void msgbox_show_qrc_text(char *name, unsigned short message_id, short kind)
     msgbox_kind = kind;
     mode_push();
     game_mode = 8;
-    D_00196272 = 1;
+    screen_active = 1;
     mouse_buttons_prev = mouse_buttons;
     xn_mouse_poll_clamped();
     msgbox_wait();

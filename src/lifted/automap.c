@@ -61,8 +61,8 @@ extern struct character *player_character;
 extern int game_minutes;
 extern struct settings *game_settings;
 extern char *scratch_buffer;
-extern struct record *D_00195CB8;
-extern signed char D_00196272;
+extern struct record *floor_object;
+extern signed char screen_active;
 extern signed char mouse_buttons_prev;
 extern signed char D_0019629F;
 extern int town_map_view_x;
@@ -183,8 +183,8 @@ void automap_open(void)
     xn_render_set_mode(8);
     automap_restore_seen();
     D_0019629F = 1;
-    saved_screen_active = (int)(unsigned char)D_00196272;
-    D_00196272 = 1;
+    saved_screen_active = (int)(unsigned char)screen_active;
+    screen_active = 1;
     *(iptr *)scratch_190de4 = disk_read_file(str_amap00i0_img, 0);
     D_00190E18 = disk_read_file(str_amap01i0_img, 0);
     *(int *)scratch_190be4 = player_object->x;
@@ -195,9 +195,9 @@ void automap_open(void)
     automap_find_record();
     scratch_190de8 = 0;
     player_marker = 0;
-    if (((iptr)D_00195CB8 != 0 && ((int)player_environment) == 3) || ((int)player_environment) == 2) {
+    if (((iptr)floor_object != 0 && ((int)player_environment) == 3) || ((int)player_environment) == 2) {
         if (((int)player_environment) == 3) {
-            parent = D_00195CB8;
+            parent = floor_object;
             while (parent != 0 && parent->type != 47 && parent->type != 1) parent = parent->parent;
         } else {
             parent = player_object->parent;
@@ -256,7 +256,7 @@ void automap_open(void)
     }
     object_foreach(location_object, func_00028F8B);
     func_00028DFD();
-    D_00196272 = *(signed char *)&saved_screen_active;
+    screen_active = *(signed char *)&saved_screen_active;
     cfg_show_markers = *(signed char *)&saved_show_markers;
     D_0019629F = 0;
 }

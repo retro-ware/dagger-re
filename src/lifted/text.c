@@ -55,7 +55,7 @@ extern signed char D_00196091;
 extern signed char current_region;
 extern signed char msgbox_kind;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char D_0019628E;
@@ -154,7 +154,7 @@ void msgbox_show_more_pages(char **image)
         msgbox_kind = 1;
         mode_push();
         game_mode = 8;
-        D_00196272 = 1;
+        screen_active = 1;
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         mouse_buttons = (mouse_buttons_prev = 0);
         while (((int)(unsigned char)game_mode) == 8) {
@@ -174,7 +174,7 @@ void msgbox_show_more_pages(char **image)
     msgbox_kind = 1;
     mode_push();
     game_mode = 8;
-    D_00196272 = 1;
+    screen_active = 1;
     mouse_buttons = (mouse_buttons_prev = 0);
     while (((int)(unsigned char)game_mode) == 8) {
         mc_memcpy((void *)screen_buffer, (void *)big_buffer, 64000, str_text_c, 641, 4);
@@ -204,7 +204,7 @@ void msgbox_show_quest_text(struct quest *quest, short message_id, int kind)
     msgbox_kind = kind;
     mode_push();
     game_mode = 8;
-    D_00196272 = 1;
+    screen_active = 1;
     mouse_buttons_prev = mouse_buttons;
     xn_mouse_poll_clamped();
     msgbox_wait();
@@ -253,7 +253,7 @@ void msgbox_show_rsc(int text_id, int kind)
         msgbox_kind = kind;
         mode_push();
         game_mode = 8;
-        D_00196272 = 1;
+        screen_active = 1;
         mouse_buttons_prev = mouse_buttons;
         xn_mouse_poll_clamped();
         msgbox_wait();
@@ -280,7 +280,7 @@ void msgbox_open_rsc(int text_id, int kind)
         msgbox_kind = kind;
         mode_push();
         game_mode = 8;
-        D_00196272 = 1;
+        screen_active = 1;
         mouse_buttons_prev = mouse_buttons;
         xn_mouse_poll_clamped();
     }

@@ -6,7 +6,7 @@ extern int D_001A3F7C;
 extern int D_001A3F90;
 extern int D_001A3F94;
 extern int D_001A3F98;
-extern int D_001A3F9C;
+extern int mem_used_k;
 extern void dpmi_get_free_memory(char *);
 
 void dpmi_memory_stats(void)
@@ -15,5 +15,5 @@ void dpmi_memory_stats(void)
     D_001A3F98 = (D_001A3F78 - D_001A3F74) << 2;
     D_001A3F90 = (D_001A3F7C << 2) + D_001A3F98;
     D_001A3F94 = D_001A3F78 << 2;
-    D_001A3F9C = D_001A3F98;
+    mem_used_k = D_001A3F98;
 }

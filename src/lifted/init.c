@@ -49,13 +49,13 @@ extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern iptr D_00190704[];
 extern iptr hud_compass_image;
-extern iptr D_00190908;
-extern iptr D_0019090C;
-extern iptr D_00190910;
+extern iptr compass_frames_1;
+extern iptr compass_frames_2;
+extern iptr compass_frame_image;
 extern char arena2_path[];
 extern char arena2_cd_path[];
 extern struct flat_cfg flats_cfg[];
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char ui_dirty_flags;
 extern iptr horse_overlay_image;
 extern iptr cart_overlay_image;
@@ -78,12 +78,12 @@ extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
 extern int monster_bsa_handle;
-extern iptr D_00195AD0;
+extern iptr init_location_object;
 extern struct image *list_popup_image;
 extern struct spell *spell_records;
 extern int creature_count;
 extern struct region *current_region_data;
-extern iptr D_00195B64;
+extern iptr paperdoll_buffer;
 extern struct image *hud_bar_image;
 extern iptr hud_mode_icons;
 extern iptr paperdoll_mask;
@@ -98,20 +98,20 @@ extern struct settings *game_settings;
 extern char *scratch_buffer;
 extern signed char cfg_map_file;
 extern iptr hud_vital_bar_images;
-extern iptr D_00195C80;
-extern iptr D_00195C84;
+extern iptr main_image_4;
+extern iptr main_image_5;
 extern int flats_cfg_count;
 extern iptr spell_cast_anim_fire[];
 extern iptr spell_cast_anim_frost;
 extern iptr spell_cast_anim_poison;
 extern iptr spell_cast_anim_shock;
 extern iptr spell_cast_anim_magic;
-extern iptr D_00195CF4;
-extern iptr D_00195CF8;
+extern iptr haze_table_0;
+extern iptr haze_buffer_1;
 extern iptr quest_face_images[];
-extern iptr D_00195D18;
-extern iptr D_00195D20;
-extern iptr D_00195D24;
+extern iptr haze_table_1;
+extern iptr shade_table_63;
+extern iptr haze_buffer_0;
 extern iptr magic_def;
 extern iptr hud_portrait_overlays;
 extern iptr books_path;
@@ -121,28 +121,28 @@ extern iptr qbn_opcode_arg_counts;
 extern signed char climate_weathers[];
 extern signed char view_cursor_active;
 extern signed char D_0019621B;
-extern iptr D_0019625E;
+extern iptr link_caster_location;
 extern signed char current_region;
 extern signed char player_underwater;
 extern signed char fog_colour;
 extern signed char exiting;
 extern int maps_bsa;
-extern iptr D_001997F0;
-extern iptr D_001997F4;
-extern int D_001997FC;
-extern int D_00199800;
-extern iptr D_00199804;
+extern iptr translucent_buffer;
+extern iptr palette_buffer;
+extern int mouse_saved_sensitivity_x;
+extern int mouse_saved_sensitivity_y;
+extern iptr water_tint_buffer;
 extern int daylight;
 extern char D_001A3F60[];
 extern int D_001A3F7C;
 extern int D_001A3F90;
-extern int D_001A3F9C;
+extern int mem_used_k;
 extern char cfg_mapsave_file[];
 extern int cfg_start_map;
 extern signed char cfg_region;
 extern int arch3d_bsa;
 extern int dagger_snd;
-extern iptr D_001AA5FC;
+extern iptr color_remap_buffer;
 
 extern int climate_category(void);
 extern iptr disk_read_file(char *, iptr);
@@ -238,10 +238,10 @@ void debug_show_mem_used(void)
     ticks_addr = (struct bf8_0_5 *)DOS_LOW(0x46C);
     if (ticks_addr->f == 0) {
         dpmi_get_free_memory((iptr)D_001A3F60);
-        D_001A3F9C = D_001A3F90 - (D_001A3F7C << 2);
+        mem_used_k = D_001A3F90 - (D_001A3F7C << 2);
     }
     mc_set_location(47, str_init_c);
-    mc_sprintf((char *)text_buffer, str_mem_used_k, D_001A3F9C);
+    mc_sprintf((char *)text_buffer, str_mem_used_k, mem_used_k);
     D_0012B508 = 146;
     text_draw(text_buffer, 246, 23);
 }
@@ -261,7 +261,7 @@ void player_refresh_paperdoll(void)
 void init_world_objects(void)
 {
     object_heap_init();
-    D_00195AD0 = (iptr)location_object;
+    init_location_object = (iptr)location_object;
     init_player_records(location_object);
     inv_reset_left_list();
     calendar_update();
@@ -317,7 +317,7 @@ void shutdown_free_all(void)
             }
         }
     }
-    xn_mouse_set_sensitivity(D_001997FC, D_00199800);
+    xn_mouse_set_sensitivity(mouse_saved_sensitivity_x, mouse_saved_sensitivity_y);
     if (qbn_opcode_arg_counts != 0 && qbn_opcode_arg_counts != (-1751672937)) {
         mc_free((void *)qbn_opcode_arg_counts, str_init_c, 319);
         qbn_opcode_arg_counts = -1751672937;
@@ -332,9 +332,9 @@ void shutdown_free_all(void)
         mc_free((void *)hud_portrait, str_init_c, 326);
         *(iptr *)&hud_portrait = -1751672937;
     }
-    if (D_001AA5FC != 0 && D_001AA5FC != (-1751672937)) {
-        mc_free((void *)D_001AA5FC, str_init_c, 327);
-        D_001AA5FC = -1751672937;
+    if (color_remap_buffer != 0 && color_remap_buffer != (-1751672937)) {
+        mc_free((void *)color_remap_buffer, str_init_c, 327);
+        color_remap_buffer = -1751672937;
     }
     if ((iptr)spell_records != 0 && (iptr)spell_records != (-1751672937)) {
         mc_free(spell_records, str_init_c, 328);
@@ -352,53 +352,53 @@ void shutdown_free_all(void)
         mc_free((void *)hud_vital_bar_images, str_init_c, 331);
         hud_vital_bar_images = -1751672937;
     }
-    if (D_00195C80 != 0 && D_00195C80 != (-1751672937)) {
-        mc_free((void *)D_00195C80, str_init_c, 332);
-        D_00195C80 = -1751672937;
+    if (main_image_4 != 0 && main_image_4 != (-1751672937)) {
+        mc_free((void *)main_image_4, str_init_c, 332);
+        main_image_4 = -1751672937;
     }
-    if (D_00195C84 != 0 && D_00195C84 != (-1751672937)) {
-        mc_free((void *)D_00195C84, str_init_c, 333);
-        D_00195C84 = -1751672937;
+    if (main_image_5 != 0 && main_image_5 != (-1751672937)) {
+        mc_free((void *)main_image_5, str_init_c, 333);
+        main_image_5 = -1751672937;
     }
     if (hud_compass_image != 0 && hud_compass_image != (-1751672937)) {
         mc_free((void *)hud_compass_image, str_init_c, 334);
         hud_compass_image = -1751672937;
     }
-    if (D_00190908 != 0 && D_00190908 != (-1751672937)) {
-        mc_free((void *)D_00190908, str_init_c, 335);
-        D_00190908 = -1751672937;
+    if (compass_frames_1 != 0 && compass_frames_1 != (-1751672937)) {
+        mc_free((void *)compass_frames_1, str_init_c, 335);
+        compass_frames_1 = -1751672937;
     }
-    if (D_0019090C != 0 && D_0019090C != (-1751672937)) {
-        mc_free((void *)D_0019090C, str_init_c, 336);
-        D_0019090C = -1751672937;
+    if (compass_frames_2 != 0 && compass_frames_2 != (-1751672937)) {
+        mc_free((void *)compass_frames_2, str_init_c, 336);
+        compass_frames_2 = -1751672937;
     }
-    if (D_00190910 != 0 && D_00190910 != (-1751672937)) {
-        mc_free((void *)D_00190910, str_init_c, 337);
-        D_00190910 = -1751672937;
+    if (compass_frame_image != 0 && compass_frame_image != (-1751672937)) {
+        mc_free((void *)compass_frame_image, str_init_c, 337);
+        compass_frame_image = -1751672937;
     }
     if (magic_def != 0 && magic_def != (-1751672937)) {
         mc_free((void *)magic_def, str_init_c, 338);
         magic_def = -1751672937;
     }
-    if (D_00199804 != 0 && D_00199804 != (-1751672937)) {
-        mc_free((void *)D_00199804, str_init_c, 339);
-        D_00199804 = -1751672937;
+    if (water_tint_buffer != 0 && water_tint_buffer != (-1751672937)) {
+        mc_free((void *)water_tint_buffer, str_init_c, 339);
+        water_tint_buffer = -1751672937;
     }
-    if (D_001997F0 != 0 && D_001997F0 != (-1751672937)) {
-        mc_free((void *)D_001997F0, str_init_c, 340);
-        D_001997F0 = -1751672937;
+    if (translucent_buffer != 0 && translucent_buffer != (-1751672937)) {
+        mc_free((void *)translucent_buffer, str_init_c, 340);
+        translucent_buffer = -1751672937;
     }
-    if (D_00195D24 != 0 && D_00195D24 != (-1751672937)) {
-        mc_free((void *)D_00195D24, str_init_c, 341);
-        D_00195D24 = -1751672937;
+    if (haze_buffer_0 != 0 && haze_buffer_0 != (-1751672937)) {
+        mc_free((void *)haze_buffer_0, str_init_c, 341);
+        haze_buffer_0 = -1751672937;
     }
-    if (D_00195CF8 != 0 && D_00195CF8 != (-1751672937)) {
-        mc_free((void *)D_00195CF8, str_init_c, 342);
-        D_00195CF8 = -1751672937;
+    if (haze_buffer_1 != 0 && haze_buffer_1 != (-1751672937)) {
+        mc_free((void *)haze_buffer_1, str_init_c, 342);
+        haze_buffer_1 = -1751672937;
     }
-    if (D_00195B64 != 0 && D_00195B64 != (-1751672937)) {
-        mc_free((void *)D_00195B64, str_init_c, 343);
-        D_00195B64 = -1751672937;
+    if (paperdoll_buffer != 0 && paperdoll_buffer != (-1751672937)) {
+        mc_free((void *)paperdoll_buffer, str_init_c, 343);
+        paperdoll_buffer = -1751672937;
     }
     if (paperdoll_mask != 0 && paperdoll_mask != (-1751672937)) {
         mc_free((void *)paperdoll_mask, str_init_c, 344);
@@ -440,9 +440,9 @@ void shutdown_free_all(void)
         mc_free((void *)scratch_buffer, str_init_c, 353);
         *(iptr *)&scratch_buffer = -1751672937;
     }
-    if (D_001997F4 != 0 && D_001997F4 != (-1751672937)) {
-        mc_free((void *)D_001997F4, str_init_c, 354);
-        D_001997F4 = -1751672937;
+    if (palette_buffer != 0 && palette_buffer != (-1751672937)) {
+        mc_free((void *)palette_buffer, str_init_c, 354);
+        palette_buffer = -1751672937;
     }
     weapon_free_sprites();
     spell_cast_anims_free();
@@ -468,7 +468,7 @@ void init_video(void)
     xn_kbd_numlock_off();
     xn_timer_wait_ticks(18);
     xn_sys_set_dos_transfer_buffer();
-    xn_mouse_get_sensitivity((char *)&D_001997FC, (char *)&D_00199800);
+    xn_mouse_get_sensitivity((char *)&mouse_saved_sensitivity_x, (char *)&mouse_saved_sensitivity_y);
     xn_mem_init(102400);
     *(iptr *)&scratch_buffer = (iptr)mc_malloc(80780, str_init_c, 382);
     file_index_build();
@@ -489,7 +489,7 @@ void init_video(void)
     xn_shade_load(0, 0);
     xn_shade_keep_colours_0_255();
     player_underwater = 0;
-    disk_read_file(str_pal_raw, (D_001997F4 = (iptr)mc_malloc(768, str_init_c, 410)));
+    disk_read_file(str_pal_raw, (palette_buffer = (iptr)mc_malloc(768, str_init_c, 410)));
     xn_world_init();
     xn_world_open(str_woods_wld);
 }
@@ -508,8 +508,8 @@ void init_palette(void)
 
 void palette_restore(void)
 {
-    xn_pal_set((char *)D_001997F4);
-    D_001940D7 |= 1;
+    xn_pal_set((char *)palette_buffer);
+    world_state_flags |= 1;
 }
 
 void game_exit(char *message)
@@ -787,7 +787,7 @@ void update_fog(void)
     if (((int)player_environment) == 1) {
         if (daylight == 0) {
             xn_cam_far_z = ((game_settings->view_flags >> 8) + 129) * 1536;
-            xn_fog_table_last = D_00195D20;
+            xn_fog_table_last = shade_table_63;
             xn_shade_set_fog((xn_cam_far_z >> 8) - 512);
             fog_colour = 0;
             return;
@@ -795,12 +795,12 @@ void update_fog(void)
         climate = climate_category();
         if (((int)(unsigned char)(climate_weathers[climate] & 127)) == 3 || ((int)(unsigned char)(climate_weathers[climate] & 128)) != 0) {
             xn_cam_far_z = ((game_settings->view_flags >> 8) + 129) * 768;
-            xn_fog_table_last = D_00195D18 + 16128;
+            xn_fog_table_last = haze_table_1 + 16128;
             xn_shade_set_fog(8);
             fog_colour = 119;
         } else {
             xn_cam_far_z = ((game_settings->view_flags >> 8) + 129) * 3072;
-            xn_fog_table_last = D_00195CF4 + 16128;
+            xn_fog_table_last = haze_table_0 + 16128;
             xn_shade_set_fog((xn_cam_far_z >> 8) - 512);
             fog_colour = 0;
         }
@@ -808,13 +808,13 @@ void update_fog(void)
     }
     if (dungeon_water_level != 10000 && (player_object->y - 76) > dungeon_water_level) {
         xn_cam_far_z = ((game_settings->view_flags >> 8) + 129) * 768;
-        xn_fog_table_last = D_00195CF4 + 16128;
+        xn_fog_table_last = haze_table_0 + 16128;
         xn_shade_set_fog(4);
         fog_colour = 107;
         return;
     }
     xn_cam_far_z = ((game_settings->view_flags >> 8) + 129) * 1536;
-    xn_fog_table_last = D_00195D20;
+    xn_fog_table_last = shade_table_63;
     xn_shade_set_fog((xn_cam_far_z >> 8) - 512);
     fog_colour = 223;
 }
@@ -864,5 +864,5 @@ void books_find_path(void)
 void init_link_caster(void)
 {
     D_0019621B = 18;
-    D_0019625E = (iptr)location_object;
+    link_caster_location = (iptr)location_object;
 }

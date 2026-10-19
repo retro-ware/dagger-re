@@ -11,7 +11,7 @@ extern unsigned loan_collectors_next;
 extern struct record *location_object;
 extern struct location *current_location;
 extern int game_minutes;
-extern iptr D_00195CB8;
+extern iptr floor_object;
 extern int sky_loaded_frame;
 extern char world_loading;
 extern char night_sky_loaded;
@@ -85,7 +85,7 @@ void town_load(int location_index)
             break;
         }
     }
-    D_00195CB8 = 0;
+    floor_object = 0;
     night_sky_loaded = 0;
     sky_loaded_frame = 10000;
     dungeon_water_level = 10000;

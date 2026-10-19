@@ -14,9 +14,9 @@ extern struct character *player_character;
 extern signed char mouse_control_mode;
 extern short player_base_speed;
 extern signed char D_0019628E;
-extern int D_001A5AE8;
+extern int steer_start_tick;
 extern char turn_this_frame[];
-extern int D_001A5AFC;
+extern int steer_ticks;
 extern int move_angle_offset;
 extern short steer_weight_down;
 extern short steer_weight_right;
@@ -36,15 +36,15 @@ void intrface_steer(int unused, int region, int region_x, int region_y)
 
         if (((int)(unsigned char)(mouse_buttons & 1)) != 0 || ((int)(short)steer_key_region) != (-1)) {
             if (((int)(short)steer_key_region) == (-1)) {
-                D_001A5AFC = steer_turn_speed_max;
+                steer_ticks = steer_turn_speed_max;
                 steer_weight_right = ((((int)(short)mouse_x) - region_x) << 8) / ((int)(short)steer_region_width);
                 steer_weight_down = ((((int)(short)mouse_y) - region_y) << 8) / ((int)(short)steer_region_height);
                 steer_weight_left = ((((int)(short)steer_region_width) - (((int)(short)mouse_x) - region_x)) << 8) / ((int)(short)steer_region_width);
                 steer_weight_up = ((((int)(short)steer_region_height) - (((int)(short)mouse_y) - region_y)) << 8) / ((int)(short)steer_region_height);
             } else {
                 bios_ticks = (int *)DOS_LOW(0x46C);
-                if ((D_001A5AFC = *bios_ticks - D_001A5AE8) > steer_turn_speed_max) {
-                    D_001A5AFC = steer_turn_speed_max;
+                if ((steer_ticks = *bios_ticks - steer_start_tick) > steer_turn_speed_max) {
+                    steer_ticks = steer_turn_speed_max;
                 }
             }
         }

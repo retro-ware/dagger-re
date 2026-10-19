@@ -12,7 +12,7 @@ extern struct record *player_object;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196272;
+extern unsigned char screen_active;
 extern unsigned char game_mode;
 extern int note_file_size;
 extern iptr note_rci;
@@ -57,7 +57,7 @@ int note_open_notebook(short mode)
             game_mode = 9;
             window_image = disk_read_file(str_mask02i0_img, 0);
             note_rci = disk_read_file(str_note_rci, 0);
-            D_00196272 = 1;
+            screen_active = 1;
             sound_play(237, player_object, 100);
         }
     }

@@ -26,7 +26,7 @@ extern short D_00195F34;
 extern unsigned char current_region;
 extern unsigned char game_mode_under_popup;
 extern char D_00196271;
-extern char D_00196272;
+extern char screen_active;
 extern unsigned char game_mode;
 extern char D_0019629C;
 extern int court_reputation_change;
@@ -104,7 +104,7 @@ int court_open(int crime)
             fine -= shortfall;
         }
         game_mode = 21;
-        D_00196272 = 1;
+        screen_active = 1;
         window_image = disk_read_file(str_cort01i0_img, 0);
         mc_memcpy(screen_buffer, window_image, 64000, str_crime_c, 114, 4);
         xn_gfx_present_inclusive(1);

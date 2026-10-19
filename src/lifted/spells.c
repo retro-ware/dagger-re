@@ -45,7 +45,7 @@ extern short list_popup_x;
 extern short list_popup_width;
 extern char list_popup_picklist[];
 extern char spellmaker_spell[];
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern char spell_effect_cost_current[];
@@ -124,7 +124,7 @@ int spellmaker_close(void)
         mc_free((void *)spellmaker_settings_image, str_spells_c, 734);
         spellmaker_settings_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     return 1;
 }
 

@@ -10,7 +10,7 @@ extern struct rect inv_buttons[];
 extern signed char text_buffer[];
 extern unsigned char player_motion_flags;
 extern iptr wagon_container;
-extern char *D_00195B64;
+extern char *paperdoll_buffer;
 extern struct character *player_character;
 extern int game_minutes;
 extern int trade_total;
@@ -71,7 +71,7 @@ void inventory_draw(void)
     }
     inv_blit_rect_from_image(inv_tab + 41, inv_background_image);
     paperdoll_draw(-147, 0);
-    xn_draw_copy_rect_stride_bytes(D_00195B64 + 1008, screen_buffer + 4209, 111, 184, 125);
+    xn_draw_copy_rect_stride_bytes(paperdoll_buffer + 1008, screen_buffer + 4209, 111, 184, 125);
     if (trade_mode != 0) {
         xn_draw_image(inv_shop_image->x, inv_shop_image->y, inv_shop_image->width, inv_shop_image->height, inv_shop_image->pixels);
         holiday = holiday_today(game_minutes, current_region);

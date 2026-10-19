@@ -15,7 +15,7 @@ extern int frame_checkpoint;
 extern struct record *player_object;
 extern iptr window_image;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern int logbook_first_entry;
 extern char logbook_show_notes[];
@@ -123,7 +123,7 @@ int logbook_open(int force)
     }
     if (force != 0 || (game_mode == 0 && key_action_held(24) != 0)) {
         game_mode = 14;
-        D_00196272 = 1;
+        screen_active = 1;
         window_image = disk_read_file(str_lgbk00i0_img_2, 0);
         *(int *)logbook_show_notes = (logbook_first_entry = 0);
         world_running = 0;

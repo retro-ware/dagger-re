@@ -28,7 +28,7 @@ extern struct record *location_object;
 extern struct location *current_location;
 extern int game_minutes;
 extern char *scratch_buffer;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char mouse_buttons_prev;
 extern int town_map_view_x;
 extern int town_map_view_y;
@@ -98,8 +98,8 @@ void town_map_open(void)
         close(handle);
     }
     mouse_buttons = (mouse_buttons_prev = 0);
-    saved_screen_active = (int)(unsigned char)D_00196272;
-    D_00196272 = 1;
+    saved_screen_active = (int)(unsigned char)screen_active;
+    screen_active = 1;
     *(iptr *)scratch_190de4 = disk_read_file(str_amap00i0_img, 0);
     D_00196D9C = (struct image *)disk_read_file(str_town00i0_img, 0);
     while (done == 0) {
@@ -142,7 +142,7 @@ void town_map_open(void)
         mc_free(D_00196D9C, str_automap_c, 680);
         D_00196D9C = (struct image *)(iptr)-1751672937;
     }
-    D_00196272 = *(signed char *)&saved_screen_active;
+    screen_active = *(signed char *)&saved_screen_active;
     if (scratch_190ce5 == 0) return;
     mc_set_location(686, str_automap_c);
     mc_sprintf((char *)text_buffer, str_at_atf_2, location_object->id >> 16);

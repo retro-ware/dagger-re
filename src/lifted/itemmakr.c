@@ -59,7 +59,7 @@ extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern char cfg_item_file[];
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern struct magic_enchantment itemmaker_slot_exclusions[][5];   /* itemmaker_slot_exclusions */
 extern char itemmaker_soul_codes[];
@@ -145,7 +145,7 @@ int itemmaker_close(void)
         magic_window_image = -1751672937;
     }
     ui_dirty_flags &= 251;
-    D_00196272 = 0;
+    screen_active = 0;
     player_refresh_paperdoll();
     return 1;
 }

@@ -33,7 +33,7 @@ extern struct record *player_object;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern iptr text_macro_city;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char text_missing_ok;
@@ -91,7 +91,7 @@ int logbook_close(void)
         return 0;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_logbook_c, 80);
         window_image = -1751672937;

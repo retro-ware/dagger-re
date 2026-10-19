@@ -72,7 +72,7 @@ extern int talk_prostitute_price;
 extern short text_macro_n_text;
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern char talk_regional_rows[];
@@ -603,7 +603,7 @@ void talk_close(void)
         talk_mode_image = -1751672937;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     world_running = 1;
 }
 

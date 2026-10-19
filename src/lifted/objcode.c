@@ -50,7 +50,7 @@ extern short D_00195F81;
 extern short D_00195F85;
 extern int D_00195F89;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char is_daytime;
 extern int marker_best;
@@ -360,7 +360,7 @@ int travel_map_open(int mode)
         scratch_190ce5 = (scratch_190ce4[0] = 0);
         *(iptr *)&travel_region_image = 0;
         game_mode = 19;
-        D_00196272 = 1;
+        screen_active = 1;
         world_running = 0;
         scratch_190ce7 = 0;
     }

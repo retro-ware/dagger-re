@@ -49,7 +49,7 @@ extern struct record *scratch_object;
 extern struct image *hud_bar_image;
 extern struct character *player_character;
 extern struct settings *game_settings;
-extern struct record *D_00195C48;
+extern struct record *collide_hit_object;
 extern iptr spell_cast_anim_fire[];
 extern char D_00195F28[];
 extern short spell_effect_slot;
@@ -455,7 +455,7 @@ void cast_fire_missile(struct record *missile)
             missile->missile_texture |= 1;
             missile->image2 = 32768;
             missile->children->light_radius <<= 2;
-            func_0005C856(missile, D_00195C48);
+            func_0005C856(missile, collide_hit_object);
             if (spell->target == 2 || spell->target == 4) cast_anim_start(spell->element);
             return;
         }
@@ -523,7 +523,7 @@ void cast_creature_missile(struct record *missile, struct record *caster, struct
         missile->missile_texture |= 1;
         missile->image2 = 32768;
         missile->children->light_radius <<= 2;
-        func_0005C856(missile, D_00195C48);
+        func_0005C856(missile, collide_hit_object);
         return;
     }
     spell_missile_update(missile, 1);

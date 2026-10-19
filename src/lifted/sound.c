@@ -28,7 +28,7 @@ extern int D_001A3F30;
 extern iptr D_001A3F48;
 extern char music_current[];
 extern signed char sound_enabled;
-extern int D_001A5AD0;
+extern int riding_sound;
 
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
 extern int sos_load_song(char *);
@@ -353,5 +353,5 @@ void sound_stop_all(void)
         }
         sound_channels[channel].handle = 305419896;
     }
-    D_001A5AD0 = -1;
+    riding_sound = -1;
 }

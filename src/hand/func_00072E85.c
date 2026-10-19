@@ -19,7 +19,7 @@ extern iptr color_remap;
 extern struct character *player_character;
 extern struct settings *game_settings;
 extern signed char weapon_active_hand;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern iptr D_001A4A30[];
 extern int D_001A4A38[];
 extern int D_001A4A48[];
@@ -48,7 +48,7 @@ void weapon_player_update(void)
 
     if (D_0019597C[((int)(unsigned char)weapon_active_hand)] != 0) return;
     if ((player_character->conditions & 0x1) != 0) return;
-    if (cast_anim_state >= 0 || (iptr)spell_ready_missile != 0 || D_00196272 != 0 || ((struct bf8_6_1 *)&D_001940DA)->f != 0) {
+    if (cast_anim_state >= 0 || (iptr)spell_ready_missile != 0 || screen_active != 0 || ((struct bf8_6_1 *)&D_001940DA)->f != 0) {
         return;
     }
     if (weapon_hand_cif[((int)(unsigned char)weapon_active_hand)] == 0) return;

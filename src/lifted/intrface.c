@@ -20,20 +20,20 @@ extern char str_arrow_raw[];
 extern char str_intrface_c[];
 extern int steer_turn_speed_max;
 extern unsigned char player_environment;
-extern short D_001789FD;
-extern short D_001789FF;
+extern short view_width;
+extern short view_height;
 extern short player_speed;
-extern iptr D_001845C8;
+extern iptr text_climbing_mode;
 extern struct collide_probe D_00187B6E;
-extern struct collide_probe D_00187BB8;
-extern struct collide_probe D_00187C12;
-extern struct move_request D_00187C86;   /* the player's move */
+extern struct collide_probe player_probe_climb;
+extern struct collide_probe player_probe_crouched;
+extern struct move_request player_move_request;   /* the player's move */
 extern int player_momentum;
 extern signed char world_running;
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern signed char D_001940D6;
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char D_001940DA;
 extern signed char player_motion_flags;
 extern int jump_velocity;
@@ -48,45 +48,45 @@ extern iptr cursor_arrow_image;
 extern struct career *player_class;
 extern int game_minutes;
 extern char *scratch_buffer;
-extern struct record *D_00195C70;
+extern struct record *moving_model;
 extern int ceiling_height;
-extern struct record *D_00195CB8;
-extern iptr D_00195CD4;
-extern iptr D_00195CD8;
-extern int D_00195DB8;
-extern char D_00195E30[];
-extern char D_00195E4E[];
+extern struct record *floor_object;
+extern iptr collide_side_hit;
+extern iptr collide_floor_hit;
+extern int move_settle_frames;
+extern char collide_floor_hit_copy[];
+extern char collide_side_hit_copy[];
 extern signed char mouse_control_mode;
 extern signed char mouse_turn_rate;
 extern signed char view_cursor_active;
-extern short D_00195F44;
+extern short player_jumping;
 extern short player_base_speed;
-extern short D_00195F5A;
+extern short collide_wall_cos;
 extern short mouse_motion_x;
 extern short mouse_motion_y;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char player_on_ground;
 extern signed char mouse_buttons_prev;
 extern signed char in_dungeon_water;
 extern signed char D_0019628E;
-extern signed char D_00196296;
+extern signed char collide_landed;
 extern int collide_height;
 extern char collide_flags[];
-extern int D_001A5A60;
-extern int D_001A5A64;
+extern int move_remainder_z;
+extern int move_remainder_x;
 extern char cursor_saved_background[];
 extern int cursor_saved_y;
-extern int D_001A5AD0;
-extern int D_001A5ADC;
-extern int D_001A5AE4;
-extern int D_001A5AE8;
+extern int riding_sound;
+extern int riding_sound_id;
+extern int move_last_tick;
+extern int steer_start_tick;
 extern char turn_this_frame[];
-extern int D_001A5AFC;
-extern int D_001A5B00;
-extern int D_001A5B04;
+extern int steer_ticks;
+extern int move_last_minute;
+extern int move_distance_total;
 extern int move_angle_offset;
-extern int D_001A5B0C;
-extern int D_001A5B10;
+extern int move_dx_total;
+extern int move_dz_total;
 extern int cursor_saved_x;
 extern iptr cursor_region_images;
 extern short steer_row_y1;
@@ -99,9 +99,9 @@ extern short steer_region_width;
 extern short steer_region_height;
 extern short steer_weight_left;
 extern short steer_weight_up;
-extern short D_001A5B30;
+extern short player_climbing;
 extern short steer_key_region;
-extern signed char D_001A5B34;
+extern signed char camera_roll_disabled;
 
 extern int engine_pick_object(int, int, struct pick_result *);
 extern int collide_move_player(struct record *, int, struct move_request *, int);
@@ -166,17 +166,17 @@ void intrface_init(void)
     }
     xn_mouse_set_cursor_image(scratch_buffer, 0, 0);
     intrface_set_regions();
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void intrface_set_regions(void)
 {
-    steer_region_width = ((int)(short)D_001789FD) / 3;
-    steer_region_height = ((int)(short)D_001789FF) / 3;
-    steer_row_y1 = (((int)(short)D_001789FF) / 3) + ((int)(short)xn_gfx_clip_top);
-    steer_row_y2 = ((((int)(short)D_001789FF) / 3) * 2) + ((int)(short)xn_gfx_clip_top);
-    steer_col_x1 = (((int)(short)D_001789FD) / 3) + ((int)(short)xn_gfx_clip_left);
-    steer_col_x2 = ((((int)(short)D_001789FD) / 3) * 2) + ((int)(short)xn_gfx_clip_left);
+    steer_region_width = ((int)(short)view_width) / 3;
+    steer_region_height = ((int)(short)view_height) / 3;
+    steer_row_y1 = (((int)(short)view_height) / 3) + ((int)(short)xn_gfx_clip_top);
+    steer_row_y2 = ((((int)(short)view_height) / 3) * 2) + ((int)(short)xn_gfx_clip_top);
+    steer_col_x1 = (((int)(short)view_width) / 3) + ((int)(short)xn_gfx_clip_left);
+    steer_col_x2 = ((((int)(short)view_width) / 3) * 2) + ((int)(short)xn_gfx_clip_left);
 }
 
 void intrface_free(void)
@@ -217,9 +217,9 @@ void func_0008066F(int distance)
     yaw = player_object->yaw;
     xn_math_yaw_offset_xz(yaw, distance << 7, &dx, &dz);
     player_momentum = distance;
-    D_001A5B04 += distance;
-    D_001A5B0C += dx;
-    D_001A5B10 += dz;
+    move_distance_total += distance;
+    move_dx_total += dx;
+    move_dz_total += dz;
 }
 
 void func_000806DD(int distance, int yaw_offset)
@@ -235,7 +235,7 @@ void func_000806DD(int distance, int yaw_offset)
 void steer_forward_left(void)
 {
     xn_snow_turn_shift = 8;
-    *(int *)turn_this_frame = -(((frame_ticks * ((((int)(short)steer_weight_left) << 6) * D_001A5AFC)) / 1000) / 256);
+    *(int *)turn_this_frame = -(((frame_ticks * ((((int)(short)steer_weight_left) << 6) * steer_ticks)) / 1000) / 256);
     player_speed = (((int)(short)player_speed) * ((int)(short)steer_weight_up)) / 256;
 }
 
@@ -248,14 +248,14 @@ void steer_forward(void)
 void steer_forward_right(void)
 {
     xn_snow_turn_shift = -8;
-    *(int *)turn_this_frame = ((frame_ticks * ((((int)(short)steer_weight_right) << 6) * D_001A5AFC)) / 1000) / 256;
+    *(int *)turn_this_frame = ((frame_ticks * ((((int)(short)steer_weight_right) << 6) * steer_ticks)) / 1000) / 256;
     player_speed = (((int)(short)player_speed) * ((int)(short)steer_weight_up)) / 256;
 }
 
 void steer_turn_left(void)
 {
     xn_snow_turn_shift = 8;
-    *(int *)turn_this_frame = -(((frame_ticks * ((((int)(short)steer_weight_left) << 6) * D_001A5AFC)) / 1000) / 256);
+    *(int *)turn_this_frame = -(((frame_ticks * ((((int)(short)steer_weight_left) << 6) * steer_ticks)) / 1000) / 256);
     player_speed = 0;
 }
 
@@ -271,7 +271,7 @@ void steer_center(void)
 void steer_turn_right(void)
 {
     xn_snow_turn_shift = -8;
-    *(int *)turn_this_frame = ((((((int)(short)steer_weight_right) << 6) * D_001A5AFC) * frame_ticks) / 1000) / 256;
+    *(int *)turn_this_frame = ((((((int)(short)steer_weight_right) << 6) * steer_ticks) * frame_ticks) / 1000) / 256;
     player_speed = 0;
 }
 
@@ -383,7 +383,7 @@ void player_compute_jump_velocity(void)
 
 void camera_roll_turn(int target_roll)
 {
-    if (D_001A5B34 != 0) return;
+    if (camera_roll_disabled != 0) return;
     if (target_roll < 0) {
         camera_object->angle_z -= 8;
         camera_object->angle_z &= ~0xF800;
@@ -447,7 +447,7 @@ void intrface_poll_controls(void)
         if (not_turning == 0) return;
     }
     bios_ticks = (int *)DOS_LOW(0x46C);
-    D_001A5AE8 = *bios_ticks;
+    steer_start_tick = *bios_ticks;
 }
 
 void player_movement_update(void)
@@ -472,11 +472,11 @@ void player_movement_update(void)
     int landing_check;
     int climb_chance;
 
-    if (D_00195DB8 != 0) {
-        D_00195DB8--;
+    if (move_settle_frames != 0) {
+        move_settle_frames--;
         return;
     }
-    D_001940D7 &= 223;
+    world_state_flags &= 223;
     steer_turn_speed_max = (((int)(unsigned char)(mouse_turn_rate & 127)) * 2) + 4;
     player_mouse_look();
     intrface_poll_controls();
@@ -484,11 +484,11 @@ void player_movement_update(void)
     if (hud_update() != 0) return;
     region = intrface_region_at((int)(short)mouse_x, (int)(short)mouse_y, &region_x, &dy);
     cursor_draw((int)(short)*(short *)&region);
-    if (D_00196272 != 0) return;
+    if (screen_active != 0) return;
     if (key_action_held(22) != 0 || (((struct bf8_6_1 *)&D_001940DA)->f != 0 && ((int)(unsigned char)(mouse_buttons & 1)) != 0)) {
         return;
     }
-    D_00195CD8 = (D_00195CD4 = 0);
+    collide_floor_hit = (collide_side_hit = 0);
     start_x = player_object->x;
     start_z = player_object->z;
     prev_velocity = vertical_velocity;
@@ -545,40 +545,40 @@ void player_movement_update(void)
         }
         blocked = player_try_move(step);
         if (((int)(short)(*(short *)collide_flags & 16)) == 0 && ((int)(short)(*(short *)collide_flags & 1)) != 0) {
-            links_trigger(D_00195CB8, 1);
+            links_trigger(floor_object, 1);
         }
-        if (((int)(short)(*(short *)collide_flags & 2)) != 0) links_trigger(D_00195C70, 3);
+        if (((int)(short)(*(short *)collide_flags & 2)) != 0) links_trigger(moving_model, 3);
     }
     if (landing_check != 0 && player_on_ground != 0) landing_check = 1;
-    if (distance == 0 && (iptr)D_00195CB8 != 0 && links_object_motion((iptr)D_00195CB8) != 0) {
+    if (distance == 0 && (iptr)floor_object != 0 && links_object_motion((iptr)floor_object) != 0) {
         player_try_move(0);
     }
     dy = 0;
-    if (((int)(short)(*(short *)collide_flags & 2)) != 0 && D_001A5B30 == 0 && climb_angle_ok((int)(unsigned short)D_00195F5A) != 0 && xn_math_approx_dist2d(player_object->x, player_object->z, start_x, start_z) < 5 && (player_character->conditions & 0x8) == 0 && ((int)(unsigned short)(player_character->flags & 1536)) == 0) {
-        if (((unsigned)(BIOS_TICKS - D_001A5AE4)) > 14) {
+    if (((int)(short)(*(short *)collide_flags & 2)) != 0 && player_climbing == 0 && climb_angle_ok((int)(unsigned short)collide_wall_cos) != 0 && xn_math_approx_dist2d(player_object->x, player_object->z, start_x, start_z) < 5 && (player_character->conditions & 0x8) == 0 && ((int)(unsigned short)(player_character->flags & 1536)) == 0) {
+        if (((unsigned)(BIOS_TICKS - move_last_tick)) > 14) {
             if (((struct bf8_5_1 *)&player_motion_flags)->f == 0) {
-                hud_message_add(D_001845C8);
+                hud_message_add(text_climbing_mode);
                 skill_add_uses(18, 1);
             }
             player_motion_flags |= 32;
             dy = (-((int)(short)player_speed)) / 3;
-            if (((unsigned)(game_minutes - D_001A5B00)) > 1) {
+            if (((unsigned)(game_minutes - move_last_minute)) > 1) {
                 skill_add_uses(18, 1);
-                D_001A5B00 = game_minutes;
+                move_last_minute = game_minutes;
                 climb_chance = player_character->skills[18].value;
                 if (player_character->race == 6) climb_chance += 30;
                 if ((player_character->conditions & 0x20000) == 0 && rand_range(1, 100) > 95 && rand_range(1, 100) > climb_chance) {
                     player_motion_flags &= 223;
-                    D_001A5B30 = 1;
+                    player_climbing = 1;
                 }
             }
         }
     } else {
-        if (((struct bf8_5_1 *)&player_motion_flags)->f != 0 && D_001A5B30 == 0 && ((int)(short)(*(short *)collide_flags & 2)) == 0) {
+        if (((struct bf8_5_1 *)&player_motion_flags)->f != 0 && player_climbing == 0 && ((int)(short)(*(short *)collide_flags & 2)) == 0) {
             if (player_climb_probe() == 0) player_motion_flags &= 223;
         }
-        D_001A5AE4 = BIOS_TICKS;
-        D_001A5B00 = game_minutes;
+        move_last_tick = BIOS_TICKS;
+        move_last_minute = game_minutes;
     }
     if (((struct bf8_5_1 *)&player_motion_flags)->f != 0 || (player_character->conditions & 0x8) != 0) {
         vertical_velocity = 0;
@@ -586,7 +586,7 @@ void player_movement_update(void)
     if ((player_object->y - 50) <= dungeon_water_level) {
         in_dungeon_water = 0;
     }
-    D_00195F44 = 0;
+    player_jumping = 0;
     if (((((int)(unsigned char)(mouse_buttons & 3)) == 3 && ((int)(unsigned char)(mouse_buttons_prev & 3)) == 1) || key_action_held(8) != 0) && player_on_ground != 0 && (player_character->conditions & 0x1) == 0 && ((int)(unsigned short)(player_character->flags & 1536)) == 0) {
         skill_add_uses(3, 1);
         if ((player_character->conditions & 0x10000) != 0) {
@@ -599,11 +599,11 @@ void player_movement_update(void)
         }
         dy = -1;
         vertical_velocity += jump_impulse;
-        D_00195F44 = 1;
+        player_jumping = 1;
         fatigue_add(-11);
         airborne = 1;
         player_on_ground = 0;
-        D_00196296 = 1;
+        collide_landed = 1;
     }
     if (landing_check != 0 && player_on_ground != 0) landing_check = 1;
     if (key_action_held(6) != 0 && ((player_character->conditions & 0x8) != 0 || in_dungeon_water != 0) && (player_object->y - 100) > ceiling_height) {
@@ -630,25 +630,25 @@ void player_movement_update(void)
         dy += player_object->y - saved_y;
         player_object->y = saved_y;
     } else {
-        D_001A5B30 = 0;
+        player_climbing = 0;
         vertical_velocity = 0;
     }
     if (landing_check != 0 && player_on_ground != 0) landing_check = 1;
     player_try_move_vertical(dy);
     if (player_on_ground != 0) vertical_velocity = 0;
-    if (vertical_velocity < 0 && D_00195F44 != 0 && (player_object->y - 99) < ceiling_height) {
+    if (vertical_velocity < 0 && player_jumping != 0 && (player_object->y - 99) < ceiling_height) {
         player_object->y = saved_y;
     }
     if (landing_check != 0 && player_on_ground != 0) landing_check = 1;
-    if (D_00195CD8 != 0) {
-        D_001A5B30 = 0;
+    if (collide_floor_hit != 0) {
+        player_climbing = 0;
         if (player_on_ground != 0) vertical_velocity = 0;
-        mc_memcpy(D_00195E30, (void *)D_00195CD8, 30, str_intrface_c, 695, 4);
-        D_00195CD8 = (iptr)D_00195E30;
+        mc_memcpy(collide_floor_hit_copy, (void *)collide_floor_hit, 30, str_intrface_c, 695, 4);
+        collide_floor_hit = (iptr)collide_floor_hit_copy;
     }
-    if (D_00195CD4 != 0) {
-        mc_memcpy(D_00195E4E, (void *)D_00195CD4, 30, str_intrface_c, 701, 4);
-        D_00195CD4 = (iptr)D_00195E4E;
+    if (collide_side_hit != 0) {
+        mc_memcpy(collide_side_hit_copy, (void *)collide_side_hit, 30, str_intrface_c, 701, 4);
+        collide_side_hit = (iptr)collide_side_hit_copy;
     }
     if (vertical_velocity == 0 && prev_velocity != 0) {
         fall_damage = ((prev_velocity / 256) / 40) - 7;
@@ -659,12 +659,12 @@ void player_movement_update(void)
             sound_play(((((int)player_environment) != 3) ? 360 : 359), player_entity, 100);
         }
     }
-    if (((int)(unsigned char)mouse_control_mode) == 1 && D_00196272 == 0) {
+    if (((int)(unsigned char)mouse_control_mode) == 1 && screen_active == 0) {
         if (view_cursor_active != 0 && ((int)(unsigned char)(mouse_buttons & 1)) != 0 && ((int)(unsigned char)(mouse_buttons_prev & 1)) == 0) {
             click_activate(0);
         }
         if (key_action_pressed(18) != 0) click_activate(1);
-    } else if (D_00196272 == 0) {
+    } else if (screen_active == 0) {
         if (((int)(unsigned char)(mouse_buttons & 2)) != 0 && ((struct bf8_6_1 *)&D_001940D6)->f == 0) {
             click_activate(0);
         }
@@ -685,25 +685,25 @@ void player_horse_sounds(int speed)
     sound = (((((int)(short)player_base_speed) - (((int)(short)player_base_speed) >> 2)) < speed) ? 366 : 365);
     if (((int)(unsigned short)(player_character->flags & 1024)) != 0) sound = 372;
     if (speed == 0) {
-        if (D_001A5AD0 == (-1)) return;
-        if (sound_channel_done(D_001A5AD0) != 0) return;
-        sound_stop_channel(D_001A5AD0);
-        D_001A5AD0 = -1;
+        if (riding_sound == (-1)) return;
+        if (sound_channel_done(riding_sound) != 0) return;
+        sound_stop_channel(riding_sound);
+        riding_sound = -1;
         return;
     }
-    if (D_001A5AD0 == (-1)) {
-        D_001A5AD0 = sound_play_loop(sound, player_object, 100);
-    } else if (sound != D_001A5ADC) {
-        sound_stop_channel(D_001A5AD0);
-        D_001A5AD0 = sound_play_loop(sound, player_object, 100);
+    if (riding_sound == (-1)) {
+        riding_sound = sound_play_loop(sound, player_object, 100);
+    } else if (sound != riding_sound_id) {
+        sound_stop_channel(riding_sound);
+        riding_sound = sound_play_loop(sound, player_object, 100);
     }
-    D_001A5ADC = sound;
+    riding_sound_id = sound;
 }
 
 void player_horse_sounds_stop(void)
 {
-    if (sound_channel_done((D_001A5AD0 = -1)) != 0) return;
-    sound_stop_channel(D_001A5AD0);
+    if (sound_channel_done((riding_sound = -1)) != 0) return;
+    sound_stop_channel(riding_sound);
 }
 
 int player_climb_probe(void)
@@ -716,26 +716,26 @@ int player_climb_probe(void)
     xn_math_yaw_offset_xz((player_object->yaw + move_angle_offset) & 2047, 1024, &x, &z);
     x += player_object->x << 5;
     z += player_object->z << 5;
-    x += D_001A5A64;
-    z += D_001A5A60;
-    D_001A5A64 = x & 31;
-    D_001A5A60 = z & 31;
-    D_00187C86.x = x / 32;
-    D_00187C86.y = player_object->y - 32;
-    D_00187C86.z = z / 32;
-    D_00187C86.angle_x = player_object->angle_x;
-    D_00187C86.yaw = player_object->yaw;
-    D_00187C86.angle_z = player_object->angle_z;
+    x += move_remainder_x;
+    z += move_remainder_z;
+    move_remainder_x = x & 31;
+    move_remainder_z = z & 31;
+    player_move_request.x = x / 32;
+    player_move_request.y = player_object->y - 32;
+    player_move_request.z = z / 32;
+    player_move_request.angle_x = player_object->angle_x;
+    player_move_request.yaw = player_object->yaw;
+    player_move_request.angle_z = player_object->angle_z;
     if (((struct bf8_2_1 *)&player_motion_flags)->f != 0) {
-        shape = (iptr)&D_00187C12;
+        shape = (iptr)&player_probe_crouched;
     } else {
         shape = (iptr)&D_00187B6E;
     }
-    D_00187C86.probe = (struct collide_probe *)shape;
-    if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) D_00187C86.probe = &D_00187BB8;
+    player_move_request.probe = (struct collide_probe *)shape;
+    if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) player_move_request.probe = &player_probe_climb;
     *(signed char *)collide_flags |= 4;
     player_motion_flags &= 223;
-    result = collide_move_player(player_object, 0, &D_00187C86, 1);
+    result = collide_move_player(player_object, 0, &player_move_request, 1);
     return result;
 }
 

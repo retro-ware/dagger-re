@@ -12,7 +12,7 @@ extern signed char ui_dirty_flags;
 extern iptr magic_window_image;
 extern iptr window_image;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern struct rdb_object_id rdb_object_ids[];
 extern struct link *D_001995E4;
@@ -203,7 +203,7 @@ int spellmaker_open(int opening)
         window_image = disk_read_file(str_info01i0_img, 0);
         magic_window_image = disk_read_file(str_mask01i0_img, 0);
         spellmaker_settings_image = disk_read_file(str_mask05i0_img, 0);
-        D_00196272 = 1;
+        screen_active = 1;
         ui_dirty_flags |= 1;
         spellmaker_new();
     }

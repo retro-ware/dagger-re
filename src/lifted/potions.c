@@ -28,7 +28,7 @@ extern char spellmaker_spell[];
 extern signed char D_0019626D;
 extern signed char item_template_capacity;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char D_0019629A;
 extern signed char D_001A9B8C[];
@@ -149,7 +149,7 @@ int potionmaker_open(int show)
         game_mode = 1;
         window_image = disk_read_file(str_mask00i0_img, 0);
         potion_cauldron_count = (*(int *)potion_ingredient_scroll = 0);
-        D_00196272 = 1;
+        screen_active = 1;
         mc_memset(((char *)potion_cauldron), 0, 32, str_potions_c, 156, 32);
         mc_memset(D_001A9BB4, 254, 8, str_potions_c, 157, 8);
     }
@@ -219,7 +219,7 @@ int potionmaker_close(void)
         mc_free((void *)window_image, str_potions_c, 359);
         window_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     return 1;
 }
 

@@ -120,7 +120,7 @@ extern struct career *player_class;
 extern char *scratch_buffer;
 extern char classmaker_file[];
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern iptr career_specials_text_end;
@@ -864,7 +864,7 @@ int itemmaker_open(int opening)
         window_image = disk_read_file(str_item00i0_img, 0);
         magic_window_image = disk_read_file(str_item01i0_img, 0);
         itemmaker_spells_file = disk_read_file(str_spells_std_3, 0);
-        D_00196272 = 1;
+        screen_active = 1;
         ui_dirty_flags &= 254;
         itemmaker_select_tab(15);
         itemmaker_reset();

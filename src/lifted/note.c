@@ -29,7 +29,7 @@ extern iptr window_image;
 extern char *scratch_buffer;
 extern short text_cursor_x;
 extern unsigned short text_cursor_y;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern struct rect D_001997B0;      /* the selection box */
 extern int note_file_size;
@@ -105,7 +105,7 @@ int note_close(void)
             window_image = -1751672937;
         }
         game_mode = 0;
-        D_00196272 = 0;
+        screen_active = 0;
     }
     note_silent = 0;
     D_001940D5 &= 247;

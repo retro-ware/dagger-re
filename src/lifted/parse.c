@@ -103,7 +103,7 @@ extern iptr scratch_190df8;
 extern iptr scratch_190dfc;
 extern iptr text_macro_map_location;
 extern signed char text_rsc_buffer[];
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern char text_macro_fcn[];
 extern struct record *wagon_container;
 extern struct record *house_container;
@@ -1055,7 +1055,7 @@ iptr macro_n_npc_name(void)
         parse_rsc_text((int)(unsigned short)text_macro_n_text, 0, 0);
         return (iptr)text_rsc_buffer;
     }
-    if (((struct bf8_2_1 *)&D_001940D7)->f != 0) return name_generate(8, 0);
+    if (((struct bf8_2_1 *)&world_state_flags)->f != 0) return name_generate(8, 0);
     if ((iptr)text_macro_npc != 0) return (iptr)text_macro_npc;
     return name_generate((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned char)(rand() & 1));
 }
@@ -1164,9 +1164,9 @@ iptr macro_pdg_more_prison_days(void)
 
 iptr macro_prn_prison_name(void)
 {
-    D_001940D7 |= 4;
+    world_state_flags |= 4;
     parse_rsc_text(8100, 0, 0);
-    D_001940D7 &= 251;
+    world_state_flags &= 251;
     return (iptr)text_rsc_buffer;
 }
 

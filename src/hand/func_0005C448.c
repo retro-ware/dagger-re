@@ -8,7 +8,7 @@ extern short spell_impact_sounds[];
 extern struct record *player_object;
 extern int frame_ticks;
 extern int shared_scratch;
-extern struct record *D_00195C48;
+extern struct record *collide_hit_object;
 extern unsigned char collide_flags;
 extern int collide_move_missile(struct record *, struct vec3 *, struct vec3 *);
 extern void func_0005C856(struct record *, struct record *);
@@ -46,13 +46,13 @@ int spell_missile_update(struct record *m, int launch)
     collide_flags |= 4;
     hit = collide_move_missile(m, &pos, &ang);
     if (hit & 10) {
-        links_trigger(D_00195C48, 6);
+        links_trigger(collide_hit_object, 6);
         sound_play(spell_impact_sounds[m->data.spell.element], m, 110);
         m->missile_texture |= 1;
         m->image2 = 0x8000;
         m->children->light_radius <<= 2;
         if ((hit & 8) && m->data.spell.target == 2)
-            func_0005C856(m, D_00195C48);
+            func_0005C856(m, collide_hit_object);
     }
     obj = monster_nearest_to_point(m->x, m->y, m->z);
     if (obj == 0)

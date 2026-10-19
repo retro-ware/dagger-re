@@ -107,11 +107,11 @@ extern struct record *inv_opened_container;
 extern int cfg_magic_repair;
 extern short D_00195F2E;
 extern char saved_player_object[];
-extern char D_001960D9[];
+extern char trade_container[];
 extern signed char current_region;
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char crime_current;
@@ -369,7 +369,7 @@ int inventory_open(int how, int mode, int icon)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         world_running = 0;
         game_mode = 4;
-        D_00196272 = 1;
+        screen_active = 1;
         trade_mode = mode;
         inv_right_icon_at_open = (inv_right_icon = *(signed char *)&icon);
         inventory_action = 2;
@@ -474,9 +474,9 @@ void inventory_close(void)
     inv_close_assign_ids();
     if (inv_from_guild_shop != 0) {
         inv_from_guild_shop = 0;
-        object_free_children((struct record *)D_001960D9);
+        object_free_children((struct record *)trade_container);
     }
-    if ((struct record *)D_001960D9 == inv_right_container_base) {
+    if ((struct record *)trade_container == inv_right_container_base) {
         *(int *)&inv_right_container = (*(int *)&inv_right_container_base = 0);
     }
     while (inv_right_container != inv_right_container_base) {
@@ -493,7 +493,7 @@ void inventory_close(void)
     if (inv_temp_pile != 0 && inv_temp_pile->children == 0) object_delete(inv_temp_pile);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     D_001940D6 &= 123;
     player_motion_flags &= 127;
     weapon_reload_hand_sprites();

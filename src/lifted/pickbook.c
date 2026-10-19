@@ -44,7 +44,7 @@ extern int trade_mode;
 extern short spell_effect_slot;
 extern short spell_ready_cost;
 extern signed char msgbox_kind;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char inv_right_icon;
@@ -205,7 +205,7 @@ int spellbook_close(void)
         mc_free((void *)spellbook_saved_screen, str_pickbook_c, 224);
         spellbook_saved_screen = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
         ui_dirty_flags &= 223;
         sheet_open(1);

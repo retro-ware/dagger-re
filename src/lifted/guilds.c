@@ -48,10 +48,10 @@ extern iptr magic_window_image;
 extern struct character *player_character;
 extern iptr window_image;
 extern int game_minutes;
-extern char D_001960D9[];
+extern char trade_container[];
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char player_on_ground;
 extern signed char mouse_buttons_prev;
@@ -137,9 +137,9 @@ int func_0006F484(int guild)
 
 void guild_buy_potions(void)
 {
-    object_free_children((iptr)D_001960D9);
-    shop_stock_potions((iptr)D_001960D9);
-    inventory_open_container((iptr)D_001960D9, 1, 4);
+    object_free_children((iptr)trade_container);
+    shop_stock_potions((iptr)trade_container);
+    inventory_open_container((iptr)trade_container, 1, 4);
 }
 
 void guild_buy_spells(void)
@@ -164,19 +164,19 @@ void guild_buy_magic_items(void)
     int seed;
 
     seed = rand();
-    object_free_children((iptr)D_001960D9);
+    object_free_children((iptr)trade_container);
     srand(current_building->id);
     if (guild_membership == 0 || guild_membership->rank < 4) {
-        shop_stock_magic((iptr)D_001960D9, 0, 1, 0);
+        shop_stock_magic((iptr)trade_container, 0, 1, 0);
     } else {
-        shop_stock_magic((iptr)D_001960D9, 0, 1, 1);
+        shop_stock_magic((iptr)trade_container, 0, 1, 1);
     }
     srand(seed);
     D_001940D9 |= 2;
     if (holiday_today(game_minutes, (int)(unsigned char)current_region) == 38) {
         trade_price_scale = 128;
     }
-    inventory_open_container((iptr)D_001960D9, 1, 4);
+    inventory_open_container((iptr)trade_container, 1, 4);
     inv_from_guild_shop = 1;
 }
 
@@ -189,7 +189,7 @@ void spellshop_open(void)
     ui_dirty_flags |= 2;
     window_image = disk_read_file(str_spbk01i0_img, 0);
     magic_window_image = disk_read_file(str_mask04i0_img, 0);
-    D_00196272 = 1;
+    screen_active = 1;
     if (spellshop_build_list() != 0) return;
     spellshop_close();
 }
@@ -208,7 +208,7 @@ int spellshop_close(void)
         mc_free((void *)magic_window_image, str_guilds_c, 964);
         magic_window_image = -1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     return 1;
 }
 
@@ -393,7 +393,7 @@ int guild_menu(struct image *image, int is_member, iptr label)
     choice = -1;
     guild_saved_screen = (iptr)mc_malloc(64000, str_guilds_c, 1581);
     mc_memcpy((void *)guild_saved_screen, (void *)screen_buffer, 64000, str_guilds_c, 1582, 4);
-    D_00196272 = 1;
+    screen_active = 1;
     while (choice == (-1)) {
         mc_memcpy((void *)screen_buffer, (void *)guild_saved_screen, 64000, str_guilds_c, 1587, 4);
         xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
@@ -417,7 +417,7 @@ int guild_menu(struct image *image, int is_member, iptr label)
         }
     }
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
-    D_00196272 = 0;
+    screen_active = 0;
     if (guild_saved_screen != 0 && guild_saved_screen != (-1751672937)) {
         mc_free((void *)guild_saved_screen, str_guilds_c, 1617);
         guild_saved_screen = -1751672937;
@@ -463,7 +463,7 @@ void guild_give_map(int brotherhood)
     map = object_create_child(location_object, 0, 107);
     map->type = 2;
     item_make(11, 0, &map->data.item);
-    object_reparent((struct record *)D_001960D9, map);
+    object_reparent((struct record *)trade_container, map);
 }
 
 void guild_heal_cleanup(struct record *object)
@@ -540,7 +540,7 @@ void rest_open(void)
     }
     *(iptr *)&rest_image = disk_read_file(str_rest00i0_img, 0);
     game_mode = 16;
-    D_00196272 = 1;
+    screen_active = 1;
     D_00190D1A = 0;
     D_00190DD0 = 0;
     bios_ticks = (int *)DOS_LOW(0x46C);

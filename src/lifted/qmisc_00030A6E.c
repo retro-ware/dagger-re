@@ -5,7 +5,7 @@
 
 extern struct quest_face quest_faces[];
 extern iptr quest_face_images[];
-extern iptr D_00195D14;
+extern iptr quest_face_images_special;
 extern struct quest *current_quest;
 
 extern int rand_range(int, int);
@@ -32,7 +32,7 @@ void quest_face_add(struct record *object, int name_bank, int gender, int object
     if (object->type != 18 && object->data.building.faction_id == 514) {
         face_index = gender + (name_bank * 2);
         quest_faces[slot].face = (((*(signed char *)&gender << 7) + (*(signed char *)&name_bank << 6)) + *(signed char *)&face_index) | 16;
-        image = (struct image *)D_00195D14;
+        image = (struct image *)quest_face_images_special;
     } else {
         quest_faces[slot].face = ((*(signed char *)&gender << 7) + (*(signed char *)&name_bank << 6)) + rand_range(0, 9);
         image = (struct image *)quest_face_images[((gender * 2) + name_bank)];

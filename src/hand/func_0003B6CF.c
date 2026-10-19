@@ -13,7 +13,7 @@ extern signed char text_buffer[];
 extern signed char D_001940D9;
 extern char D_00195A08[];
 extern struct record *player_entity;
-extern iptr D_00195B64;
+extern iptr paperdoll_buffer;
 extern struct character *player_character;
 extern struct career *player_class;
 extern void sheet_draw_levelup_points(void);
@@ -66,7 +66,7 @@ void sheet_draw(void)
         else
             text_draw_centred_coloured(itoa(attributes[i], ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);
     }
-    xn_draw_put_rect(192, 1, 125, 197, (char *)D_00195B64, 0);
+    xn_draw_put_rect(192, 1, 125, 197, (char *)paperdoll_buffer, 0);
     weight = object_weight(player_entity) >> 2;
     mc_set_location(218, str_sheet_c);
     mc_sprintf(((char *)text_buffer), str_fmt_d_d, weight, carry_capacity());

@@ -50,7 +50,7 @@ extern short D_00195F52;
 extern short D_00195F54;
 extern short spell_ready_cost;
 extern unsigned char weapon_active_hand;
-extern unsigned char D_00196272;
+extern unsigned char screen_active;
 extern unsigned char game_mode;
 extern unsigned char interaction_mode;
 extern unsigned char in_dungeon_water;
@@ -113,7 +113,7 @@ void keys_world_actions(void)
         game_exit(0);
     if (key_down_ctrl && key_down_b)
         saveload_menu(1);
-    if (D_00196272)
+    if (screen_active)
         return;
     if (game_mode)
         return;

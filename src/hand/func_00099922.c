@@ -4,7 +4,7 @@
 #include "doslow.h"
 
 extern unsigned char player_environment;
-extern signed char D_00196297;
+extern signed char collide_stepped;
 extern struct record *doors_moving[];
 extern void func_00063DDC(struct record *);
 extern void links_trigger(struct record *, int);
@@ -28,6 +28,6 @@ int door_start_swing(struct record *door, int close)
         sound_play(((((int)player_environment) == 2) ? 362 : 27), door, 100);
     }
     func_00063DDC(0);
-    if (D_00196297 != 0) links_trigger(door, 10);
+    if (collide_stepped != 0) links_trigger(door, 10);
     return 1;
 }

@@ -29,30 +29,30 @@ extern char str_gnrc01i0_img[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
 extern signed char D_0017C5B9[];
-extern iptr D_0017CA14;
+extern iptr text_too_far_away;
 extern char *monster_names[];
-extern iptr D_00183248;
-extern iptr D_0018324C;
-extern iptr D_00183250;
-extern iptr D_00183254;
-extern iptr D_00184329;
-extern iptr D_001845CC;
-extern iptr D_00185093;
+extern iptr vowels_text;
+extern iptr text_you_see_an;
+extern iptr text_you_see_a;
+extern iptr text_you_see;
+extern iptr text_you_see_a_dead;
+extern iptr text_body_no_treasure;
+extern iptr text_dead_person;
 extern struct rect repair_menu_buttons[];
 extern struct rect coven_menu_buttons[];
 extern struct rect service_menu_buttons[];
 extern char str_s[];
 extern signed char footstep_sound_ids[];
 extern short music_special_dungeon_ids[];
-extern iptr D_001878AC[];
-extern iptr D_001878D4[];
+extern iptr dungeon_songs[];
+extern iptr dungeon_songs_fm[];
 extern signed char text_buffer[];
 extern char shelf_book_ids[];
 extern char scratch_190be4[];
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern signed char D_001940D6;
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char D_001940D9;
 extern struct record *wagon_container;
 extern struct record *quest_root;
@@ -72,21 +72,21 @@ extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern struct record *D_00195CE8;
-extern struct block_model *D_00195D3C;
+extern struct block_model *picked_block_model;
 extern char picked_model_index[];
 extern struct arch3d_plane *click_face_texture;
 extern signed char climate_weathers[];
 extern short shelf_model_index;
 extern short D_00195F68;
-extern char D_00196092[];
-extern char D_001960D9[];
-extern iptr D_00196118;
+extern char furniture_container_1[];
+extern char trade_container[];
+extern iptr shelf_open_object;
 extern char D_00196120[];
 extern char D_001961F5[];
 extern signed char in_knightly_order_hall;
 extern signed char current_region;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern unsigned char interaction_mode;
 extern signed char player_on_ground;
@@ -110,17 +110,17 @@ extern iptr service_menu_handler;
 extern signed char shelf_list_active;
 extern signed char repair_menu_kind;
 extern char position_history[];
-extern char D_001A4CA4[];
-extern char D_001A4CA8[];
+extern char position_history_y[];
+extern char position_history_z[];
 extern char ground_position_history[];
-extern char D_001A4E24[];
-extern char D_001A4E28[];
+extern char ground_position_history_y[];
+extern char ground_position_history_z[];
 extern int position_history_next;
-extern int D_001A4FBC;
-extern int D_001A4FC4;
+extern int footstep_last_x;
+extern int footstep_last_z;
 extern int ground_position_history_next;
-extern int D_001A4FCC;
-extern int D_001A4FD4;
+extern int position_history_count;
+extern int ground_position_history_count;
 
 extern int lockpick_action_door(struct building *, int, struct record *);
 extern int furniture_is_container(int);
@@ -239,24 +239,24 @@ void spawn_point_occupied_cb(struct record *);
 
 void click_describe_item(struct item *item)
 {
-    if (strchr((char *)D_00183248, (int)(unsigned char)item->name[0]) != 0) {
+    if (strchr((char *)vowels_text, (int)(unsigned char)item->name[0]) != 0) {
         mc_set_location(204, str_click_c);
-        mc_sprintf((char *)text_buffer, (char *)D_0018324C, item);
+        mc_sprintf((char *)text_buffer, (char *)text_you_see_an, item);
     } else {
         mc_set_location(206, str_click_c);
-        mc_sprintf((char *)text_buffer, (char *)D_00183250, item);
+        mc_sprintf((char *)text_buffer, (char *)text_you_see_a, item);
     }
     hud_message_add((iptr)text_buffer);
 }
 
 void click_describe_creature(struct character *unused, struct career *creature_class)
 {
-    if (strchr((char *)D_00183248, (int)(unsigned char)creature_class->name[0]) != 0) {
+    if (strchr((char *)vowels_text, (int)(unsigned char)creature_class->name[0]) != 0) {
         mc_set_location(215, str_click_c);
-        mc_sprintf((char *)text_buffer, (char *)D_0018324C, creature_class->name);
+        mc_sprintf((char *)text_buffer, (char *)text_you_see_an, creature_class->name);
     } else {
         mc_set_location(217, str_click_c);
-        mc_sprintf((char *)text_buffer, (char *)D_00183250, creature_class->name);
+        mc_sprintf((char *)text_buffer, (char *)text_you_see_a, creature_class->name);
     }
     hud_message_add((iptr)text_buffer);
 }
@@ -311,7 +311,7 @@ int click_world_face(struct pick_result *hit)
             case 81:
                 if (archive == 72 && record_index == 3) {
                     if (building_is_open(building) == 0 && lockpick_action_door(building, 19, hit->object) != 0) {
-                        loot_generate(14, (struct record *)D_001960D9, building->quality, (int)(unsigned short)(player_character->flags & 1));
+                        loot_generate(14, (struct record *)trade_container, building->quality, (int)(unsigned short)(player_character->flags & 1));
                         shelf_object = hit->object;
                         shelf_return_items();
                         shelf_open_stock(hit->object, building, *(int *)picked_model_index);
@@ -393,7 +393,7 @@ void shelf_open(struct record *shelf, struct building *shelf_building, int model
 
 void shelf_book_chosen(int row)
 {
-    D_00196272 = 0;
+    screen_active = 0;
     book_open((int)(short)*(short *)(shelf_book_ids + (row * 2)));
     shelf_return_items();
 }
@@ -405,13 +405,13 @@ int shelf_collect_items(struct record *object, int group, int model_index)
     struct item *item;
 
     count = 0;
-    object_free_children((struct record *)D_001960D9);
+    object_free_children((struct record *)trade_container);
     object = object->children;
     while (object != 0) {
         next = object->next;
         if (object->type == 36 && object->shelf_index == model_index) {
             item = &object->data.item;
-            if (((struct bf8_1_1 *)&D_001940D7)->f != 0 && item->enchantments[0].type != (-1)) {
+            if (((struct bf8_1_1 *)&world_state_flags)->f != 0 && item->enchantments[0].type != (-1)) {
                 object = next;
                 continue;
             }
@@ -420,7 +420,7 @@ int shelf_collect_items(struct record *object, int group, int model_index)
                 object->flags &= ~0x2;
                 object->flags |= 32;
                 object_detach(object);
-                object_reparent((struct record *)D_001960D9, object);
+                object_reparent((struct record *)trade_container, object);
                 object->x = player_object->x;
                 object->y = player_object->y;
                 object->z = player_object->z;
@@ -438,7 +438,7 @@ void shelf_return_items(void)
     struct record *next;
 
     inventory_close_callback = 0;
-    object = (struct record *)D_00196118;
+    object = (struct record *)shelf_open_object;
     while (object != 0) {
         next = object->next;
         object->flags |= 2;
@@ -467,7 +467,7 @@ void shelf_open_books(struct record *shelf, struct building *shelf_building, int
         count = shelf_building->quality >> 1;
         if (count == 0) count++;
         for (i = 0; i < count; i++) {
-            object = object_create_child((struct record *)D_001960D9, 0, 107);
+            object = object_create_child((struct record *)trade_container, 0, 107);
             object->type = 2;
             object->x = player_object->x;
             object->y = player_object->y;
@@ -480,7 +480,7 @@ void shelf_open_books(struct record *shelf, struct building *shelf_building, int
         header = scratch_buffer;
         text = scratch_buffer + 1000;
         list = text;
-        object = (struct record *)D_00196118;
+        object = (struct record *)shelf_open_object;
         i = 0;
         while (object != 0) {
             *(short *)(shelf_book_ids + (i * 2)) = (short)object->data.item.message;
@@ -492,13 +492,13 @@ void shelf_open_books(struct record *shelf, struct building *shelf_building, int
         *text = 0;
         list_popup_open_strings(list);
         shelf_list_callback = (iptr)shelf_book_chosen;
-        D_00196272 = 1;
+        screen_active = 1;
         inventory_close_callback = (iptr)shelf_return_items;
         shelf_object = shelf;
         shelf_list_active = 1;
         return;
     }
-    inventory_open_container((struct record *)D_001960D9, 1, 4);
+    inventory_open_container((struct record *)trade_container, 1, 4);
     inventory_close_callback = (iptr)shelf_return_items;
     shelf_object = shelf;
 }
@@ -516,22 +516,22 @@ void shelf_open_stock(struct record *shelf, struct building *shelf_building, int
     shelf_model_index = model_index;
     if (building_is_open(shelf_building) != 0) {
         D_001940D9 |= 2;
-        D_001940D7 &= 253;
+        world_state_flags &= 253;
     } else {
         D_001940D9 &= 253;
-        D_001940D7 |= 2;
+        world_state_flags |= 2;
     }
     count = shelf_collect_items(shelf, -1, model_index);
     collected_count = count;
     if (count == 0 && shelf_shop_stocked(model_index) == 0) {
         *(int *)(stocked_shop_ids + (stocked_shop_count++ << 2)) = model_index;
-        shelf_stock_items((struct record *)D_001960D9, shelf_building->type + 32, shelf_building->quality);
+        shelf_stock_items((struct record *)trade_container, shelf_building->type + 32, shelf_building->quality);
         if (shelf_building->type == 0 && rand_range(1, 100) < 25) {
-            object = item_add_to_container((struct record *)D_001960D9, 27, 4, 0);
+            object = item_add_to_container((struct record *)trade_container, 27, 4, 0);
         }
     }
     if (collected_count == 0 && shelf_building->type == 9) {
-        object = object_create_child((struct record *)D_001960D9, 0, 107);
+        object = object_create_child((struct record *)trade_container, 0, 107);
         object->type = 2;
         object->flags |= 33;
         object->id = object_new_id(((unsigned)location_object->id) >> 16);
@@ -539,7 +539,7 @@ void shelf_open_stock(struct record *shelf, struct building *shelf_building, int
         object->y = player_object->y;
         object->z = player_object->z;
         item_make(23, 1, &object->data.item);
-        object = object_create_child((struct record *)D_001960D9, 0, 107);
+        object = object_create_child((struct record *)trade_container, 0, 107);
         object->type = 2;
         object->flags |= 33;
         object->id = object_new_id(((unsigned)location_object->id) >> 16);
@@ -549,9 +549,9 @@ void shelf_open_stock(struct record *shelf, struct building *shelf_building, int
         item_make(23, 0, &object->data.item);
     }
     if (((struct bf8_1_1 *)&D_001940D9)->f != 0) {
-        inventory_open_container((struct record *)D_001960D9, 1, 4);
+        inventory_open_container((struct record *)trade_container, 1, 4);
     } else {
-        inventory_open_container((struct record *)D_001960D9, 0, 4);
+        inventory_open_container((struct record *)trade_container, 0, 4);
     }
     inventory_close_callback = (iptr)shelf_return_items;
     shelf_object = shelf;
@@ -737,7 +737,7 @@ int repair_menu_open(int opening)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         window_image = disk_read_file(str_repr01i0_img, 0);
         game_mode = 26;
-        D_00196272 = 1;
+        screen_active = 1;
         return 1;
     }
     return 0;
@@ -771,7 +771,7 @@ void repair_menu_close(void)
         window_image = -1751672937;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void repair_menu_repair(void)
@@ -789,8 +789,8 @@ void repair_menu_talk(void)
 void repair_menu_sell(void)
 {
     repair_menu_close();
-    object_free_children((struct record *)D_001960D9);
-    inventory_open_container((struct record *)D_001960D9, 2, 6);
+    object_free_children((struct record *)trade_container);
+    inventory_open_container((struct record *)trade_container, 2, 6);
 }
 
 int coven_menu_open(int opening)
@@ -800,7 +800,7 @@ int coven_menu_open(int opening)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         window_image = disk_read_file(str_daed00i0_img, 0);
         game_mode = 27;
-        D_00196272 = 1;
+        screen_active = 1;
         return 1;
     }
     return 0;
@@ -834,7 +834,7 @@ void coven_menu_close(void)
         window_image = -1751672937;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void coven_menu_talk(void)
@@ -859,7 +859,7 @@ void click_item(struct pick_result *unused, struct record *object)
     case 2:
     case 3:
         if (pick_distance > 128) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
         } else {
             pick_up_item(object);
         }
@@ -885,14 +885,14 @@ void click_npc(struct pick_result *unused, struct record *npc)
     case 2:
     case 3:
         if (pick_distance > 256) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
         } else {
             npc_click_service(npc);
         }
         return;
     case 1:
         mc_set_location(1021, str_click_c);
-        mc_sprintf((char *)text_buffer, (char *)D_00183254, npc_display_name(npc));
+        mc_sprintf((char *)text_buffer, (char *)text_you_see, npc_display_name(npc));
         hud_message_add((iptr)text_buffer);
     default:;
     }
@@ -919,7 +919,7 @@ void click_creature(struct pick_result *unused, struct record *monster)
         return;
     case 2:
         if (pick_distance > 128) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
             return;
         }
         pickpocket_attempt(monster);
@@ -930,7 +930,7 @@ void click_creature(struct pick_result *unused, struct record *monster)
 void click_door(struct pick_result *unused, struct record *door)
 {
     if (pick_distance > 128) {
-        hud_status_set(D_0017CA14);
+        hud_status_set(text_too_far_away);
         return;
     }
     switch (interaction_mode) {
@@ -961,14 +961,14 @@ void click_interior_model(struct pick_result *hit, struct record *object)
     case 2:
     case 3:
         if (pick_distance > 128) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
             return;
         }
         building = object_building(object);
-        if (building != 0 && D_00195D3C != 0 && (D_00195D3C->id == 418 || (D_00195D3C->id == 410 && furniture_is_container(D_00195D3C->variant + (D_00195D3C->id << 7)) != 0)) && (stock_count = func_000612A1()) != 0) {
+        if (building != 0 && picked_block_model != 0 && (picked_block_model->id == 418 || (picked_block_model->id == 410 && furniture_is_container(picked_block_model->variant + (picked_block_model->id << 7)) != 0)) && (stock_count = func_000612A1()) != 0) {
             if (building->id == player_character->house) {
                 D_001940D6 |= 4;
-                inventory_open_container((struct record *)D_00196092, 0, 4);
+                inventory_open_container((struct record *)furniture_container_1, 0, 4);
             } else {
                 msgbox_yes_no_rsc(37);
                 if (((int)D_00196271) != 1) return;
@@ -981,12 +981,12 @@ void click_interior_model(struct pick_result *hit, struct record *object)
                     inventory_open_container((struct record *)D_00196120, 0, 4);
                 }
             }
-        } else if (building != 0 && D_00195D3C != 0 && D_00195D3C->id == 414 && D_00195D3C->variant == 9) {
+        } else if (building != 0 && picked_block_model != 0 && picked_block_model->id == 414 && picked_block_model->variant == 9) {
             ladder_climb();
         }
         return;
     case 1:
-        if (building != 0 && D_00195D3C != 0 && D_00195D3C->id == 414 && D_00195D3C->variant == 9) {
+        if (building != 0 && picked_block_model != 0 && picked_block_model->id == 414 && picked_block_model->variant == 9) {
             ladder_climb();
             return;
         }
@@ -1005,9 +1005,9 @@ void click_corpse(struct pick_result *unused, struct record *corpse)
         character = &corpse->data.character;
         if (character->race < 43) {
             mc_set_location(1153, str_click_c);
-            mc_sprintf((char *)text_buffer, (char *)D_00184329, (iptr)monster_names[character->race]);
+            mc_sprintf((char *)text_buffer, (char *)text_you_see_a_dead, (iptr)monster_names[character->race]);
         } else {
-            mc_strncpy((char *)text_buffer, (char *)D_00185093, 160, str_click_c, 1155);
+            mc_strncpy((char *)text_buffer, (char *)text_dead_person, 160, str_click_c, 1155);
         }
         hud_message_add((iptr)text_buffer);
         return;
@@ -1015,14 +1015,14 @@ void click_corpse(struct pick_result *unused, struct record *corpse)
     case 2:
     case 3:
         if (pick_distance > 150) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
             return;
         }
         if (object_count_items(corpse) != 0) {
             inventory_open_container(corpse, 0, 1);
             return;
         }
-        hud_message_add(D_001845CC);
+        hud_message_add(text_body_no_treasure);
     default:;
     }
 }
@@ -1033,7 +1033,7 @@ void click_pedestrian(struct pick_result *unused, struct record *pedestrian)
         return;
     case 2:
         if (pick_distance > 128) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
         } else if (((int)(unsigned short)(pedestrian->npc_flags & 16384)) == 0) {
             pedestrian->npc_flags |= 0x4000;
             pickpocket_attempt(pedestrian);
@@ -1043,7 +1043,7 @@ void click_pedestrian(struct pick_result *unused, struct record *pedestrian)
     case 1:
     case 3:
         if (pick_distance > 256) {
-            hud_status_set(D_0017CA14);
+            hud_status_set(text_too_far_away);
             return;
         }
         npc_talk(pedestrian);
@@ -1054,7 +1054,7 @@ void click_pedestrian(struct pick_result *unused, struct record *pedestrian)
 void click_loot_container(struct pick_result *unused, struct record *container)
 {
     if (pick_distance > 128) {
-        hud_status_set(D_0017CA14);
+        hud_status_set(text_too_far_away);
         return;
     }
     switch (interaction_mode) {
@@ -1148,7 +1148,7 @@ int service_menu_open(iptr label)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         window_image = disk_read_file(str_gnrc01i0_img, 0);
         game_mode = 28;
-        D_00196272 = 1;
+        screen_active = 1;
         return 1;
     }
     return 0;
@@ -1183,7 +1183,7 @@ void service_menu_close(void)
         window_image = -1751672937;
     }
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
 }
 
 void service_menu_talk(void)
@@ -1239,11 +1239,11 @@ void footstep_sounds(void)
     int sound_index;
     int weather;
 
-    if (xn_math_approx_dist2d(D_001A4FBC, D_001A4FC4, player_object->x, player_object->z) <= 100 || player_on_ground == 0) {
+    if (xn_math_approx_dist2d(footstep_last_x, footstep_last_z, player_object->x, player_object->z) <= 100 || player_on_ground == 0) {
         return;
     }
-    D_001A4FBC = player_object->x;
-    D_001A4FC4 = player_object->z;
+    footstep_last_x = player_object->x;
+    footstep_last_z = player_object->z;
     switch (player_environment) {
     case 1:
         weather = (int)(unsigned char)climate_weathers[climate_category()];
@@ -1272,8 +1272,8 @@ void footstep_sounds(void)
     if (D_001962A0 != 0) sound_index = 10;
     position_history_record();
     if (((int)(unsigned short)(player_character->flags & 1536)) != 0) return;
-    if (((struct bf8_6_1 *)&D_001940D7)->f != 0) sound_index++;
-    D_001940D7 ^= 64;
+    if (((struct bf8_6_1 *)&world_state_flags)->f != 0) sound_index++;
+    world_state_flags ^= 64;
     sound_play((int)(unsigned char)footstep_sound_ids[sound_index], player_object, 100);
 }
 
@@ -1281,27 +1281,27 @@ void position_history_reset(void)
 {
     int i;
 
-    D_001A4FCC = (position_history_next = (D_001A4FD4 = (ground_position_history_next = 0)));
+    position_history_count = (position_history_next = (ground_position_history_count = (ground_position_history_next = 0)));
     for (i = 0; i < 32; i++) {
         *(int *)(position_history + (i * 12)) = (*(int *)(ground_position_history + (i * 12)) = player_object->x);
-        *(int *)(D_001A4CA4 + (i * 12)) = (*(int *)(D_001A4E24 + (i * 12)) = player_object->y);
-        *(int *)(D_001A4CA8 + (i * 12)) = (*(int *)(D_001A4E28 + (i * 12)) = player_object->z);
+        *(int *)(position_history_y + (i * 12)) = (*(int *)(ground_position_history_y + (i * 12)) = player_object->y);
+        *(int *)(position_history_z + (i * 12)) = (*(int *)(ground_position_history_z + (i * 12)) = player_object->z);
     }
 }
 
 void position_history_record(void)
 {
     *(int *)(position_history + (position_history_next * 12)) = player_object->x;
-    *(int *)(D_001A4CA4 + (position_history_next * 12)) = player_object->y;
-    *(int *)(D_001A4CA8 + (position_history_next * 12)) = player_object->z;
+    *(int *)(position_history_y + (position_history_next * 12)) = player_object->y;
+    *(int *)(position_history_z + (position_history_next * 12)) = player_object->z;
     position_history_next = (position_history_next + 1) % 32;
-    D_001A4FCC++;
+    position_history_count++;
     if (player_on_ground == 0) return;
     *(int *)(ground_position_history + (ground_position_history_next * 12)) = player_object->x;
-    *(int *)(D_001A4E24 + (ground_position_history_next * 12)) = player_object->y;
-    *(int *)(D_001A4E28 + (ground_position_history_next * 12)) = player_object->z;
+    *(int *)(ground_position_history_y + (ground_position_history_next * 12)) = player_object->y;
+    *(int *)(ground_position_history_z + (ground_position_history_next * 12)) = player_object->z;
     ground_position_history_next = (ground_position_history_next + 1) % 32;
-    D_001A4FD4++;
+    ground_position_history_count++;
 }
 
 int spawn_point_visible(struct record *object)
@@ -1368,11 +1368,11 @@ int spawn_point_town(struct record *object, int min_distance, int max_distance)
     if (position_history_next < 20) return 0;
     for (i = 0; i < 20; i++) {
         slot = rand() % 32;
-        distance = xn_math_approx_dist2d(player_object->x, player_object->z, *(int *)(position_history + (slot * 12)), *(int *)(D_001A4CA8 + (slot * 12)));
+        distance = xn_math_approx_dist2d(player_object->x, player_object->z, *(int *)(position_history + (slot * 12)), *(int *)(position_history_z + (slot * 12)));
         if (distance > min_distance && distance < max_distance) {
             object->x = *(int *)(position_history + (slot * 12));
-            object->y = *(int *)(D_001A4CA4 + (slot * 12));
-            object->z = *(int *)(D_001A4CA8 + (slot * 12));
+            object->y = *(int *)(position_history_y + (slot * 12));
+            object->z = *(int *)(position_history_z + (slot * 12));
             if (pedestrian_spawn_spot_ok(object, object->x, object->z) != 0) return 1;
         }
     }
@@ -1492,11 +1492,11 @@ int spawn_point_dungeon(struct record *object, int min_distance, int max_distanc
     if (position_history_next < 20) return 0;
     for (i = 0; i < 20; i++) {
         slot = rand() % 32;
-        distance = xn_math_approx_dist2d(player_object->x, player_object->z, *(int *)(position_history + (slot * 12)), *(int *)(D_001A4CA8 + (slot * 12)));
+        distance = xn_math_approx_dist2d(player_object->x, player_object->z, *(int *)(position_history + (slot * 12)), *(int *)(position_history_z + (slot * 12)));
         if (distance > min_distance && distance < max_distance) {
             object->x = *(int *)(position_history + (slot * 12));
-            object->y = *(int *)(D_001A4CA4 + (slot * 12));
-            object->z = *(int *)(D_001A4CA8 + (slot * 12));
+            object->y = *(int *)(position_history_y + (slot * 12));
+            object->z = *(int *)(position_history_z + (slot * 12));
             if (spawn_point_fits(object) != 0) return 1;
         }
     }
@@ -1554,9 +1554,9 @@ iptr music_dungeon_song(void)
     for (i = 0; i < 10; i++) {
         if ((short)*(int *)&location_id == music_special_dungeon_ids[i]) {
             if (music_uses_fm != 0) {
-                song = D_001878AC[i];
+                song = dungeon_songs[i];
             } else {
-                song = D_001878D4[i];
+                song = dungeon_songs_fm[i];
             }
             return song;
         }
@@ -1569,7 +1569,7 @@ void cheat_return_to_last_position(void)
     ground_position_history_next--;
     if (ground_position_history_next == (-1)) ground_position_history_next = 31;
     player_object->x = *(int *)(ground_position_history + (ground_position_history_next * 12));
-    player_object->y = *(int *)(D_001A4E24 + (ground_position_history_next * 12));
-    player_object->z = *(int *)(D_001A4E28 + (ground_position_history_next * 12));
+    player_object->y = *(int *)(ground_position_history_y + (ground_position_history_next * 12));
+    player_object->z = *(int *)(ground_position_history_z + (ground_position_history_next * 12));
     D_001940D5 |= 2;
 }

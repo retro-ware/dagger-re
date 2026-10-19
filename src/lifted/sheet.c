@@ -65,7 +65,7 @@ extern short text_cursor_x;
 extern signed char D_0019626C;
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char D_001962A2;
@@ -155,7 +155,7 @@ int sheet_close(void)
         mc_free(D_00195B5C, str_sheet_c, 130);
         D_00195B5C = (struct image *)(iptr)-1751672937;
     }
-    D_00196272 = 0;
+    screen_active = 0;
     return 1;
 }
 
@@ -461,7 +461,7 @@ void training_offer(iptr skills)
     *(iptr *)scratch_190de4 = skills;
     D_00190C34 = 1234;
     game_mode = 23;
-    D_00196272 = 1;
+    screen_active = 1;
     trade_price = player_character->level * 100;
     if (guild_membership == 0) trade_price <<= 2;
     msgbox_yes_no_rsc(8);
@@ -499,7 +499,7 @@ void training_update(void)
         D_00190C34 = 1236;
         return;
     case 1235:
-        D_00196272 = 0;
+        screen_active = 0;
         game_mode = 0;
         return;
     case 1236:

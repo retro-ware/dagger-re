@@ -67,8 +67,8 @@ struct xz_step {
 RECORD_SIZE(xz_step, 4);
 
 /* a collision probe: spheres around a position (the movers' shapes: D_00187B44 the creatures',
- * D_00187B6E, D_00187BB8, D_00187C12, D_00187C3C the player's, D_00179F48); the collision code
- * keeps the current one in D_00196D4C and writes the tested position into it */
+ * D_00187B6E, player_probe_climb, player_probe_crouched, player_probe_riding the player's, collide_object_probe); the collision code
+ * keeps the current one in xn_collide_probe and writes the tested position into it */
 struct probe_sphere {
     int x;                          /* +0x00: from the position */
     int y;                          /* +0x04 */
@@ -85,8 +85,8 @@ struct collide_probe {
 };
 
 /* XnGine's collision result (xn_collide_segment_model, xn_collide_spheres_model...): the faces
- * hit; colstuff.c keeps the last in D_00196D48, and the planes the mover slides along in
- * D_00196D50 (collide_move_player, collide_move_object) */
+ * hit; colstuff.c keeps the last in xn_collide_result, and the planes the mover slides along in
+ * xn_slide_planes (collide_move_player, collide_move_object) */
 struct collide_hit {
     int x;                          /* +0x00: the point hit */
     int y;                          /* +0x04: (the height a vertical segment found) */

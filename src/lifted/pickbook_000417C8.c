@@ -18,7 +18,7 @@ extern iptr window_image;
 extern int spell_cast_busy;
 extern int player_death_timer;
 extern unsigned char game_mode_under_popup;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern iptr spellbook_saved_screen;
 
@@ -53,7 +53,7 @@ int spellbook_open(short force)
         game_mode = 5;
         window_image = disk_read_file(str_spbk00i0_img, 0);
         magic_window_image = disk_read_file(str_mask04i0_img_2, 0);
-        D_00196272 = 1;
+        screen_active = 1;
         sound_play(237, player_object, 100);
     }
     if (((int)(unsigned char)game_mode) == 5) {

@@ -65,8 +65,8 @@ extern struct record *location_object;
 extern struct record *scratch_object;
 extern struct location *current_location;
 extern struct career *player_class;
-extern char D_001960D9[];
-extern iptr D_00196118;
+extern char trade_container[];
+extern iptr shelf_open_object;
 extern signed char current_region;
 extern signed char forced_material;
 extern struct house_for_sale bank_houses_for_sale[];
@@ -203,7 +203,7 @@ void guild_service_dispatch(struct record *npc)
     refusal_text = 0;
     not_served = 0;
     D_001A4A1C = 0;
-    object_free_children((iptr)D_001960D9);
+    object_free_children((iptr)trade_container);
     found_faction = faction_find(current_building->faction_id);
     guild_membership = guild_find_membership_by_faction(current_building->faction_id);
     guild = guild_kind_of_faction(found_faction);
@@ -364,9 +364,9 @@ void guild_service_dispatch(struct record *npc)
                 break;
             case 801:
                 hud_message_add(D_001832B0);
-                object_free_children((iptr)D_001960D9);
+                object_free_children((iptr)trade_container);
                 trade_price_scale = ((10 - (guild_membership->rank)) << 8) / 10;
-                inventory_open_container((iptr)D_001960D9, 4, 8);
+                inventory_open_container((iptr)trade_container, 4, 8);
                 break;
             default:
                 msgbox_show_string(str_my_services_are_reserved_for_members, 1);
@@ -428,8 +428,8 @@ void guild_service_dispatch(struct record *npc)
                     break;
                 }
                 trade_price_scale = 128;
-                object_free_children((iptr)D_001960D9);
-                inventory_open_container((iptr)D_001960D9, 2, 6);
+                object_free_children((iptr)trade_container);
+                inventory_open_container((iptr)trade_container, 2, 6);
                 break;
             case 3:
                 if ((guild_membership->rank) < 4) {
@@ -947,7 +947,7 @@ L6E949:;
         }
     }
     if (refusal_text != 0) msgbox_show_rsc((int)(short)*(short *)&refusal_text, 1);
-    if (D_001A4A1C == 0 || D_00196118 == 0) return;
+    if (D_001A4A1C == 0 || shelf_open_object == 0) return;
     D_001A4A1C = 0;
-    inventory_open_container((iptr)D_001960D9, 0, 6);
+    inventory_open_container((iptr)trade_container, 0, 6);
 }

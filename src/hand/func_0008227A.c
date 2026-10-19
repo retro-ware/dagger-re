@@ -10,10 +10,10 @@ struct flags {
     unsigned char b5:1;
 };
 extern struct collide_probe D_00187B6E;
-extern struct collide_probe D_00187BB8;
-extern struct collide_probe D_00187C12;
-extern struct collide_probe D_00187C3C;
-extern struct move_request D_00187C86;
+extern struct collide_probe player_probe_climb;
+extern struct collide_probe player_probe_crouched;
+extern struct collide_probe player_probe_riding;
+extern struct move_request player_move_request;
 extern struct flags player_motion_flags;
 extern struct record *player_object;
 extern struct character *player_character;
@@ -25,17 +25,17 @@ int player_try_move_vertical(int dy)
     int result;
     int unused;
 
-    D_00187C86.x = player_object->x;
-    D_00187C86.y = player_object->y + dy;
-    D_00187C86.z = player_object->z;
-    D_00187C86.angle_x = player_object->angle_x;
-    D_00187C86.yaw = player_object->yaw;
-    D_00187C86.angle_z = player_object->angle_z;
-    D_00187C86.probe = player_motion_flags.b2 ? &D_00187C12 : &D_00187B6E;
-    D_00187C86.probe = (player_character->flags & 1536) ? &D_00187C3C : D_00187C86.probe;
+    player_move_request.x = player_object->x;
+    player_move_request.y = player_object->y + dy;
+    player_move_request.z = player_object->z;
+    player_move_request.angle_x = player_object->angle_x;
+    player_move_request.yaw = player_object->yaw;
+    player_move_request.angle_z = player_object->angle_z;
+    player_move_request.probe = player_motion_flags.b2 ? &player_probe_crouched : &D_00187B6E;
+    player_move_request.probe = (player_character->flags & 1536) ? &player_probe_riding : player_move_request.probe;
     if (player_motion_flags.b5)
-        D_00187C86.probe = &D_00187BB8;
+        player_move_request.probe = &player_probe_climb;
     collide_flags &= 251;
-    result = collide_move_player(player_object, 0, &D_00187C86, 1);
+    result = collide_move_player(player_object, 0, &player_move_request, 1);
     return result;
 }

@@ -36,7 +36,7 @@ extern struct image *hud_bar_image;
 extern char shared_scratch[];
 extern struct character *player_character;
 extern struct settings *game_settings;
-extern struct record *D_00195C48;
+extern struct record *collide_hit_object;
 extern int spell_cast_queue_count;
 extern short mouse_motion_x;
 extern short mouse_motion_y;
@@ -285,14 +285,14 @@ int weapon_arrow_update(struct record *arrow)
             }
         } else {
             if ((hit_flags & 2) != 0) {
-                links_trigger(D_00195C48, 5);
+                links_trigger(collide_hit_object, 5);
                 object_free_later(arrow);
                 return 0;
             }
-            if ((hit_flags & 8) != 0 && D_00195C48->type == 18) {
-                sound_play(7, D_00195C48, 100);
-                damage_resolve_attack(player_entity, D_00195C48, 19);
-                inv_merge_arrows(D_00195C48, arrow, 0);
+            if ((hit_flags & 8) != 0 && collide_hit_object->type == 18) {
+                sound_play(7, collide_hit_object, 100);
+                damage_resolve_attack(player_entity, collide_hit_object, 19);
+                inv_merge_arrows(collide_hit_object, arrow, 0);
                 object_free_later(arrow);
                 return 0;
             }

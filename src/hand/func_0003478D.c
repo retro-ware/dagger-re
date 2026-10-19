@@ -25,7 +25,7 @@ extern int frame_ticks;
 extern struct image *hud_bar_image;
 extern int game_minutes;
 extern struct settings *game_settings;
-extern iptr D_00195CF4;
+extern iptr haze_table_0;
 extern signed char climate_weathers[];
 extern signed char current_region;
 extern signed char D_001962A1;
@@ -170,7 +170,7 @@ void sky_update(void)
             sky_draw_day(screen_y, horizon_y, daylight, climate);
             return;
         }
-        mc_memset((void *)screen_buffer, (int)(unsigned char)*(signed char *)(((char *)D_00195CF4)), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y) * 320, D_00170A86, 251, 4);
+        mc_memset((void *)screen_buffer, (int)(unsigned char)*(signed char *)(((char *)haze_table_0)), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y) * 320, D_00170A86, 251, 4);
     } else {
         sky_draw_night(screen_y, horizon_y);
     }

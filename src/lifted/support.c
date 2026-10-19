@@ -79,7 +79,7 @@ extern signed char D_00196090;
 extern signed char D_00196091;
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char info_popup_saved_state;
 extern signed char swift_present;
@@ -251,8 +251,8 @@ void hud_messages_draw(void)
 
 void info_popup_open(char *text)
 {
-    info_popup_saved_state = D_00196272;
-    D_00196272 = 2;
+    info_popup_saved_state = screen_active;
+    screen_active = 2;
     info_popup_text = text;
 }
 
@@ -299,7 +299,7 @@ int key_pressed_once(unsigned char scancode)
 
 void mode_push(void)
 {
-    mode_stack[((int)(short)mode_stack_depth) * 2] = D_00196272;
+    mode_stack[((int)(short)mode_stack_depth) * 2] = screen_active;
     mode_stack_game_mode[((int)(short)(mode_stack_depth)++) * 2] = game_mode;
     game_mode_under_popup = game_mode;
 }
@@ -307,7 +307,7 @@ void mode_push(void)
 void mode_pop(void)
 {
     mode_stack_depth--;
-    D_00196272 = mode_stack[((int)(short)mode_stack_depth) * 2];
+    screen_active = mode_stack[((int)(short)mode_stack_depth) * 2];
     game_mode = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
     if (mode_stack_depth != 0) {
         game_mode_under_popup = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];

@@ -60,7 +60,7 @@ extern unsigned short text_cursor_y;
 extern signed char current_region;
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char current_climate;
@@ -134,7 +134,7 @@ int bank_open(int opening)
         D_001A41E8 = disk_read_file(str_bank01i1_img, 0);
         D_001A4140 = disk_read_file(str_bank01i2_img, 0);
         xn_cam_set_view_window(51, 45, 216, 72);
-        D_00196272 = 1;
+        screen_active = 1;
         game_mode = 15;
         world_running = 0;
         bank_house_count = (bank_ship_count = (bank_screen = (bank_selected = 0)));
@@ -180,7 +180,7 @@ void bank_close(void)
     mc_memset(text_rsc_buffer, 0, 2048, str_bank_c, 116, 2048);
     func_0006CB02();
     game_mode = 0;
-    D_00196272 = 0;
+    screen_active = 0;
     world_running = 1;
 }
 

@@ -8,7 +8,7 @@ extern double D_00175A20;
 extern double D_00175A28;
 extern signed char D_00190D63;
 extern struct building *current_building;
-extern signed char D_00196272;
+extern signed char screen_active;
 extern signed char game_mode;
 extern double trade_haggle_minimum;
 extern double trade_haggle_asking;
@@ -38,7 +38,7 @@ void trade_haggle_start(int price, int quantity, struct record *seller, struct r
     trade_haggle_step();
     mode_push();
     game_mode = 13;
-    D_00196272 = 1;
+    screen_active = 1;
     trade_haggle_show_offer();
     D_00190D63 = 0;
 }

@@ -16,7 +16,7 @@ extern struct record *player_object;
 extern struct record *location_object;
 extern int creature_count;
 extern struct location *current_location;
-extern int D_00195DB8;
+extern int move_settle_frames;
 extern char saved_player_object[];
 extern struct loaded_location loaded_location;
 extern signed char model_cache_flush_count;
@@ -81,7 +81,7 @@ void location_unload(int image)
             } else {
                 D_00187F2C++;
             }
-            D_00195DB8 = 5;
+            move_settle_frames = 5;
         }
         D_00187F28 = location_id;
         func_0008EB52();

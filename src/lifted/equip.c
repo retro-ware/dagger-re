@@ -48,7 +48,7 @@ extern char book_levels[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern signed char D_001940D6;
-extern unsigned char D_001940D7;
+extern unsigned char world_state_flags;
 extern signed char D_001940DA;
 extern struct character *ai_characters[];
 extern struct record *ai_entities[];
@@ -380,7 +380,7 @@ void shelf_stock_items(struct record *container, int list_index, int quality)
         }
         template_ids = item_group_templates[*entry];
         if (template_ids != 0 && *entry != 8 && *entry != 1) {
-            if (((struct bf8_1_1 *)&D_001940D7)->f != 0 && (*entry == 4 || *entry == 5)) {
+            if (((struct bf8_1_1 *)&world_state_flags)->f != 0 && (*entry == 4 || *entry == 5)) {
             } else {
                 chance_mod = entry[1];
                 index = 0;

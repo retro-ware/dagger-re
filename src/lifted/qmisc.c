@@ -33,8 +33,8 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
 extern iptr quest_face_images[];
-extern iptr D_00195D14;
-extern char D_001960D9[];
+extern iptr quest_face_images_special;
+extern char trade_container[];
 extern signed char current_region;
 extern signed char game_mode;
 extern signed char is_daytime;
@@ -101,7 +101,7 @@ void qaction_op04_give_reward(struct quest *quest, struct qbn_op *op)
     if (tavern_open(0) != 0) tavern_close();
     quest_reward_faction(quest);
     if (((int)(unsigned char)game_mode) != 4) {
-        object_free_children((*(iptr *)&quest_reward_container = (iptr)D_001960D9));
+        object_free_children((*(iptr *)&quest_reward_container = (iptr)trade_container));
     } else {
         quest_reward_container = inv_right_container;
     }
@@ -211,7 +211,7 @@ void quest_faces_after_load(void)
     for (slot = 0; slot < 10; slot++) {
         i = 0;
         if (((int)(unsigned char)(quest_faces[slot].face & 16)) != 0) {
-            image = (struct image *)D_00195D14;
+            image = (struct image *)quest_face_images_special;
         } else {
             image = (struct image *)quest_face_images[(((int)(unsigned char)quest_faces[slot].face) >> 6)];
         }
