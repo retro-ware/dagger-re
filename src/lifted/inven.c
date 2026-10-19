@@ -117,7 +117,7 @@ extern signed char mouse_buttons_prev;
 extern signed char crime_current;
 extern signed char inv_right_icon;
 extern signed char inv_store_on_close;
-extern signed char D_0019629A;
+extern signed char cast_ignore_silence;
 extern signed char monster_summon_anywhere;
 extern signed char quests_suspended;
 extern signed char inv_weight_container_only;
@@ -848,9 +848,9 @@ void inv_use_item(void)
         while (i < 10 && item->enchantments[i].type != (-1)) {
             if (item->enchantments[i].type == 0) {
                 *(int *)&saved_spell = (int)(short)spell_last_cast_id;
-                D_0019629A = 1;
+                cast_ignore_silence = 1;
                 cast_item_used_spell(item->enchantments[i].param);
-                D_0019629A = 1;
+                cast_ignore_silence = 1;
                 used = 1;
                 spell_last_cast_id = *(int *)&saved_spell;
                 item_damage(inv_selected_item, 10);

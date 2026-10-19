@@ -31,7 +31,7 @@ extern struct record *creature_list[];
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
 extern signed char D_001940D6;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern char frame_counter[];
 extern struct record *player_object;
 extern struct record *scratch_current_object;
@@ -217,7 +217,7 @@ void marquee_show_quest_text(struct quest *quest, short message_id)
     current_quest = quest;
     text = text_qrc_load_for_quest(quest, message_id, 0, 280);
     if (text == 0 || *text == 0) return;
-    D_001940DA |= 8;
+    misc_state_flags |= 8;
     marquee_start(text);
 }
 
@@ -228,7 +228,7 @@ void marquee_show_rsc(short text_id)
 
         text = text_rsc_load(text_id, 0, 280);
         if (text == 0 || *text == 0) return;
-        D_001940DA |= 8;
+        misc_state_flags |= 8;
         marquee_start(text);
     }
 }

@@ -11,13 +11,13 @@ extern char str_deviceport[];
 extern char str_devicedma[];
 extern char str_deviceirq[];
 extern char str_midi[];
-extern char D_0018DC38[];
+extern char sos_digi_settings[];
 extern char D_0018DC94[];
 extern char D_0018DC98[];
 extern char D_0018DC9C[];
 extern int D_0018DD54;
 extern int sos_digi_driver;
-extern char D_0018DD64[];
+extern char sos_midi_settings[];
 extern char D_0018DD86[];
 
 extern int profile_open(struct profile *, char *);
@@ -35,8 +35,8 @@ int sos_read_settings(char *path)
 {
     struct profile profile;
 
-    mc_memset(D_0018DC38, 0, 268, str_sosez_c, 217, 4);
-    mc_memset(D_0018DD64, 0, 46, str_sosez_c, 218, 4);
+    mc_memset(sos_digi_settings, 0, 268, str_sosez_c, 217, 4);
+    mc_memset(sos_midi_settings, 0, 46, str_sosez_c, 218, 4);
     if ((short)profile_open(&profile, path) == 0) return 0;
     if ((short)profile_find_section(&profile, str_digital) == 0) {
         profile_close(&profile);

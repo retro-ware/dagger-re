@@ -28,10 +28,10 @@ extern iptr guild_service_labels[];
 extern struct rect guild_menu_buttons[];
 extern signed char world_running;
 extern signed char text_buffer[];
-extern int D_00190CBC;
-extern signed char D_00190D1A;
+extern int rest_last_tick;
+extern signed char rest_state;
 extern signed char scratch_190d20;
-extern short D_00190DD0;
+extern short rest_hours_left;
 extern short guild_search_faction;
 extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
@@ -541,10 +541,10 @@ void rest_open(void)
     *(iptr *)&rest_image = disk_read_file(str_rest00i0_img, 0);
     game_mode = 16;
     screen_active = 1;
-    D_00190D1A = 0;
-    D_00190DD0 = 0;
+    rest_state = 0;
+    rest_hours_left = 0;
     bios_ticks = (int *)DOS_LOW(0x46C);
-    D_00190CBC = *bios_ticks;
+    rest_last_tick = *bios_ticks;
     world_running = 0;
     D_00196299 = 0;
 }

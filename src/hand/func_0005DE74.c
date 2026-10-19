@@ -10,7 +10,7 @@ extern unsigned char item_init_count;
 extern char fatal_error_text[];
 extern struct character *player_character;
 extern short item_draw_order_scratch;
-extern unsigned char D_0019626D;
+extern unsigned char item_template_rarity;
 extern unsigned char item_template_capacity;
 extern void fatal_error(char *);
 extern void item_set_race_image(struct item *, int);
@@ -105,7 +105,7 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     item->variants = template->variants;
     item->draw_order = template->draw_order;
     mc_memset(item->enchantments, -1, 40, str_equip_c, 118, 40);
-    D_0019626D = template->rarity;
+    item_template_rarity = template->rarity;
     item_draw_order_scratch = template->draw_order;
     if (group == 27 && index == 4)
         item->stack_count = rand() % 20;

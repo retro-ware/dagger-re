@@ -32,7 +32,7 @@ extern signed char crime_current;
 extern signed char damage_suppressed;
 extern char court_reputation_change[];
 extern int weapon_swing_state[];
-extern int D_001A4A74;
+extern int weapon_swing_state_2;
 
 extern iptr faction_find_type_in_region(int, short);
 extern int court_open(int);
@@ -188,7 +188,7 @@ void court_reputation_restore(void)
     regions[(unsigned char)current_region].legal_reputation += *(short *)court_reputation_change - 1;
     faction = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15);
     faction_change_reputation(faction, (-(*(int *)court_reputation_change - 1)) / 2);
-    weapon_swing_state[0] = (D_001A4A74 = 0);
+    weapon_swing_state[0] = (weapon_swing_state_2 = 0);
     damage_suppressed = 1;
 }
 

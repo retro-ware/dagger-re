@@ -19,11 +19,11 @@ extern char monster_weights[];
 extern char monster_category[];
 extern signed char scratch_190ce4[];
 extern char scratch_190d64[];
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern signed char quest_global_states[];
 extern int spell_points_bonus;
-extern char D_00195A08[];
-extern int D_00195A0C;
+extern char strength_bonus[];
+extern int spell_points_bonus_end;
 extern int strength_bonus_end;
 extern struct record *player_object;
 extern struct record *scratch_current_object;
@@ -36,7 +36,7 @@ extern int sky_loaded_frame;
 extern short D_00195DA0;
 extern unsigned char D_00196271;
 extern signed char game_mode;
-extern signed char D_00196291;
+extern signed char cast_strike_spell;
 extern signed char night_sky_loaded;
 extern char D_00196DC4[];
 extern signed char monsters_woken;
@@ -224,11 +224,11 @@ void damage_knockback(struct record *target, int force, int angle, int amount)
 
 void damage_expire_drain_bonuses(void)
 {
-    if (D_00195A0C != 0 && ((unsigned)game_minutes) > D_00195A0C) {
+    if (spell_points_bonus_end != 0 && ((unsigned)game_minutes) > spell_points_bonus_end) {
         spell_points_bonus = 0;
     }
     if (strength_bonus_end == 0 || ((unsigned)game_minutes) <= strength_bonus_end) return;
-    *(int *)D_00195A08 = 0;
+    *(int *)strength_bonus = 0;
 }
 
 int damage_miss_sound(struct item *weapon, int target_id)
@@ -325,9 +325,9 @@ void quest_cast_spell_on_foe_cb(struct record *object)
     if (object->type != 18) return;
     if ((short)(object->quest_id) != current_quest->id) return;
     if (object->image2 != *(short *)scratch_190d64) return;
-    D_00196291 = 1;
+    cast_strike_spell = 1;
     cast_spell_on(scratch_current_object, object, 1);
-    D_00196291 = 0;
+    cast_strike_spell = 0;
 }
 
 unsigned int quest_travel_minutes(struct quest *quest, struct record *from, struct record *to)
@@ -388,7 +388,7 @@ void qaction_op35_cycle_state(struct quest *quest, struct qbn_op *op)
 
 void qaction_op29_prompt(struct quest *quest, struct qbn_op *op)
 {
-    D_001940DA |= 32;
+    misc_state_flags |= 32;
     quest_prompt_op = op;
     quest_prompt_quest = quest;
     quest_op_done(quest, op);
@@ -400,14 +400,14 @@ void quest_prompt_answer(void)
 {
     struct qbn_state *state;
 
-    if (((struct bf8_5_1 *)&D_001940DA)->f == 0 || game_mode != 0) return;
+    if (((struct bf8_5_1 *)&misc_state_flags)->f == 0 || game_mode != 0) return;
     state = (struct qbn_state *)quest_prompt_op->args[(int)D_00196271].record;
     if (state->is_global != 0) {
         quest_global_states[state->value] = 1;
     } else {
         state->value = 1;
     }
-    D_001940DA &= 223;
+    misc_state_flags &= 223;
 }
 
 void quest_set_arg_state(struct quest *quest, struct qbn_op *op, int arg_index, int value)

@@ -25,16 +25,16 @@ extern char shared_scratch[];
 extern iptr window_image;
 extern char item_draw_order_scratch[];
 extern char spellmaker_spell[];
-extern signed char D_0019626D;
+extern signed char item_template_rarity;
 extern signed char item_template_capacity;
 extern unsigned char game_mode_under_popup;
 extern signed char screen_active;
 extern signed char game_mode;
-extern signed char D_0019629A;
-extern signed char D_001A9B8C[];
-extern signed char D_001A9B94[];
-extern signed char D_001A9BAC[];
-extern signed char D_001A9BB4[];
+extern signed char cast_ignore_silence;
+extern signed char potion_cauldron_x[];
+extern signed char potion_cauldron_z[];
+extern signed char potion_cauldron_rarity[];
+extern signed char potion_cauldron_ids[];
 extern struct record *potion_cauldron[];
 extern struct record *potion_ingredients[];
 extern char potion_ingredient_scroll[];
@@ -71,7 +71,7 @@ void potionmaker_mix(void)
 
     i = 0;
     while (i < 64 && str_stamina[i * 109] != 0) {
-        if (potion_match_recipe((struct potion_recipe *)(((iptr)potion_recipes) + (i * 109)), D_001A9BB4, D_001A9BAC, &value) != 0) {
+        if (potion_match_recipe((struct potion_recipe *)(((iptr)potion_recipes) + (i * 109)), potion_cauldron_ids, potion_cauldron_rarity, &value) != 0) {
             potion = object_create_child(location_object, 0, 107);
             potion->type = 2;
             potion->flags |= 1;
@@ -151,7 +151,7 @@ int potionmaker_open(int show)
         potion_cauldron_count = (*(int *)potion_ingredient_scroll = 0);
         screen_active = 1;
         mc_memset(((char *)potion_cauldron), 0, 32, str_potions_c, 156, 32);
-        mc_memset(D_001A9BB4, 254, 8, str_potions_c, 157, 8);
+        mc_memset(potion_cauldron_ids, 254, 8, str_potions_c, 157, 8);
     }
     return ((((int)(unsigned char)game_mode) == 1) ? 1 : 0);
 }
@@ -172,10 +172,10 @@ void potionmaker_add_ingredient(int index)
         }
         ingredient = potion_cauldron[item_buf.slot] = potion_ingredients[index];
         item_make(ingredient->data.item.group, ingredient->data.item.index, &item_buf.item);
-        D_001A9BB4[item_buf.slot] = item_buf.item.variants;
-        D_001A9BAC[item_buf.slot] = D_0019626D;
-        D_001A9B8C[item_buf.slot] = *(signed char *)item_draw_order_scratch;
-        D_001A9B94[item_buf.slot] = item_template_capacity;
+        potion_cauldron_ids[item_buf.slot] = item_buf.item.variants;
+        potion_cauldron_rarity[item_buf.slot] = item_template_rarity;
+        potion_cauldron_x[item_buf.slot] = *(signed char *)item_draw_order_scratch;
+        potion_cauldron_z[item_buf.slot] = item_template_capacity;
     }
 }
 
@@ -240,7 +240,7 @@ int potion_match_recipe(struct potion_recipe *recipe, signed char *cauldron_ids,
         if (recipe->ingredient_indices[i] != (-2)) {
             item_make((int)(unsigned short)(short)recipe->ingredient_groups[i], (int)(signed char)recipe->ingredient_indices[i], &item_buf);
             recipe_ids[i] = item_buf.variants;
-            *value_out += (int)(unsigned char)D_0019626D;
+            *value_out += (int)(unsigned char)item_template_rarity;
             unmatched++;
         } else {
             recipe_ids[i] = 255;
@@ -301,14 +301,14 @@ void potion_drink(struct record *recipe)
     int saved_ignore_silence;
 
     spell = object_create_child(location_object, 0, 89);
-    saved_ignore_silence = (int)(unsigned char)D_0019629A;
+    saved_ignore_silence = (int)(unsigned char)cast_ignore_silence;
     spell->type = 9;
     spell->flags |= 1;
     spell->id = object_new_id(801);
     mc_memcpy(&spell->data.spell, &recipe->data.potion_recipe.spell, 89, str_potions_c, 540, 4);
-    D_0019629A = 1;
+    cast_ignore_silence = 1;
     cast_player_spell(spell);
-    D_0019629A = *(signed char *)&saved_ignore_silence;
+    cast_ignore_silence = *(signed char *)&saved_ignore_silence;
     object_delete(spell);
 }
 

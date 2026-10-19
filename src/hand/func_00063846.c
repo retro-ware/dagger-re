@@ -10,7 +10,7 @@ extern char str_monster_c[];
 extern struct collide_probe D_00187B44;
 extern int player_speed_bonus;
 extern unsigned char world_state_flags;
-extern unsigned char D_001940DA;
+extern unsigned char misc_state_flags;
 extern struct record *player_object;
 extern int frame_ticks;
 extern int vertical_velocity;
@@ -90,7 +90,7 @@ int monster_move_step(struct record *o, struct record *target, int angle)
     vertical_velocity = saved_ab8;
     ceiling_height = saved_c74;
     if (abs(o->y - player_object->y) > 4000) {
-        D_001940DA |= 128;
+        misc_state_flags |= 128;
         object_delete(o);
     }
     dist = xn_math_approx_dist2d(o->x, o->z, oldpos.x, oldpos.z);

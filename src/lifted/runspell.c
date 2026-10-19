@@ -54,8 +54,8 @@ extern iptr spell_cast_anim_fire[];
 extern char item_draw_order_scratch[];
 extern short spell_effect_slot;
 extern short spell_ready_cost;
-extern signed char D_00196291;
-extern signed char D_00196292;
+extern signed char cast_strike_spell;
+extern signed char cast_strike_creature_spell;
 extern struct spell *D_00199D64;
 extern int D_00199D6C;
 extern signed char D_00199D71;
@@ -135,7 +135,7 @@ int cast_creature_spell(struct record *caster, struct record *target, int spell_
     spell->id = object_new_id(((unsigned)location_object->id) >> 16);
     spell->caster = caster;
     mc_memcpy(&spell->data.spell, &spell_records[i], 89, str_runspell_c, 144, 4);
-    if (D_00196292 != 0) spell->data.spell.icon = 250;
+    if (cast_strike_creature_spell != 0) spell->data.spell.icon = 250;
     i = spell_cost((struct spell *)((char *)spell + 89), &caster->data.character);
     if (cast_creature_spell_at(spell, caster, target) != 0) object_delete(spell);
     return i;
@@ -157,7 +157,7 @@ void cast_spell_on(struct record *spell, struct record *target, int no_save)
     spell_data = &spell->data.spell;
     if (spell_data->target != 2 && spell_data->target != 4) {
         sound_play((int)(short)*(short *)(spell_cast_sounds + (spell_data->element * 2)), player_object, 110);
-        if (spell->caster == player_entity && D_00196291 == 0) {
+        if (spell->caster == player_entity && cast_strike_spell == 0) {
             cast_anim_start(spell_data->element);
         } else {
             damage_spawn_splash(spell->caster, 3, 3);

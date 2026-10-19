@@ -3,7 +3,7 @@
 
 extern int xn_snow_turn_shift;
 extern int game_state_flags;
-extern int D_001940DA;
+extern int misc_state_flags;
 extern int player_motion_flags;
 extern int view_look_pitch;
 extern int view_look_yaw;
@@ -50,7 +50,7 @@ void player_mouse_look(void)
                 camera_object->yaw = player_object->yaw;
             }
         }
-    } else if (D_001940DA & 0x40) {
+    } else if (misc_state_flags & 0x40) {
         dy = mouse_motion_x;
         dx = mouse_motion_y;
         view_look_pitch += dx;

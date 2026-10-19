@@ -19,7 +19,7 @@ struct Hit {
 extern char str_monster_c[];
 extern char D_00187B44[];
 extern unsigned char world_state_flags;
-extern unsigned char D_001940DA;
+extern unsigned char misc_state_flags;
 extern struct record *player_object;
 extern int vertical_velocity;
 extern int ceiling_height;
@@ -78,7 +78,7 @@ int func_00063FCF(struct record *m, int dest_x, int dest_z)
     vertical_velocity = save14;
     ceiling_height = save28;
     if (abs(m->y - player_object->y) > 3000) {
-        D_001940DA |= 128;
+        misc_state_flags |= 128;
         object_delete(m);
     }
     dist = xn_math_approx_dist2d(m->x, m->z, pos.x, pos.z);

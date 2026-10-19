@@ -10,7 +10,7 @@ extern struct record *spell_ready_touch;
 extern struct character *player_character;
 extern int spell_cast_queue_count;
 extern int spell_cast_busy;
-extern char D_0019629A;
+extern char cast_ignore_silence;
 extern void quests_raise_event_all(int, struct record *, int);
 extern void cast_spell_on(struct record *, struct record *, int);
 extern void spell_area_effect(struct record *);
@@ -29,7 +29,7 @@ int cast_player_spell(struct record *spell_object)
         disease_lycanthrope_shapechange(0);
         return 1;
     }
-    if (D_0019629A == 0 && (player_character->conditions & 0x100) != 0)
+    if (cast_ignore_silence == 0 && (player_character->conditions & 0x100) != 0)
         return 1;
     spell_cast_busy = 130 - player_character->attributes[ATTR_INT] * 50;
     quests_raise_event_all(73, spell_object, 0);

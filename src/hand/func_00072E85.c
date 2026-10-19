@@ -7,7 +7,7 @@ extern char str_you_have_no_arrows[];
 extern short cast_anim_state;
 extern char bow_anim_script[];
 extern signed char D_001940D6;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern signed char player_motion_flags;
 extern int right_hand_ready_delay[];
 extern struct record *player_entity;
@@ -48,7 +48,7 @@ void weapon_player_update(void)
 
     if (right_hand_ready_delay[((int)(unsigned char)weapon_active_hand)] != 0) return;
     if ((player_character->conditions & 0x1) != 0) return;
-    if (cast_anim_state >= 0 || (iptr)spell_ready_missile != 0 || screen_active != 0 || ((struct bf8_6_1 *)&D_001940DA)->f != 0) {
+    if (cast_anim_state >= 0 || (iptr)spell_ready_missile != 0 || screen_active != 0 || ((struct bf8_6_1 *)&misc_state_flags)->f != 0) {
         return;
     }
     if (weapon_hand_cif[((int)(unsigned char)weapon_active_hand)] == 0) return;

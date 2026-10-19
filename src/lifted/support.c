@@ -34,7 +34,7 @@ extern int icon_cycle_last_tick;
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
 extern signed char D_001940D6;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern struct record *location_grid[];
 extern struct record *inventory_container_2;
 extern struct record *house_container;
@@ -232,7 +232,7 @@ void hud_messages_draw(void)
     slot = 0;
     for (y = 2; slot < 16; slot++, y += 9) {
         if (hud_message_expiry[slot] != 0) {
-            if (((struct bf8_0_1 *)&D_001940DA)->f == 0) {
+            if (((struct bf8_0_1 *)&misc_state_flags)->f == 0) {
                 if (((unsigned)BIOS_TICKS) > hud_message_expiry[slot]) {
                     hud_message_expiry[slot] = 0;
                 }
@@ -241,7 +241,7 @@ void hud_messages_draw(void)
         }
     }
     if (hud_status_expiry == 0) return;
-    if (((struct bf8_0_1 *)&D_001940DA)->f == 0) {
+    if (((struct bf8_0_1 *)&misc_state_flags)->f == 0) {
         if (((unsigned)BIOS_TICKS) > hud_status_expiry) {
             hud_status_expiry = 0;
         }

@@ -2,14 +2,14 @@
 #include "records.h"
 
 extern int spell_points_bonus;
-extern int D_00195A08;
-extern int D_00195A0C;
+extern int strength_bonus;
+extern int spell_points_bonus_end;
 extern int strength_bonus_end;
 extern struct record *scratch_current_object;
 extern struct character *player_character;
 extern int game_minutes;
-extern char D_00196291;
-extern char D_00196292;
+extern char cast_strike_spell;
+extern char cast_strike_creature_spell;
 extern int damage_heal(struct character *, int);
 extern int cast_item_strike_spell(int, struct record *);
 extern int cast_creature_spell(struct record *, struct record *, int);
@@ -30,8 +30,8 @@ void damage_weapon_strike_effects(struct item *weapon, struct record *attacker, 
         if (weapon->enchantments[i].type == -1)
             return;
         if (weapon->enchantments[i].type == 2) {
-            D_00196292 = 1;
-            D_00196291 = 1;
+            cast_strike_creature_spell = 1;
+            cast_strike_spell = 1;
             if (attacker_character == player_character) {
                 cast_item_strike_spell(weapon->enchantments[i].param, target);
                 item_damage(scratch_current_object, 10);
@@ -39,8 +39,8 @@ void damage_weapon_strike_effects(struct item *weapon, struct record *attacker, 
                 cast_creature_spell(attacker, target, weapon->enchantments[i].param);
                 item_damage(scratch_current_object, 10);
             }
-            D_00196291 = 0;
-            D_00196292 = 0;
+            cast_strike_spell = 0;
+            cast_strike_creature_spell = 0;
         } else if (weapon->enchantments[i].type == 6 && weapon->enchantments[i].param == 1) {
             item_damage(scratch_current_object, damage_heal(attacker_character, damage / 2) / 4 + 1);
         } else if (weapon->enchantments[i].type == 26 && weapon->enchantments[i].param == 2) {
@@ -54,13 +54,13 @@ void damage_weapon_strike_effects(struct item *weapon, struct record *attacker, 
                 i = spell_points_bonus + player_character->magicka;
                 if (player_character->max_magicka < i)
                     spell_points_bonus = player_character->max_magicka - player_character->magicka;
-                if (D_00195A0C == 0)
-                    D_00195A0C = game_minutes + 12;
+                if (spell_points_bonus_end == 0)
+                    spell_points_bonus_end = game_minutes + 12;
             } else if (target_character->attributes[ATTR_STR] > 10) {
                 target_character->attributes[ATTR_STR] -= i;
                 if (target_character->attributes[ATTR_STR] < 0)
                     target_character->attributes[ATTR_STR] = 0;
-                D_00195A08 += i;
+                strength_bonus += i;
                 strength_bonus_end = game_minutes + 12;
             }
         }

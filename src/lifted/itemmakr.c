@@ -45,8 +45,8 @@ extern signed char text_rsc_buffer[];
 extern char enchant_text[];
 extern signed char ui_dirty_flags;
 extern char enchant_reference_character[];
-extern signed char D_001957CD;
-extern char D_001957E9[];
+extern signed char enchant_caster_level;
+extern char enchant_effect_params[];
 extern struct record *player_entity;
 extern struct record *player_object;
 extern char cheat_flags[];
@@ -412,9 +412,9 @@ int enchant_spell_cost(unsigned char spell_id)
     short unused3;
 
     for (i = 0; i < 35; i++) {
-        *(short *)(D_001957E9 + (i * 6)) = 50;
+        *(short *)(enchant_effect_params + (i * 6)) = 50;
     }
-    D_001957CD = 1;
+    enchant_caster_level = 1;
     i = 0;
     unused = i;
     for (; i < 128; i++) {

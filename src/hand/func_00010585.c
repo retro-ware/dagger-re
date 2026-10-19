@@ -41,7 +41,7 @@ extern unsigned char game_mode;
 extern unsigned char in_dungeon_water;
 extern unsigned char crime_current;
 extern unsigned char link_axis_state;
-extern unsigned char D_0019628D;
+extern unsigned char guards_alerted;
 extern unsigned char player_moving;
 extern unsigned char player_swimming;
 extern short magicka_max_modifier;
@@ -145,7 +145,7 @@ void player_frame_update(void)
     if (game_mode != 8 && game_mode != 2 && msgbox_kind != 0)
         msgbox_close();
     if (creature_count == 0)
-        D_0019628D = 0;
+        guards_alerted = 0;
     player_character->max_magicka = (rec->attributes[ATTR_INT] * magery_spell_point_mults[(player_class->flags >> 10) & 7]) / 256;
     player_character->max_magicka += magicka_max_modifier;
     if (player_character->magicka > player_character->max_magicka)

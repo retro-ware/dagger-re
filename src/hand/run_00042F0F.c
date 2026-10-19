@@ -19,22 +19,22 @@ extern unsigned char key_down_alt;
 extern char str_keys_c[];        /* __FILE__ */
 extern char str_cheat_code_entered[];
 extern unsigned char player_environment;
-extern char *D_0018323C;
-extern char *D_00183240;
-extern char *D_00183244;
-extern char *D_00184876;
+extern char *text_weapon_hand_fmt;
+extern char *text_hand_left;
+extern char *text_hand_right;
+extern char *text_not_ready;
 extern short player_speed_bonus;
 extern signed char text_buffer[];
 extern struct bits8 ui_mode_flags;
 extern struct bits8 D_001940D6;
 extern struct bits8 player_view_flags;
-extern struct bits8 D_001940DA;
+extern struct bits8 misc_state_flags;
 extern unsigned char player_motion_flags;
-extern int D_001950E4;
-extern int D_001950E8;
+extern int dungeon_marker_count;
+extern int dungeon_marker16_count;
 extern int view_look_pitch;
 extern int view_look_yaw;
-extern int D_001959C0;
+extern int keys_toggle_state;
 extern struct record *camera_object;
 extern struct record *player_object;
 extern struct record *location_object;
@@ -57,7 +57,7 @@ extern unsigned char in_dungeon_water;
 extern unsigned char player_swimming;
 extern int cheat_marker_index;
 extern int weapon_swing_state;
-extern int D_001A4A74;
+extern int weapon_swing_state_2;
 extern unsigned char cheat_mode;
 extern void automap_open(void);
 extern void spell_add_skill_uses(struct spell *, int);
@@ -89,7 +89,7 @@ extern short steer_weight_right;
 extern short steer_weight_left;
 extern short steer_weight_up;
 extern char *str_t_3[];
-extern char *D_0017D1EE;
+extern char *text_interaction_mode_fmt;
 extern unsigned char key_down[];
 extern int joystick_x;
 extern int joystick_y;
@@ -123,7 +123,7 @@ void keys_world_actions(void)
         if (spell_cast_busy == 0)
             cast_recast_last();
         else
-            hud_message_add(D_00184876);
+            hud_message_add(text_not_ready);
     }
     if (key_action_held(27))
         travel_map_open(1);
@@ -147,12 +147,12 @@ void keys_world_actions(void)
         hud_toggle_weapon();
     if (key_action_pressed(12))
         rest_open();
-    if (key_action_pressed(34) && D_001940D6.b6 && (weapon_swing_state | D_001A4A74) == 0) {
+    if (key_action_pressed(34) && D_001940D6.b6 && (weapon_swing_state | weapon_swing_state_2) == 0) {
         o = player_character->equipped[(weapon_active_hand ^ 1) ? 21 : 19];
         if (o == 0 || o->data.item.group == 3) {
             weapon_active_hand ^= 1;
             mc_set_location(96, str_keys_c);
-            mc_sprintf(((char *)text_buffer), D_0018323C, weapon_active_hand ? D_00183240 : D_00183244);
+            mc_sprintf(((char *)text_buffer), text_weapon_hand_fmt, weapon_active_hand ? text_hand_left : text_hand_right);
             D_00195F2E = 20;
             text_colour = 146;
             hud_message_add(((char *)text_buffer));
@@ -184,27 +184,27 @@ void keys_world_actions(void)
     if (key_pressed_once(2) && cheat_mode)
         player_speed_bonus ^= 1300;
     if (mouse_control_mode == 0) {
-        if (key_action_pressed(22) || D_001940DA.b6 && (mouse_buttons & 1)) {
+        if (key_action_pressed(22) || misc_state_flags.b6 && (mouse_buttons & 1)) {
             view_look_pitch = 32;
             view_look_yaw = 0;
-            D_001959C0 = 0;
+            keys_toggle_state = 0;
             player_object->angle_x = camera_object->angle_x = 0;
         }
         if (key_action_held(23)) {
-            if (!D_001940DA.b6) {
+            if (!misc_state_flags.b6) {
                 saved_mouse_x = mouse_x;
                 saved_mouse_y = mouse_y;
             }
-            D_001940DA.b6 = 1;
+            misc_state_flags.b6 = 1;
         } else {
-            if (D_001940DA.b6)
+            if (misc_state_flags.b6)
                 xn_mouse_set_position(saved_mouse_x, saved_mouse_y);
-            D_001940DA.b6 = 0;
+            misc_state_flags.b6 = 0;
         }
     } else {
         view_look_pitch = 0;
         view_look_yaw = 0;
-        D_001959C0 = 0;
+        keys_toggle_state = 0;
     }
     if (key_action_held(20))
         view_look_pitch -= 32;
@@ -230,24 +230,24 @@ void keys_world_actions(void)
     if (key_down_equals && cheat_mode)
         cheat_raise_skills();
     if (key_pressed_once(26) && player_environment == 3 && cheat_mode) {
-        cheat_marker_index = --cheat_marker_index % (D_001950E4 + D_001950E8);
+        cheat_marker_index = --cheat_marker_index % (dungeon_marker_count + dungeon_marker16_count);
         if (cheat_marker_index < 0)
-            cheat_marker_index = D_001950E4 + D_001950E8 - 1;
-        if (cheat_marker_index < D_001950E4)
+            cheat_marker_index = dungeon_marker_count + dungeon_marker16_count - 1;
+        if (cheat_marker_index < dungeon_marker_count)
             o = marker_find_nth(location_object, 9, cheat_marker_index);
         else
-            o = marker_find_nth(location_object, 16, cheat_marker_index - D_001950E4);
+            o = marker_find_nth(location_object, 16, cheat_marker_index - dungeon_marker_count);
         object_set_position(player_object, o->x, o->y, o->z, o->angle_x, o->yaw, o->angle_z);
         camera_object->yaw = player_object->yaw;
         xn_tex_cache_begin_frame();
         ui_mode_flags.b1 = 1;
     }
     if (key_pressed_once(27) && player_environment == 3 && cheat_mode) {
-        cheat_marker_index = ++cheat_marker_index % (D_001950E4 + D_001950E8);
-        if (cheat_marker_index < D_001950E4)
+        cheat_marker_index = ++cheat_marker_index % (dungeon_marker_count + dungeon_marker16_count);
+        if (cheat_marker_index < dungeon_marker_count)
             o = marker_find_nth(location_object, 9, cheat_marker_index);
         else
-            o = marker_find_nth(location_object, 16, cheat_marker_index - D_001950E4);
+            o = marker_find_nth(location_object, 16, cheat_marker_index - dungeon_marker_count);
         object_set_position(player_object, o->x, o->y, o->z, o->angle_x, o->yaw, o->angle_z);
         camera_object->yaw = player_object->yaw;
         xn_tex_cache_begin_frame();
@@ -263,7 +263,7 @@ void interaction_mode_cycle(int step)
 {
     interaction_mode = (interaction_mode + step) & 3;
     mc_set_location(231, str_keys_c);
-    mc_sprintf(((char *)text_buffer), D_0017D1EE, str_t_3[interaction_mode]);
+    mc_sprintf(((char *)text_buffer), text_interaction_mode_fmt, str_t_3[interaction_mode]);
     hud_status_set(((char *)text_buffer));
 }
 

@@ -1319,8 +1319,8 @@ global,0x001959F8,repair_container,strong,"build/names/scratch/audit_tq/exp_fina
 global,0x001959FC,spell_points_bonus,strong,"spell points spent before magicka by spellbook_frame and cast_recast_last; damage_weapon_strike_effects (the Mace of Molag Bal) adds the drained magicka; cleared at spell_points_bonus_end; audit: savevars_read's order puts it at SAVEVARS.DAT 0x33F = DFU SaveVars maceOfMolagBalVarsOffset: MaceOfMolagBalSpellPointBonus, followed by the strength bonus and the two time limits as here"
 global,0x00195A00,quest_root,strong,"object whose child list (+0x3F) holds the active quests (type 14); init_player_records creates it (type 16, flags 3); quest_start adds, talk and quest walks read. audit: build/names/scratch/audit_euw/B/survey.py: in all 18 save snapshots a type-16 (DFU QuestHolder) object, flags 3, whose children are the quests: s0000999, s0000977, s0000016, s0000102, B0B71Y03, $curevam..."
 global,0x00195A04,bank_accounts,confirmed,"pointer to the type-25 record (init.c: child of the player entity, 806 bytes = 62 regions x 13) holding every region's bank account at +0x47; the experiments read balances there (tlalac 70771/owed 330000, morthag1 423106)"
-global,0x00195A08,strength_bonus,candidate,temporary STR: the Mace of Molag Bal (damage_weapon_strike_effects) adds the STR it drains; damage_resolve_attack's damage bonus is (STR+this-50)/5; cleared at strength_bonus_end
-global,0x00195A0C,spell_points_bonus_end,candidate,"game_minutes + 12 when spell_points_bonus (magicka drained by the Mace of Molag Bal, damage_weapon_strike_effects) is cleared by damage_expire_drain_bonuses"
+global,0x00195A08,strength_bonus,strong,temporary STR from the Mace of Molag Bal
+global,0x00195A0C,spell_points_bonus_end,strong,damage_expire_drain_bonuses
 global,0x00195A14,quest_faces,strong,"10 slots of 10 bytes, the escort faces drawn at the top left: +0 face bits (gender<<7, race<<6, index), +1 quest id, +2 object id, +6 image (quest_face_add, quest_faces_draw)"
 global,0x00195A15,quest_faces_quest,strong,build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: quest_faces_after_load freed slot 1 because its quest id here (99) had no quest
 global,0x00195A16,quest_faces_object,strong,build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: quest_face_replace_object_id changed it 0x12345678 -> 0x0BADF00D
@@ -1338,7 +1338,7 @@ global,0x00195AA8,scratch_current_object,strong,"shared by unrelated units (cons
 global,0x00195AB0,frame_ticks,strong,"time of the last frame in milliseconds (frame_ticks_update: timer interrupts * 1828/256, cap 100): timers count down by it, movement is speed*frame_ticks/1000. audit: build/names/scratch/audit_euw/B/exp_run.py clock/walk (save_tlalac_s): 21, 28 or 35 from frame to frame (3-5 interrupts of the ~140 Hz timer), 14-35 in the 18 saves"
 global,0x00195AB4,collide_floor_plane,strong,struct arch3d_plane *: the plane collide_vertical_cb found (with collide_height); footstep_sounds reads its floor_sound in dungeons
 global,0x00195AB8,vertical_velocity,confirmed,"fall speed: gravity adds to it, fall damage from it (sounds 359/360); -8379 just after the jump in exp_steer.py"
-global,0x00195ABC,attack_angle,candidate,code reading (damage code); not tested. Keep: code only (weapon_melee_strike -> damage_resolve_attack -> damage_knockback)
+global,0x00195ABC,attack_angle,strong,"weapon_melee_strike, damage_knockback"
 global,0x00195AC4,location_object,confirmed,"root object of the loaded location or dungeon: +0x1B its location index, +0x1F high word the id in the at%05d.amf/.atf names; children walked for seen marks; audit: build/names/scratch/audit_euw/C/s1_survey.py: its location index equals location_here's index (416 Ipscart Rock, 394 Crossing, 6 Sentinel) and its x/z the map_location's; build/names/scratch/audit_euw/C/s4_load.py: map_goto_location(21,1,2,0) made it index 2 (Charmarket) with 4 type-38 block children"
 global,0x00195AC8,monster_bsa_handle,strong,MONSTER.BSA's open archive handle (init_game_data opens it; monster_init and monster_reload_anim_cb read through it). New: the save-load traces (exp2) read MONSTER.BSA records through this handle
 global,0x00195ACC,text_macro_potion,strong,potion recipe the %po macro reads ('Recipe for %po.')
@@ -1496,7 +1496,7 @@ global,0x00196092,furniture_container_1,strong,a bare record header used as a fu
 global,0x001960D9,trade_container,strong,item list the guild services stock and hand to the trade window
 global,0x00196120,furniture_container_3,strong,furniture container
 global,0x001961F5,pending_quest_file,strong,13-char quest file name queued
-global,0x0019621B,link_caster,candidate,the static spell caster of link action 9 (engine/UI/world audit)
+global,0x0019621B,link_caster,strong,static spell caster of link action 9
 global,0x00196263,in_knightly_order_hall,confirmed,"byte, saved at SAVEVARS.DAT 0x1795: click_world_face sets it when the player clicks a building's door (archive 74, even a locked one) to 1 if the building's faction is one of the 21 knightly orders in D_00187644 (FACTION.TXT: 83 The Knights of the Circle ... 410 The Knights of the Flame ... 412 The Host of the True Horn), else 0; leaving clears it; music_choose_song plays 17.hmi in such a temple; audit: 0 in all 18 saves; build/names/scratch/audit_euw/A/knight.py: save_morthag1, clicking the Knights of the Flame hall's door made it 1 and inside it stayed 1 (current_building faction 410); build/names/scratch/audit_euw/A/knight2.py: preset to 1, entering the bank (faction 510) made it 0. Old name savevars_1795"
 global,0x00196266,text_macro_imperial,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: 0-3 -> %imp Pelagius, Cephorus, Uriel, Cassynder"
 global,0x00196268,current_region,strong,"byte region index of the player: the world view paints pixels 128+this red (the highlighted region in cheat_morthag1, value 21 Anticlere), I'M AT and travel_mark_player use it, closing the map reloads it"
@@ -1527,9 +1527,9 @@ global,0x00196288,inv_right_icon,strong,"byte: picture of inve16i0.cif shown for
 global,0x00196289,world_loading,strong,"counter raised by map_goto_location around building_enter and set by the save load: entry texts, quest links, Open-spell checks and dungeon_load's saved_player_object copy are skipped while it is set; audit: build/names/scratch/audit_euw/C/s4_load.py: during map_goto_location(21,2,2,0) it was 1 inside building_enter and 0 after; 0 in 6 saves"
 global,0x0019628F,text_macro_gender,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: 0, 1, 2 -> %g he, she, it"
 global,0x00196290,player_ailment_flags,strong,"bit 0 poisoned (set by poison_tick), bit 1 diseased (spfx_disease_daily); cleared by tamriel.c; hud_portrait_overlay_index"
-global,0x00196291,cast_strike_spell,candidate,"byte: 1 while func_0002E2CF casts a weapon's cast-when-strikes spell; cast_spell_on then plays the creature cast animation instead of the player's. Keep: code only (damage_weapon_strike_effects, cast_spell_on)"
+global,0x00196291,cast_strike_spell,strong,damage_weapon_strike_effects
 global,0x00196295,text_missing_ok,confirmed,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: text_rsc_load(31999) -> ""Bad DAGTEXT number requested : 31999."" with 0, 0 with 1"
-global,0x0019629A,cast_ignore_silence,candidate,"byte: potion_drink sets it so cast_player_spell skips the silence check. Keep: code only (potion_drink, cast_player_spell)"
+global,0x0019629A,cast_ignore_silence,strong,"potion_drink, cast_player_spell"
 global,0x0019629B,night_sky_loaded,strong,"set by sky_load_night, cleared by the day sky and on loads; audit: build/names/scratch/audit_euw/D/survey.py, 18 saves: 1 in the three outdoor night saves (dorian 18:55, keophex 22:47, kralvamp 18:24), 0 outdoors by day and in every dungeon"
 global,0x001962A1,dungeon_block_special,candidate,the dungeon block's special flag (consistency pass notes)
 global,0x001962A6,cfg_artifact,strong,config key 'artifact'
@@ -1799,8 +1799,8 @@ global,0x00199D78,links,strong,1024 x 39-byte link records ('Exceeded maximum nu
 global,0x001A3978,active_links,strong,"pointers to the first record of each running link chain (links_trigger adds, links_update removes); saved as indices"
 global,0x001A3A78,link_count,confirmed,"number of link records: 0 in save_tlalac_s (a town), 59 in save_mord (a dungeon); links_reset zeroes it"
 global,0x001A3A7C,active_link_count,strong,number of active_links entries
-global,0x001A3A80,link_combo_set,candidate,byte OR'd into a combination link's state (+0x0B combination) before the test (link_step); links_resolve zeroes it; audit keep: code only; save_blades has no combination (action 129) links; a switch-puzzle dungeon with one would settle it
-global,0x001A3A81,link_combo_mask,candidate,byte AND'd (| 0xF0) into a combination link's state (link_step); links_resolve zeroes it; audit keep: code only; a switch-puzzle dungeon with an action 129 link would settle it
+global,0x001A3A80,link_combo_set,strong,OR'd into a combination link's state
+global,0x001A3A81,link_combo_mask,strong,AND'd into a combination link's state
 global,0x001A3AA4,extra_spell_points,strong,enchant_extra_spell_points accumulates 75 per active ExtraSpellPts enchantment. New: Daggerfall Unity ExtraSpellPts: 'Adds +75 to maximum spell points' (maxIncrease = 75)
 global,0x001A3AA8,magicka_max_modifier,strong,added to max magicka: -max/2 or -max for light/darkness-powered magery
 global,0x001A3AAC,trade_haggle_minimum,strong,"double: the lowest price the merchant takes in the unused haggling window. New: exp_haggle: 214.8 for an asking price of 300; a counter offer below it -> -1, each concession raises it by the step"
@@ -1959,7 +1959,7 @@ global,0x001A9B34,object_heap_size,strong,"1280000, or 2048000 when D_001A3F94 >
 global,0x001A9B38,object_heap_free,strong,"bytes left in the object heap: object_alloc subtracts size+18, object_heap_release adds it back; 1458112 in save_tlalac_s"
 global,0x001A9B3C,object_count_result,strong,"object_count_type's count (short), key at D_001A9B42. audit: build/names/scratch/audit_euw/B/exp_obj.py (save_tlalac_s): object_count_type(entity, 52) returned 9 and left 9 here (key 52 at D_001A9B42)"
 global,0x001A9B44,object_debug_watch_copy,confirmed,71-byte header copy object_create_in_block takes of the object with id 0xC36B0042 (a debugging watch; not 0xC36B4D42). audit: build/names/scratch/audit_euw/B/exp_misc.py watch: when object_create_in_block made id 0xC36B0042 these 71 bytes equalled the new object's header
-global,0x001A9BB4,potion_cauldron_ids,candidate,"8 bytes: ingredient id per cauldron cell, 254 empty. Keep: code only (potion maker)"
+global,0x001A9BB4,potion_cauldron_ids,strong,"8 bytes, 254 empty"
 global,0x001A9BBC,potion_cauldron,strong,8 ingredient object pointers in the cauldron
 global,0x001A9BDC,potion_ingredients,strong,up to 512 ingredient objects listed on the left
 global,0x001AA3DC,potion_ingredient_scroll,strong,first listed ingredient (scroll buttons move it by 3)
@@ -7661,3 +7661,68 @@ global,0x0018463C,text_shadowed,strong,spfx_shadow
 global,0x00184640,text_slowfalling,strong,spfx_slowfall
 global,0x00185097,text_spell_failed,strong,"""Spell effect failed."""
 global,0x0018DE20,spfx_popup_hold,strong,spfx_popup_update
+global,0x0017D1EE,text_interaction_mode_fmt,strong,"""Interaction is now %s mode."""
+global,0x0018323C,text_weapon_hand_fmt,strong,"""Using weapon in %s hand."""
+global,0x00183240,text_hand_left,strong,"""left"""
+global,0x00183244,text_hand_right,strong,"""right"""
+global,0x00184876,text_not_ready,strong,"""You are not ready yet."""
+global,0x001940DA,misc_state_flags,strong,"flag byte: marquee owned text, monster moved"
+global,0x001950E4,dungeon_marker_count,strong,cheat marker cycling in keys_world_actions
+global,0x001950E8,dungeon_marker16_count,strong,"marker_count(location_object, 16) in dungeon_load"
+global,0x001959C0,keys_toggle_state,strong,cleared in keys_world_actions
+global,0x001A4A74,weapon_swing_state_2,strong,next to weapon_swing_state
+global,0x0017596A,str_gt,strong,""">"""
+global,0x00195798,link_step_timer,strong,1000-tick countdown in link_step
+global,0x001957CD,enchant_caster_level,strong,"link_step, enchant_spell_cost"
+global,0x001957E9,enchant_effect_params,strong,"6-byte entries, link_step, enchant_spell_cost"
+global,0x00196222,link_caster_x,strong,link_step
+global,0x00196226,link_caster_y,strong,link_step
+global,0x0019622A,link_caster_z,strong,link_step
+global,0x00175A6A,trade_counter_prompt_fmt,strong,"""Enter counter of..."""
+global,0x00175A96,haggle_quality_factor,strong,trade_haggle_step
+global,0x00175A9E,haggle_base_step,strong,trade_haggle_step
+global,0x00175AA6,haggle_skill_factor,strong,trade_haggle_step
+global,0x00175AAE,haggle_factor_4,strong,trade_haggle_step
+global,0x0018DC64,music_buffer_size,strong,sound_init_music
+global,0x001A3AC4,trade_haggle_low,strong,trade_haggle_counter
+global,0x001A3ACC,trade_haggle_high,strong,trade_haggle_counter
+global,0x001A3ADC,trade_haggle_last_offer,strong,trade_haggle_counter
+global,0x001A3F3C,music_timer_handle,strong,sound_timer_add in sound_init_music
+global,0x0017B1CF,potion_ingredient_weights,strong,potion_mix_unknown
+global,0x0019626D,item_template_rarity,strong,item_init_from_template
+global,0x001A9B8C,potion_cauldron_x,strong,potion_mix_unknown
+global,0x001A9B94,potion_cauldron_z,strong,potion_mix_unknown
+global,0x001A9B9C,potion_remove_slots,strong,potionmaker_update
+global,0x001A9BAC,potion_cauldron_rarity,strong,potion_mix_unknown
+global,0x001AA3E0,potion_maker_busy,strong,potionmaker_update
+global,0x001760EA,rest_prompt_fmt,strong,"""%s : "" prompt format"
+global,0x0017611C,loiter_prompt_fmt,strong,"""%s : "" prompt format"
+global,0x0017D1FA,text_rest_how_many,strong,"""Rest how many hours"""
+global,0x0017D1FE,text_loiter_how_many,strong,"""Loiter how many hours"""
+global,0x00185087,text_no_room_rented,strong,"""You have not rented a room here."""
+global,0x00190CBC,rest_last_tick,strong,BIOS tick at the last rested hour
+global,0x00190D1A,rest_state,strong,rest_update state
+global,0x00190DD0,rest_hours_left,strong,rest_update
+global,0x0019629E,rest_active,strong,rest_update
+global,0x001A9AF8,object_move_new_y,strong,object_set_position
+global,0x001A9AFC,object_move_new_z,strong,object_set_position
+global,0x001A9B00,object_move_new_angle_x,strong,object_set_position
+global,0x001A9B04,object_move_new_yaw,strong,object_set_position
+global,0x001A9B08,object_move_new_angle_z,strong,object_set_position
+global,0x001A9B20,object_move_old_yaw,strong,object_set_position
+global,0x001A9B24,object_move_old_angle_z,strong,object_set_position
+global,0x001A9B40,object_find_group,strong,object_find_item
+global,0x001A9B42,object_find_index,strong,"object_find_item, object_count_type"
+global,0x0018DC38,sos_digi_settings,strong,"268 bytes, sos_init"
+global,0x0018DC3C,sos_digi_rate,strong,11025
+global,0x0018DC7C,sos_digi_buffer_size,strong,4096
+global,0x0018DD3C,sos_digi_device,strong,digi_device
+global,0x0018DD40,sos_digi_timer_callback,strong,sos_init
+global,0x0018DD4C,sos_digi_lock_4,strong,sos_init lock region
+global,0x0018DD50,sos_digi_timer_handle,strong,"sos_init, sos_shutdown"
+global,0x0018DD58,sos_midi_driver,strong,sos_init
+global,0x0018DD64,sos_midi_settings,strong,"46 bytes, sos_init"
+global,0x0017A144,quest_symbol_name_kinds,strong,quest_symbol_text
+global,0x0018506F,text_backstab,strong,"""Successful backstab!"""
+global,0x0019628D,guards_alerted,strong,damage_apply
+global,0x00196292,cast_strike_creature_spell,strong,cast_creature_spell

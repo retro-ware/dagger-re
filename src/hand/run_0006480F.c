@@ -13,25 +13,25 @@ extern char str_links_c[];
 extern int link_step(struct link *);
 extern iptr screen_buffer;
 extern iptr big_buffer;
-extern char D_0017596A[];
-extern signed char D_001940DA;
+extern char str_gt[];
+extern signed char misc_state_flags;
 extern signed char quest_global_states[];
-extern int D_00195798;
-extern signed char D_001957CD;
-extern char D_001957E9[];
+extern int link_step_timer;
+extern signed char enchant_caster_level;
+extern char enchant_effect_params[];
 extern char frame_counter[];
 extern struct record *player_entity;
 extern struct record *player_object;
 extern int frame_ticks;
 extern struct character *player_character;
-extern signed char D_0019621B;
-extern int D_00196222;
-extern int D_00196226;
-extern int D_0019622A;
+extern signed char link_caster;
+extern int link_caster_x;
+extern int link_caster_y;
+extern int link_caster_z;
 extern unsigned char interaction_mode;
 extern signed char link_axis_state;
-extern signed char D_001A3A80;
-extern signed char D_001A3A81;
+extern signed char link_combo_set;
+extern signed char link_combo_mask;
 extern int damage_apply(struct record *, int, struct record *);
 extern void msgbox_show_rsc(int, int);
 extern int cast_creature_spell(struct record *, struct record *, int);
@@ -145,8 +145,8 @@ int link_step(struct link *link)
         int axis;
         switch (link->action) {
         case 129:
-            link->combination &= D_001A3A81 | 240;
-            link->combination |= D_001A3A80;
+            link->combination &= link_combo_mask | 240;
+            link->combination |= link_combo_set;
             if (((int)(unsigned char)(link->combination & 15)) != (link->combination >> 4)) break;
         case 1:
             offset = ((BIOS_TICKS - link->start_tick) * link->speed) >> 16;
@@ -193,8 +193,8 @@ int link_step(struct link *link)
             }
             break;
         case 130:
-            link->combination &= D_001A3A81 | 240;
-            link->combination |= D_001A3A80;
+            link->combination &= link_combo_mask | 240;
+            link->combination |= link_combo_set;
             if (((int)(unsigned char)(link->combination & 15)) != (link->combination >> 4)) break;
         case 8:
             offset = ((BIOS_TICKS - link->start_tick) * link->speed) >> 16;
@@ -220,20 +220,20 @@ int link_step(struct link *link)
             }
             break;
         case 9:
-            D_00195798 -= frame_ticks;
-            if (D_00195798 <= 0) {
-                D_00195798 = 1000;
-                D_001957CD = player_character->level;
+            link_step_timer -= frame_ticks;
+            if (link_step_timer <= 0) {
+                link_step_timer = 1000;
+                enchant_caster_level = player_character->level;
                 for (offset = 0; offset < 35; offset++) {
-                    *(short *)(D_001957E9 + (offset * 6)) = 50;
+                    *(short *)(enchant_effect_params + (offset * 6)) = 50;
                 }
-                D_00196222 = link->object->x;
-                D_00196226 = link->object->y - 40;
-                D_0019622A = link->object->z;
+                link_caster_x = link->object->x;
+                link_caster_y = link->object->y - 40;
+                link_caster_z = link->object->z;
                 if (link_find_spell(link->param)->target == 0) {
                     cast_creature_spell(player_entity, player_entity, link->param);
                 } else {
-                    cast_creature_spell((struct record *)&D_0019621B, player_entity, link->param);
+                    cast_creature_spell((struct record *)&link_caster, player_entity, link->param);
                 }
             }
             break;
@@ -244,9 +244,9 @@ int link_step(struct link *link)
             break;
         case 12:
             mc_memcpy((void *)big_buffer, (void *)DOS_LOW(0xA0000), 64000, str_links_c, 315, 4);
-            D_001940DA |= 1;
+            misc_state_flags |= 1;
             link_show_text(link->param + 5400);
-            message = hud_message_add(D_0017596A);
+            message = hud_message_add(str_gt);
             ((char *)message)[3] = 0;
             xn_kbd_flush();
             inpstr_begin_text(message + 2, 16);
@@ -255,7 +255,7 @@ int link_step(struct link *link)
                 hud_messages_draw();
                 xn_gfx_present_inclusive(1);
             }
-            D_001940DA &= 254;
+            misc_state_flags &= 254;
             if (link_answer_matches(link->param + 5656, message + 2) == 0) link->flags |= 16;
             break;
         case 13:
@@ -289,9 +289,9 @@ int link_step(struct link *link)
             link->object->flags &= ~0x40;
             break;
         case 21:
-            D_00195798 -= frame_ticks;
-            if (D_00195798 <= 0) {
-                D_00195798 = 1000;
+            link_step_timer -= frame_ticks;
+            if (link_step_timer <= 0) {
+                link_step_timer = 1000;
                 damage = rand_range(link->param, link->axis) * player_character->level;
                 if (damage == 0) damage = player_character->level;
                 damage_apply(player_entity, damage, 0);
@@ -310,16 +310,16 @@ int link_step(struct link *link)
             link_hurt_player(2, link->axis);
             break;
         case 26:
-            D_00195798 -= frame_ticks;
-            if (D_00195798 <= 0) {
-                D_00195798 = 1000;
+            link_step_timer -= frame_ticks;
+            if (link_step_timer <= 0) {
+                link_step_timer = 1000;
                 poison_apply(player_entity, (int)(iptr)&*(signed char *)((char *)(iptr)rand_range(0, 11) + 128), 0);
             }
             break;
         case 27:
-            D_00195798 -= frame_ticks;
-            if (D_00195798 <= 0) {
-                D_00195798 = 1000;
+            link_step_timer -= frame_ticks;
+            if (link_step_timer <= 0) {
+                link_step_timer = 1000;
                 disease_infect(player_entity, 0, rand_range(0, 16), 0);
             }
             break;
@@ -347,13 +347,13 @@ int link_step(struct link *link)
         }
         bits = link->axis >> 4;
         if (bits != 0) {
-            D_001A3A81 = ~(*(signed char *)&bits);
+            link_combo_mask = ~(*(signed char *)&bits);
             if (((int)(unsigned char)(link->flags & 2)) != 0) {
                 value = 0;
             } else {
                 value = bits;
             }
-            D_001A3A80 = *(signed char *)&value;
+            link_combo_set = *(signed char *)&value;
         }
         return 1;
     }

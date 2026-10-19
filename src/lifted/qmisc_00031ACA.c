@@ -6,7 +6,7 @@
 
 extern signed char text_colour;
 extern signed char ui_mode_flags;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern short D_00195F2E;
 
 extern void msgbox_show_quest_text(struct quest *, short, int);
@@ -23,7 +23,7 @@ void quest_show_message(struct quest *quest, int message)
         msgbox_show_rsc((int)(short)((short)*(int *)&message & 32767), 1);
         return;
     }
-    if (((struct bf8_5_1 *)&D_001940DA)->f != 0) {
+    if (((struct bf8_5_1 *)&misc_state_flags)->f != 0) {
         msgbox_yes_no_quest((int)(short)message);
         return;
     }

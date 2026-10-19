@@ -120,7 +120,7 @@ extern iptr compass_box_image;
 extern iptr qbn_opcode_arg_counts;
 extern signed char climate_weathers[];
 extern signed char view_cursor_active;
-extern signed char D_0019621B;
+extern signed char link_caster;
 extern iptr link_caster_location;
 extern signed char current_region;
 extern signed char player_underwater;
@@ -863,6 +863,6 @@ void books_find_path(void)
 
 void init_link_caster(void)
 {
-    D_0019621B = 18;
+    link_caster = 18;
     link_caster_location = (iptr)location_object;
 }

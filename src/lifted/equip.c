@@ -49,7 +49,7 @@ extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern signed char D_001940D6;
 extern unsigned char world_state_flags;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern struct character *ai_characters[];
 extern struct record *ai_entities[];
 extern struct building *current_building;
@@ -1013,8 +1013,8 @@ void ai_creature_think(struct character *monster_char, struct record *monster, s
         }
     }
     if (monster_char->give_up_timer != 0) monster_char->give_up_timer--;
-    if (((struct bf8_7_1 *)&D_001940DA)->f != 0) {
-        D_001940DA &= 127;
+    if (((struct bf8_7_1 *)&misc_state_flags)->f != 0) {
+        misc_state_flags &= 127;
         return;
     }
     if (((int)(unsigned short)(anim->anim_bits & 2)) == 0) return;

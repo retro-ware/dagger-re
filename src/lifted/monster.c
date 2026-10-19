@@ -16,7 +16,7 @@ extern iptr D_00190704[];
 extern char scratch_190de4[];
 extern signed char text_rsc_buffer[];
 extern unsigned char world_state_flags;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern struct record *nonworld_root;
 extern struct record *player_object;
 extern int frame_ticks;
@@ -186,7 +186,7 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
         vertical_velocity = saved_velocity;
         ceiling_height = saved_ceiling;
         if (abs(monster->y - player_object->y) <= 3000) return;
-        D_001940DA |= 128;
+        misc_state_flags |= 128;
         object_delete(monster);
     }
 }

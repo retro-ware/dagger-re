@@ -12,7 +12,7 @@ extern char str_rest_c[];
 extern char str_anim0002_vid[];
 extern char str_anim0004_vid[];
 extern unsigned char player_environment;
-extern iptr D_00185087;
+extern iptr text_no_room_rented;
 extern signed char world_running;
 extern int D_0018DDE4;
 extern signed char player_view_flags;
@@ -213,7 +213,7 @@ int rest_allowed(void)
         if (((int)(unsigned char)(signed char)current_building->type) == 15) {
             tavern_building = current_building;
             if (tavern_room_rented() == 0) {
-                msgbox_show_string(D_00185087, 1);
+                msgbox_show_string(text_no_room_rented, 1);
                 return 0;
             }
             tavern_go_to_room();

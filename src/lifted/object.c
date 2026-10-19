@@ -20,26 +20,26 @@ extern struct loaded_location loaded_location;
 extern iptr object_found_last;
 extern int D_001A3F94;
 extern int object_move_new;
-extern int D_001A9AF8;
-extern int D_001A9AFC;
-extern int D_001A9B00;
-extern int D_001A9B04;
-extern int D_001A9B08;
+extern int object_move_new_y;
+extern int object_move_new_z;
+extern int object_move_new_angle_x;
+extern int object_move_new_yaw;
+extern int object_move_new_angle_z;
 extern iptr object_debug_watch;
 extern int object_delete_block_id;
 extern struct record *object_search_result;
 extern iptr object_search_id;
 extern int object_move_old_angles;
-extern int D_001A9B20;
-extern int D_001A9B24;
+extern int object_move_old_yaw;
+extern int object_move_old_angle_z;
 extern int object_move_old_z;
 extern int object_move_old_x;
 extern int object_move_old_y;
 extern int object_heap_size;
 extern int object_heap_free;
 extern short object_count_result;
-extern short D_001A9B40;
-extern short D_001A9B42;
+extern short object_find_group;
+extern short object_find_index;
 extern char object_debug_watch_copy[];
 extern char potion_ingredient_scroll[];
 extern char potion_ingredient_count[];
@@ -226,8 +226,8 @@ void object_set_position(struct record *object, int x, int y, int z, int angle_x
     object_move_old_y = object->y;
     object_move_old_z = object->z;
     object_move_old_angles = object->angle_x;
-    D_001A9B20 = object->yaw;
-    D_001A9B24 = object->angle_z;
+    object_move_old_yaw = object->yaw;
+    object_move_old_angle_z = object->angle_z;
     object->x = x;
     object->y = y;
     object->z = z;
@@ -235,11 +235,11 @@ void object_set_position(struct record *object, int x, int y, int z, int angle_x
     object->yaw = yaw;
     object->angle_z = angle_z;
     object_move_new = x;
-    D_001A9AF8 = y;
-    D_001A9AFC = z;
-    D_001A9B00 = angle_x;
-    D_001A9B04 = yaw;
-    D_001A9B08 = angle_z;
+    object_move_new_y = y;
+    object_move_new_z = z;
+    object_move_new_angle_x = angle_x;
+    object_move_new_yaw = yaw;
+    object_move_new_angle_z = angle_z;
     if (object->type == 43) return;
     object_foreach(object->children, object_follow_move_cb);
 }
@@ -419,16 +419,16 @@ void object_find_item_cb(struct record *object)
 {
     struct item *item;
 
-    if (((int)(short)D_001A9B42) == (-1) || object->type != 2) return;
+    if (((int)(short)object_find_index) == (-1) || object->type != 2) return;
     item = &object->data.item;
-    if (item->group != D_001A9B40 || item->index != D_001A9B42) return;
-    D_001A9B42 = 65535;
+    if (item->group != object_find_group || item->index != object_find_index) return;
+    object_find_index = 65535;
     found_object = object;
 }
 
 iptr object_find_type_cb(struct record *object)
 {
-    if ((short)object->type != D_001A9B42) return 0;
+    if ((short)object->type != object_find_index) return 0;
     found_object = object;
     return 1;
 }
@@ -436,14 +436,14 @@ iptr object_find_type_cb(struct record *object)
 struct record *object_find_type(struct record *root, int type)
 {
     found_object = 0;
-    D_001A9B42 = type;
+    object_find_index = type;
     object_find(root, object_find_type_cb);
     return found_object;
 }
 
 void object_count_type_cb(struct record *object)
 {
-    if ((short)object->type != D_001A9B42) return;
+    if ((short)object->type != object_find_index) return;
     object_count_result++;
 }
 

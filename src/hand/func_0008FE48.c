@@ -5,10 +5,10 @@
 extern char str_potions_c[];
 extern char str_unknown_powers[];
 extern unsigned char spell_effect_settings[][12];
-extern unsigned char D_0017B1CF[];
-extern unsigned char D_001A9B8C[];
-extern unsigned char D_001A9B94[];
-extern unsigned char D_001A9BAC[];
+extern unsigned char potion_ingredient_weights[];
+extern unsigned char potion_cauldron_x[];
+extern unsigned char potion_cauldron_z[];
+extern unsigned char potion_cauldron_rarity[];
 extern short potion_cauldron_count;
 extern void potion_sort_ingredients(unsigned char *, unsigned char *, unsigned char *, int);
 
@@ -23,14 +23,14 @@ int potion_mix_unknown(struct spell *sp)
     unsigned char z[8];
     int n;
 
-    mc_memcpy(x, D_001A9B8C, potion_cauldron_count, str_potions_c, 410, 8);
-    mc_memcpy(y, D_001A9BAC, potion_cauldron_count, str_potions_c, 411, 8);
-    mc_memcpy(z, D_001A9B94, potion_cauldron_count, str_potions_c, 412, 8);
+    mc_memcpy(x, potion_cauldron_x, potion_cauldron_count, str_potions_c, 410, 8);
+    mc_memcpy(y, potion_cauldron_rarity, potion_cauldron_count, str_potions_c, 411, 8);
+    mc_memcpy(z, potion_cauldron_z, potion_cauldron_count, str_potions_c, 412, 8);
     potion_sort_ingredients(x, y, z, potion_cauldron_count);
     n = potion_cauldron_count;
     for (i = 0; n - 1 > i; i++) {
         if (x[i] == x[i + 1]) {
-            w[i] = D_0017B1CF[x[i]];
+            w[i] = potion_ingredient_weights[x[i]];
             y[i] += y[i + 1];
             mc_memcpy(x + i, x + (i + 1), 8 - i - 1, str_potions_c, 424, 4);
             mc_memcpy(z + i, (i + 1) + z, 8 - i - 1, str_potions_c, 425, 4);

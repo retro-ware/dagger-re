@@ -11,7 +11,7 @@ extern char str_fmt_d_d[];
 extern char *race_names[];
 extern signed char text_buffer[];
 extern signed char player_view_flags;
-extern char D_00195A08[];
+extern char strength_bonus[];
 extern struct record *player_entity;
 extern iptr paperdoll_buffer;
 extern struct character *player_character;
@@ -55,14 +55,14 @@ void sheet_draw(void)
     else attributes = player_character->attributes;
     for (i = 0; i < 8; i++) {
         if (i == 0 && ((struct bf8_2_1 *)&player_view_flags)->f == 0)
-            value = attributes[i] + *(short *)D_00195A08;
+            value = attributes[i] + *(short *)strength_bonus;
         else
             value = attributes[i];
         if (value < player_character->base_attributes[i]) colour = 240;
         else if (value > player_character->base_attributes[i]) colour = 96;
         else colour = 145;
         if (i == 0 && ((struct bf8_2_1 *)&player_view_flags)->f == 0)
-            text_draw_centred_coloured(itoa(attributes[i] + *(int *)D_00195A08, ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);
+            text_draw_centred_coloured(itoa(attributes[i] + *(int *)strength_bonus, ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);
         else
             text_draw_centred_coloured(itoa(attributes[i], ((char *)text_buffer), 10), x, (short)((sheet_buttons[i + 13].y1 - font_height) - 2), colour, 141);
     }

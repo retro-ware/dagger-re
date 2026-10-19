@@ -7,7 +7,7 @@ extern struct record *creature_list[];
 extern int view_look_yaw;
 extern struct record *player_entity;
 extern struct record *player_object;
-extern int D_00195ABC;
+extern int attack_angle;
 extern int creature_count;
 extern struct character *player_character;
 extern struct w2 *click_face_texture;
@@ -70,7 +70,7 @@ void weapon_melee_strike(struct record *attacker)
             continue;
         if (dist > 10) {
             dist = xn_math_angle_to_point(attacker->x, attacker->z, other->x, other->z);
-            D_00195ABC = dist;
+            attack_angle = dist;
             if (attacker == player_entity)
                 res = ai_angle_diff(attacker->yaw + view_look_yaw & 2047, dist, &dist);
             else
@@ -101,7 +101,7 @@ void weapon_melee_strike(struct record *attacker)
             if (dist > 90)
                 continue;
             dist = xn_math_angle_to_point(attacker->x, attacker->z, other->x, other->z);
-            D_00195ABC = dist;
+            attack_angle = dist;
             res = ai_angle_diff(attacker->yaw + view_look_yaw & 2047, dist, &dist);
             if (res < 200) {
                 damage_spawn_splash(people_list[i], 0, -1);

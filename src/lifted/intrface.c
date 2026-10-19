@@ -34,7 +34,7 @@ extern signed char game_state_flags;
 extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern unsigned char world_state_flags;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern signed char player_motion_flags;
 extern int jump_velocity;
 extern struct record *camera_object;
@@ -485,7 +485,7 @@ void player_movement_update(void)
     region = intrface_region_at((int)(short)mouse_x, (int)(short)mouse_y, &region_x, &dy);
     cursor_draw((int)(short)*(short *)&region);
     if (screen_active != 0) return;
-    if (key_action_held(22) != 0 || (((struct bf8_6_1 *)&D_001940DA)->f != 0 && ((int)(unsigned char)(mouse_buttons & 1)) != 0)) {
+    if (key_action_held(22) != 0 || (((struct bf8_6_1 *)&misc_state_flags)->f != 0 && ((int)(unsigned char)(mouse_buttons & 1)) != 0)) {
         return;
     }
     collide_floor_hit = (collide_side_hit = 0);

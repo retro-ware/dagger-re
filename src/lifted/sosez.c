@@ -7,16 +7,16 @@
 extern char str_sosez_c[];
 extern char str_riff[];
 extern iptr music_song_buffer;
-extern char D_0018DC38[];
+extern char sos_digi_settings[];
 extern iptr sos_drum_bank;
 extern iptr sos_melodic_bank;
-extern char D_0018DD4C[];
-extern char D_0018DD50[];
+extern char sos_digi_lock_4[];
+extern char sos_digi_timer_handle[];
 extern int D_0018DD54;
-extern int D_0018DD58;
+extern int sos_midi_driver;
 extern int sos_digi_driver;
 extern int sos_digi_handle;
-extern char D_0018DD64[];
+extern char sos_midi_settings[];
 extern iptr music_song_data;
 extern int D_001A3F4C;
 
@@ -27,20 +27,20 @@ extern int dpmi_unlock_region(iptr, int);
 
 int sos_shutdown(void)
 {
-    func_0009E61A(*(int *)D_0018DD50);
+    func_0009E61A(*(int *)sos_digi_timer_handle);
     if (sos_digi_driver != (-1)) func_0009F9A7(sos_digi_handle, 1, 1);
-    if (D_0018DD54 != (-1)) func_0009F253(D_0018DD58, 1);
+    if (D_0018DD54 != (-1)) func_0009F253(sos_midi_driver, 1);
     func_0009EC0A();
     func_0009E95B();
     func_0009E281(0);
-    dpmi_unlock_region((iptr)D_0018DC38, 268);
-    dpmi_unlock_region((iptr)D_0018DD64, 46);
+    dpmi_unlock_region((iptr)sos_digi_settings, 268);
+    dpmi_unlock_region((iptr)sos_midi_settings, 46);
     dpmi_unlock_region((iptr)&sos_digi_driver, 4);
     dpmi_unlock_region((iptr)&sos_digi_handle, 4);
-    dpmi_unlock_region((iptr)D_0018DD50, 4);
+    dpmi_unlock_region((iptr)sos_digi_timer_handle, 4);
     dpmi_unlock_region((iptr)&D_0018DD54, 4);
-    dpmi_unlock_region((iptr)&D_0018DD58, 4);
-    dpmi_unlock_region((iptr)D_0018DD4C, 4);
+    dpmi_unlock_region((iptr)&sos_midi_driver, 4);
+    dpmi_unlock_region((iptr)sos_digi_lock_4, 4);
     dpmi_unlock_region((iptr)&music_song_buffer, 4);
     dpmi_unlock_region((iptr)&sos_melodic_bank, 4);
     dpmi_unlock_region((iptr)&sos_drum_bank, 4);

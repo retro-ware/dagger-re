@@ -13,7 +13,7 @@ extern signed char game_mode;
 extern double trade_haggle_minimum;
 extern double trade_haggle_asking;
 extern double trade_haggle_discount;
-extern int D_001A3ADC;
+extern int trade_haggle_last_offer;
 extern struct character *trade_haggle_buyer;
 extern iptr trade_haggle_seller;
 extern void trade_haggle_show_offer(void);
@@ -24,7 +24,7 @@ extern double exp(double);
 
 void trade_haggle_start(int price, int quantity, struct record *seller, struct record *buyer)
 {
-    D_001A3ADC = -1;
+    trade_haggle_last_offer = -1;
     trade_haggle_seller = (iptr)&seller->data.character;
     trade_haggle_buyer = &buyer->data.character;
     if (quantity > 1) {

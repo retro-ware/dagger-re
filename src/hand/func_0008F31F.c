@@ -21,12 +21,12 @@ extern struct record *player_object;
 extern struct character *player_character;
 extern iptr window_image;
 extern signed char mouse_buttons_prev;
-extern char D_001A9B9C[];
-extern signed char D_001A9BB4[];
+extern char potion_remove_slots[];
+extern signed char potion_cauldron_ids[];
 extern struct record *potion_cauldron[];
 extern struct record *potion_ingredients[];
 extern char potion_ingredient_scroll[];
-extern int D_001AA3E0;
+extern int potion_maker_busy;
 extern char potion_ingredient_count[];
 extern iptr potion_name;
 extern short potion_cauldron_count;
@@ -76,10 +76,10 @@ void potionmaker_update(void)
             image = ((struct tex_cache_entry *)xn_tex_cache_lookup(item->inventory_image >> 7, item->inventory_image & 127, (int *)(iptr)-1))->image;
             xn_draw_image_drop_shadow((COUNT & 1) * 56 + 233 - (image->width >> 1), (COUNT >> 1) * 38 + 42 - (image->height >> 1), image->width, image->height, (char *)image + image->data_offset);
             text_draw_centred_coloured((iptr)item->name, (short)((COUNT & 1) * 56 + 236), (short)((COUNT >> 1) * 40 + 48), 145, 156);
-            ((short *)D_001A9B9C)[COUNT++] = i;
+            ((short *)potion_remove_slots)[COUNT++] = i;
         }
     }
-    if (*(int *)potion_ingredient_count == 0 && D_001AA3E0 == 0 && COUNT == 0) {
+    if (*(int *)potion_ingredient_count == 0 && potion_maker_busy == 0 && COUNT == 0) {
         msgbox_show_rsc(34, 1);
         potionmaker_close();
     }
@@ -103,8 +103,8 @@ void potionmaker_update(void)
         if (row > 24) return;
         row = (MOUSE_Y - 30) / 38;
         i += row + row;
-        *(iptr *)&potion_cauldron[((short *)D_001A9B9C)[i]] = 0;
-        ((unsigned char *)D_001A9BB4)[((short *)D_001A9B9C)[i]] = 254;
+        *(iptr *)&potion_cauldron[((short *)potion_remove_slots)[i]] = 0;
+        ((unsigned char *)potion_cauldron_ids)[((short *)potion_remove_slots)[i]] = 254;
         return;
     }
     if (MOUSE_X < 16 || MOUSE_X > 155 || MOUSE_Y < 30 || MOUSE_Y > 171) return;

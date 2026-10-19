@@ -4,8 +4,8 @@ extern char str_exceeded_maximum_number_of_links[];
 extern struct record *location_object;
 extern struct link links[];
 extern int link_count;
-extern char D_001A3A80;
-extern char D_001A3A81;
+extern char link_combo_set;
+extern char link_combo_mask;
 extern void fatal_error(char *);
 extern struct record *object_find_by_id(struct record *, iptr);
 
@@ -25,5 +25,5 @@ void links_resolve(void)
         if (e->object != 0)
             e->object->link_flag = 255;
     }
-    D_001A3A80 = D_001A3A81 = 0;
+    link_combo_set = link_combo_mask = 0;
 }

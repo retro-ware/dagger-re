@@ -4,7 +4,7 @@ struct bits8 {
 };
 extern char str_rumor_c[];        /* __FILE__ */
 extern char *marquee_owned_text;
-extern struct bits8 D_001940DA;
+extern struct bits8 misc_state_flags;
 extern int marquee_x;
 extern char *marquee_text;
 #include "clib.h"
@@ -16,8 +16,8 @@ void marquee_start(char *text)
         mc_free(marquee_owned_text, str_rumor_c, 52);
         marquee_owned_text = (char *)(iptr)-1751672937;
     }
-    marquee_owned_text = D_001940DA.b3 ? text : 0;
+    marquee_owned_text = misc_state_flags.b3 ? text : 0;
     marquee_text = text;
     marquee_x = 320;
-    D_001940DA.b3 = 0;
+    misc_state_flags.b3 = 0;
 }

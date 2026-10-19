@@ -8,7 +8,7 @@ extern iptr screen_buffer;
 extern char str_pickbook_c[];
 extern char str_spbk00i0_img[];
 extern char str_mask04i0_img_2[];
-extern iptr D_00184876;
+extern iptr text_not_ready;
 extern signed char world_running;
 extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
@@ -39,7 +39,7 @@ int spellbook_open(short force)
     if (player_death_timer > 0) return 0;
     if (force != 0 || (game_mode == 0 && key_action_held(28) != 0)) {
         if (spell_cast_busy != 0) {
-            hud_status_set(D_00184876);
+            hud_status_set(text_not_ready);
             return 0;
         }
         xn_font_select(4);

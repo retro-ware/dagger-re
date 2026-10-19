@@ -41,7 +41,7 @@ extern char arena2_cd_path[];
 extern signed char game_state_flags;
 extern signed char D_001940D6;
 extern signed char player_view_flags;
-extern signed char D_001940DA;
+extern signed char misc_state_flags;
 extern struct record *inventory_containers[];
 extern struct record *inventory_container_1;
 extern struct record *inventory_container_2;
@@ -434,8 +434,8 @@ void kludge_pick_pockets(void)
 
 void kludge_toggle_quest_debug(void)
 {
-    D_001940DA ^= 2;
-    if (((struct bf8_1_1 *)&D_001940DA)->f == 0) return;
+    misc_state_flags ^= 2;
+    if (((struct bf8_1_1 *)&misc_state_flags)->f == 0) return;
     hud_message_add(str_quest_debugging_on);
 }
 

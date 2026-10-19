@@ -17,7 +17,7 @@ extern char str_castle_sentinel[];
 extern char str_scourg_barrow[];
 extern char str_the_material_of_the_weapon_you_are_using[];
 extern signed char weapon_skills[];
-extern signed char D_0017A144[];
+extern signed char quest_symbol_name_kinds[];
 extern signed char struck_body_part_table[];
 extern char *D_0017CCFA[];   /* class names, by mobile id - 128 */
 extern char material_to_hit[];
@@ -28,7 +28,7 @@ extern char *region_names[];
 extern signed char region_name_races[];
 extern iptr text_blank;
 extern char monster_category[];
-extern iptr D_0018506F;
+extern iptr text_backstab;
 extern signed char body_part_armor_slots[];
 extern char weapon_proficiency_bits[];
 extern int D_0018DDDC;
@@ -37,12 +37,12 @@ extern struct record *creature_list[];
 extern char D_00190B44[];
 extern signed char text_rsc_buffer[];
 extern unsigned char world_state_flags;
-extern char D_00195A08[];
+extern char strength_bonus[];
 extern struct item *text_macro_item;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *scratch_current_object;
-extern int D_00195ABC;
+extern int attack_angle;
 extern char cheat_flags[];
 extern struct record *found_object;
 extern int creature_count;
@@ -52,7 +52,7 @@ extern struct career *player_class;
 extern signed char current_region;
 extern unsigned char D_00196271;
 extern signed char game_mode;
-extern signed char D_0019628D;
+extern signed char guards_alerted;
 extern signed char player_moving;
 extern signed char text_macro_gender;
 extern signed char D_0019629C;
@@ -221,7 +221,7 @@ L2D3DB:;
                             if (creature->mobile_id >= 128) {
                                 return name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)creature->flags & 1), object->name_seed);
                             }
-                            return name_generate_seeded((int)(unsigned char)D_0017A144[current_quest->id % 3], 0, object->name_seed);
+                            return name_generate_seeded((int)(unsigned char)quest_symbol_name_kinds[current_quest->id % 3], 0, object->name_seed);
                         }
                         if (creature->mobile_id >= 128) {
                             return (iptr)D_0017CCFA[creature->mobile_id - 128];
@@ -323,14 +323,14 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
                 if (backstab_chance != 0) {
                     if (rand_range(1, 100) <= backstab_chance) {
                         damage = damage * 3;
-                        hud_message_add(D_0018506F);
+                        hud_message_add(text_backstab);
                     }
                 }
                 dealt = damage_apply(target, damage, 0) + ((int)(short)swing_damage);
                 spell_break_concealment(attacker);
                 if (dealt != 0) {
                     total_dealt += dealt;
-                    damage_knockback(target, dealt * 10, D_00195ABC, dealt * 2);
+                    damage_knockback(target, dealt * 10, attack_angle, dealt * 2);
                 }
             }
         } else {
@@ -342,14 +342,14 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
                     if (backstab_chance != 0) {
                         if (rand_range(1, 100) <= backstab_chance) {
                             damage = damage * 3;
-                            hud_message_add(D_0018506F);
+                            hud_message_add(text_backstab);
                         }
                     }
                     dealt = damage_apply(target, damage, 0);
                     if (attacker == player_entity) dealt += (int)(short)swing_damage;
                     total_dealt += dealt;
                     if (attacker == player_entity && dealt != 0) {
-                        damage_knockback(target, dealt * 10, D_00195ABC, dealt * 2);
+                        damage_knockback(target, dealt * 10, attack_angle, dealt * 2);
                     }
                     if (dealt != 0) damage_monster_hit_effects(attacker, target);
                     if (attacker->type == 18) damage_namira_reflect(attacker, target, dealt);
@@ -387,19 +387,19 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
             if (((int)(unsigned short)(weapon->item_flags & 16)) == 0) damage >>= 1;
         }
         damage += ((int)(short)*(short *)(material_to_hit + (weapon->material * 2))) / 10;
-        damage += ((int)(iptr)&*(signed char *)((char *)(iptr)(attacker_character->attributes[ATTR_STR] + *(int *)D_00195A08) - 50)) / 5;
+        damage += ((int)(iptr)&*(signed char *)((char *)(iptr)(attacker_character->attributes[ATTR_STR] + *(int *)strength_bonus) - 50)) / 5;
         if (damage < 1) damage = 0;
         damage += damage_bonus_vs_target(weapon, attacker_character, target_character);
         if (backstab_chance != 0) {
             if (rand_range(1, 100) <= backstab_chance) {
                 damage = damage * 3;
-                hud_message_add(D_0018506F);
+                hud_message_add(text_backstab);
             }
         }
         dealt = damage_apply(target, damage, attacker_character->equipped[hand_slot]);
         if (D_0019629C != 0) return;
         if (attacker == player_entity && dealt != 0) {
-            damage_knockback(target, dealt * 10, D_00195ABC, dealt * 2);
+            damage_knockback(target, dealt * 10, attack_angle, dealt * 2);
         }
         if (dealt != 0 && attacker_character->equipped[hand_slot]->children != 0) {
             poison = &attacker_character->equipped[hand_slot]->children->data.disease;
@@ -532,11 +532,11 @@ int damage_apply(struct record *target, int damage, struct record *weapon)
 
     if (target == 0) return 0;
     if (target == player_entity && ((struct bf8_6_1 *)&cheat_flags)->f != 0) return 0;
-    if (D_0019628D == 0 && target == player_entity && guards_are_present() != 0) {
+    if (guards_alerted == 0 && target == player_entity && guards_are_present() != 0) {
         if (((int)(unsigned char)game_mode) == 21) return 0;
         crime_reputation_penalty();
         msgbox_yes_no_rsc(15);
-        D_0019628D = 1;
+        guards_alerted = 1;
         if (((int)D_00196271) == 1) {
             crime_guards_or_court(1);
             return 0;
