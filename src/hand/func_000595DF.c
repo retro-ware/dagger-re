@@ -1,0 +1,53 @@
+/* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000595DF */
+#include "records.h"
+
+extern iptr paperdoll_mask;
+extern iptr color_remap;
+extern char *scratch_buffer;
+extern unsigned char *color_remap_tables;
+extern void xn_draw_image_scaled(int, int, int, int, int, int, int, char *);
+#ifdef DAGGER_PORT
+/* the engine's canonical order: dst, src, w, h, colour. The game passes its registers as the
+   asm took them (dst EAX, w EDX, h EBX, src ECX: the boundary adapter xn_draw_paperdoll_mask_b),
+   so the native call puts them in the engine's order */
+extern void xn_draw_paperdoll_mask(char *, char *, int, int, int);
+#else
+extern void xn_draw_paperdoll_mask(char *, char *, int, iptr, int);
+#endif
+extern void xn_draw_paperdoll_item(int, int, int, int, void *);
+extern void *xn_tex_cache_lookup(int, int, int *);
+extern void xn_tex_cache_flush(void);
+
+void paperdoll_draw_item(struct item *item, int x, int y, int mask_value)
+{
+    char *mask;
+    struct texture_header *image;
+    char *texture;
+    int unused4;
+    int unused3;
+    int unused2;
+    int unused1;
+    short mask_x;
+    short mask_y;
+
+    color_remap = (iptr)((char *)color_remap_tables + (item->color << 8));
+    texture = (char *)xn_tex_cache_lookup(item->inventory_image >> 7, (int)(unsigned short)(item->inventory_image & 127), (int *)(iptr)-1);
+    if (texture == 0) {
+        xn_tex_cache_flush();
+        texture = (char *)xn_tex_cache_lookup(item->inventory_image >> 7, (int)(unsigned short)(item->inventory_image & 127), (int *)(iptr)-1);
+    }
+    image = ((struct tex_cache_entry *)texture)->image;
+    if (item->enchantments[0].type == 26 && item->enchantments[0].param == 6) {
+        xn_draw_image_scaled((image->x) + x, (image->y) + y, image->width, image->height, image->width, image->height, (int)(unsigned short)(image->flags | 32768), (char *)image + image->data_offset);
+    } else {
+        xn_draw_paperdoll_item((image->x) + x, (image->y) + y, image->width, image->height, (char *)image + image->data_offset);
+    }
+    mask_x = image->x - 192;
+    mask_y = image->y - 1;
+    mask = (char *)paperdoll_mask + ((((int)(short)mask_y) * 125) + ((int)(short)mask_x));
+#ifdef DAGGER_PORT
+    xn_draw_paperdoll_mask(mask, (char *)(iptr)scratch_buffer, image->width, image->height, mask_value);
+#else
+    xn_draw_paperdoll_mask(mask, (char *)(iptr)image->width, image->height, (iptr)scratch_buffer, mask_value);
+#endif
+}

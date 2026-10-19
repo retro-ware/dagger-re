@@ -1,0 +1,197 @@
+/* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0007193D */
+#include "records.h"
+#include "clib.h"
+#include "doslow.h"
+
+extern signed char mouse_buttons;
+extern short mouse_x;
+extern short mouse_y;
+extern signed char D_0012B508;
+extern signed char key_down_esc;
+extern signed char key_down_enter;
+extern char D_001760B1[];
+extern char D_001760D6[];
+extern char D_001760DD[];
+extern char D_001760EA[];
+extern char D_0017610F[];
+extern char D_0017611C[];
+extern iptr D_0017D1FA;
+extern iptr D_0017D1FE;
+extern signed char text_buffer[];
+extern int D_00190CBC;
+extern signed char D_00190D1A;
+extern short D_00190DD0;
+extern struct record *player_entity;
+extern int creature_count;
+extern char inpstr_result[];
+extern struct character *player_character;
+extern struct career *player_class;
+extern char *scratch_buffer;
+extern unsigned char D_0019626F;
+extern signed char game_mode;
+extern signed char mouse_buttons_prev;
+extern signed char D_00196294;
+extern signed char D_00196299;
+extern signed char D_0019629E;
+extern int rest_ticks_per_hour;
+extern struct image *rest_image;
+extern signed char rest_loitering;
+extern void msgbox_show_string(iptr, int);
+extern void msgbox_show_rsc(int, int);
+extern void time_pass_minutes(int);
+extern void hud_draw(void);
+extern iptr disk_read_file(char *, iptr);
+extern void rest_recover(struct record *);
+extern void rest_close(void);
+extern int rest_allowed(void);
+extern int rest_room_expired(void);
+extern void text_draw_centred_coloured(iptr, int, int, int, unsigned char);
+extern void inpstr_begin_number(int);
+extern int point_in_rect(short, short, short, short, short, short);
+extern int xn_mouse_poll_clamped(void);
+extern void xn_gfx_clear(int);
+extern void xn_draw_image(int, int, int, int, char *);
+#pragma aux mc_set_location parm routine [];
+
+void rest_update(void)
+{
+    int max_hours;
+    iptr prompt;
+
+
+    D_0019629E = 0;
+    if (((int)(unsigned char)game_mode) != 16) {
+        if (((int)D_0019626F) != 16 || ((int)(unsigned char)game_mode) != 8) {
+            return;
+        }
+    }
+    xn_gfx_clear(0);
+    hud_draw();
+    D_0019629E = 1;
+    D_0012B508 = 146;
+    if (rest_room_expired() != 0) {
+        msgbox_show_string((iptr)D_001760B1, 1);
+        rest_close();
+        return;
+    }
+    if (creature_count != 0 || D_00196299 != 0) {
+        msgbox_show_rsc(354, 1);
+        rest_close();
+        return;
+    }
+    if (key_down_esc != 0) {
+        key_down_esc = 0;
+        rest_close();
+        return;
+    }
+    if (D_00190D1A == 0) {
+        xn_draw_image(rest_image->x, rest_image->y, rest_image->width, rest_image->height, rest_image->pixels);
+        if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 87, 63, 134, 86) != 0) {
+            while (mouse_buttons != 0) xn_mouse_poll_clamped();
+            if (rest_allowed() == 0) {
+                rest_close();
+                return;
+            }
+            rest_ticks_per_hour = 9;
+            D_00190D1A = 1;
+            if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
+                mc_free(rest_image, D_001760D6, 165);
+                rest_image = (struct image *)(iptr)-1751672937;
+            }
+            rest_image = (struct image *)disk_read_file(D_001760DD, 0);
+            prompt = (iptr)(scratch_buffer + 55000);
+            mc_set_location(168, D_001760D6);
+            mc_sprintf((char *)prompt, D_001760EA, D_0017D1FA);
+            *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
+            inpstr_begin_number(0);
+            msgbox_show_string(prompt, 2);
+            while (key_down_enter != 0);
+        } else if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 136, 63, 183, 86) != 0) {
+            while (mouse_buttons != 0) xn_mouse_poll_clamped();
+            if (rest_allowed() == 0) {
+                rest_close();
+                return;
+            }
+            rest_ticks_per_hour = 9;
+            D_00190D1A = 3;
+            if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
+                mc_free(rest_image, D_001760D6, 184);
+                rest_image = (struct image *)(iptr)-1751672937;
+            }
+            rest_image = (struct image *)disk_read_file(D_0017610F, 0);
+            D_00190CBC = *(int *)DOS_LOW(0x46C);
+        } else if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 185, 63, 232, 86) != 0) {
+            while (mouse_buttons != 0) xn_mouse_poll_clamped();
+            rest_ticks_per_hour = 32;
+            D_00190D1A = 1;
+            if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
+                mc_free(rest_image, D_001760D6, 193);
+                rest_image = (struct image *)(iptr)-1751672937;
+            }
+            rest_image = (struct image *)disk_read_file(D_001760DD, 0);
+            prompt = (iptr)(scratch_buffer + 55000);
+            mc_set_location(196, D_001760D6);
+            mc_sprintf((char *)prompt, D_0017611C, D_0017D1FE);
+            *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
+            inpstr_begin_number(0);
+            msgbox_show_string(prompt, 2);
+            rest_loitering = 1;
+            D_00196294 = 1;
+            while (key_down_enter != 0);
+        }
+        return;
+    }
+    if (((int)(signed char)D_00190D1A) == 1) {
+        if (((int)(unsigned char)game_mode) != 8) {
+            if (rest_loitering != 0) {
+                max_hours = 3;
+            } else {
+                max_hours = 99;
+            }
+            if (*(int *)inpstr_result > max_hours) {
+                key_down_enter = 0;
+                msgbox_show_rsc((int)(short)((rest_loitering != 0) ? 27 : 26), 1);
+                rest_close();
+            } else {
+                D_00190DD0 = *(short *)inpstr_result;
+                D_00190D1A = 2;
+                D_00190CBC = *(int *)DOS_LOW(0x46C);
+            }
+        }
+        return;
+    }
+    if (((int)(signed char)D_00190D1A) == 2) {
+        xn_draw_image(rest_image->x, rest_image->y, rest_image->width, rest_image->height, rest_image->pixels);
+        text_draw_centred_coloured((iptr)itoa((int)(short)D_00190DD0, (char *)text_buffer, 10), 118, 62, 146, 156);
+        if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 140, 76, 179, 85) != 0) {
+            rest_close();
+        }
+        if (((unsigned)(*(int *)DOS_LOW(0x46C) - D_00190CBC)) > rest_ticks_per_hour) {
+            time_pass_minutes(60);
+            if (rest_loitering == 0) rest_recover(player_entity);
+            D_00190DD0--;
+            D_00190CBC = *(int *)DOS_LOW(0x46C);
+        }
+        if (D_00190DD0 == 0) {
+            msgbox_show_rsc((int)(short)((rest_loitering != 0) ? 349 : 353), 1);
+            rest_close();
+        }
+        return;
+    }
+    if (((int)(signed char)D_00190D1A) != 3) return;
+    xn_draw_image(rest_image->x, rest_image->y, rest_image->width, rest_image->height, rest_image->pixels);
+    text_draw_centred_coloured((iptr)itoa((int)(short)D_00190DD0, (char *)text_buffer, 10), 118, 62, 146, 156);
+    if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 140, 76, 179, 85) != 0) {
+        rest_close();
+    } else if (((unsigned)(*(int *)DOS_LOW(0x46C) - D_00190CBC)) > rest_ticks_per_hour) {
+        time_pass_minutes(60);
+        rest_recover(player_entity);
+        D_00190DD0++;
+        D_00190CBC = *(int *)DOS_LOW(0x46C);
+    }
+    if (player_character->health != player_character->max_health || (player_character->magicka != player_character->max_magicka && (player_class->flags & 8) == 0) || player_character->fatigue != ((player_character->attributes[0] + player_character->attributes[4]) << 6)) {
+        return;
+    }
+    msgbox_show_rsc(350, 1);
+    rest_close();
+}

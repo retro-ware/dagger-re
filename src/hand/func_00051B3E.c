@@ -1,0 +1,82 @@
+/* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00051B3E */
+#include "ptrint.h"
+#include "structs.h"
+#include "clib.h"
+#include "doslow.h"
+#pragma pack(1)
+struct Snd {
+    char pad0[2];
+    unsigned short id;          /* 0x02 */
+    unsigned short step;        /* 0x04 */
+    short count;                /* 0x06 */
+    unsigned short delay;       /* 0x08 */
+    int data;                   /* 0x0a */
+    char pad1[0x16 - 0x0e];
+    char *chunk;                /* 0x16: struct flc_player's three buffers, so that state and */
+    char *palette;              /* 0x1a: loops are where flc_open's player has them natively */
+    char *image;                /* 0x1e */
+    char pad2[0x2a - 0x22];
+    unsigned char state;        /* 0x2a */
+    unsigned char loops;        /* 0x2b */
+};
+/* pflc_play's view of struct flc_player (its own field types) */
+typedef char snd_size_check[(sizeof(struct Snd) == sizeof(struct flc_player)) ? 1 : -1];
+extern unsigned char mouse_buttons;
+extern char xn_kbd_last_scancode;
+extern void flc_show_frame(struct Snd *);
+extern int flc_open(iptr, struct Snd *);
+extern void flc_close(struct Snd *);
+extern int flc_next_frame(struct Snd *);
+extern void xn_kbd_wait_all_released(void);
+extern void xn_mouse_poll_clamped(void);
+
+int pflc_play(iptr file_name, struct Snd *s)
+{
+    int t0;
+
+    if (flc_open(file_name, s) == 0)
+        return 1;
+    s->state = 255;
+    while (mouse_buttons != 0)
+        xn_mouse_poll_clamped();
+    xn_kbd_wait_all_released();
+    if (s->step > 256)
+        s->step -= 16;
+    for (;;) {
+        s->count += s->step;
+        if (s->loops == 0)
+            s->count--;
+        while (s->count-- != 0) {
+            t0 = *(int *)DOS_LOW(0x46C);
+            if (flc_next_frame(s) != 0)
+                break;
+            flc_show_frame(s);
+            xn_mouse_poll_clamped();
+            if (xn_kbd_last_scancode != 0 || (int)(unsigned char)(mouse_buttons & 3) != 0)
+                goto out;
+            while (*(int *)DOS_LOW(0x46C) - t0 < s->delay) {
+                xn_mouse_poll_clamped();
+                if (xn_kbd_last_scancode != 0 || (int)(unsigned char)(mouse_buttons & 3) != 0)
+                    goto out;
+            }
+        }
+        if (s->loops == 0)
+            goto out;
+        if (s->loops != 255) {
+            s->loops--;
+            if (s->loops == 0)
+                goto stop;
+        }
+        lseek(s->id, s->data, 0);
+        s->count = 0;
+    }
+stop:
+    s->state = 255;
+    flc_close(s);
+    xn_kbd_wait_all_released();
+    return 0;
+out:
+    flc_close(s);
+    xn_kbd_wait_all_released();
+    return 1;
+}

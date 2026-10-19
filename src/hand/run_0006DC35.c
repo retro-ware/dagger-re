@@ -1,0 +1,953 @@
+/* matched by the real Watcom C32 10.0a (-d2): a run of guilds from 0x0006D91A to 0x0006DC35, kept together for its switch table's alignment */
+#include "records.h"
+#include "clib.h"
+
+struct msgs {
+    short busy;                 /* 0x00 */
+    short done;                 /* 0x02 */
+    short start;                /* 0x04 */
+    short level[10];            /* 0x06 */
+};
+extern unsigned char mouse_buttons;
+extern struct msgs guild_messages[];
+extern char guild_rank_messages[];         /* guild_messages[0].level */
+extern struct building *current_building;
+extern struct record *player_entity;
+extern struct record *found_object;
+extern struct character *player_character;
+extern unsigned int game_minutes;
+extern unsigned char D_00196271;
+extern struct faction *D_0019671C;
+extern struct membership *guild_membership;
+extern unsigned char D_001A4A1D;
+extern void msgbox_show_rsc(int, int);
+extern int guild_join_check(int);
+extern int guild_rank_for_skills(int);
+extern struct membership *guild_find_membership_by_faction(short);
+extern struct membership *guild_find_membership_by_bits(unsigned char);
+extern void guild_give_map(int);
+extern void msgbox_yes_no_rsc(int);
+extern struct record *object_delete(struct record *);
+extern struct record *object_create_child(struct record *, struct record *, int);
+extern void xn_mouse_poll_clamped(void);
+extern char D_00175EAA[];
+extern char D_00175EB3[];
+extern char D_00175EC1[];
+extern char D_00175EEC[];
+extern char D_00175F17[];
+extern char D_00175F42[];
+extern char D_00175F6D[];
+extern char D_00175F98[];
+extern char D_00175FC3[];
+extern char D_00175FEE[];
+extern char D_00176019[];
+extern char D_00176044[];
+extern int trade_price_scale;
+extern iptr D_001832B0;
+extern char *region_names[];
+extern char D_00186F37[];
+extern char D_00186F4C[];
+extern char D_00186F5F[];
+extern char D_00186F74[];
+extern char D_00186F88[];
+extern char D_00186F9E[];
+extern char D_00186FB6[];
+extern char D_00186FC9[];
+extern char D_00186FDB[];
+extern char D_00186FEE[];
+extern char D_00187001[];
+extern char D_00187017[];
+extern char saved_location_name[];
+extern char saved_region_name[];
+extern signed char text_buffer[];
+extern struct record *player_object;
+extern struct record *location_object;
+extern struct record *scratch_object;
+extern struct location *current_location;
+extern struct career *player_class;
+extern char D_001960D9[];
+extern iptr D_00196118;
+extern signed char current_region;
+extern signed char forced_material;
+extern struct house_for_sale bank_houses_for_sale[];
+extern iptr D_001A41DC;
+extern struct record *D_001A41E4;
+extern signed char bank_house_count;
+extern short D_001A4A1A;
+extern signed char D_001A4A1C;
+extern struct faction *faction_find(short);
+extern void daedra_summon(struct record *);
+extern int spellmaker_open(int);
+extern void training_offer(iptr);
+extern void msgbox_show_string(char *, short);
+extern int quest_pick_file(unsigned char, unsigned char, unsigned char, unsigned char, unsigned char);
+extern int itemmaker_open(int);
+extern void item_make_in_range(uslot16, int, int, struct item *);
+extern void bank_add_house_for_sale(struct record *);
+extern iptr disk_read_file(char *, iptr);
+extern void guild_buy_potions(void);
+extern void guild_buy_spells(void);
+extern void guild_buy_magic_items(void);
+extern void guild_teleport(void);
+extern void guild_buy_soulgems(void);
+extern void guild_cure_diseases(void);
+extern void guild_buy_blessing(void);
+extern void guild_donate(void);
+extern void guild_temple_quest(void);
+extern int guild_kind_of_faction(struct faction *);
+extern iptr guild_service_label(short);
+extern int guild_menu(iptr, int, iptr);
+extern void guild_heal(void);
+extern void shop_open_repair(int, struct record *);
+extern void npc_talk(struct record *);
+extern iptr hud_message_add(iptr);
+extern int rand_range(int, int);
+extern void object_free_children(iptr);
+extern void object_foreach(struct record *, void (*)());
+extern int potionmaker_open(int);
+extern void inventory_open_container(iptr, int, int);
+extern void inv_store_item(struct record *);
+#pragma aux mc_set_location parm routine [];
+
+void guild_join_or_promote(int guild, int joining)
+{
+    struct record *object;
+    int delta;
+    int refusal;
+    int kind;
+    int expelled;
+
+    kind = guild;
+    expelled = 0;
+    guild &= 63;
+    if (guild_membership == 0 && joining != 0) {
+        D_001A4A1D++;
+        if (D_001A4A1D != (char)1)
+            return;
+        if ((kind & 64) && guild_find_membership_by_bits(64) != 0)
+            return;
+        if ((kind & 128) && guild_find_membership_by_bits(128) != 0)
+            return;
+        refusal = guild_join_check(guild);
+        if (refusal == 2) {
+            msgbox_show_rsc(guild_messages[guild].busy, 1);
+            return;
+        }
+        if (refusal == 1) {
+            msgbox_show_rsc(guild_messages[guild].done, 1);
+            return;
+        }
+        msgbox_yes_no_rsc(guild_messages[guild].start);
+        if (D_00196271 == 2)
+            return;
+        object = object_create_child(player_entity, 0, 13);
+        object->type = 10;
+        object->flags = 3;
+        (guild_membership = &object->data.membership)->rank = 0;
+        guild_membership->kind = kind;
+        guild_membership->faction = D_0019671C->id;
+        guild_membership->rank_time = game_minutes;
+        while (mouse_buttons)
+            xn_mouse_poll_clamped();
+        msgbox_show_rsc(guild_messages[guild].level[0], 1);
+        return;
+    }
+    if (guild_membership == 0)
+        return;
+    if (game_minutes - guild_membership->rank_time <= 40320)
+        return;
+    delta = guild_rank_for_skills(guild) - guild_membership->rank;
+    if (D_0019671C->reputation < 0) {
+        delta = -(guild_membership->rank + 1);
+        expelled = 1;
+    }
+    if (delta > 0 || expelled != 0) {
+        guild_membership->rank += delta;
+        guild_membership->rank_time = game_minutes;
+        if (guild == 3 && (guild_membership->rank == 6 || guild_membership->rank == 8))
+            guild_give_map(0);
+        if (guild == 0 && guild_membership->rank < 100)
+            guild_give_map(1);
+        if (guild_membership->rank > 100) {
+            msgbox_show_rsc(668, 1);
+            guild_find_membership_by_faction(current_building->faction_id);
+            if (found_object != 0)
+                object_delete(found_object);
+            if (guild == 3)
+                player_character->thieves_invite_count = 0;
+            if (guild == 0)
+                player_character->brotherhood_invite_count = 0;
+            guild_membership = 0;
+            return;
+        }
+        if (delta < 0) {
+            msgbox_show_rsc(667, 1);
+            return;
+        }
+        msgbox_show_rsc(*(short *)(guild_rank_messages + (guild * 26 + guild_membership->rank * 2)), 1);
+    }
+}
+
+void guild_service_dispatch(struct record *npc)
+{
+    struct record *armor;
+    int unused;
+    int choice;
+    int guild;
+    int is_member;
+    int refusal_text;
+    int not_served;
+    iptr label;
+    iptr image;
+
+    refusal_text = 0;
+    not_served = 0;
+    D_001A4A1C = 0;
+    object_free_children((iptr)D_001960D9);
+    D_0019671C = faction_find(current_building->faction_id);
+    guild_membership = guild_find_membership_by_faction(current_building->faction_id);
+    guild = guild_kind_of_faction(D_0019671C);
+    scratch_object = npc;
+    guild_join_or_promote(guild, 0);
+    D_001A4A1A = ((unsigned)npc->id) >> 16;
+    label = guild_service_label((int)(short)npc->data.person.faction_id);
+    if (label == 0) {
+        npc_talk(npc);
+        return;
+    }
+    is_member = ((guild_membership != 0) ? 1 : 0);
+    mc_set_location(163, D_00175EAA);
+    mc_sprintf((char *)text_buffer, D_00175EB3, is_member + 48);
+    image = disk_read_file(text_buffer, 0);
+    choice = guild_menu(image, is_member, label);
+    switch (choice) {
+    case 0:
+        guild_join_or_promote(guild, 1);
+        if (image != 0 && image != (-1751672937)) {
+            mc_free((void *)image, D_00175EAA, 170);
+            image = -1751672937;
+        }
+        return;
+    case 1:
+        npc_talk(npc);
+        if (image != 0 && image != (-1751672937)) {
+            mc_free((void *)image, D_00175EAA, 174);
+            image = -1751672937;
+        }
+        return;
+    case 2:
+        if (image != 0 && image != (-1751672937)) {
+            mc_free((void *)image, D_00175EAA, 177);
+            image = -1751672937;
+        }
+        break;
+    case 3:
+        if (image != 0 && image != (-1751672937)) {
+            mc_free((void *)image, D_00175EAA, 180);
+            image = -1751672937;
+        }
+        return;
+    default:
+        if (image != 0 && image != (-1751672937)) {
+            mc_free((void *)image, D_00175EAA, 183);
+            image = -1751672937;
+        }
+    }
+    switch ((unsigned)guild) {
+    case 0:
+        if (guild_membership != 0) {
+            switch (npc->data.person.faction_id) {
+            case 839:
+                training_offer((iptr)D_00186F37);
+                break;
+            case 841:
+                if ((guild_membership->rank) >= 1) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 840:
+                if ((guild_membership->rank) >= 3) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 843:
+                if ((guild_membership->rank) < 5) {
+                    refusal_text = 3100;
+                } else {
+                    guild_buy_soulgems();
+                }
+                break;
+            case 842:
+                if ((guild_membership->rank) < 7) {
+                    refusal_text = 3100;
+                } else {
+                    msgbox_show_rsc(402, 1);
+                    npc_talk(npc);
+                }
+                break;
+            case 807:
+                if (npc->quest_id == 0) {
+                    quest_pick_file(76, 0, 48, 66, guild_membership->rank);
+                } else {
+                    npc_talk(npc);
+                }
+                break;
+            default:
+                npc_talk(npc);
+            }
+        }
+        break;
+    case 1:
+        if (guild_membership != 0) {
+            if (((int)(unsigned short)(player_class->flags & 8)) != 0 && player_character->magicka != player_character->max_magicka) {
+                player_character->magicka = player_character->max_magicka;
+                msgbox_show_rsc(465, 1);
+            }
+            switch (npc->data.person.faction_id) {
+            case 61:
+                training_offer((iptr)D_00186F5F);
+                break;
+            case 64:
+                spellmaker_open(1);
+                break;
+            case 65:
+                if ((guild_membership->rank) >= 3) {
+                    guild_buy_magic_items();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 802:
+                if ((guild_membership->rank) >= 5) {
+                    itemmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 66:
+                if ((guild_membership->rank) >= 6) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 62:
+                if ((guild_membership->rank) >= 8) {
+                    guild_teleport();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 60:
+                guild_buy_spells();
+                break;
+            case 63:
+                if (npc->quest_id != 0) {
+                    npc_talk(npc);
+                } else if (guild_membership != 0) {
+                    quest_pick_file(78, 0, 48, 66, player_character->level);
+                } else {
+                    quest_pick_file(78, 0, 48, 67, player_character->level);
+                }
+                break;
+            case 801:
+                hud_message_add(D_001832B0);
+                object_free_children((iptr)D_001960D9);
+                trade_price_scale = ((10 - (guild_membership->rank)) << 8) / 10;
+                inventory_open_container((iptr)D_001960D9, 4, 8);
+                break;
+            default:
+                msgbox_show_string(D_00175EC1, 1);
+            }
+        }
+        break;
+    case 2:
+        if (guild_membership != 0) {
+            switch (npc->data.person.faction_id) {
+            case 849:
+                training_offer((iptr)D_00186F74);
+                break;
+            case 850:
+                trade_price_scale = ((10 - (guild_membership->rank)) << 8) / 10;
+                shop_open_repair(255, npc);
+                break;
+            case 851:
+                if (npc->quest_id == 0) {
+                    quest_pick_file(77, 0, 48, 66, guild_membership->rank);
+                } else {
+                    npc_talk(npc);
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            if (npc->data.person.faction_id == 851) {
+                if (npc->quest_id == 0) {
+                    quest_pick_file(77, 0, 48, 67, guild_membership->rank);
+                } else {
+                    npc_talk(npc);
+                }
+            } else {
+                npc_talk(npc);
+            }
+        }
+        break;
+    case 3:
+        if (guild_membership == 0) {
+        } else {
+            switch ((unsigned short)(npc->data.person.faction_id - 803)) {
+            case 0:
+                training_offer((iptr)D_00186F4C);
+                break;
+            case 1:
+                if (npc->quest_id == 0) {
+                    quest_pick_file(79, 0, 48, 66, guild_membership->rank);
+                } else {
+                    npc_talk(npc);
+                }
+                break;
+            case 2:
+                if ((guild_membership->rank) < 2) {
+                    refusal_text = 3100;
+                    break;
+                }
+                trade_price_scale = 128;
+                object_free_children((iptr)D_001960D9);
+                inventory_open_container((iptr)D_001960D9, 2, 6);
+                break;
+            case 3:
+                if ((guild_membership->rank) < 4) {
+                    refusal_text = 3100;
+                    break;
+                }
+                msgbox_show_rsc(402, 1);
+                npc_talk(npc);
+                break;
+            default:
+                npc_talk(npc);
+            }
+        }
+        break;
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+    case 75:
+    case 76:
+    case 77:
+        if (guild_membership != 0) {
+            switch (npc->data.person.faction_id) {
+            case 845:
+                if (((1 << (guild_membership->rank)) & guild_membership->armor_received) != 0) {
+                    msgbox_show_rsc(461, 1);
+                    break;
+                }
+                guild_membership->armor_received |= 1 << (guild_membership->rank);
+                armor = object_create_child(npc, 0, 107);
+                armor->type = 2;
+                forced_material = guild_membership->rank - 1;
+                if (((int)(unsigned char)forced_material) > 100) {
+                    forced_material = 2;
+                } else if (((int)(unsigned char)forced_material) > 10) {
+                    forced_material = 10;
+                }
+                item_make_in_range(2, 0, 6, &armor->data.item);
+                armor->data.item.armor_type = 2;
+                armor->x = player_object->x;
+                armor->y = player_object->y;
+                armor->z = player_object->z;
+                inv_store_item(armor);
+                msgbox_show_rsc(463, 1);
+                break;
+            case 848:
+                if (player_character->house != 0) break;
+                if ((guild_membership->rank) != 9) {
+                    msgbox_show_rsc(460, 1);
+                    break;
+                }
+                object_foreach(location_object, bank_add_house_for_sale);
+                if (bank_house_count == 0) break;
+                choice = rand_range(0, (unsigned char)bank_house_count - 1);
+                player_character->house = bank_houses_for_sale[choice].id;
+                D_001A41E4 = RECORD_FROM_DATA(bank_houses_for_sale[choice].block);
+                D_001A41DC = (iptr)bank_houses_for_sale[choice].building;
+                msgbox_show_rsc(462, 1);
+                mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, D_00175EAA, 413);
+                mc_strncpy(saved_location_name, (char *)current_location, 32, D_00175EAA, 414);
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 846:
+                if (npc->quest_id != 0) {
+                    npc_talk(npc);
+                } else if (guild_membership != 0) {
+                    quest_pick_file(66, 0, 48, 66, player_character->level);
+                } else {
+                    quest_pick_file(66, 0, 48, 67, player_character->level);
+                }
+                break;
+            default:
+                msgbox_show_string(D_00175EEC, 1);
+            }
+        }
+        break;
+    case 142:
+        if (guild_membership == 0) {
+        } else {
+            guild_heal();
+            switch ((unsigned short)(npc->data.person.faction_id - 453)) {
+            case 0:
+                if ((guild_membership->rank) >= 1) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 1:
+                if ((guild_membership->rank) >= 4) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 2:
+                if ((guild_membership->rank) >= 4) {
+                    guild_buy_soulgems();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 3:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+            goto L6E949;
+        }
+        not_served = 1;
+L6E949:;
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 241:
+                training_offer((iptr)D_00186F88);
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            default:
+                msgbox_show_string(D_00175F17, 1);
+            }
+        }
+        break;
+    case 143:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 2) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 462:
+                if ((guild_membership->rank) >= 1) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 463:
+                if ((guild_membership->rank) >= 6) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 464:
+                if ((guild_membership->rank) >= 8) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 243:
+                training_offer((iptr)D_00186F9E);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 460:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00175F42, 1);
+            }
+        }
+        break;
+    case 144:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 1) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 468:
+                if ((guild_membership->rank) >= 2) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 469:
+                if ((guild_membership->rank) >= 5) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 470:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 245:
+                training_offer((iptr)D_00186FB6);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 466:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00175F6D, 1);
+            }
+        }
+        break;
+    case 145:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 1) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 473:
+                if ((guild_membership->rank) >= 4) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 474:
+                if ((guild_membership->rank) >= 5) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 475:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 247:
+                training_offer((iptr)D_00186FC9);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 471:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00175F98, 1);
+            }
+        }
+        break;
+    case 146:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 2) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 480:
+                if ((guild_membership->rank) >= 3) {
+                    guild_buy_magic_items();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 481:
+                if ((guild_membership->rank) >= 5) {
+                    itemmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 482:
+                if ((guild_membership->rank) >= 6) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 249:
+                training_offer((iptr)D_00186FDB);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 477:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00175FC3, 1);
+            }
+        }
+        break;
+    case 147:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 2) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 485:
+                if ((guild_membership->rank) >= 1) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 487:
+                if ((guild_membership->rank) >= 5) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 488:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 250:
+                training_offer((iptr)D_00186FEE);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 484:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00175FEE, 1);
+            }
+        }
+        break;
+    case 148:
+        if (guild_membership != 0) {
+            guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 490:
+                if ((guild_membership->rank) >= 2) {
+                    guild_buy_potions();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 491:
+                if ((guild_membership->rank) >= 5) {
+                    potionmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 492:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 252:
+                training_offer((iptr)D_00187001);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 493:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00176019, 1);
+            }
+        }
+        break;
+    case 149:
+        if (guild_membership != 0) {
+            if ((guild_membership->rank) >= 1) guild_heal();
+            switch (npc->data.person.faction_id) {
+            case 496:
+                if ((guild_membership->rank) >= 3) {
+                    guild_buy_spells();
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 497:
+                if ((guild_membership->rank) >= 6) {
+                    spellmaker_open(1);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            case 498:
+                if ((guild_membership->rank) >= 7) {
+                    daedra_summon(npc);
+                } else {
+                    refusal_text = 3100;
+                }
+                break;
+            default:
+                not_served = 1;
+            }
+        } else {
+            not_served = 1;
+        }
+        if (not_served != 0) {
+            switch (npc->data.person.faction_id) {
+            case 254:
+                training_offer((iptr)D_00187017);
+                break;
+            case 810:
+                guild_donate();
+                break;
+            case 494:
+                guild_buy_blessing();
+                break;
+            case 813:
+                guild_cure_diseases();
+                break;
+            case 240:
+                guild_temple_quest();
+                break;
+            default:
+                msgbox_show_string(D_00176044, 1);
+            }
+        }
+    }
+    if (refusal_text != 0) msgbox_show_rsc((int)(short)*(short *)&refusal_text, 1);
+    if (D_001A4A1C == 0 || D_00196118 == 0) return;
+    D_001A4A1C = 0;
+    inventory_open_container((iptr)D_001960D9, 0, 6);
+}
