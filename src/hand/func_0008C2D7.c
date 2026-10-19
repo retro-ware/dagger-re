@@ -1,10 +1,10 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0008C2D7 */
 extern unsigned char text_colour;
 extern short font_height;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern char str_inpstr_c[];        /* __FILE__ */
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern char *inpstr_text;
 extern short inpstr_max_length;
 extern short inpstr_cursor;
@@ -31,7 +31,7 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
     xn_mouse_cursor_erase();
     xn_kbd_flush();
     inpstr_text = text;
-    mc_strncpy(D_00190B44, inpstr_text, 160, str_inpstr_c, 56);
+    mc_strncpy(inpstr_saved_text, inpstr_text, 160, str_inpstr_c, 56);
     inpstr_cursor = strlen(inpstr_text);
     inpstr_max_length = max_length;
     for (;;) {
@@ -41,10 +41,10 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
             text_colour = 0;
             xn_draw_fill_rect(x, y, w, h);
             text_colour = 12;
-            D_00142928 = x + inpstr_text_width(inpstr_text, inpstr_cursor);
-            D_0014292C = y;
+            pen_x = x + inpstr_text_width(inpstr_text, inpstr_cursor);
+            pen_y = y;
             if (*(int *)DOS_LOW(0x46C) & 32)
-                xn_draw_line(D_00142928, D_0014292C, D_00142928, D_0014292C + font_height - 1);
+                xn_draw_line(pen_x, pen_y, pen_x, pen_y + font_height - 1);
             text_colour = old;
             text_draw(inpstr_text, x, y);
             xn_gfx_present_inclusive(1);
@@ -54,7 +54,7 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
         }
         r = inpstr_handle_key(key);
         if (r == 32768) {
-            mc_strncpy(inpstr_text, D_00190B44, 4, str_inpstr_c, 83);
+            mc_strncpy(inpstr_text, inpstr_saved_text, 4, str_inpstr_c, 83);
             return 0;
         }
         if (r != 0x87654321)

@@ -48,7 +48,7 @@ extern char *scratch_buffer;
 extern struct xn_pick_hit *pick_hit;
 extern struct record *floor_object;
 extern iptr haze_table_0;
-extern iptr D_00195D84;
+extern iptr shop_item_groups;
 extern char item_draw_order_scratch[];
 extern short building_music_seed;
 extern char saved_player_object[];
@@ -395,7 +395,7 @@ void building_enter(struct building *building)
     building_music_seed = rand();
     if (building_try_enter(building) == 0) return;
     current_building = building;
-    D_00195D84 = building_type_odds[building->type];
+    shop_item_groups = building_type_odds[building->type];
     object_free_children((struct record *)furniture_container_3);
     if (building->id != player_character->house) {
         building_grant_access(building, 5, (int)(iptr)(((char *)(iptr)game_minutes) + building_minutes_to_close(building)));

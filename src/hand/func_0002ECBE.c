@@ -21,7 +21,7 @@ extern int game_minutes;
 extern unsigned short *game_settings;
 extern int ceiling_height;
 extern int player_death_timer;
-extern short D_00195DA0;
+extern short blood_archive;
 extern unsigned char player_on_ground;
 extern short collide_flags;
 extern int collide_move_object(struct record *, int, struct move_request *, int);
@@ -97,11 +97,11 @@ found:
     creature->type = 44;
     if (creature_char->mobile_id < 43) {
         if (*game_settings & 4)
-            creature->image = (D_00195DA0 << 7) + 1;
+            creature->image = (blood_archive << 7) + 1;
         else
             creature->image = (monster_corpse_textures[creature_char->mobile_id].file << 7) + monster_corpse_textures[creature_char->mobile_id].rec;
     } else {
-        creature->image = (D_00195DA0 << 7) + 1;
+        creature->image = (blood_archive << 7) + 1;
     }
     collide_flags = 0;
     world_state_flags |= 32;

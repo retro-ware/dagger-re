@@ -12,10 +12,10 @@ extern unsigned *scratch_buffer;
 extern unsigned char current_region;
 extern struct loaded_location loaded_location;
 extern short quest_location;
-extern int D_001970CC;
-extern struct location_door *D_001970D0;
-extern struct record *D_001970D4;
-extern struct location *D_001970D8;
+extern int quest_location_door_count;
+extern struct location_door *quest_location_doors;
+extern struct record *quest_location_object;
+extern struct location *quest_location_location;
 extern struct quest *current_quest;
 extern struct faction *faction_find_type_in_region(short, short);
 extern int func_000337AD(struct location_door *, struct qbn_place *, struct building *);
@@ -58,10 +58,10 @@ retry:
     if (place->scope != 0) {
         location_free(&quest_location);
         quest_pick_location(&quest_location, place->p1, place->p2, place->scope);
-        doors = D_001970D0;
-        door_count = D_001970CC;
-        loc_object = D_001970D4;
-        location = D_001970D8;
+        doors = quest_location_doors;
+        door_count = quest_location_door_count;
+        loc_object = quest_location_object;
+        location = quest_location_location;
     } else {
         doors = loaded_location.doors;
         door_count = loaded_location.door_count;
@@ -111,7 +111,7 @@ retry:
     place_object->id = (loc_object->id & 0xffff0000) + (candidates[i] & 0xffff);
     place_object->repair_due = place_object->id;
     place_object->quest_id = current_quest->id;
-    place_object->link_flag = D_001970D8->kind;
+    place_object->link_flag = quest_location_location->kind;
     place_object->region = (unsigned short)current_region;
     place->object = place_object;
     place_object->x = loc_object->x;

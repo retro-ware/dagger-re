@@ -6,15 +6,15 @@
 
 extern char str_song_c[];
 extern char str_fmt_s_ld[];
-extern char D_001706CA[];
-extern char D_001706CD[];
-extern iptr D_00179EA8[];
+extern char str_crlf[];
+extern char str_crlf_crlf[];
+extern iptr song_pattern_text[];
 extern signed char text_buffer[];
-extern short D_00190CA2[];
+extern short song_rsc_ids[];
 extern int song_hero1_seed;
 extern int song_hero2_seed;
 extern int song_hero3_seed;
-extern signed char D_00190D1F;
+extern signed char song_hero_race;
 extern signed char scratch_190d20;
 extern signed char song_hero2_gender;
 extern signed char song_hero3_gender;
@@ -48,13 +48,13 @@ void song_generate(int skip)
         *(short *)(scratch_190d64 + (n * 2)) = rand_range(0, 21) + 900;
     }
     n = rand() % 10;
-    pattern = (unsigned char *)xn_str_skip_fields((char *)D_00179EA8[0], 33, n);
+    pattern = (unsigned char *)xn_str_skip_fields((char *)song_pattern_text[0], 33, n);
     while (*pattern != 33) {
-        parse_rsc_text((int)(short)D_00190CA2[*pattern++], 0, 0);
+        parse_rsc_text((int)(short)song_rsc_ids[*pattern++], 0, 0);
         func_000A1054((char *)((iptr)scratch_buffer + 50000), (char *)text_rsc_buffer, str_song_c, 56, 4);
-        func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CA, str_song_c, 57, 4);
+        func_000A1054((char *)((iptr)scratch_buffer + 50000), str_crlf, str_song_c, 57, 4);
     }
-    func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CD, str_song_c, 59, 4);
+    func_000A1054((char *)((iptr)scratch_buffer + 50000), str_crlf_crlf, str_song_c, 59, 4);
 }
 
 void song_init_heroes(int player_hero)
@@ -62,7 +62,7 @@ void song_init_heroes(int player_hero)
     {
         int gender;
 
-        D_00190D1F = rand() & -255;
+        song_hero_race = rand() & -255;
         if (player_hero != 0) {
             song_hero1_seed = 0;
             scratch_190d20 = (signed char)player_character->flags & 1;

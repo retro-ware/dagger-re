@@ -47,7 +47,7 @@ extern char book_list[];
 extern char book_levels[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern unsigned char world_state_flags;
 extern signed char misc_state_flags;
 extern struct character *ai_characters[];
@@ -551,7 +551,7 @@ void item_info_painting(struct item *item)
     painting_adjective_text = pick_random_byte((unsigned char *)((iptr)scratch_buffer + 10)) + 6200;
     painting_prefix1_text = pick_random_byte((unsigned char *)scratch_buffer + 20) + 6300;
     painting_prefix2_text = (short)pick_random_byte((unsigned char *)scratch_buffer + 30) + 6400;
-    D_001940D6 |= 32;
+    display_flags |= 32;
     msgbox_show_rsc(250, 1);
     srand(saved_seed);
 }

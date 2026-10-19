@@ -11,8 +11,8 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char text_colour;
 extern short font_height;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern char str_note_c[];
 extern char note_goto_prompt_fmt[];
 extern char note_find_prompt_fmt[];
@@ -204,8 +204,8 @@ void note_draw_page(void)
                 } else {
                     text_colour = *(signed char *)(entry + 9);
                 }
-                D_00142928 = *(short *)(entry + 1);
-                D_0014292C = *(short *)(entry + 3);
+                pen_x = *(short *)(entry + 1);
+                pen_y = *(short *)(entry + 3);
                 xn_draw_line_to((int)(short)*(short *)(entry + 5), (int)(short)*(short *)(entry + 7));
                 (*(char (**)[11])&entry)++;
             }

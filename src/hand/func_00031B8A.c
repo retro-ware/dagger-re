@@ -16,10 +16,10 @@ extern struct record *quest_person_source;
 extern unsigned char current_region;
 extern struct loaded_location loaded_location;
 extern char quest_location[];
-extern int D_001970CC;
-extern struct location_door *D_001970D0;
-extern struct record *D_001970D4;
-extern struct location *D_001970D8;
+extern int quest_location_door_count;
+extern struct location_door *quest_location_doors;
+extern struct record *quest_location_object;
+extern struct location *quest_location_location;
 extern char quest_init_retry;
 extern unsigned char quest_init_local;
 extern struct quest *current_quest;
@@ -215,10 +215,10 @@ retry:
     } else {
         location_free(quest_location);
         location_pick_random_town(quest_location);
-        door_count = D_001970CC;
-        doors = D_001970D0;
-        loc_object = D_001970D4;
-        location = D_001970D8;
+        door_count = quest_location_door_count;
+        doors = quest_location_doors;
+        loc_object = quest_location_object;
+        location = quest_location_location;
     }
     candidates = (int *)scratch_buffer;
     candidate_count = 0;

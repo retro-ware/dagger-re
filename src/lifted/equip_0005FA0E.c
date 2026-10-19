@@ -4,8 +4,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern signed char D_001861AA[];
-extern iptr D_0018642F[];
+extern signed char loot_category_groups[];
+extern iptr loot_tables[];
 extern struct record *player_object;
 extern struct record *location_object;
 extern struct character *player_character;
@@ -28,7 +28,7 @@ void loot_generate(int table_index, struct record *container, int level, int fem
     struct item *item_data;
     struct record *item;
 
-    table = (unsigned short *)D_0018642F[table_index];
+    table = (unsigned short *)loot_tables[table_index];
     if (table[0] != 0 || table[1] != 0) {
         item = object_create_child(container, 0, 107);
         item->type = 2;
@@ -56,18 +56,18 @@ void loot_generate(int table_index, struct record *container, int level, int fem
                 item->z = player_object->z;
                 item->image2 = 998;
                 item->id = object_new_id(((unsigned)location_object->id) >> 16);
-                if (((int)(unsigned char)D_001861AA[category]) == 255) {
+                if (((int)(unsigned char)loot_category_groups[category]) == 255) {
                     if (((int)(unsigned short)(player_character->flags & 1)) == 0) {
                         item_make_random(6, &item->data.item);
                     } else {
                         item_make_random(12, &item->data.item);
                     }
-                } else if (((int)(unsigned char)D_001861AA[category]) == 4) {
+                } else if (((int)(unsigned char)loot_category_groups[category]) == 4) {
                     item_make_magic(&item->data.item, -1);
-                } else if (((int)(unsigned char)D_001861AA[category]) == 7) {
+                } else if (((int)(unsigned char)loot_category_groups[category]) == 7) {
                     item_make(7, (level + 3) / 5, &item->data.item);
                 } else {
-                    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)D_001861AA[category]), &item->data.item);
+                    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)loot_category_groups[category]), &item->data.item);
                 }
                 item_data = &item->data.item;
                 if (item_data->group != 3 || item_data->index != 18) item->image2 = 0;

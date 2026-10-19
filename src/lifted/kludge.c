@@ -39,7 +39,7 @@ extern signed char scratch_190ce5;
 extern char arena2_path[];
 extern char arena2_cd_path[];
 extern signed char game_state_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char player_view_flags;
 extern signed char misc_state_flags;
 extern struct record *inventory_containers[];
@@ -398,12 +398,12 @@ struct record *item_add_to_container(struct record *container, int group, int it
 
 void kludge_toggle_world_position(void)
 {
-    D_001940D6 ^= 1;
+    display_flags ^= 1;
 }
 
 void kludge_toggle_second_compass(void)
 {
-    D_001940D6 ^= 8;
+    display_flags ^= 8;
 }
 
 void kludge_pick_pockets(void)

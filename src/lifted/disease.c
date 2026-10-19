@@ -30,7 +30,7 @@ extern signed char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *scratch_current_object;
 extern struct spell *spell_records;
-extern char D_00195B08[];
+extern char effect_tick_minutes[];
 extern int trade_haggle_result;
 extern int creature_count;
 extern int calendar_month;
@@ -809,16 +809,16 @@ void effects_tick(void)
     struct item *item;
 
     magicka_max_modifier = 0;
-    i = (*(int *)D_00195B08 = game_minutes - effects_last_minute);
-    if (*(int *)D_00195B08 > 100) {
-        i = (*(int *)D_00195B08 = 0);
+    i = (*(int *)effect_tick_minutes = game_minutes - effects_last_minute);
+    if (*(int *)effect_tick_minutes > 100) {
+        i = (*(int *)effect_tick_minutes = 0);
         effects_last_minute = game_minutes;
     }
-    *(int *)D_00195B08 >>= 2;
-    if (*(int *)D_00195B08 != 0) effects_last_minute = game_minutes;
+    *(int *)effect_tick_minutes >>= 2;
+    if (*(int *)effect_tick_minutes != 0) effects_last_minute = game_minutes;
     scratch_current_object = 0;
-    if (*(int *)D_00195B08 != 0 || i != 0) {
-        if (player_class->regeneration_flags != 0 && *(int *)D_00195B08 != 0) {
+    if (*(int *)effect_tick_minutes != 0 || i != 0) {
+        if (player_class->regeneration_flags != 0 && *(int *)effect_tick_minutes != 0) {
             if (((int)(unsigned char)(player_class->regeneration_flags & 4)) != 0 && (in_dungeon_water != 0 || player_swimming != 0)) {
                 item_enchantment_tick(0, 5, 0);
             }
@@ -832,15 +832,15 @@ void effects_tick(void)
                 item_enchantment_tick(0, 5, 2);
             }
         }
-        j = *(int *)D_00195B08;
-        *(int *)D_00195B08 = *(int *)D_00195B08 * 12;
+        j = *(int *)effect_tick_minutes;
+        *(int *)effect_tick_minutes = *(int *)effect_tick_minutes * 12;
         if (((int)(unsigned short)(player_class->flags & 16)) != 0 && player_in_daylight() != 0) {
             item_enchantment_tick(0, 17, 0);
         }
         if (((int)(unsigned short)(player_class->flags & 32)) != 0 && player_in_temple() != 0) {
             item_enchantment_tick(0, 17, 1);
         }
-        *(int *)D_00195B08 = j;
+        *(int *)effect_tick_minutes = j;
     }
     for (i = 0; i < 27; i++) {
         if (player_character->equipped[i] != 0) {

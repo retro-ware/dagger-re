@@ -19,14 +19,14 @@ extern char str_ea[];
 extern char *skill_names[];
 extern struct rect chargen_buttons[];
 extern signed char text_buffer[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern int scratch_190be8;
 extern short scratch_190d64;
 extern short scratch_190d6a;
 extern short scratch_190de4[];
-extern short D_00190DEA[];
+extern short chargen_bonus_points[];
 extern short scratch_190dec;
-extern short D_00190DEE;
+extern short chargen_bonus_points_4;
 extern short scratch_190df0[3];
 extern struct image *screen_image_1;
 extern char *screen_image_2;
@@ -58,7 +58,7 @@ int chargen_screen_loop(int first, int last)
         if (mouse_buttons != 0 && mouse_buttons_prev == 0 &&
             mouse_x > chargen_buttons[0].x0 && mouse_x < chargen_buttons[0].x1 &&
             mouse_y > chargen_buttons[0].y0 && mouse_y < chargen_buttons[0].y1) {
-            if (scratch_190d64 == 0 && D_00190DEA[0] == 0 && scratch_190dec == 0 && D_00190DEE == 0)
+            if (scratch_190d64 == 0 && chargen_bonus_points[0] == 0 && scratch_190dec == 0 && chargen_bonus_points_4 == 0)
                 return 0;
             msgbox_show_rsc(14, 1);
         }
@@ -118,19 +118,19 @@ void chargen_draw_attributes(void)
     character_reset_magicka(player_character, player_class);
     if (chargen_screen == 255)
         return;
-    parse_expand(str_am, D_00190B44);
-    text_draw_coloured(D_00190B44, 83, 22, 145, 141);
-    parse_expand(str_nc, D_00190B44);
-    text_draw_coloured(D_00190B44, 103, 32, 145, 141);
-    parse_expand(str_pt, D_00190B44);
-    text_draw_coloured(D_00190B44, 112, 49, 145, 141);
-    parse_expand(str_ad, D_00190B44);
-    text_draw_coloured(D_00190B44, 121, 71, 145, 141);
-    parse_expand(str_hd, D_00190B44);
-    text_draw_coloured(D_00190B44, 97, 93, 145, 141);
-    parse_expand(str_ea, D_00190B44);
-    text_draw_coloured(D_00190B44, 101, 110, 145, 141);
-    text_draw_coloured(D_00190B44, 122, 120, 145, 141);
+    parse_expand(str_am, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 83, 22, 145, 141);
+    parse_expand(str_nc, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 103, 32, 145, 141);
+    parse_expand(str_pt, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 112, 49, 145, 141);
+    parse_expand(str_ad, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 121, 71, 145, 141);
+    parse_expand(str_hd, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 97, 93, 145, 141);
+    parse_expand(str_ea, inpstr_saved_text);
+    text_draw_coloured(inpstr_saved_text, 101, 110, 145, 141);
+    text_draw_coloured(inpstr_saved_text, 122, 120, 145, 141);
 }
 
 void chargen_draw_skills(void)
@@ -140,7 +140,7 @@ void chargen_draw_skills(void)
 
     for (i = 0; i < 3; i++) {
         xn_draw_image(203, scratch_190de4[i], *(unsigned short *)(screen_image_2 + 4), *(unsigned short *)(screen_image_2 + 6), screen_image_2 + 12);
-        text_draw_centred_coloured(itoa(D_00190DEA[i], ((char *)text_buffer), 10), 221, scratch_190de4[i] + 8 - font_height + 1, 145, 141);
+        text_draw_centred_coloured(itoa(chargen_bonus_points[i], ((char *)text_buffer), 10), 221, scratch_190de4[i] + 8 - font_height + 1, 145, 141);
     }
     for (i = 0; i < 12; i++) {
         skill = player_class->skills[i];

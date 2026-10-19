@@ -20,7 +20,7 @@ extern int game_minutes;
 extern struct record *quest_tick_object;
 extern iptr qbn_opcode_arg_counts;
 extern signed char current_region;
-extern signed char D_00196299;
+extern signed char encounter_spawned;
 extern signed char quest_site_found;
 extern int faction_count;
 extern struct faction *factions;
@@ -261,7 +261,7 @@ void qaction_place_foe(struct qbn_op *op, struct qbn_place *place)
 
     foe_object = op->args[1].object;
     if (quest_place_object(foe_object, place) == 0) return;
-    if (place == 0) D_00196299 = 1;
+    if (place == 0) encounter_spawned = 1;
     monster_init_gear(foe_object);
 }
 

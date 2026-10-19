@@ -14,7 +14,7 @@ extern int player_death_timer;
 extern short mouse_motion_x;
 extern short mouse_motion_y;
 extern unsigned char fog_colour;
-extern unsigned char D_001962A5;
+extern unsigned char politics_new_year;
 extern void game_frame(void);
 extern void screenshot_poll(void);
 extern void faction_politics_update(int);
@@ -92,7 +92,7 @@ int func_00010010(short argc, char **argv)
     quest_init_record_sizes();
     intro_play_logo();
     for (n = 0; n < 12; n++) {
-        D_001962A5 = (n == 11);
+        politics_new_year = (n == 11);
         faction_politics_update(1);
         faction_politics_update(2);
     }

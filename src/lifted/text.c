@@ -30,7 +30,7 @@ extern signed char guard_team;
 extern struct record *creature_list[];
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char misc_state_flags;
 extern char frame_counter[];
 extern struct record *player_object;
@@ -44,7 +44,7 @@ extern struct character *player_character;
 extern int realtime_clock_tick;
 extern signed char climate_weathers[];
 extern short msgbox_delay;
-extern short D_00195F34;
+extern short msgbox_buttons_y;
 extern unsigned short text_cursor_y;
 extern signed char msgbox_button_keys;
 extern signed char msgbox_key_2;
@@ -319,7 +319,7 @@ void msgbox_update(void)
     }
     text_colour = 146;
     if (((struct bf8_6_1 *)&ui_mode_flags)->f != 0) {
-        xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), ((int)(short)D_00195F34) - ((int)(short)msgbox_h), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
+        xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), ((int)(short)msgbox_buttons_y) - ((int)(short)msgbox_h), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
     } else {
         xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), 100 - (((int)(short)msgbox_h) >> 1), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
     }
@@ -395,7 +395,7 @@ void msgbox_free_borders(void)
 void msgbox_draw_buttons(short y)
 {
     if (((struct bf8_6_1 *)&ui_mode_flags)->f != 0) {
-        text_cursor_y = y + ((((int)(short)D_00195F34) - ((int)(short)msgbox_h)) - (100 - (((int)(short)msgbox_h) >> 1)));
+        text_cursor_y = y + ((((int)(short)msgbox_buttons_y) - ((int)(short)msgbox_h)) - (100 - (((int)(short)msgbox_h) >> 1)));
     } else {
         text_cursor_y = y;
     }
@@ -521,7 +521,7 @@ int pedestrian_walk(struct record *pedestrian, int player_distance)
 
     retry_count = 0;
     speed = 75;
-    if (creature_count == 0 && player_distance < 192 && ((struct bf8_6_1 *)&D_001940D6)->f == 0 && player_moving == 0 && people_idle_count < 3 && ((int)(unsigned short)(pedestrian->npc_flags & 32768)) == 0 && player_character->race < 9) {
+    if (creature_count == 0 && player_distance < 192 && ((struct bf8_6_1 *)&display_flags)->f == 0 && player_moving == 0 && people_idle_count < 3 && ((int)(unsigned short)(pedestrian->npc_flags & 32768)) == 0 && player_character->race < 9) {
         people_idle_count++;
         pedestrian->image = (pedestrian->image & -128) + 5;
         if ((pedestrian->image >> 7) == 399) pedestrian->image += 10;

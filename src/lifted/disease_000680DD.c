@@ -8,7 +8,7 @@
 
 extern struct record *player_entity;
 extern struct record *scratch_current_object;
-extern char D_00195B08[];
+extern char effect_tick_minutes[];
 extern char shared_scratch[];
 extern struct character *player_character;
 extern int game_minutes;
@@ -30,7 +30,7 @@ void item_enchantment_tick(struct item *item, int enchant_type, int enchant_para
 {
     int unused;
 
-    if (enchant_type != 3 && *(int *)D_00195B08 == 0) return;
+    if (enchant_type != 3 && *(int *)effect_tick_minutes == 0) return;
     switch ((unsigned)enchant_type) {
     case 3:
         *(int *)extra_spell_points = 0;
@@ -38,9 +38,9 @@ void item_enchantment_tick(struct item *item, int enchant_type, int enchant_para
         player_character->max_magicka += *(short *)extra_spell_points;
         magicka_max_modifier += *(int *)extra_spell_points;
         if (*(int *)extra_spell_points != 0 && enchant_param >= 7 && enchant_param <= 10 && player_character->magicka < player_character->max_magicka) {
-            player_character->magicka += *(short *)D_00195B08 * 5;
+            player_character->magicka += *(short *)effect_tick_minutes * 5;
         }
-        if (*(int *)D_00195B08 != 0 && ((struct bf8_0_2 *)&game_minutes)->f == 0) {
+        if (*(int *)effect_tick_minutes != 0 && ((struct bf8_0_2 *)&game_minutes)->f == 0) {
             item_damage(scratch_current_object, 1);
         }
         break;
@@ -53,7 +53,7 @@ void item_enchantment_tick(struct item *item, int enchant_type, int enchant_para
             if (player_in_daylight() != 0) return;
         default:
 L68256:;
-            player_character->health += *(short *)D_00195B08;
+            player_character->health += *(short *)effect_tick_minutes;
             if (player_character->health > player_character->max_health) {
                 player_character->health = player_character->max_health;
             } else if ((rand() % 10) == 0) {
@@ -63,7 +63,7 @@ L68256:;
         break;
     case 17:
         if ((enchant_param == 0 && player_in_daylight() != 0) || (enchant_param != 0 && player_in_temple() != 0)) {
-            damage_apply(player_entity, *(int *)D_00195B08, 0);
+            damage_apply(player_entity, *(int *)effect_tick_minutes, 0);
         }
         break;
     case 16:
@@ -74,8 +74,8 @@ L68256:;
         case 2:
             if (player_in_temple() == 0) return;
         }
-        if (item->condition > *(int *)D_00195B08) {
-            item->condition -= *(short *)D_00195B08;
+        if (item->condition > *(int *)effect_tick_minutes) {
+            item->condition -= *(short *)effect_tick_minutes;
         } else {
             item_break(scratch_current_object);
         }
@@ -83,18 +83,18 @@ L68256:;
     case 21:
         switch ((unsigned)enchant_param) {
         case 1:
-            if (*(int *)D_00195B08 != 0 && ((unsigned)(game_minutes - player_character->last_kill_time)) > 1440) {
-                damage_apply(player_entity, *(int *)D_00195B08, 0);
+            if (*(int *)effect_tick_minutes != 0 && ((unsigned)(game_minutes - player_character->last_kill_time)) > 1440) {
+                damage_apply(player_entity, *(int *)effect_tick_minutes, 0);
             }
             break;
         case 2:
-            if (*(int *)D_00195B08 != 0 && ((unsigned)(game_minutes - player_character->last_kill_time)) > 10080) {
-                damage_apply(player_entity, *(int *)D_00195B08, 0);
+            if (*(int *)effect_tick_minutes != 0 && ((unsigned)(game_minutes - player_character->last_kill_time)) > 10080) {
+                damage_apply(player_entity, *(int *)effect_tick_minutes, 0);
             }
         }
         break;
     case 8:
-        *(int *)shared_scratch = *(int *)D_00195B08;
+        *(int *)shared_scratch = *(int *)effect_tick_minutes;
         object_foreach(player_entity->children, item_repair_cb);
         if ((rand() % 10) == 0) item_damage(scratch_current_object, 1);
         break;
@@ -103,12 +103,12 @@ L68256:;
         break;
     case 6:
         if (enchant_param == 0 && nearest_creature_distance < 128 && player_character->health != player_character->max_health) {
-            damage_apply(nearest_creature, *(int *)D_00195B08, 0);
-            player_character->health += *(short *)D_00195B08;
+            damage_apply(nearest_creature, *(int *)effect_tick_minutes, 0);
+            player_character->health += *(short *)effect_tick_minutes;
             if (player_character->health > player_character->max_health) {
                 player_character->health = player_character->max_health;
             }
-            item_damage(scratch_current_object, *(int *)D_00195B08);
+            item_damage(scratch_current_object, *(int *)effect_tick_minutes);
         }
     }
     if (player_character->magicka >= 0) return;

@@ -32,7 +32,7 @@ extern int player_momentum;
 extern signed char world_running;
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern unsigned char world_state_flags;
 extern signed char misc_state_flags;
 extern signed char player_motion_flags;
@@ -665,7 +665,7 @@ void player_movement_update(void)
         }
         if (key_action_pressed(18) != 0) click_activate(1);
     } else if (screen_active == 0) {
-        if (((int)(unsigned char)(mouse_buttons & 2)) != 0 && ((struct bf8_6_1 *)&D_001940D6)->f == 0) {
+        if (((int)(unsigned char)(mouse_buttons & 2)) != 0 && ((struct bf8_6_1 *)&display_flags)->f == 0) {
             click_activate(0);
         }
     }

@@ -31,7 +31,7 @@ extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char time_skip_active;
-extern signed char D_00196299;
+extern signed char encounter_spawned;
 extern signed char rest_active;
 extern int rest_ticks_per_hour;
 extern struct image *rest_image;
@@ -74,7 +74,7 @@ void rest_update(void)
         rest_close();
         return;
     }
-    if (creature_count != 0 || D_00196299 != 0) {
+    if (creature_count != 0 || encounter_spawned != 0) {
         msgbox_show_rsc(354, 1);
         rest_close();
         return;

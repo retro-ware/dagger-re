@@ -13,9 +13,9 @@ extern signed char text_buffer[];
 extern int sky_loaded_frame;
 extern signed char time_skip_active;
 extern signed char night_sky_loaded;
-extern signed char D_001962A4;
-extern signed char D_001962A5;
-extern signed char D_001962B0;
+extern signed char time_skip_quiet;
+extern signed char politics_new_year;
+extern signed char reputation_decay_off;
 
 extern iptr disk_read_file(char *, iptr);
 extern void xn_pal_set_range_8bit(char *, int, int);
@@ -32,9 +32,9 @@ void prison_serve_sentence(int days)
     int day;
     iptr image;
 
-    D_001962B0 = 1;
-    D_001962A4 = 1;
-    D_001962A5 = 0;
+    reputation_decay_off = 1;
+    time_skip_quiet = 1;
+    politics_new_year = 0;
     time_skip_active = 1;
     image = disk_read_file(str_pris00i0_img, 0);
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_crime_c, 384, 4);
@@ -58,11 +58,11 @@ void prison_serve_sentence(int days)
         image = -1751672937;
     }
     time_skip_active = 0;
-    D_001962A5 = 1;
-    D_001962B0 = 0;
+    politics_new_year = 1;
+    reputation_decay_off = 0;
     sky_loaded_frame = 10000;
     night_sky_loaded = 0;
-    D_001962A4 = 0;
+    time_skip_quiet = 0;
     screen_shake_stop();
     court_restore_vitals();
 }

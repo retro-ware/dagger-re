@@ -8,7 +8,7 @@ extern char str_sosez_c[];
 extern iptr music_song_buffer;
 extern int midi_bsa;
 extern iptr music_song_data;
-extern int D_001A3F4C;
+extern int music_song_locked_size;
 
 extern int archive_find_record(int, char *, int);
 extern int archive_record_size(int, int);
@@ -45,6 +45,6 @@ int sos_load_song(char *name)
     }
     music_song_buffer = buffer;
     music_song_data = buffer;
-    dpmi_lock_region(buffer, (D_001A3F4C = size + (int)sizeof(struct sos_song)));
+    dpmi_lock_region(buffer, (music_song_locked_size = size + (int)sizeof(struct sos_song)));
     return song_handle;
 }

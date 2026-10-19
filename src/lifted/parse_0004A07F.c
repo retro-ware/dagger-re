@@ -4,11 +4,11 @@
 #include "ptrint.h"
 
 extern signed char region_name_races[];
-extern signed char D_00190D1F;
+extern signed char song_hero_race;
 
 extern iptr name_generate_seeded(unsigned char, unsigned char, int);
 
 iptr parse_regional_name(int seed, int gender)
 {
-    return name_generate_seeded((int)(unsigned char)region_name_races[(int)(signed char)D_00190D1F], (int)(unsigned char)*(signed char *)&gender, seed);
+    return name_generate_seeded((int)(unsigned char)region_name_races[(int)(signed char)song_hero_race], (int)(unsigned char)*(signed char *)&gender, seed);
 }

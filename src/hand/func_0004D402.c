@@ -8,8 +8,8 @@ extern signed char text_colour;
 extern short font_height;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern char str_note_c[];
 extern struct rect note_buttons[];
 extern char note_colour_marker_image[];
@@ -95,13 +95,13 @@ void note_update(void)
         }
     } else if (((int)(unsigned char)note_action) == 2) {
         text_colour = *(signed char *)note_colour;
-        D_00142928 = note_cursor_x;
-        D_0014292C = note_cursor_y;
+        pen_x = note_cursor_x;
+        pen_y = note_cursor_y;
         xn_draw_line_to((int)(short)mouse_x, (int)(short)mouse_y);
     } else if (((int)(unsigned char)note_action) == 3) {
         if (((int)(unsigned char)(mouse_buttons & 1)) != 0) {
-            D_00142928 = notebook_selection_box.x0;
-            D_0014292C = notebook_selection_box.y0;
+            pen_x = notebook_selection_box.x0;
+            pen_y = notebook_selection_box.y0;
             xn_draw_line_to((int)(short)mouse_x, (int)(short)notebook_selection_box.y0);
             xn_draw_line_to((int)(short)mouse_x, (int)(short)mouse_y);
             xn_draw_line_to((int)(short)notebook_selection_box.x0, (int)(short)mouse_y);

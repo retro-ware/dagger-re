@@ -18,8 +18,8 @@ extern short font_space_width;
 extern short font_char_spacing;
 extern char *font_glyphs;
 extern signed char key_down_esc;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern short xn_gfx_clip_left;
 extern short xn_gfx_clip_top;
 extern short xn_gfx_clip_right;
@@ -37,7 +37,7 @@ extern signed char text_buffer[];
 extern char scratch_190d64[];
 extern char scratch_190d66[];
 extern short scratch_190d68;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -158,9 +158,9 @@ void book_close(void)
 void book_flush_line(void)
 {
     if (*(short *)scratch_190d66 != 0) {
-        text_draw_centred_coloured((char *)text_buffer, 160, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)text_colour), 156);
+        text_draw_centred_coloured((char *)text_buffer, 160, (int)(short)pen_y, (int)(short)((int)(unsigned char)text_colour), 156);
     } else {
-        text_draw_coloured((char *)text_buffer, (int)(short)D_00142928, (int)(short)D_0014292C, (int)(short)((int)(unsigned char)text_colour), 156);
+        text_draw_coloured((char *)text_buffer, (int)(short)pen_x, (int)(short)pen_y, (int)(short)((int)(unsigned char)text_colour), 156);
     }
     *(short *)scratch_190d66 = 0;
     *(short *)scratch_190d64 = 0;
@@ -290,7 +290,7 @@ void spell_tick(struct record *object)
     struct record *next;
 
     if (object->children == 0) return;
-    if (object == player_entity) D_001940D6 &= 239;
+    if (object == player_entity) display_flags &= 239;
     target = object;
     object = object->children;
     while (object != 0) {

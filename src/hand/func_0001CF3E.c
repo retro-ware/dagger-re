@@ -9,7 +9,7 @@ extern signed char text_rsc_buffer[];
 extern int shared_scratch;
 extern int game_minutes;
 extern unsigned char previous_region;
-extern unsigned char D_001962A5;
+extern unsigned char politics_new_year;
 extern int rumor_file;
 extern int rumor_added_count;
 extern struct faction *macro_faction2;
@@ -26,7 +26,7 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
     int saved;
 
     saved = shared_scratch;
-    if (D_001962A5 == 0)
+    if (politics_new_year == 0)
         return;
     if (text_id != 455 && text_id != 456)
         if (kind == 100 && faction_player_related(faction1) == 0 && faction_player_related(faction2) == 0) {

@@ -3,8 +3,8 @@
 #include "clib.h"
 
 extern unsigned char key_down_enter;
-extern iptr D_00185077;
-extern unsigned char *D_00187545;
+extern iptr text_donate_how_much;
+extern unsigned char *temple_quest_types;
 extern struct region regions[];
 extern int inpstr_result;
 extern struct record *scratch_object;
@@ -61,7 +61,7 @@ int blessing_apply(struct blessing *blessing, int amount)
 
 void guild_donate(void)
 {
-    msgbox_prompt_number(1000, D_00185077);
+    msgbox_prompt_number(1000, text_donate_how_much);
     while (key_down_enter != 0)
         ;
     if (inpstr_result < 1)
@@ -83,10 +83,10 @@ void guild_temple_quest(void)
         return;
     }
     if (guild_membership != 0) {
-        quest_pick_file(*(D_00187545 - 142 + guild_membership->kind), 67, 48, 66, guild_membership->rank);
+        quest_pick_file(*(temple_quest_types - 142 + guild_membership->kind), 67, 48, 66, guild_membership->rank);
         return;
     }
-    quest_pick_file(*(D_00187545 - 142 + guild_membership->kind), 67, 48, 67, player_character->level);
+    quest_pick_file(*(temple_quest_types - 142 + guild_membership->kind), 67, 48, 67, player_character->level);
 }
 
 int guild_kind_of_faction(struct faction *faction)

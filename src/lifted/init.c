@@ -47,7 +47,7 @@ extern char saved_positions[];
 extern struct region regions[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
-extern iptr D_00190704[];
+extern iptr monster_anim_records[];
 extern iptr hud_compass_image;
 extern iptr compass_frames_1;
 extern iptr compass_frames_2;
@@ -134,8 +134,8 @@ extern int mouse_saved_sensitivity_y;
 extern iptr water_tint_buffer;
 extern int daylight;
 extern char dpmi_mem_info[];
-extern int D_001A3F7C;
-extern int D_001A3F90;
+extern int dpmi_mem_free_unlocked_pages;
+extern int mem_free_k;
 extern int mem_used_k;
 extern char cfg_mapsave_file[];
 extern int cfg_start_map;
@@ -238,7 +238,7 @@ void debug_show_mem_used(void)
     ticks_addr = (struct bf8_0_5 *)DOS_LOW(0x46C);
     if (ticks_addr->f == 0) {
         dpmi_get_free_memory((iptr)dpmi_mem_info);
-        mem_used_k = D_001A3F90 - (D_001A3F7C << 2);
+        mem_used_k = mem_free_k - (dpmi_mem_free_unlocked_pages << 2);
     }
     mc_set_location(47, str_init_c);
     mc_sprintf((char *)text_buffer, str_mem_used_k, mem_used_k);
@@ -310,10 +310,10 @@ void shutdown_free_all(void)
     archive_close(dagger_snd);
     archive_close(monster_bsa_handle);
     for (i = 0; ((int)(short)*(short *)&i) < 127; i++) {
-        if (D_00190704[((int)(short)*(short *)&i)] != 0) {
-            if (D_00190704[((int)(short)*(short *)&i)] != 0 && D_00190704[((int)(short)*(short *)&i)] != (-1751672937)) {
-                mc_free((void *)D_00190704[((int)(short)*(short *)&i)], str_init_c, 314);
-                D_00190704[((int)(short)*(short *)&i)] = -1751672937;
+        if (monster_anim_records[((int)(short)*(short *)&i)] != 0) {
+            if (monster_anim_records[((int)(short)*(short *)&i)] != 0 && monster_anim_records[((int)(short)*(short *)&i)] != (-1751672937)) {
+                mc_free((void *)monster_anim_records[((int)(short)*(short *)&i)], str_init_c, 314);
+                monster_anim_records[((int)(short)*(short *)&i)] = -1751672937;
             }
         }
     }

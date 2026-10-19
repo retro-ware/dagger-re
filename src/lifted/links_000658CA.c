@@ -2,8 +2,8 @@
  * ordinary source: edit them here. Keep each function where it is: Watcom aligns switch
  * tables from the start of the file, so moving functions can change the code. */
 
-extern int D_00186A34[];
-extern int D_00186A4C[];
+extern int link_axis_override_keys[];
+extern int link_axis_override_axes[];
 
 
 int func_000658CA(int id_hundreds, int id_rest)
@@ -13,7 +13,7 @@ int func_000658CA(int id_hundreds, int id_rest)
 
     model_id = id_rest + (id_hundreds * 100);
     for (i = 0; i < 6; i++) {
-        if (D_00186A34[i] == model_id) return D_00186A4C[i];
+        if (link_axis_override_keys[i] == model_id) return link_axis_override_axes[i];
     }
     return 0;
 }

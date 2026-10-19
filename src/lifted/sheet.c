@@ -70,7 +70,7 @@ extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char health_status_changed;
 extern char health_status_disease_shown;
-extern struct image *D_00199638;
+extern struct image *sheet_popup_image;
 extern iptr sheet_affiliations_text;
 extern int text_macro_skill;
 extern signed char sheet_hth_damage_line;
@@ -147,9 +147,9 @@ int sheet_close(void)
         mc_free((void *)window_image, str_sheet_c, 128);
         window_image = -1751672937;
     }
-    if ((iptr)D_00199638 != 0 && (iptr)D_00199638 != (-1751672937)) {
-        mc_free(D_00199638, str_sheet_c, 129);
-        D_00199638 = (struct image *)(iptr)-1751672937;
+    if ((iptr)sheet_popup_image != 0 && (iptr)sheet_popup_image != (-1751672937)) {
+        mc_free(sheet_popup_image, str_sheet_c, 129);
+        sheet_popup_image = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
         mc_free(screen_image_1, str_sheet_c, 130);

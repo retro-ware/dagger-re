@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00095B81 */
 #include "records.h"
 
-extern int D_001940D6;
+extern int display_flags;
 extern int ui_dirty_flags;
 extern struct record *wagon_container;
 extern struct record *player_object;
@@ -23,9 +23,9 @@ void inv_list_right_item(struct record *object, iptr rects)
         return;
     if (object->flags & 0x200)
         return;
-    if ((D_001940D6 & 4) && object->owner != picked_model_index)
+    if ((display_flags & 4) && object->owner != picked_model_index)
         return;
-    if ((!(D_001940D6 & 4) && object->parent != wagon_container ? 1 : 0) && xn_math_approx_hypot(object->z - player_object->z, xn_math_approx_dist2d(object->x, object->y, player_object->x, player_object->y)) > 160)
+    if ((!(display_flags & 4) && object->parent != wagon_container ? 1 : 0) && xn_math_approx_hypot(object->z - player_object->z, xn_math_approx_dist2d(object->x, object->y, player_object->x, player_object->y)) > 160)
         return;
     if (inv_right_item_count >= inv_right_scroll && inv_right_item_count < inv_right_scroll + 4) {
         if (!(ui_dirty_flags & 4) && PTR_TABLE_FIND_ARGS((char *)player_character->equipped, object, 27) != 0) {

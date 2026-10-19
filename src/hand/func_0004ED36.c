@@ -90,7 +90,7 @@ extern char *hud_portrait_overlays;
 extern char *compass_image;
 extern unsigned spell_record_count;
 extern char *compass_box_image;
-extern int D_00195DA0;
+extern int blood_archive;
 extern char *qbn_opcode_arg_counts;
 extern signed char mouse_control_mode;
 extern unsigned char mouse_sensitivity_x;
@@ -284,9 +284,9 @@ void init_game_data(void)
     }
     if (disk_file_exists(str_dagger_grd_2) != 0) {
         *game_settings |= 4;
-        D_00195DA0 = 434;
+        blood_archive = 434;
     } else {
-        D_00195DA0 = 380;
+        blood_archive = 380;
     }
     music_select_tables();
     automap_delete_files();

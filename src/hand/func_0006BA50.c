@@ -5,7 +5,7 @@
 extern char *screen_buffer;
 extern char str_bank_c[];        /* __FILE__ */
 extern char str_at[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern signed char text_rsc_buffer[];
 extern struct image *screen_image_1;
 extern struct image *window_image;
@@ -40,8 +40,8 @@ void bank_draw(void)
             text_draw_coloured(itoa(bank_account->loan_owed, ((char *)text_rsc_buffer), 10), 143, 39, 145, 156);
             saved_minutes = game_minutes;
             game_minutes = bank_account->loan_due;
-            parse_expand(str_at, D_00190B44);
-            text_draw_coloured(D_00190B44, 119, 49, 145, 156);
+            parse_expand(str_at, inpstr_saved_text);
+            text_draw_coloured(inpstr_saved_text, 119, 49, 145, 156);
             game_minutes = saved_minutes;
         }
         break;

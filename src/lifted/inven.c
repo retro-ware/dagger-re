@@ -61,13 +61,13 @@ extern struct rect inv_buttons[];
 extern char weapon_proficiency_bits[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern int trade_total_weight;
 extern signed char scratch_190ce4[];
 extern iptr text_macro_map_location;
 extern char enchant_text[];
 extern signed char game_state_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char ui_dirty_flags;
 extern signed char player_motion_flags;
 extern int right_hand_ready_delay[];
@@ -131,8 +131,8 @@ extern iptr inventory_images;
 extern iptr inv_background_image;
 extern iptr inv_image_inve02;
 extern iptr inv_image_inve05;
-extern iptr D_001AA42C;
-extern iptr D_001AA430;
+extern iptr inv_arrow_image_on;
+extern iptr inv_arrow_image_off;
 extern iptr inv_paperdoll_background;
 extern iptr inv_paperdoll_overlay;
 extern iptr inv_shop_image;
@@ -284,8 +284,8 @@ void inventory_load_images(void)
     inv_background_image = disk_read_file(str_inve01i0_img, 0);
     inv_image_inve02 = disk_read_file(str_inve02i0_img, 0);
     inv_image_inve05 = disk_read_file(str_inve05i0_img, 0);
-    D_001AA42C = disk_read_file(str_inve06i0_img, 0);
-    D_001AA430 = disk_read_file(str_inve07i0_img, 0);
+    inv_arrow_image_on = disk_read_file(str_inve06i0_img, 0);
+    inv_arrow_image_off = disk_read_file(str_inve07i0_img, 0);
     inv_shop_image = disk_read_file(str_shop00i0_img, 0);
     inv_container_icons = disk_read_file(str_inve16i0_cif, 0);
     if (trade_mode == 0) return;
@@ -315,13 +315,13 @@ void inventory_free_images(void)
         mc_free((void *)inv_image_inve05, str_inven_c, 325);
         inv_image_inve05 = -1751672937;
     }
-    if (D_001AA42C != 0 && D_001AA42C != (-1751672937)) {
-        mc_free((void *)D_001AA42C, str_inven_c, 326);
-        D_001AA42C = -1751672937;
+    if (inv_arrow_image_on != 0 && inv_arrow_image_on != (-1751672937)) {
+        mc_free((void *)inv_arrow_image_on, str_inven_c, 326);
+        inv_arrow_image_on = -1751672937;
     }
-    if (D_001AA430 != 0 && D_001AA430 != (-1751672937)) {
-        mc_free((void *)D_001AA430, str_inven_c, 327);
-        D_001AA430 = -1751672937;
+    if (inv_arrow_image_off != 0 && inv_arrow_image_off != (-1751672937)) {
+        mc_free((void *)inv_arrow_image_off, str_inven_c, 327);
+        inv_arrow_image_off = -1751672937;
     }
     if (inv_shop_image != 0 && inv_shop_image != (-1751672937)) {
         mc_free((void *)inv_shop_image, str_inven_c, 328);
@@ -494,7 +494,7 @@ void inventory_close(void)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     game_mode = 0;
     screen_active = 0;
-    D_001940D6 &= 123;
+    display_flags &= 123;
     player_motion_flags &= 127;
     weapon_reload_hand_sprites();
     inv_track_hand_weapons(1);
@@ -1155,8 +1155,8 @@ void item_break(struct record *object)
     inv_store_item(object);
     mc_set_location(2157, str_inven_c);
     mc_sprintf((char *)text_buffer, str_is_broken, item->name);
-    parse_expand(text_buffer, D_00190B44);
-    hud_message_add(D_00190B44);
+    parse_expand(text_buffer, inpstr_saved_text);
+    hud_message_add(inpstr_saved_text);
     for (i = 0; i < 27; i++) {
         if (player_character->equipped[i] == object) slot = i;
     }

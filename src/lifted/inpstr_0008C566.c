@@ -3,7 +3,7 @@
  * tables from the start of the file, so moving functions can change the code. */
 
 extern char str_inpstr_c[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern char *inpstr_text;
 extern short inpstr_max_length;
 extern short inpstr_cursor;
@@ -17,7 +17,7 @@ void inpstr_begin_text(char *text, int max_length)
     xn_kbd_flush();
     input_digits_only = 0;
     inpstr_text = text;
-    mc_strncpy(D_00190B44, inpstr_text, 160, str_inpstr_c, 121);
+    mc_strncpy(inpstr_saved_text, inpstr_text, 160, str_inpstr_c, 121);
     inpstr_cursor = strlen(text);
     inpstr_max_length = max_length;
 }

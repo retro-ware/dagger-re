@@ -17,7 +17,7 @@ extern iptr text_fortified;
 extern iptr text_invisible;
 extern iptr text_levitating;
 extern iptr text_regenerating;
-extern iptr D_00184634;
+extern iptr text_silenced;
 extern iptr text_blending;
 extern iptr text_shadowed;
 extern iptr text_slowfalling;
@@ -32,7 +32,7 @@ extern struct record *creature_list[];
 extern char scratch_190de4[];
 extern char scratch_190ee4[];
 extern signed char game_state_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
@@ -373,7 +373,7 @@ int spfx_silence(struct record *spell, int slot, struct record *target)
     }
     target_char = &target->data.character;
     target_char->conditions |= 0x100;
-    if (target_char == player_character) hud_message_add(D_00184634);
+    if (target_char == player_character) hud_message_add(text_silenced);
     return 1;
 }
 
@@ -676,7 +676,7 @@ case 18:
     spfx_heal(spell, slot, target);
     return;
 case 39:
-    D_001940D6 |= 16;
+    display_flags |= 16;
     player_character->detect_kind = spell_data->effects[slot].subtype;
 default:;
 }

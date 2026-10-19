@@ -9,7 +9,7 @@
 extern iptr big_buffer;
 extern char str_links_c[];
 extern signed char text_rsc_buffer[];
-extern signed char D_00190FE5[];
+extern signed char link_answer_text[];
 extern struct record *player_entity;
 extern struct record *location_object;
 extern struct spell *spell_records;
@@ -106,7 +106,7 @@ int link_answer_matches(int text_id, iptr answer)
             text_rsc_buffer[i] = 0;
         }
     }
-    D_00190FE5[i] = 0;
+    link_answer_text[i] = 0;
     i = 1;
     while (text_rsc_buffer[i] != 0) {
         if (stricmp((char *)(((iptr)text_rsc_buffer) + i), (char *)answer) == 0) return 1;

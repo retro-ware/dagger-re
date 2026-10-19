@@ -8,7 +8,7 @@ extern char str_profile_c[];
 extern char str_yes[];
 extern char str_yes_2[];
 extern char str_no[];
-extern iptr D_00178848[];
+extern iptr hex_digits_and_powers[];
 
 extern int profile_find_section(struct profile *, char *);
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
@@ -137,7 +137,7 @@ int profile_hex_to_int(char *text)
     digits = strlen(text);
     i = 0;
     do {
-        value += (int)(profile_hex_digit((signed char)text[i++]) * D_00178848[digits]);
+        value += (int)(profile_hex_digit((signed char)text[i++]) * hex_digits_and_powers[digits]);
         digits--;
     } while (((unsigned)digits) > 0);
     return value;
@@ -148,7 +148,7 @@ int profile_hex_digit(signed char digit)
     int i;
 
     for (i = 0; ((unsigned)i) < 16; i++) {
-        if (((int)(unsigned char)*(signed char *)((char *)(D_00178848[0] + i))) == toupper((int)(signed char)digit)) {
+        if (((int)(unsigned char)*(signed char *)((char *)(hex_digits_and_powers[0] + i))) == toupper((int)(signed char)digit)) {
             return i;
         }
     }

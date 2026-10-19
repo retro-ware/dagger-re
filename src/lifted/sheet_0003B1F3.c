@@ -29,7 +29,7 @@ extern signed char sheet_selected_attribute;
 extern unsigned char game_mode_under_popup;
 extern signed char screen_active;
 extern signed char game_mode;
-extern struct image *D_00199638;
+extern struct image *sheet_popup_image;
 
 extern int key_action_held(int);
 extern int sound_play(int, struct record *, int);
@@ -49,13 +49,13 @@ int sheet_open(short opening)
     if (opening != 0 || (game_mode == 0 && key_action_held(36) != 0 && player_death_timer == 0)) {
         game_mode = 3;
         window_image = disk_read_file(str_info00i0_img, 0);
-        D_00199638 = (struct image *)disk_read_file(str_popu00i0_img, 0);
+        sheet_popup_image = (struct image *)disk_read_file(str_popu00i0_img, 0);
         screen_image_1 = (struct image *)disk_read_file(str_cust09i0_img_3, 0);
         screen_active = 1;
-        list_popup_x = 160 - (D_00199638->width >> 1);
-        list_popup_y = 100 - (D_00199638->height >> 1);
-        list_popup_width = D_00199638->width;
-        list_popup_height = D_00199638->height;
+        list_popup_x = 160 - (sheet_popup_image->width >> 1);
+        list_popup_y = 100 - (sheet_popup_image->height >> 1);
+        list_popup_width = sheet_popup_image->width;
+        list_popup_height = sheet_popup_image->height;
         if (((struct bf8_2_1 *)&player_view_flags)->f != 0) {
             hp_gain = (rand_range(player_class->hp_per_level >> 1, player_class->hp_per_level) + (player_character->attributes[4] / 10)) - 5;
             if (hp_gain < 1) hp_gain = 1;

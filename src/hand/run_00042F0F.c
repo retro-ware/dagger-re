@@ -26,7 +26,7 @@ extern char *text_not_ready;
 extern short player_speed_bonus;
 extern signed char text_buffer[];
 extern struct bits8 ui_mode_flags;
-extern struct bits8 D_001940D6;
+extern struct bits8 display_flags;
 extern struct bits8 player_view_flags;
 extern struct bits8 misc_state_flags;
 extern unsigned char player_motion_flags;
@@ -147,7 +147,7 @@ void keys_world_actions(void)
         hud_toggle_weapon();
     if (key_action_pressed(12))
         rest_open();
-    if (key_action_pressed(34) && D_001940D6.b6 && (weapon_swing_state | weapon_swing_state_2) == 0) {
+    if (key_action_pressed(34) && display_flags.b6 && (weapon_swing_state | weapon_swing_state_2) == 0) {
         o = player_character->equipped[(weapon_active_hand ^ 1) ? 21 : 19];
         if (o == 0 || o->data.item.group == 3) {
             weapon_active_hand ^= 1;

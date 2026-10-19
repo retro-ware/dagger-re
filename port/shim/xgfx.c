@@ -7,7 +7,7 @@
 extern int xn_gfx_clip_left, xn_gfx_clip_top, xn_gfx_clip_right, xn_gfx_clip_bottom;
 extern int xn_gfx_row_offset[];
 extern unsigned char *screen_buffer;
-extern int D_00142928, D_0014292C;     /* pen_x, pen_y: where the last pixel went */
+extern int pen_x, pen_y;     /* pen_x, pen_y: where the last pixel went */
 
 static int inside(int x, int y)
 {
@@ -21,8 +21,8 @@ void func_000A134C(int x, int y, int colour)
 {
     if (!inside(x, y))
         return;
-    D_00142928 = x;
-    D_0014292C = y;
+    pen_x = x;
+    pen_y = y;
     screen_buffer[xn_gfx_row_offset[y] + x] = (unsigned char)colour;
 }
 

@@ -2,8 +2,8 @@
 #include "records.h"
 extern char *player_entity;
 extern unsigned char *found_object;
-extern struct image *D_001AA42C;
-extern struct image *D_001AA430;
+extern struct image *inv_arrow_image_on;
+extern struct image *inv_arrow_image_off;
 extern int inv_left_scroll;
 extern int inv_right_scroll;
 extern short inv_right_count;
@@ -35,12 +35,12 @@ void inv_draw_scroll_arrows(void)
 {
     int last;
 
-    inv_draw_scroll_arrow(inv_left_scroll != 0 ? D_001AA42C : D_001AA430, 0);
-    inv_draw_scroll_arrow(inv_right_scroll != 0 ? D_001AA42C : D_001AA430, 1);
+    inv_draw_scroll_arrow(inv_left_scroll != 0 ? inv_arrow_image_on : inv_arrow_image_off, 0);
+    inv_draw_scroll_arrow(inv_right_scroll != 0 ? inv_arrow_image_on : inv_arrow_image_off, 1);
     last = inv_left_count - 4;
-    inv_draw_scroll_arrow(last > 0 && inv_left_scroll < last ? D_001AA42C : D_001AA430, 2);
+    inv_draw_scroll_arrow(last > 0 && inv_left_scroll < last ? inv_arrow_image_on : inv_arrow_image_off, 2);
     last = inv_right_count - 4;
-    inv_draw_scroll_arrow(last > 0 && inv_right_scroll < last ? D_001AA42C : D_001AA430, 3);
+    inv_draw_scroll_arrow(last > 0 && inv_right_scroll < last ? inv_arrow_image_on : inv_arrow_image_off, 3);
 }
 
 void inv_draw_scroll_arrow(struct image *image, int arrow)

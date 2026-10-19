@@ -15,7 +15,7 @@ extern unsigned char world_state_flags;
 extern signed char player_motion_flags;
 extern signed char dungeon_water_monster_table[];
 extern signed char dungeon_monster_table[];
-extern signed char D_001951ED[];
+extern signed char encounter_kinds[];
 extern char frame_counter[];
 extern struct record *player_object;
 extern struct record *location_object;
@@ -27,9 +27,9 @@ extern signed char game_mode;
 extern signed char player_on_ground;
 extern signed char current_climate;
 extern signed char is_daytime;
-extern signed char D_00196293;
+extern signed char monster_init_mode;
 extern signed char time_skip_active;
-extern signed char D_00196299;
+extern signed char encounter_spawned;
 extern signed char player_swimming;
 extern struct map_location *location_here;
 extern char collide_flags[];
@@ -80,7 +80,7 @@ int place_spawn_from_marker(struct record *marker)
         if ((((int)(unsigned short)(creature->image & 31)) - 2) == 13) {
             character->flags |= 64;
         } else {
-            D_00196293 = marker->link_flag;
+            monster_init_mode = marker->link_flag;
         }
         monster_id = creature->mobile_id;
         if ((monster_id & 128) == 0 && ((int)(unsigned short)(monster_table[monster_id].flags & 64)) != 0 && (dungeon_water_level == 10000 || (dungeon_water_level - 20) > creature->y)) {
@@ -98,7 +98,7 @@ int place_spawn_from_marker(struct record *marker)
         character->career_id = creature->spawn_seed;
         character->target = 0;
         monster_pacify_check(creature);
-        D_00196293 = 0;
+        monster_init_mode = 0;
         world_state_flags |= 32;
         world_state_flags |= 128;
         mc_memcpy(&request, &creature->x, 12, str_mplace_c, 119, 4);
@@ -406,7 +406,7 @@ void encounter_tick(int minutes, int forced)
     if (((int)player_environment) != 3) return;
     if (((int)(unsigned char)game_mode) != 16) return;
     if (rand_range(0, 35) != 0) return;
-    encounter_spawn_hidden((int)(unsigned char)D_001951ED[rand() % 6]);
+    encounter_spawn_hidden((int)(unsigned char)encounter_kinds[rand() % 6]);
 }
 
 void encounter_spawn_hidden(int monster_id)
@@ -424,7 +424,7 @@ void encounter_spawn_hidden(int monster_id)
         object_delete(creature);
         return;
     }
-    D_00196299 = 1;
+    encounter_spawned = 1;
 }
 
 void encounter_spawn_ahead(int monster_id)
@@ -442,5 +442,5 @@ void encounter_spawn_ahead(int monster_id)
     creature->x += player_object->x;
     creature->z += player_object->z;
     creature->y = xn_terrain_height_at(creature->x, creature->z);
-    D_00196299 = 1;
+    encounter_spawned = 1;
 }

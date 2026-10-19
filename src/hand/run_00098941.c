@@ -12,8 +12,8 @@ extern char str_you_cannot_change_transportation_indoors[];
 extern char str_move00i0_img[];
 extern char str_move01i0_img[];
 extern unsigned char player_environment;
-extern char *D_001832B4;
-extern char *D_001832BC;
+extern char *text_not_magic_item;
+extern char *text_already_identified;
 extern struct rect transport_buttons[];
 extern signed char scratch_190d16;
 extern unsigned char player_motion_flags;
@@ -59,7 +59,7 @@ int trade_can_identify_selected(void)
     item = inv_selected_item + RECORD_HEADER_SIZE;
     if (*(short *)(item + 67) != -1) {
         if (*(unsigned short *)(item + 42) & 32) {
-            msgbox_show_string(D_001832BC, 1);
+            msgbox_show_string(text_already_identified, 1);
             return 0;
         }
         holiday = holiday_today(game_minutes, current_region);
@@ -70,7 +70,7 @@ int trade_can_identify_selected(void)
         }
         return 1;
     }
-    msgbox_show_string(D_001832B4, 1);
+    msgbox_show_string(text_not_magic_item, 1);
     return 0;
 }
 

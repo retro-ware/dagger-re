@@ -6,8 +6,8 @@
 
 extern signed char text_colour;
 extern short font_height;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern signed char text_buffer[];
 extern char scratch_190d64[];
 extern char scratch_190d66[];
@@ -32,12 +32,12 @@ void book_draw_page(int page)
         text_colour = 145;
         *(short *)scratch_190d64 = 0;
         line_height = font_height;
-        D_00142928 = 10;
-        D_0014292C = 20;
+        pen_x = 10;
+        pen_y = 20;
         while (((int)(unsigned char)*(signed char *)text) != 246) {
             switch (*(unsigned char *)text) {
             case 251:
-                D_00142928 = *(short *)(text + 1);
+                pen_x = *(short *)(text + 1);
                 text += 3;
                 break;
             case 247:
@@ -67,8 +67,8 @@ void book_draw_page(int page)
                 text++;
                 text_buffer[(int)(short)*(short *)scratch_190d64] = 0;
                 book_flush_line();
-                D_00142928 = 10;
-                D_0014292C += *(int *)&line_height;
+                pen_x = 10;
+                pen_y += *(int *)&line_height;
                 line_height = font_height;
                 break;
             default:

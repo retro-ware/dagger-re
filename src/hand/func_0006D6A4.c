@@ -4,9 +4,9 @@
 extern char str_disk_c[];        /* __FILE__ */
 extern char str_fmt_s_6[];
 extern char str_fmt_s_7[];
-extern char D_00175D95[];
-extern char D_00175D97[];
-extern char D_00175D9A[];
+extern char str_dot[];
+extern char str_dotdot[];
+extern char str_backslash_star_dot_star[];
 extern void file_index_add_dir(char *);
 extern void file_index_add_name(char *);
 #pragma aux mc_set_location parm routine [];
@@ -36,7 +36,7 @@ void file_index_scan(char *dir)
     rc = func_000A13DA(path, 16, &ff);
     while (rc == 0) {
         if (ff.attrib & 16) {
-            if (stricmp(ff.name, D_00175D95) == 0 || stricmp(ff.name, D_00175D97) == 0) {
+            if (stricmp(ff.name, str_dot) == 0 || stricmp(ff.name, str_dotdot) == 0) {
                 rc = func_000A13F7(&ff);
                 continue;
             }
@@ -46,7 +46,7 @@ void file_index_scan(char *dir)
             i = strlen(path) - 1;
             while (i != 0 && path[i] != '\\')
                 i--;
-            mc_strncpy(path + i, D_00175D9A, 4, str_disk_c, 363);
+            mc_strncpy(path + i, str_backslash_star_dot_star, 4, str_disk_c, 363);
         }
         rc = func_000A13F7(&ff);
     }

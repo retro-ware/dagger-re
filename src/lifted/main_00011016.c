@@ -16,7 +16,7 @@ extern iptr sos_drum_bank;
 extern iptr sos_melodic_bank;
 extern char sos_digi_lock_4[];
 extern char sos_digi_timer_handle[];
-extern int D_0018DD54;
+extern int sos_midi_device;
 extern int sos_midi_driver;
 extern int sos_digi_driver;
 extern int sos_digi_handle;
@@ -78,7 +78,7 @@ int sos_init(int digi_device, int midi_device)
     dpmi_lock_region((iptr)&sos_digi_driver, 4);
     dpmi_lock_region((iptr)&sos_digi_handle, 4);
     dpmi_lock_region((iptr)sos_digi_timer_handle, 4);
-    dpmi_lock_region((iptr)&D_0018DD54, 4);
+    dpmi_lock_region((iptr)&sos_midi_device, 4);
     dpmi_lock_region((iptr)&sos_midi_driver, 4);
     dpmi_lock_region((iptr)sos_digi_lock_4, 4);
     dpmi_lock_region((iptr)&music_song_buffer, 4);

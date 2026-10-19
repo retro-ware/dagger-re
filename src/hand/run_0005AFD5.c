@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2): a run of runspell from 0x5AE5F to 0x5AFD5, kept together for its switch table's alignment */
 #include "records.h"
 
-extern char *D_001842D5;
+extern char *text_press_to_fire;
 extern short spell_last_cast_id;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -38,19 +38,19 @@ int cast_player_spell(struct record *spell_object)
         cast_spell_on(spell_object, player_entity, 0);
         return 1;
     case 1:
-        hud_message_add(D_001842D5);
+        hud_message_add(text_press_to_fire);
         spell_ready_touch = spell_object;
         return 0;
     case 2:
-        hud_message_add(D_001842D5);
+        hud_message_add(text_press_to_fire);
         spell_ready_missile = spell_object;
         return 0;
     case 3:
-        hud_message_add(D_001842D5);
+        hud_message_add(text_press_to_fire);
         spell_ready_missile = spell_object;
         return 0;
     case 4:
-        hud_message_add(D_001842D5);
+        hud_message_add(text_press_to_fire);
         spell_ready_missile = spell_object;
         return 0;
     default:

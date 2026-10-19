@@ -22,13 +22,13 @@ extern struct record *location_object;
 extern int creature_count;
 extern char *window_image;
 extern int free_later_count;
-extern short D_00195F34;
+extern short msgbox_buttons_y;
 extern unsigned char current_region;
 extern unsigned char game_mode_under_popup;
 extern char popup_answer;
 extern char screen_active;
 extern unsigned char game_mode;
-extern char D_0019629C;
+extern char court_in_session;
 extern int court_reputation_change;
 extern struct res *music_court;
 extern void crime_remove_monster(struct record *);
@@ -64,7 +64,7 @@ int court_open(int crime)
     if (crime != 0) {
         crime--;
         music_play(music_court->f4);
-        D_0019629C = 1;
+        court_in_session = 1;
         scratch_190d17 = crime;
         court_reputation_change = crime_reputation_loss[crime] >> 1;
         if (player_environment == 2)
@@ -111,7 +111,7 @@ int court_open(int crime)
         scratch_190cac = fine;
         world_running = 0;
         ui_mode_flags |= 64;
-        D_00195F34 = 194;
+        msgbox_buttons_y = 194;
         membership = guild_find_membership_by_kind(0);
         if ((scratch_190d17 == 4 || scratch_190d17 == 3) && membership != 0 && membership->rank >= rand_range(0, 19)) {
             msgbox_show_rsc(551, 1);

@@ -12,7 +12,7 @@ extern int ai_octant_angles[];
 extern struct collide_probe monster_collide_probe;
 extern signed char undead_daedra_ids[];
 extern struct record *creature_list[];
-extern iptr D_00190704[];
+extern iptr monster_anim_records[];
 extern char scratch_190de4[];
 extern signed char text_rsc_buffer[];
 extern unsigned char world_state_flags;
@@ -419,10 +419,10 @@ int monster_alloc_anim_slot(void)
     object_foreach(location_object->children, monster_mark_anim_slot_cb);
     object_foreach(nonworld_root->children, monster_mark_anim_slot_cb);
     for (slot = 0; slot < 128; slot++) {
-        if (text_rsc_buffer[slot] == 0 && D_00190704[slot] != 0) {
-            if (D_00190704[slot] != 0 && D_00190704[slot] != (-1751672937)) {
-                mc_free((void *)D_00190704[slot], str_monster_c, 836);
-                D_00190704[slot] = -1751672937;
+        if (text_rsc_buffer[slot] == 0 && monster_anim_records[slot] != 0) {
+            if (monster_anim_records[slot] != 0 && monster_anim_records[slot] != (-1751672937)) {
+                mc_free((void *)monster_anim_records[slot], str_monster_c, 836);
+                monster_anim_records[slot] = -1751672937;
             }
         }
     }

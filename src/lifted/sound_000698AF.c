@@ -3,7 +3,7 @@
  * tables from the start of the file, so moving functions can change the code. */
 
 extern int sound_volume;
-extern int D_0018DD54;
+extern int sos_midi_device;
 extern signed char sound_enabled;
 
 #include "clib.h"
@@ -11,7 +11,7 @@ extern signed char sound_enabled;
 void sound_set_volume(int volume)
 {
     if (sound_enabled == 0) return;
-    if (D_0018DD54 == (-1)) return;
+    if (sos_midi_device == (-1)) return;
     func_000A1D3C(volume);
     sound_volume = volume;
 }

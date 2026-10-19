@@ -5,7 +5,7 @@
 extern unsigned char text_colour;
 extern unsigned char font_height;
 extern char str_picklist_c[];
-extern char D_001A9AF3;
+extern char picklist_highlight_all;
 extern void text_draw(char *, int, int);
 extern void picklist_clip_text(char *, short);
 extern void xn_draw_line_text_colour(int, int, int, int);
@@ -53,7 +53,7 @@ void picklist_draw(struct picklist *list, int unused)
     while (i < list->count && y < list->list_rect.h - line_height) {
         mc_strncpy(text, list->entries[i].text, 80, str_picklist_c, 236);
         picklist_clip_text(text, list->list_rect.w);
-        if (i != list->selected || D_001A9AF3 != 0) {
+        if (i != list->selected || picklist_highlight_all != 0) {
             text_colour = i != list->selected ? 156 : 0;
             text_draw(text, list->list_rect.x + 2, list->list_rect.y + y + 1);
         }

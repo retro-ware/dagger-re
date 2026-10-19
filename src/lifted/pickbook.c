@@ -20,7 +20,7 @@ extern struct rect spellbook_buttons[9];
 extern char *spell_effect_names[];
 extern char *spell_effect_subtype_names[][12];
 extern char month_moon_phase[];
-extern iptr D_00184634;
+extern iptr text_silenced;
 extern char monster_category[];
 extern signed char world_running;
 extern signed char text_buffer[];
@@ -134,7 +134,7 @@ void spellbook_frame(void)
         spell_object = (struct record *)((iptr *)scratch_190de4)[(int)(unsigned short)shared_picklist.selected];
         spellbook_close();
         if ((player_character->conditions & 0x100) != 0) {
-            hud_message_add(D_00184634);
+            hud_message_add(text_silenced);
         } else if (((struct bf8_7_1 *)&game_state_flags)->f != 0) {
             cost = (spell_cost(&spell_object->data.spell, player_character) * spell_cost_item_percent()) / 100;
             if (spell_object->data.spell.id == 92) cost = 0;

@@ -10,10 +10,10 @@ extern char str_enemy_cfg[];
 extern struct monster_template monster_table[];
 extern signed char class_creature_types[];
 extern signed char text_buffer[];
-extern iptr D_00190704[];
+extern iptr monster_anim_records[];
 extern int monster_bsa_handle;
 extern struct character *player_character;
-extern signed char D_00196293;
+extern signed char monster_init_mode;
 extern int archive_find_record(int, char *, int);
 extern iptr archive_read_record(int, int, iptr);
 extern void loot_generate(int, struct record *, int, int);
@@ -70,9 +70,9 @@ void monster_init(struct record *monster, int monster_type)
             } else if (class_index == 18) {
                 texture_base = 340;
             } else {
-                if (D_00196293 == 0) {
+                if (monster_init_mode == 0) {
                     monster_type += rand() & 1;
-                } else if (((int)(unsigned char)D_00196293) == 2) {
+                } else if (((int)(unsigned char)monster_init_mode) == 2) {
                     monster_type++;
                 }
                 texture_base = 432;
@@ -98,7 +98,7 @@ void monster_init(struct record *monster, int monster_type)
         mc_set_location(91, str_moninit_c);
         mc_sprintf((char *)text_buffer, str_ascr_anc, monster_char->ascr_record);
         record_index = archive_find_record(monster_bsa_handle, text_buffer, 8);
-        D_00190704[monster_char->anim_slot] = (iptr)(anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0));
+        monster_anim_records[monster_char->anim_slot] = (iptr)(anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0));
         anim->anim_request = 0;
         do {
             texture = xn_tex_cache_lookup(texture_base + monster_type, 5, 0);

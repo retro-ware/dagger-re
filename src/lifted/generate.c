@@ -18,10 +18,10 @@ extern int trade_total_weight;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190cee[];
 extern char scratch_190d64[];
-extern short D_00190DEA[];
+extern short chargen_bonus_points[];
 extern short scratch_190df0[];
 extern signed char ui_mode_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char ui_dirty_flags;
 extern struct record *inventory_containers[];
 extern struct record *wagon_container;
@@ -38,7 +38,7 @@ extern struct career *player_class;
 extern int game_minutes;
 extern int trade_total;
 extern struct record *inv_opened_container;
-extern short D_00195F34;
+extern short msgbox_buttons_y;
 extern signed char current_region;
 extern signed char msgbox_kind;
 extern signed char game_mode;
@@ -102,7 +102,7 @@ int chargen_draw(void)
     if (((int)(unsigned char)(chargen_screen & 16)) != 0 && ((int)(unsigned char)chargen_screen) != 255 && ((int)(unsigned char)msgbox_kind) != 4) {
         msgbox_open_rsc(307, 4);
         ui_mode_flags |= 64;
-        D_00195F34 = 125;
+        msgbox_buttons_y = 125;
     }
     if (((int)(unsigned char)chargen_screen) == 255 && ((int)(unsigned char)game_mode) != 8) {
         text_draw_coloured((iptr)player_character, 80, 5, 145, 141);
@@ -162,17 +162,17 @@ void chargen_skill_arrow(int button)
     *(int *)scratch_190be4 = *bios_ticks_now;
     button += -14;
     group = button >> 1;
-    if (D_00190DEA[group] == 0 && (button & 1) != 0) return;
+    if (chargen_bonus_points[group] == 0 && (button & 1) != 0) return;
     slot = scratch_190df0[group];
     skill = &player_character->skills[player_class->skills[slot]];
     if ((unsigned char)skill->value == scratch_190cee[slot] && (button & 1) == 0) return;
     if ((button & 1) != 0) {
         (*(signed char *)&skill->value)++;
-        (D_00190DEA[group])--;
+        (chargen_bonus_points[group])--;
         return;
     }
     (*(signed char *)&skill->value)--;
-    (D_00190DEA[group])++;
+    (chargen_bonus_points[group])++;
 }
 
 void chargen_face_previous(void)
@@ -282,7 +282,7 @@ void trade_add_buy_price(struct record *object)
         trade_total += price >> 1;
         return;
     }
-    if (((struct bf8_7_1 *)&D_001940D6)->f != 0) {
+    if (((struct bf8_7_1 *)&display_flags)->f != 0) {
         trade_total += price >> 1;
         return;
     }

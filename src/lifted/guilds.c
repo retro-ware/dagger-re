@@ -56,13 +56,13 @@ extern signed char game_mode;
 extern signed char player_on_ground;
 extern signed char mouse_buttons_prev;
 extern signed char in_dungeon_water;
-extern signed char D_00196299;
+extern signed char encounter_spawned;
 extern signed char player_swimming;
 extern signed char inv_from_guild_shop;
 extern struct faction *found_faction;
 extern iptr guild_saved_screen;
 extern struct membership *guild_membership;
-extern short D_001A4A18;
+extern short spellshop_saved_seed;
 extern short guild_npc_seed;
 extern signed char guild_map_pending;
 extern struct image *rest_image;
@@ -182,7 +182,7 @@ void guild_buy_magic_items(void)
 
 void spellshop_open(void)
 {
-    D_001A4A18 = rand();
+    spellshop_saved_seed = rand();
     srand((int)(short)guild_npc_seed);
     game_mode = 5;
     ui_dirty_flags &= 254;
@@ -197,7 +197,7 @@ void spellshop_open(void)
 int spellshop_close(void)
 {
     if (((struct bf8_2_1 *)&game_state_flags)->f != 0) picklist_free((iptr)shared_picklist);
-    srand((int)(short)D_001A4A18);
+    srand((int)(short)spellshop_saved_seed);
     ui_dirty_flags &= 253;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
@@ -546,5 +546,5 @@ void rest_open(void)
     bios_ticks = (int *)DOS_LOW(0x46C);
     rest_last_tick = *bios_ticks;
     world_running = 0;
-    D_00196299 = 0;
+    encounter_spawned = 0;
 }

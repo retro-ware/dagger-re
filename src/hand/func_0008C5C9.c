@@ -4,10 +4,10 @@
 #include "doslow.h"
 extern unsigned char text_colour;
 extern short font_height;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern char str_inpstr_c[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern int inpstr_result;
 extern iptr inpstr_text;
 extern short text_cursor_x;
@@ -26,14 +26,14 @@ int inpstr_update(void)
     char y;
 
     text_colour += 5;
-    D_00142928 = inpstr_text_width(inpstr_text, inpstr_cursor) + text_cursor_x;
-    D_0014292C = text_cursor_y;
+    pen_x = inpstr_text_width(inpstr_text, inpstr_cursor) + text_cursor_x;
+    pen_y = text_cursor_y;
     {
         int *clk;
 
         clk = (int *)DOS_LOW(0x46C);
         if (*clk & 4)
-            xn_draw_line(D_00142928, D_0014292C, D_00142928, (short)(D_0014292C + font_height - 1));
+            xn_draw_line(pen_x, pen_y, pen_x, (short)(pen_y + font_height - 1));
     }
     text_colour -= 5;
     text_draw(inpstr_text, text_cursor_x, text_cursor_y);
@@ -47,7 +47,7 @@ int inpstr_update(void)
         if (r == 0x87654321)
             return 0;
         if (r == 0x8000) {
-            mc_strncpy((char *)inpstr_text, D_00190B44, 4, str_inpstr_c, 157);
+            mc_strncpy((char *)inpstr_text, inpstr_saved_text, 4, str_inpstr_c, 157);
             return 2;
         }
         inpstr_result = r;

@@ -494,8 +494,8 @@ global,0x00142397,xn_kbd_ascii_table,strong,"256 bytes: ASCII by scan code-1, 12
 global,0x0014291B,xn_gfx_mode,strong,"current video mode number: 13h from 0x143870, the VESA mode from 0x15FCA7; 0x14396C uses the banked VESA copy when >= 100h"
 global,0x0014291F,xn_gfx_saved_mode,strong,"the BIOS video mode found at start (int 10h AH=0Fh in 0x143870, VESA 4F03h in 0x15FCA7), restored by 0x143700"
 global,0x00142923,xn_gfx_driver,strong,"byte offset into the driver tables D_00143565/69/6D (0 = the only driver), set to 0 by 0x143600"
-global,0x00142928,pen_x,candidate,"code reading (start point of XnGine line 1532B4); a direct call of 1532B4 broke the emulator state, so untested"
-global,0x0014292C,pen_y,candidate,code reading; see pen_x
+global,0x00142928,pen_x,strong,XnGine line start
+global,0x0014292C,pen_y,strong,XnGine line start
 global,0x00142930,xn_gfx_width,strong,"screen width in pixels (320 from 0x143870, VESA width from 0x15FCA7); row stride of screen_buffer for every blit"
 global,0x00142934,xn_gfx_height,strong,"screen height in pixels (200 from 0x143870, VESA height from 0x15FCA7)"
 global,0x00142938,xn_gfx_screen_size,strong,width*height bytes (64000 in mode 13h); back buffer allocation and page size
@@ -1124,8 +1124,8 @@ global,0x00185C58,hud_buttons,confirmed,"11 x {x0,y0,x1,y1,handler}: portrait, s
 global,0x00185CEC,spell_hud_icon_x,strong,"12 shorts 16, 40, ... 280"
 global,0x00185F88,item_group_templates,strong,"per item group, a -1-ended list of template indices (group 11 has none: item_make maps it to the Map). New: exp_equip: item_make through it gave (3,2) Staff, (3,0) Dagger, (14,3) Diamond, (2,0) Cuirass..., the templates of the same names in item_templates"
 global,0x00186A14,ai_octant_angles,strong,8 angles by ai_octant_toward result
-global,0x00186A34,link_axis_override_keys,candidate,"6 model ids (image2*100 + image): 61032, 74073, 54000, 54001, 0, 0, looked up by link_model_axis_override; audit keep: a static table read only there, and no link on these models was seen; a rotate link (action 8) on one of these models in a dungeon would settle what they are"
-global,0x00186A4C,link_axis_override_axes,candidate,"their rotation axes 3, 5, 1, 1: link_start replaces a rotate link's axis with this (+1 for an odd axis); audit keep: a static table read only by link_model_axis_override; a rotate link on one of the models would settle it"
+global,0x00186A34,link_axis_override_keys,strong,link_model_axis_override
+global,0x00186A4C,link_axis_override_axes,strong,link_model_axis_override
 global,0x00186A64,disease_table,strong,"47-byte disease records by id (disease_infect copies one). New: Daggerfall Unity DiseaseEffect.GetClassicDiseaseData ('Found in FALL.EXE (1.07.213)'): Witches' Pox 1,0,0,0,1,0,0,0,1,0,0 / 2,10 / 0xFF, Plague, Yellow Fever... are these bytes"
 global,0x00186D83,poison_table,strong,"4 s16 per poison id-128: minutes before it starts min/max (+0x17), duration min/max (+0x1B); poison_apply, poison_init_record. New: identical to Daggerfall Unity PoisonEffect MinMinutesToPoison/MaxMinutesToPoison/MinRoundsOfPoison/MaxRoundsOfPoison (4,4,3,10 / 10,10,20,1000 / ...)"
 global,0x00186DE3,vampire_spells,strong,"spell ids (255 ends) every new vampire gets: 4, 90, 91 (disease_become_vampire via disease_add_vampire_spell). New: Daggerfall Unity AssignPlayerVampireSpells: the common spells levitateID 4, charmMortalID 90, calmHumanoidID 91"
@@ -1143,7 +1143,7 @@ global,0x001872B7,guild_service_factions,strong,"92 service NPC faction ids (839
 global,0x00187369,guild_service_labels,strong,"92 label pointers: Training, Buy Potions, Make Potions, Buy Soulgems, Spymaster, Get Quest, Make Spells, Buy Magic Items, ..., Cure Diseases, Buy Blessing"
 global,0x001874CD,spellshop_buttons,confirmed,"5 x {rect, handler}: 3 effect slots, BUY (23,167)-(65,181), EXIT (242,170)-(278,178); experiment: BUY (45,174) -> spellshop_buy"
 global,0x00187509,guild_menu_buttons,confirmed,"4 x {x0,y0,x1,y1,..}: JOIN (99,51)-(220,59), TALK (99,60)-(220,68), service (99,69)-(220,77), EXIT (139,80)-(181,94); experiment: clicks matched"
-global,0x00187545,temple_quest_types,candidate,quest type per temple kind (index kind-142) for guild_temple_quest. Keep: code only (guild_temple_quest)
+global,0x00187545,temple_quest_types,strong,guild_temple_quest
 global,0x0018754C,weapon_cif_by_index,strong,WEAPON%02d.CIF number per weapon index (2 dagger ... 9 bows); weapon_load_hand_sprite (asset trace WEAPON04.CIF ...)
 global,0x0018755E,weapon_swing_types,strong,"16 swing types by mouse direction sector (0 down, 4/3 diagonals, 5 up ...); weapon_start_swing"
 global,0x0018756E,swing_to_hit_mods,strong,"s16 per sector: -10, 5, 5, 0, 0, 10 x6, 0, 0, -5, -5, -10 = DFU swing to-hit"
@@ -1229,9 +1229,9 @@ global,0x001903A4,text_buffer,strong,"sprintf target for every text line drawn b
 global,0x00190444,shelf_book_ids,confirmed,"shorts: the book id of each row of a shelf's book list (shelf_open_books fills it from the books' message; shelf_book_chosen opens row a1); audit: build/names/scratch/audit_euw/A/town.py shelf: shelf_open_books on save_morthag1's library gave 21, 21, 56, 33, read books\bok00021/00021/00056/00033.txt for the titles, and the list showed those 4 books (build/names/scratch/audit_euw/shots/A_shelf_books.png)"
 global,0x00190484,key_was_down,strong,byte per scan code: key_pressed_once's edge memory
 global,0x00190504,creature_list,strong,"creature objects processed by ai_update_creatures (world_collect_object appends them, creature_count entries). New: exp_mord: save_mord's 3 entries are the type-18 creatures (two Mages, a Frost Daedra); monster_nearest_to_point and the AI spell pickers index it"
-global,0x00190704,monster_anim_records,candidate,"the loaded ASCR animation records, read only by XnGine's animation-script interpreter xn_C0100 (exp4). Keep: the evidence (exp4) is another unit's; not re-examined here"
+global,0x00190704,monster_anim_records,strong,loaded ASCR animation records
 global,0x00190904,hud_compass_image,strong,"cmpa00i0.bss, frames by yaw, drawn by hud_draw_compass"
-global,0x00190B44,inpstr_saved_text,candidate,"160-byte copy taken at the start, restored on Esc; other code uses it as a scratch string (magic_items_add_cb's parse_expand output)"
+global,0x00190B44,inpstr_saved_text,strong,"160-byte inpstr copy, shared scratch string"
 global,0x00190BE4,scratch_190be4,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): object counts, the automap camera x, the sheet's click timer, %qdt (38 functions)"
 global,0x00190BE8,scratch_190be8,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): the automap camera, chargen, classmaker, itemmaker"
 global,0x00190BEC,scratch_190bec,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): the automap camera, chargen, classmaker, itemmaker"
@@ -1284,7 +1284,7 @@ global,0x00191834,arena2_cd_path,confirmed,"build/names/scratch/audit_tq/exp_glo
 global,0x00191884,cfg_last_path,confirmed,"config_read copies each 'path' / 'pathcd' value here too ('C:\ARENA2\' in save_tlalac_s); audit: build/names/scratch/audit_euw/D/exp_globals.py: config_read with path then pathcd left pathcd's value ('D:\CDROM\'), with pathcd then path left path's ('C:\Y', without the trailing backslash the others get); nothing reads it"
 global,0x001918D4,flats_cfg,strong,"FLATS.CFG records, 40 bytes: u16 picture (archive<<7|record), name, flags (2 '?', 1 '2'), three numbers; flats_cfg_find searches it"
 global,0x001940D4,game_state_flags,strong,flag byte tested across units
-global,0x001940D6,display_flags,candidate,"bit 0 world position, 3 second compass (the debug list toggles), 4 Detect arrow, 6 weapon ready (the HUD weapon button and A; SAVEVARS 0x3BF bit 0x40 = DFU weaponDrawn) (world and UI agents); was debug_display_flags"
+global,0x001940D6,display_flags,strong,"world position, compass, Detect arrow, weapon ready"
 global,0x001940DB,player_motion_flags,strong,"bit 2 crouching (CROUCH toggles; exp_steer.py D: 0 -> 4 -> 0; walk steps 5 instead of 10, crouched body shape), bit 5 climbing ('Climbing mode.'), bit 6 cleared by player_motion_clear_bit6"
 global,0x001940DC,horse_overlay_image,strong,mred00i0.cfa (init_game_data); player_frame_update draws it while riding a horse (transport flag 0x200)
 global,0x001940E0,cart_overlay_image,strong,mred01i0.cfa (init_game_data); player_frame_update draws it with a cart (transport flag 0x400)
@@ -1354,7 +1354,7 @@ global,0x00195AF4,found_object,strong,"the result of object walks and searches (
 global,0x00195AFC,list_popup_image,strong,"pick00i0.img, the list popup's window (list_popup_open/_open_strings load it, list_popup_update and list_popup_poll draw it); was picklist_image"
 global,0x00195B00,frame_timer_ms,strong,xn_timer_add_25 adds 25 to it (40 Hz timer callback); func_0007E066 copies it to frame_timer_start and frame_timer_last
 global,0x00195B04,spell_records,confirmed,"pointer to SPELLS.STD in memory: 89-byte spell records, 128 max (name +0x2F, id +0x49); in save_morthag1 89 records (Fenrik's Door Jam, Buoyancy, Frostbite...); exp1b: cast_item_used_spell(82) found Orc Strength by id here"
-global,0x00195B08,effect_tick_minutes,candidate,"minutes (/4) since the last effects_tick; the regeneration and enchantment amounts. Keep: code only (effects_tick, item_enchantment_tick)"
+global,0x00195B08,effect_tick_minutes,strong,effects_tick
 global,0x00195B0C,trade_haggle_result,strong,"the agreed price of the unused haggling window (0 when rejected or unaffordable), set by trade_haggle_close. New: exp_haggle: ACCEPT -> 282 (the asking price); close with more than the gold -> 0"
 global,0x00195B10,clothing_gender_group,strong,"SAVEVARS.DAT 0x3D1 = DFU '6 for male clothing or 12 for female clothing'; main.c 10585 sets 12 when character flags bit 0, else 6"
 global,0x00195B14,creature_count,strong,active creatures: ai_update_creatures loops over them; inv_use_item says 'There are no monsters nearby.' when 0
@@ -1643,7 +1643,7 @@ global,0x00196AAC,maps_bsa,strong,handle of MAPS.BSA (init 4ED36 opens 'maps.bsa
 global,0x00196AB0,dungeon_header,strong,"10 bytes read after a MAPDITEM record for loaded_location, before the 128-byte dungeon_blocks; +3 is dungeon_block_count; audit: matches the tail of DFU's DungeonHeader (BlockCount u16, Unknown3[5]) before the 4-byte block entries; build/names/scratch/audit_euw/C/s1_survey.py: +3 = 7 (Mantellan Crux), 10 (The Hold of Hearthhouse), 0 in towns"
 global,0x00196AB3,dungeon_block_count,confirmed,byte: blocks in the dungeon; 5 in The Masterford Graveyard (exp3); dungeon_load loads that many RDB blocks
 global,0x00196ABA,region_locations_region,confirmed,u16 region whose locations are loaded; maploads_load_region saves that region's MAPSAVE flags before loading another; audit: build/names/scratch/audit_euw/C/s1_survey.py: equals current_region in 6 saves; build/names/scratch/audit_euw/C/s2_world.py: maploads_enter_region(17) took it from 21 to 17
-global,0x00196ABC,tavern_room_list,candidate,scratch list of 26-byte building entries built by tavern_collect_* (in scratch_buffer). Keep: used only by the dead tavern room system (no reference to tavern_save_rooms/tavern_restore_rooms)
+global,0x00196ABC,tavern_room_list,strong,tavern room scratch list
 global,0x00196AC0,tavern_menu_image,strong,"tvrn00i0.img, loaded by tavern_open, drawn by tavern_frame, freed by tavern_close"
 global,0x00196B00,politic_pak,confirmed,POLITIC.PAK loaded by region_load_tables; politic_region_at looks the player's position up in it and returned current_region (21) in save_morthag1 (exp1)
 global,0x00196B04,climate_pak,confirmed,CLIMATE.PAK loaded by region_load_tables; climate_lookup at the player gave 231 (woodlands) = current_climate (exp1)
@@ -1748,7 +1748,7 @@ global,0x00199784,quest_ended_id,confirmed,id of the last quest ended (quest_end
 global,0x00199788,qbn_record_sizes,confirmed,"short[10] = 19, 94, 34, 20, 24, 16, 33, 14, 87, 8 (quest_init_record_sizes), the QBN section record sizes; quest_record multiplies by it; read back in save_dorian"
 global,0x001997A0,quest_prompt_op,strong,opcode of the yes/no question in progress (qaction_op29_prompt)
 global,0x001997A4,quest_prompt_quest,strong,quest of the yes/no question in progress
-global,0x001997AA,quest_find_id,candidate,"read only by the callback 2FDB0; never written in the C (0 after quest_find_by_id, build/names/scratch/audit_tq/exp_globals.py save_tlalac_s). Keep: read only by the dead callback quest_find_by_id_cb and never written; nothing to settle"
+global,0x001997AA,quest_find_id,strong,func_0002FDB0
 global,0x001997AC,quest_event_code,strong,"short: event being dispatched (1 item to npc, 2 kill, 3 item found, 5 item dropped, 21 foe hurt, 28 npc clicked, 71 pay, 73 spell, 78 faction); quest_dispatch_event runs the opcodes equal to it"
 global,0x001997AE,quest_test_started,strong,func_0004CD80
 global,0x001997B0,notebook_selection_box,strong,struct rect of the selection
@@ -1843,7 +1843,7 @@ global,0x001A4A08,file_index_count,confirmed,number of names in the file index; 
 global,0x001A4A0C,save_file_handle,strong,"file handle of the save file being read or written: savetree_read_chunk, savetree_write_record, links_save/links_load, the SAVEVARS reader and writer all use it"
 global,0x001A4A10,guild_saved_screen,strong,64000-byte copy of the screen under the guild menu / spell shop
 global,0x001A4A14,guild_membership,strong,the player's membership record for the current guild (or 0); experiment at the Mages Guild: rank 9 kind 1 faction 40
-global,0x001A4A18,spellshop_saved_seed,candidate,RNG seed saved while the spell shop is open. Keep: code only (spellshop_open/close)
+global,0x001A4A18,spellshop_saved_seed,strong,spellshop_open
 global,0x001A4A1A,guild_npc_seed,strong,high word of the NPC's record id; seeds the spell shop list
 global,0x001A4A1C,guild_map_pending,strong,set by guild_give_map; guild_service_dispatch then opens the container holding the map
 global,0x001A4A1D,guild_join_asked,strong,counter: the join question is asked when it becomes 1
@@ -7849,3 +7849,66 @@ global,0x0018DC94,sos_digi_port,strong,sos_read_settings
 global,0x0018DC98,sos_digi_irq,strong,sos_read_settings
 global,0x0018DC9C,sos_digi_dma,strong,sos_read_settings
 global,0x0018DD86,sos_midi_port,strong,sos_read_settings
+global,0x001A3F74,dpmi_mem_free_pages,strong,dpmi_memory_stats
+global,0x001A3F78,dpmi_mem_total_pages,strong,dpmi_memory_stats
+global,0x001A3F7C,dpmi_mem_free_unlocked_pages,strong,dpmi_memory_stats
+global,0x001A3F90,mem_free_k,strong,dpmi_memory_stats
+global,0x001A3F94,mem_total_k,strong,"dpmi_memory_stats, object_heap_init"
+global,0x001A3F98,mem_used_k_total,strong,dpmi_memory_stats
+global,0x001970CC,quest_location_door_count,strong,quest_location + 4
+global,0x001970D0,quest_location_doors,strong,quest_location + 8
+global,0x001970D4,quest_location_object,strong,quest_location + 0xC
+global,0x001970D8,quest_location_location,strong,quest_location + 0x10
+global,0x00179EA8,song_pattern_text,strong,song_generate
+global,0x00195F34,msgbox_buttons_y,strong,y of the message box buttons
+global,0x0019629C,court_in_session,strong,"court_open, damage_resolve_attack"
+global,0x00195DA0,blood_archive,strong,380/434 by game data
+global,0x00196DC4,black_palette,strong,play_death_video fade
+global,0x0017B667,climate_people_kind,strong,"pedestrian_pick_sprite, npc_load_face"
+global,0x0017B66D,pedestrian_sprites,strong,[][2][4] pedestrian sprites
+global,0x0017B69D,npc_face_offsets,strong,npc_load_face
+global,0x00175D95,str_dot,strong,"""."""
+global,0x00175D97,str_dotdot,strong,""".."""
+global,0x00175D9A,str_backslash_star_dot_star,strong,"""\*.*"""
+global,0x00190DEA,chargen_bonus_points,strong,chargen skill points
+global,0x00190DEE,chargen_bonus_points_4,strong,chargen skill points
+global,0x0017C5B9,building_close_hours,strong,building_is_open
+global,0x001830E2,date_fmt,strong,"""%d%s of %s"""
+global,0x001962A4,time_skip_quiet,strong,time_pass_minutes
+global,0x001706CA,str_crlf,strong,"""\r\n"""
+global,0x001706CD,str_crlf_crlf,strong,"""\r\n\r\n"""
+global,0x00190CA2,song_rsc_ids,strong,song_generate
+global,0x001962A5,politics_new_year,strong,faction_politics_update
+global,0x001962B0,reputation_decay_off,strong,reputation_decay
+global,0x00185CDC,hud_mode_icon_offsets,strong,hud_draw
+global,0x001951ED,encounter_kinds,strong,encounter_tick
+global,0x00196299,encounter_spawned,strong,encounter_spawn_hidden
+global,0x00196293,monster_init_mode,strong,marker link_flag in place_spawn_from_marker
+global,0x001865CA,magic_item_kinds_1,strong,item_make_magic
+global,0x00186634,magic_item_kinds_2,strong,item_make_magic
+global,0x00185077,text_donate_how_much,strong,"""Donate how much money"""
+global,0x001AA42C,inv_arrow_image_on,strong,inv_draw_scroll_arrows
+global,0x001AA430,inv_arrow_image_off,strong,inv_draw_scroll_arrows
+global,0x001832B4,text_not_magic_item,strong,"""Not a magic item..."""
+global,0x001832BC,text_already_identified,strong,"""Item has already been identified..."""
+global,0x00179970,climate_texture_set_1,strong,texture_archive_for_climate
+global,0x0017998E,climate_texture_set_2,strong,texture_archive_for_climate
+global,0x001861AA,loot_category_groups,strong,loot_generate
+global,0x0018642F,loot_tables,strong,loot_generate
+global,0x0018DD54,sos_midi_device,strong,deviceid
+global,0x001A3F4C,music_song_locked_size,strong,sos_load_song
+global,0x00176DA0,str_space,strong,""" """
+global,0x00184872,text_pcf_house,strong,"""%pcf's house."""
+global,0x00190D84,classmaker_selected_special,strong,classmaker_specials_screen
+global,0x00195D84,shop_item_groups,strong,building_type_odds entry
+global,0x001A9AF3,picklist_highlight_all,strong,picklist_draw
+global,0x0017A13C,quest_timer_place_kinds,strong,quest_timer_update
+global,0x001842D5,text_press_to_fire,strong,"""Press button to fire spell."""
+global,0x001A9AB1,inpstr_saved_font,strong,inpstr_begin_number
+global,0x00190FE5,link_answer_text,strong,link_answer_matches
+global,0x00190D1F,song_hero_race,strong,song_init_heroes
+global,0x00184634,text_silenced,strong,"""You are silenced."""
+global,0x00178848,hex_digits_and_powers,strong,profile_hex_to_int
+global,0x00178EB0,region_event_durations_max,strong,region_flag_set
+global,0x00199638,sheet_popup_image,strong,popu00i0.img
+global,0x0017B631,msgbox_border_style_tiles,strong,msgbox_set_border_style

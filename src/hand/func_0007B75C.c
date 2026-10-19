@@ -3,8 +3,8 @@
 #include "clib.h"
 
 extern signed char text_colour;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern iptr screen_buffer;
 extern iptr big_buffer;
 extern char str_loadsave_c[];
@@ -33,8 +33,8 @@ L7B7D9:;
 
     i = ((slot < 3) ? slot : slot + 3);
     text_colour = 146;
-    D_00142928 = saveload_buttons[i].x0 - 1;
-    D_0014292C = saveload_buttons[i].y0 - 1;
+    pen_x = saveload_buttons[i].x0 - 1;
+    pen_y = saveload_buttons[i].y0 - 1;
     xn_draw_line_to((int)(short)(saveload_buttons[i].x1 + 1), (int)(short)(saveload_buttons[i].y0 - 1));
     xn_draw_line_to((int)(short)(saveload_buttons[i].x1 + 1), (int)(short)(saveload_buttons[i].y1 + 1));
     xn_draw_line_to((int)(short)(saveload_buttons[i].x0 - 1), (int)(short)(saveload_buttons[i].y1 + 1));

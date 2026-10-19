@@ -6,7 +6,7 @@
 
 extern char str_namegen_dat[];
 extern char str_names_c[];
-extern char D_00176DA0[];
+extern char str_space[];
 extern char str_residence[];
 extern char str_fmt_s_s_11[];
 extern char str_your_house[];
@@ -23,9 +23,9 @@ extern char *tavern_name_first_words[];
 extern char *tavern_name_last_words[];
 extern char *region_names[];
 extern signed char region_name_races[];
-extern iptr D_00184872;
+extern iptr text_pcf_house;
 extern signed char text_buffer[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern signed char text_rsc_buffer[];
 extern struct record *location_object;
 extern struct character *player_character;
@@ -64,7 +64,7 @@ iptr name_generate(unsigned char bank, unsigned char female)
     mc_strncpy(namegen_name, (char *)name_generate_first((int)(unsigned char)bank, (int)(unsigned char)female), 40, str_names_c, 90);
     surname = (char *)name_generate_surname((int)(unsigned char)bank, (int)(unsigned char)female);
     if (*surname != 0) {
-        func_000A1054(namegen_name, D_00176DA0, str_names_c, 96, 40);
+        func_000A1054(namegen_name, str_space, str_names_c, 96, 40);
         func_000A1054(namegen_name, surname, str_names_c, 97, 40);
     }
     close((int)(short)namegen_file);
@@ -138,7 +138,7 @@ iptr name_generate_first(unsigned char bank, unsigned char female)
             if (female == 0 && (rand() % 100) < 25) {
                 namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 3));
                 mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 223);
-                func_000A1054(namegen_part_name, D_00176DA0, str_names_c, 224, 30);
+                func_000A1054(namegen_part_name, str_space, str_names_c, 224, 30);
                 namegen_read_part((int)(short)namegen_file, (int)(short)part);
                 func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 226, 30);
             } else {
@@ -178,8 +178,8 @@ iptr building_name(struct building *building)
     if (building == 0) return (iptr)str_residence;
     saved_seed = rand();
     if (building->id == player_character->house) {
-        parse_expand(D_00184872, (iptr)D_00190B44);
-        return (iptr)D_00190B44;
+        parse_expand(text_pcf_house, (iptr)inpstr_saved_text);
+        return (iptr)inpstr_saved_text;
     }
     if (((int)(unsigned short)(building->name_seed & 32768)) != 0) {
         parse_rsc_text(building->name_seed & 0x7FFF, 0, 0);

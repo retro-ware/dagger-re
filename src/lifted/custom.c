@@ -96,7 +96,7 @@ extern short classmaker_special_level;
 extern signed char classmaker_special_counts[];
 extern signed char classmaker_disadvantage_count;
 extern short classmaker_special_list;
-extern short D_00190D84;
+extern short classmaker_selected_special;
 extern short classmaker_hp_repeat;
 extern char scratch_190de4[];
 extern iptr scratch_190de8;
@@ -176,7 +176,7 @@ void classmaker_run(void)
     scratch_190d68 = 115;
     classmaker_select_attribute(0);
     *(short *)classmaker_screen = 0;
-    D_00190D84 = 65535;
+    classmaker_selected_special = 65535;
     classmaker_hp_repeat = 0;
     ui_dirty_flags |= 1;
     if (*(signed char *)classmaker_file != 0) {

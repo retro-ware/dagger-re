@@ -17,11 +17,11 @@ extern char str_main02i0_img[];
 extern struct rect hud_buttons[];
 extern signed char world_running;
 extern short weapon_equip_sounds[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern char scratch_190d64[];
 extern char scratch_190de4[];
 extern signed char game_state_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char ui_dirty_flags;
 extern struct record *wagon_container;
 extern struct record *house_container;
@@ -120,8 +120,8 @@ void hud_toggle_weapon(void)
 {
     pslot16 item_data;
 
-    D_001940D6 ^= 64;
-    if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
+    display_flags ^= 64;
+    if (((struct bf8_6_1 *)&display_flags)->f == 0) return;
     if (player_character->equipped[19] == 0) return;
     *(iptr *)&item_data = (iptr)player_character->equipped[19] + RECORD_HEADER_SIZE;
     sound_play((int)(short)weapon_equip_sounds[((int)(unsigned short)*(short *)(*(char **)&item_data + 34))], player_object, 100);
@@ -189,11 +189,11 @@ void magic_items_add_cb(struct record *object)
     text_macro_item = item;
     if (kind == 2) {
         text_macro_potion = (iptr)&object->children->data.potion_recipe;
-        parse_expand(str_o, D_00190B44);
+        parse_expand(str_o, inpstr_saved_text);
     } else {
-        parse_expand(str_t_4, D_00190B44);
+        parse_expand(str_t_4, inpstr_saved_text);
     }
-    picklist_add(&shared_picklist, D_00190B44, 0);
+    picklist_add(&shared_picklist, inpstr_saved_text, 0);
     ((iptr *)scratch_190de4)[(int)(short)(*(short *)scratch_190d64)++] = (iptr)object;
 }
 

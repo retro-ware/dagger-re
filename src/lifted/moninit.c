@@ -24,7 +24,7 @@ extern iptr monster_class_spell_lists[];
 extern signed char monster_class_map_chance[];
 extern signed char wabbajack_creatures[];
 extern signed char monster_map_chance[];
-extern iptr D_00190704[];
+extern iptr monster_anim_records[];
 extern struct record *nonworld_root;
 extern struct record *location_object;
 extern struct spell *spell_records;
@@ -51,10 +51,10 @@ void monster_reload_anims(void)
     int slot;
 
     for (slot = 0; slot < 128; slot++) {
-        if (D_00190704[slot] != 0) {
-            if (D_00190704[slot] != 0 && D_00190704[slot] != (-1751672937)) {
-                mc_free((void *)D_00190704[slot], str_moninit_c, 211);
-                D_00190704[slot] = -1751672937;
+        if (monster_anim_records[slot] != 0) {
+            if (monster_anim_records[slot] != 0 && monster_anim_records[slot] != (-1751672937)) {
+                mc_free((void *)monster_anim_records[slot], str_moninit_c, 211);
+                monster_anim_records[slot] = -1751672937;
             }
         }
     }

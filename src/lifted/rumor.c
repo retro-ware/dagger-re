@@ -9,7 +9,7 @@ extern char str_rumor_c[];
 extern iptr marquee_owned_text;
 extern char region_event_flag_groups[];
 extern signed char region_event_durations[];
-extern signed char D_00178EB0[];
+extern signed char region_event_durations_max[];
 extern struct region regions[];
 extern signed char text_buffer[];
 extern int marquee_x;
@@ -66,7 +66,7 @@ void region_flag_set(int region, int flag)
     }
     regions[region].flags[flag] = 1;
     regions[region].groups[region_event_flag_groups[flag]] = 1;
-    regions[region].values[flag] = rand_range((int)(unsigned char)region_event_durations[flag * 2], (int)(unsigned char)D_00178EB0[flag * 2]);
+    regions[region].values[flag] = rand_range((int)(unsigned char)region_event_durations[flag * 2], (int)(unsigned char)region_event_durations_max[flag * 2]);
     if (flag != 18) return;
     regions[region].persecuted_temple = faction_random_of_type(1)->id;
 }

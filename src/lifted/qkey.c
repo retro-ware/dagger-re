@@ -34,7 +34,7 @@ extern char weapon_proficiency_bits[];
 extern int career_to_hit_penalty;
 extern signed char text_buffer[];
 extern struct record *creature_list[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern signed char text_rsc_buffer[];
 extern unsigned char world_state_flags;
 extern char strength_bonus[];
@@ -55,7 +55,7 @@ extern signed char game_mode;
 extern signed char guards_alerted;
 extern signed char player_moving;
 extern signed char text_macro_gender;
-extern signed char D_0019629C;
+extern signed char court_in_session;
 extern signed char damage_suppressed;
 extern struct quest *current_quest;
 extern short swing_to_hit;
@@ -141,8 +141,8 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
                         mc_strncpy((char *)text_rsc_buffer, book_header, 2048, str_qkey_c, 119);
                         return (iptr)text_rsc_buffer;
                     }
-                    parse_expand(str_t_2, D_00190B44);
-                    return (iptr)D_00190B44;
+                    parse_expand(str_t_2, inpstr_saved_text);
+                    return (iptr)inpstr_saved_text;
                 }
             }
             qbn_place = quest_section(current_quest, 4);
@@ -397,7 +397,7 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
             }
         }
         dealt = damage_apply(target, damage, attacker_character->equipped[hand_slot]);
-        if (D_0019629C != 0) return;
+        if (court_in_session != 0) return;
         if (attacker == player_entity && dealt != 0) {
             damage_knockback(target, dealt * 10, attack_angle, dealt * 2);
         }

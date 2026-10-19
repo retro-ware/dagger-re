@@ -39,7 +39,7 @@ extern signed char crime_current;
 extern signed char fog_colour;
 extern signed char time_skip_active;
 extern signed char night_sky_loaded;
-extern signed char D_001962A4;
+extern signed char time_skip_quiet;
 extern int breath_last_tick;
 extern struct image *rest_image;
 
@@ -145,10 +145,10 @@ void fatigue_add(int amount)
         return;
     }
     msgbox_show_rsc(1071, 1);
-    D_001962A4 = 1;
+    time_skip_quiet = 1;
     time_pass_minutes(60);
     rest_recover(player_entity);
-    D_001962A4 = 0;
+    time_skip_quiet = 0;
 }
 
 void breath_update(void)

@@ -18,7 +18,7 @@ extern struct location *current_location;
 extern struct mem_pool object_heap;
 extern struct loaded_location loaded_location;
 extern iptr object_found_last;
-extern int D_001A3F94;
+extern int mem_total_k;
 extern int object_move_new;
 extern int object_move_new_y;
 extern int object_move_new_z;
@@ -85,7 +85,7 @@ void object_delete_type_cb(struct record *);
 void object_heap_init(void)
 {
     if (object_heap_size == 0) {
-        if (D_001A3F94 < 13000) {
+        if (mem_total_k < 13000) {
             object_heap_size = NATIVE_HEAP_BYTES(1280000);
         } else {
             object_heap_size = NATIVE_HEAP_BYTES(2048000);

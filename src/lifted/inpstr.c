@@ -11,14 +11,14 @@ extern signed char key_down_right;
 extern signed char key_down_end;
 extern short xn_gfx_clip_right;
 extern char str_inpstr_c[];
-extern char D_00190B44[];
+extern char inpstr_saved_text[];
 extern iptr inpstr_text;
 extern short text_cursor_x;
 extern char inpstr_number_text[];
 extern short inpstr_max_length;
 extern short inpstr_cursor;
 extern signed char input_digits_only;
-extern signed char D_001A9AB1;
+extern signed char inpstr_saved_font;
 
 extern int font_char_width(unsigned char);
 extern int font_text_width(iptr);
@@ -46,10 +46,10 @@ void inpstr_begin_number(int number)
     input_digits_only = 1;
     itoa(number, inpstr_number_text, 10);
     inpstr_text = (iptr)inpstr_number_text;
-    mc_strncpy(D_00190B44, (char *)inpstr_text, 160, str_inpstr_c, 110);
+    mc_strncpy(inpstr_saved_text, (char *)inpstr_text, 160, str_inpstr_c, 110);
     inpstr_cursor = strlen(inpstr_number_text);
     inpstr_max_length = 8;
-    D_001A9AB1 = xn_font_current;
+    inpstr_saved_font = xn_font_current;
 }
 
 int inpstr_handle_key(unsigned char key)

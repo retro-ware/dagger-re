@@ -33,19 +33,19 @@ extern struct character *player_character;
 extern int game_minutes;
 extern struct settings *game_settings;
 extern int sky_loaded_frame;
-extern short D_00195DA0;
+extern short blood_archive;
 extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char cast_strike_spell;
 extern signed char night_sky_loaded;
-extern char D_00196DC4[];
+extern char black_palette[];
 extern signed char monsters_woken;
 extern struct quest *current_quest;
 extern struct record *quest_event_object;
 extern struct quest *quest_tick_data;
 extern struct qbn_op *quest_prompt_op;
 extern struct quest *quest_prompt_quest;
-extern short D_001997AA;
+extern short quest_find_id;
 
 extern int object_weight(struct record *);
 extern int cast_creature_spell(struct record *, struct record *, int);
@@ -171,11 +171,11 @@ void damage_spawn_splash(struct record *target, int image_record, int alt_image_
         if (target_char->race == 1 || target_char->race == 0 || target_char->race == 3) splash->y += 10;
     }
     splash->z = target->z;
-    splash->image = image_record + (D_00195DA0 << 7);
+    splash->image = image_record + (blood_archive << 7);
     if (alt_image_record != (-1)) {
         target_char = &target->data.character;
         if (target_char->mobile_id < 128 && *(signed char *)(monster_category + target_char->race) == 0) {
-            splash->image = alt_image_record + (D_00195DA0 << 7);
+            splash->image = alt_image_record + (blood_archive << 7);
         }
     }
     angle = xn_math_angle_to_point(target->x, target->z, player_object->x, player_object->z);
@@ -250,7 +250,7 @@ void play_death_video(void)
     int unused[11];
     iptr path;
 
-    xn_pal_fade_to(D_00196DC4, 50);
+    xn_pal_fade_to(black_palette, 50);
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_damage_c, 875, 4);
     mc_memset((void *)screen_buffer, 0, 64000, str_damage_c, 876, 4);
     palette_restore();
@@ -293,7 +293,7 @@ void func_0002FDB0(struct record *object)
 
     if (object->type != 14) return;
     quest = &object->data.quest;
-    if (quest->id != D_001997AA) return;
+    if (quest->id != quest_find_id) return;
     quest_tick_data = quest;
     quest_event_object = object;
 }

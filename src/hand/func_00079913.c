@@ -5,7 +5,7 @@ struct bits8 {
     unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1;
 };
 extern unsigned char monster_language_skill[];
-extern struct bits8 D_001940D6;
+extern struct bits8 display_flags;
 extern struct record *player_entity;
 extern struct character *player_character;
 extern void skill_add_uses(int, int);
@@ -19,7 +19,7 @@ void monster_pacify_check(struct record *monster)
     int skill;
 
     monster_char = &monster->data.character;
-    chance = D_001940D6.b6 ? -25 : 10;
+    chance = display_flags.b6 ? -25 : 10;
     if (monster_char->race >= 43)
         chance += player_character->attributes[ATTR_PER] / 5 + player_character->skills[SKILL_ETIQUETTE].value / 10;
     else {

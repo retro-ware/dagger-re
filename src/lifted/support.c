@@ -33,7 +33,7 @@ extern int icon_cycle_frame;
 extern int icon_cycle_last_tick;
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char misc_state_flags;
 extern struct record *location_grid[];
 extern struct record *inventory_container_2;
@@ -431,7 +431,7 @@ void world_collect_object(struct record *object)
 
     switch (object->type) {
     case 33:
-        if (((struct bf8_4_1 *)&D_001940D6)->f != 0 && player_character->detect_kind == 2) {
+        if (((struct bf8_4_1 *)&display_flags)->f != 0 && player_character->detect_kind == 2) {
             if ((object->image >> 7) == 216 || object->image == 26112) detect_consider(object);
         }
         if ((object->image >> 7) == 210 && memchr(fire_flat_records, (int)(unsigned short)(object->image & 127), 8) != 0) {
@@ -446,13 +446,13 @@ void world_collect_object(struct record *object)
         creature_list[creature_count++] = object;
         if (monster_despawn_to_marker(object) != 0) {
             creature_count--;
-        } else if (((struct bf8_4_1 *)&D_001940D6)->f != 0 && player_character->detect_kind == 1) {
+        } else if (((struct bf8_4_1 *)&display_flags)->f != 0 && player_character->detect_kind == 1) {
             detect_consider_creature(object, object->detect_distance);
         }
         return;
     case 2:
         item_data = &object->data.item;
-        if (((struct bf8_4_1 *)&D_001940D6)->f != 0 && player_character->detect_kind == 0 && item_data->enchantments[0].type != (-1) && object->parent->parent != player_entity) {
+        if (((struct bf8_4_1 *)&display_flags)->f != 0 && player_character->detect_kind == 0 && item_data->enchantments[0].type != (-1) && object->parent->parent != player_entity) {
             detect_consider(object);
         }
         return;

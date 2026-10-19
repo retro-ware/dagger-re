@@ -6,7 +6,7 @@ extern int xn_anim_ticks;
 extern char str_you_have_no_arrows[];
 extern short cast_anim_state;
 extern char bow_anim_script[];
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern signed char misc_state_flags;
 extern signed char player_motion_flags;
 extern int right_hand_ready_delay[];
@@ -53,11 +53,11 @@ void weapon_player_update(void)
     }
     if (weapon_hand_cif[((int)(unsigned char)weapon_active_hand)] == 0) return;
     if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) return;
-    if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
+    if (((struct bf8_6_1 *)&display_flags)->f == 0) return;
     if (((iptr)bow_anim_script) == *(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)]) {
         if (inv_take_arrow(0) == 0) {
             hud_status_set(str_you_have_no_arrows);
-            D_001940D6 &= 191;
+            display_flags &= 191;
             return;
         }
         weapon_bow_update();
@@ -67,7 +67,7 @@ void weapon_player_update(void)
         /* the item's colour: its data's +56 (the record's header first) */
         color_remap = (iptr)((char *)color_remap_tables + (((int)(unsigned char)*(signed char *)((char *)weapon_hand_item[((int)(unsigned char)weapon_active_hand)] + RECORD_HEADER_SIZE + 56)) << 8));
     }
-    if (((struct bf8_6_1 *)&D_001940D6)->f != 0 && weapon_swing_state[((int)(unsigned char)weapon_active_hand)] == 0) {
+    if (((struct bf8_6_1 *)&display_flags)->f != 0 && weapon_swing_state[((int)(unsigned char)weapon_active_hand)] == 0) {
         cif = weapon_hand_cif[((int)(unsigned char)weapon_active_hand)];
         if (((int)(unsigned short)(game_settings->view_flags & 1)) != 0) {
             bar_height = 0;

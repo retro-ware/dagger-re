@@ -8,7 +8,7 @@ extern char str_sound_c[];
 extern unsigned char player_environment;
 extern int sound_volume;
 extern iptr music_song_buffer;
-extern int D_0018DD54;
+extern int sos_midi_device;
 extern int sos_digi_driver;
 extern int sos_digi_handle;
 extern struct record *player_object;
@@ -216,7 +216,7 @@ void music_stop(void)
 void func_0006987B(void)
 {
     if (sound_enabled == 0) return;
-    if (D_0018DD54 == (-1)) return;
+    if (sos_midi_device == (-1)) return;
     func_000A1D3C(sound_volume);
 }
 
@@ -224,7 +224,7 @@ void music_update(void)
 {
     if (sound_enabled == 0) return;
     if (music_song_data == 0) return;
-    if (D_0018DD54 == (-1)) return;
+    if (sos_midi_device == (-1)) return;
     if ((short)func_000A2941(music_song) == 0) return;
     func_000A27A0(music_song);
 }

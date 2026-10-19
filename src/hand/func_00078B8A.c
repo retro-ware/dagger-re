@@ -5,7 +5,7 @@
 extern char str_moninit_c[];
 extern char str_ascr_anc[];
 extern signed char text_buffer[];
-extern iptr D_00190704[];
+extern iptr monster_anim_records[];
 extern int monster_bsa_handle;
 extern int archive_find_record(int, char *, int);
 extern iptr archive_read_record(int, int, iptr);
@@ -27,7 +27,7 @@ void monster_reload_anim_cb(struct record *object)
     mc_set_location(196, str_moninit_c);
     mc_sprintf((char *)text_buffer, str_ascr_anc, monster_char->ascr_record);
     record_index = archive_find_record(monster_bsa_handle, text_buffer, 8);
-    *(char * *)&D_00190704[monster_char->anim_slot] = anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0);
+    *(char * *)&monster_anim_records[monster_char->anim_slot] = anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0);
     if (anim->anim_script_pos == 0) return;
     anim->anim_script_pos = anim->anim_script + script_offset;
 }

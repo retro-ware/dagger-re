@@ -13,8 +13,8 @@ extern short mouse_y;
 extern signed char text_colour;
 extern short font_height;
 extern signed char key_down_esc;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern iptr screen_buffer;
 extern iptr big_buffer;
 extern char str_copyfile_dat_2[];
@@ -116,7 +116,7 @@ void logbook_draw_entry(char *text)
     while (*(signed char *)text != 0) {
         switch (*(unsigned char *)text) {
         case 251:
-            D_00142928 = *(short *)(text + 1);
+            pen_x = *(short *)(text + 1);
             text += 3;
             break;
         case 247:
@@ -135,24 +135,24 @@ void logbook_draw_entry(char *text)
             break;
         case 252:
             line_height = font_height;
-            D_00142928 = 30;
-            D_0014292C += *(int *)&line_height;
+            pen_x = 30;
+            pen_y += *(int *)&line_height;
             text++;
             text_buffer[(int)(short)*(short *)scratch_190d64] = 0;
             book_flush_line();
             *(short *)scratch_190d64 = 0;
-            if (((int)(short)D_0014292C) > 160) goto L6AB05;
+            if (((int)(short)pen_y) > 160) goto L6AB05;
             break;
         case 253:
             line_height = font_height;
-            D_00142928 = 30;
-            D_0014292C += *(int *)&line_height;
+            pen_x = 30;
+            pen_y += *(int *)&line_height;
             text++;
             text_buffer[(int)(short)*(short *)scratch_190d64] = 0;
             *(short *)scratch_190d66 = 1;
             book_flush_line();
             *(short *)scratch_190d64 = 0;
-            if (((int)(short)D_0014292C) > 160) goto L6AB05;
+            if (((int)(short)pen_y) > 160) goto L6AB05;
             break;
         case 1:
             text++;
@@ -166,9 +166,9 @@ void logbook_draw_entry(char *text)
     text_buffer[(int)(short)*(short *)scratch_190d64] = 0;
     book_flush_line();
 L6AB05:;
-    D_00142928 = 30;
+    pen_x = 30;
     line_height = font_height;
-    D_0014292C += *(int *)&line_height;
+    pen_y += *(int *)&line_height;
 }
 
 void logbook_prev_page(void)
@@ -247,18 +247,18 @@ void logbook_draw(void)
     int i;
     char *entry;
 
-    D_00142928 = 30;
-    D_0014292C = 25;
+    pen_x = 30;
+    pen_y = 25;
     *(short *)scratch_190d66 = 0;
     xn_font_select(4);
     entry = str_list_skip(scratch_buffer + 20000, logbook_first_entry);
     for (i = logbook_first_entry; i < logbook_entry_count; i++) {
-        if (((int)(short)D_0014292C) > 160) return;
+        if (((int)(short)pen_y) > 160) return;
         logbook_draw_entry(entry);
         entry += strlen(entry) + 1;
         if (*(signed char *)entry == 0) {
             entry++;
-            D_0014292C += 8;
+            pen_y += 8;
         }
     }
 }

@@ -13,7 +13,7 @@ extern char **classmaker_disadvantage_sublists[];
 extern short classmaker_screen;
 extern unsigned char classmaker_special_counts[];
 extern short classmaker_special_list;
-extern short D_00190D84;
+extern short classmaker_selected_special;
 extern iptr scratch_190df4;
 extern char *scratch_190dfc;
 extern char *classmaker_specials_image;
@@ -104,7 +104,7 @@ void classmaker_specials_screen(void)
         }
         classmaker_specials_picked();
     } else {
-        D_00190D84 = -1;
+        classmaker_selected_special = -1;
         y = 36;
         for (index = 0; classmaker_special_counts[classmaker_special_list] > index; index++, y += font_height * 2) {
             top = y;
@@ -127,7 +127,7 @@ void classmaker_specials_screen(void)
             }
             bottom = y + font_height;
             if (mouse_y >= top && mouse_y <= bottom)
-                D_00190D84 = index;
+                classmaker_selected_special = index;
         }
     }
 done:

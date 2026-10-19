@@ -2,8 +2,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern unsigned char D_0017B667[];
-extern short D_0017B66D[][2][4];
+extern unsigned char climate_people_kind[];
+extern short pedestrian_sprites[][2][4];
 extern int climate_category(void);
 
 void pedestrian_pick_sprite(struct record *pedestrian)
@@ -18,7 +18,7 @@ void pedestrian_pick_sprite(struct record *pedestrian)
         pedestrian->flags &= ~0x4000;
         return;
     }
-    pedestrian->image = D_0017B66D[D_0017B667[kind]][flip][rand() & 3] << 7;
+    pedestrian->image = pedestrian_sprites[climate_people_kind[kind]][flip][rand() & 3] << 7;
     pedestrian->flags |= flip != 0 ? 16384 : 0;
     *((unsigned char *)pedestrian + 73) |= flip != 0 ? 16 : 0;      /* a person's data +2 flags: bit 4 female */
 }

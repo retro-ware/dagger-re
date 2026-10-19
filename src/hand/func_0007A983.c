@@ -37,8 +37,8 @@ extern int game_minutes;
 extern struct settings *game_settings;
 extern int realtime_clock_tick;
 extern int sky_loaded_frame;
-extern iptr D_00195D84;
-extern int D_00195DA0;
+extern iptr shop_item_groups;
+extern int blood_archive;
 extern char view_cursor_active;
 extern unsigned char current_region;
 extern unsigned char mouse_buttons_prev;
@@ -167,7 +167,7 @@ int load_game(char *name)
     if (player_environment == 3)
         automap_restore_seen();
     if (player_environment == 2)
-        D_00195D84 = building_type_odds[(current_building = object_building(player_object))->type];
+        shop_item_groups = building_type_odds[(current_building = object_building(player_object))->type];
     if ((int)(unsigned short)(game_settings->view_flags & 1) != 0)
         xn_cam_set_view_window(160, 100, 160, 100);
     else
@@ -187,10 +187,10 @@ int load_game(char *name)
     view_cursor_active = 0;
     if (disk_file_exists(str_dagger_grd) != 0) {
         game_settings->view_flags |= 4;
-        D_00195DA0 = 434;
+        blood_archive = 434;
     } else {
         game_settings->view_flags &= ~4;
-        D_00195DA0 = 380;
+        blood_archive = 380;
     }
     sound_stop_ambient();
     object_foreach(location_object, func_00028F8B);

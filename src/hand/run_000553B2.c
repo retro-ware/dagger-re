@@ -10,7 +10,7 @@ extern char str_custom_c[];
 extern signed char classmaker_special_counts[];
 extern short scratch_190d68;
 extern short classmaker_special_list;
-extern short D_00190D84;
+extern short classmaker_selected_special;
 extern iptr scratch_190de4;
 extern unsigned short *scratch_190dec;
 extern struct career *player_class;
@@ -31,13 +31,13 @@ void classmaker_draw_dagger(void)
 
 void classmaker_specials_remove(void)
 {
-    if (D_00190D84 == -1) return;
+    if (classmaker_selected_special == -1) return;
     if (classmaker_special_list == 0)
-        classmaker_set_advantage(D_00190D84, 1);
+        classmaker_set_advantage(classmaker_selected_special, 1);
     else
-        classmaker_set_disadvantage(D_00190D84, 1);
-    if (D_00190D84 != 6)
-        mc_memcpy(&classmaker_specials[classmaker_special_list][D_00190D84], &classmaker_specials[classmaker_special_list][D_00190D84 + 1], (6 - D_00190D84) * 2, str_custom_c, 952, 4);
+        classmaker_set_disadvantage(classmaker_selected_special, 1);
+    if (classmaker_selected_special != 6)
+        mc_memcpy(&classmaker_specials[classmaker_special_list][classmaker_selected_special], &classmaker_specials[classmaker_special_list][classmaker_selected_special + 1], (6 - classmaker_selected_special) * 2, str_custom_c, 952, 4);
     classmaker_special_counts[classmaker_special_list]--;
     while (mouse_buttons != 0)
         xn_mouse_poll_clamped();

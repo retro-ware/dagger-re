@@ -6,8 +6,8 @@
 extern unsigned char player_environment;
 extern char str_w[];
 extern short dungeon_texture_archives[];
-extern char D_00179970[];
-extern char D_0017998E[];
+extern char climate_texture_set_1[];
+extern char climate_texture_set_2[];
 extern signed char scratch_190ce4[];
 extern signed char scratch_190ce5;
 extern signed char climate_weathers[];
@@ -22,7 +22,7 @@ short texture_archive_for_climate(int archive, int record)
     base = archive % 100;
     switch (player_environment) {
     case 1:
-        if (xn_str_find_u16((unsigned short *)D_00179970, (int)(short)*(short *)&base, 15) != 0) {
+        if (xn_str_find_u16((unsigned short *)climate_texture_set_1, (int)(short)*(short *)&base, 15) != 0) {
             if (base == 74 && record > 2) return archive;
             archive = base + (((int)(signed char)scratch_190ce4[0]) * 100);
             if (((int)(unsigned char)climate_weathers[(int)(signed char)scratch_190ce5]) == 5 && base != 74) {
@@ -31,7 +31,7 @@ short texture_archive_for_climate(int archive, int record)
         }
         return archive;
     case 2:
-        if (xn_str_find_u16((unsigned short *)D_0017998E, (int)(short)*(short *)&base, 15) != 0) {
+        if (xn_str_find_u16((unsigned short *)climate_texture_set_2, (int)(short)*(short *)&base, 15) != 0) {
             if (base == 74 && record > 2) return archive;
             archive = (archive % 100) + (((int)(signed char)scratch_190ce4[0]) * 100);
         }

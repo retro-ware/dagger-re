@@ -4,7 +4,7 @@
 #include "ptrint.h"
 
 extern signed char msgbox_border_sizes[];
-extern signed char D_0017B631[];
+extern signed char msgbox_border_style_tiles[];
 extern iptr msgbox_spop_tiles[];
 extern iptr msgbox_border_tiles;
 extern short msgbox_tile_size;
@@ -16,6 +16,6 @@ void msgbox_set_border_style(short style)
 {
     msgbox_border_tiles = msgbox_spop_tiles[style];
     msgbox_tile_w = (unsigned short)(unsigned char)msgbox_border_sizes[style * 2];
-    msgbox_tile_h = (unsigned short)(unsigned char)D_0017B631[style * 2];
+    msgbox_tile_h = (unsigned short)(unsigned char)msgbox_border_style_tiles[style * 2];
     msgbox_tile_size = msgbox_tile_w * msgbox_tile_h;
 }

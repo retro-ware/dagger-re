@@ -11,8 +11,8 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char text_colour;
 extern signed char key_down_enter;
-extern short D_00142928;
-extern short D_0014292C;
+extern short pen_x;
+extern short pen_y;
 extern short xn_gfx_clip_bottom;
 extern iptr screen_buffer;
 extern char str_travel_c[];
@@ -207,11 +207,11 @@ void travel_map_update(void)
                 if (((struct bf8_3_1 *)blink_ticks)->f != 0) {
                     if (scratch_190ce4[0] != 0) {
                         text_colour = 244;
-                        D_00142928 = *(short *)travel_marker_x;
-                        D_0014292C = 12;
+                        pen_x = *(short *)travel_marker_x;
+                        pen_y = 12;
                         xn_draw_line_to((int)(short)*(short *)travel_marker_x, 172);
-                        D_00142928 = 0;
-                        D_0014292C = *(short *)travel_marker_y;
+                        pen_x = 0;
+                        pen_y = *(short *)travel_marker_y;
                         xn_draw_line_to(320, (int)(short)*(short *)travel_marker_y);
                     } else {
                         xn_draw_mark_matching((char *)travel_region_index_image, (char *)screen_buffer, ((int)(unsigned char)current_region) + 128, 64000);

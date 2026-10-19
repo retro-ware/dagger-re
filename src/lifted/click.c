@@ -28,7 +28,7 @@ extern char str_store_is_closed_open_from_00_to_00[];
 extern char str_gnrc01i0_img[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
-extern signed char D_0017C5B9[];
+extern signed char building_close_hours[];
 extern iptr text_too_far_away;
 extern char *monster_names[];
 extern iptr vowels_text;
@@ -51,7 +51,7 @@ extern char shelf_book_ids[];
 extern char scratch_190be4[];
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
-extern signed char D_001940D6;
+extern signed char display_flags;
 extern unsigned char world_state_flags;
 extern signed char player_view_flags;
 extern struct record *wagon_container;
@@ -967,7 +967,7 @@ void click_interior_model(struct pick_result *hit, struct record *object)
         building = object_building(object);
         if (building != 0 && picked_block_model != 0 && (picked_block_model->id == 418 || (picked_block_model->id == 410 && furniture_is_container(picked_block_model->variant + (picked_block_model->id << 7)) != 0)) && (stock_count = func_000612A1()) != 0) {
             if (building->id == player_character->house) {
-                D_001940D6 |= 4;
+                display_flags |= 4;
                 inventory_open_container((struct record *)furniture_container_1, 0, 4);
             } else {
                 msgbox_yes_no_rsc(37);
@@ -977,7 +977,7 @@ void click_interior_model(struct pick_result *hit, struct record *object)
                     guards_summon(1);
                 }
                 if (stock_count != 0) {
-                    D_001940D6 |= 4;
+                    display_flags |= 4;
                     inventory_open_container((struct record *)furniture_container_3, 0, 4);
                 }
             }
@@ -1102,7 +1102,7 @@ void click_show_building_info(struct pick_result *unused, struct record *object)
     hud_message_add(building_name(building));
     if (building->type == 1 || building_is_open(building) != 0 || building->type >= 14) return;
     mc_set_location(1274, str_click_c);
-    mc_sprintf((char *)text_buffer, str_store_is_closed_open_from_00_to_00, (int)(unsigned char)building_open_hours[building->type * 2], (int)(unsigned char)D_0017C5B9[building->type * 2]);
+    mc_sprintf((char *)text_buffer, str_store_is_closed_open_from_00_to_00, (int)(unsigned char)building_open_hours[building->type * 2], (int)(unsigned char)building_close_hours[building->type * 2]);
     hud_message_add((iptr)text_buffer);
 }
 

@@ -3,7 +3,7 @@
  * tables from the start of the file, so moving functions can change the code. */
 #include "ptrint.h"
 
-extern iptr D_00195D84;
+extern iptr shop_item_groups;
 
 
 int trade_shop_takes_group(int group)
@@ -11,8 +11,8 @@ int trade_shop_takes_group(int group)
     int i;
 
     i = 0;
-    while (((int)(unsigned char)*(signed char *)((char *)(D_00195D84 + i))) != 255) {
-        if (((int)(unsigned char)*(signed char *)((char *)(D_00195D84 + i))) == group) {
+    while (((int)(unsigned char)*(signed char *)((char *)(shop_item_groups + i))) != 255) {
+        if (((int)(unsigned char)*(signed char *)((char *)(shop_item_groups + i))) == group) {
             return 1;
         }
         i += 2;

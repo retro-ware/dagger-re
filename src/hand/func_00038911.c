@@ -16,7 +16,7 @@ extern signed char text_buffer[];
 extern unsigned char ui_mode_flags;
 extern struct character *player_character;
 extern short spell_effect_slot;
-extern short D_00195F34;
+extern short msgbox_buttons_y;
 extern short saved_mouse_y;
 extern short saved_mouse_x;
 extern short mouse_motion_y;
@@ -48,7 +48,7 @@ void spellmaker_settings_update(void)
         msgbox_open_rsc(spell_effect_text_index(spell_effect_slot) + 1500, 4);
         game_mode = 2;
         ui_mode_flags |= 64;
-        D_00195F34 = 88;
+        msgbox_buttons_y = 88;
     }
     if ((int)(unsigned char)(mouse_buttons & 1) != 0 && mouse_buttons_prev != mouse_buttons && mouse_x > 281
       && mouse_x < 304 && mouse_y > 94 && mouse_y < 109) {

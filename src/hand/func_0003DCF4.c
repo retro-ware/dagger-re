@@ -9,7 +9,7 @@ extern char *screen_buffer;
 extern char str_text_c[];       /* __FILE__ */
 extern signed char text_buffer[];
 extern struct flags5 ui_mode_flags;
-extern struct flags6 D_001940D6;
+extern struct flags6 display_flags;
 extern short text_cursor_x;
 extern short text_cursor_y;
 extern char *msgbox_next_page;
@@ -223,8 +223,8 @@ void msgbox_render(char *text, char **out)
     }
     if (text_format_flags & 4)
         msgbox_draw_buttons((short)(y + 4));
-    if (D_001940D6.b5) {
-        D_001940D6.b5 = 0;
+    if (display_flags.b5) {
+        display_flags.b5 = 0;
         painting_draw();
     }
     *out = mc_malloc(msgbox_h * msgbox_w, str_text_c, 510);

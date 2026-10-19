@@ -4,7 +4,7 @@
 
 /* the timer flags are read signed here: (short)t->flags */
 extern short travel_options;
-extern char D_0017A13C[];
+extern char quest_timer_place_kinds[];
 extern int game_minutes;
 extern struct quest *current_quest;
 extern void quest_timer_update(struct quest *, struct qbn_timer *, short);
@@ -77,25 +77,25 @@ void quest_timer_update(struct quest *quest, struct qbn_timer *timer, short star
             break;
         case 2:
             timer->delay = quest_travel_minutes(quest, 0, timer->link1) * 384 >> 8;
-            if (memchr(D_0017A13C, timer->link1->link_flag, 5))
+            if (memchr(quest_timer_place_kinds, timer->link1->link_flag, 5))
                 timer->delay += 10080;
             break;
         case 3:
             timer->delay = quest_travel_minutes(quest, timer->link1, timer->link2) * 384 >> 8;
-            if (memchr(D_0017A13C, timer->link1->link_flag, 5) || memchr(D_0017A13C, timer->link2->link_flag, 5))
+            if (memchr(quest_timer_place_kinds, timer->link1->link_flag, 5) || memchr(quest_timer_place_kinds, timer->link2->link_flag, 5))
                 timer->delay += 10080;
             break;
         case 4:
             timer->delay = quest_travel_minutes(quest, 0, timer->link1) * 384 >> 8;
-            if (memchr(D_0017A13C, timer->link1->link_flag, 5))
+            if (memchr(quest_timer_place_kinds, timer->link1->link_flag, 5))
                 timer->delay += 10080;
             break;
         case 5:
             timer->delay = quest_travel_minutes(quest, 0, timer->link1) * 384 >> 8;
             timer->delay += quest_travel_minutes(quest, timer->link1, timer->link2) * 384 >> 8;
-            if (memchr(D_0017A13C, timer->link1->link_flag, 5))
+            if (memchr(quest_timer_place_kinds, timer->link1->link_flag, 5))
                 timer->delay += 10080;
-            if (memchr(D_0017A13C, timer->link2->link_flag, 5))
+            if (memchr(quest_timer_place_kinds, timer->link2->link_flag, 5))
                 timer->delay += 10080;
             break;
         }

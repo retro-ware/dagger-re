@@ -9,7 +9,7 @@ extern struct region regions[];
 extern int shared_scratch;
 extern char current_region;
 extern char previous_region;
-extern char D_001962A5;
+extern char politics_new_year;
 extern int faction_count;
 extern struct faction *factions;
 extern void region_flag_set(int, int);
@@ -59,7 +59,7 @@ void faction_politics_update(int mode)
     faction = factions;
     if (mode == 1)
         return;
-    if (D_001962A5)
+    if (politics_new_year)
         rumor_file_purge();
     rumor_file_open();
     for (i = 0; i < faction_count; i++, faction++) {

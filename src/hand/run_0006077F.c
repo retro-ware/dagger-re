@@ -3,8 +3,8 @@
 #include "clib.h"
 
 extern char str_equip_c[];        /* __FILE__ */
-extern unsigned char D_001865CA[];
-extern unsigned char D_00186634[];
+extern unsigned char magic_item_kinds_1[];
+extern unsigned char magic_item_kinds_2[];
 extern struct character *player_character;
 extern int magic_def_count;
 extern struct magic_template *magic_def;
@@ -41,10 +41,10 @@ void item_make_magic(struct item *item, int which)
     }
     switch (magic_def[i].group) {
     case 0:
-        kind = D_001865CA[rand_range(0, 6)];
+        kind = magic_item_kinds_1[rand_range(0, 6)];
         break;
     case 1:
-        kind = D_00186634[rand_range(0, 4)];
+        kind = magic_item_kinds_2[rand_range(0, 4)];
         break;
     case 2:
         kind = 3;

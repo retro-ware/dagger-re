@@ -11,10 +11,10 @@ extern signed char text_colour;
 extern char str_tamriel_c[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
-extern signed char D_0017C5B9[];
+extern signed char building_close_hours[];
 extern iptr month_names[];
 extern iptr ordinal_suffixes[];
-extern iptr D_001830E2;
+extern iptr date_fmt;
 extern signed char world_running;
 extern int frame_checkpoint;
 extern struct record *creature_list[];
@@ -46,10 +46,10 @@ extern signed char crime_current;
 extern signed char is_daytime;
 extern signed char player_ailment_flags;
 extern signed char quest_time_passed;
-extern signed char D_001962A4;
-extern signed char D_001962A5;
+extern signed char time_skip_quiet;
+extern signed char politics_new_year;
 extern signed char quests_suspended;
-extern signed char D_001962B0;
+extern signed char reputation_decay_off;
 extern int faction_count;
 extern struct faction *factions;
 extern struct quest *current_quest;
@@ -115,7 +115,7 @@ iptr calendar_format_date(int minutes, iptr buffer)
 
     *(int *)&day = ((unsigned)(((unsigned)(((unsigned)minutes) % 518400)) / 1440)) % 30;
     mc_set_location(79, str_tamriel_c);
-    mc_sprintf((char *)buffer, (char *)D_001830E2, ((int)(short)day) + 1, ordinal_suffixes[((((int)(short)day) > 3) ? 3 : (int)(short)day)], month_names[(((unsigned)(((unsigned)minutes) % 518400)) / 43200)]);
+    mc_sprintf((char *)buffer, (char *)date_fmt, ((int)(short)day) + 1, ordinal_suffixes[((((int)(short)day) > 3) ? 3 : (int)(short)day)], month_names[(((unsigned)(((unsigned)minutes) % 518400)) / 43200)]);
     return buffer;
 }
 
@@ -176,7 +176,7 @@ void time_pass_minutes(int minutes)
         days = (((unsigned)game_minutes) / 1440) - days;
         frame_checkpoint = 2000;
         for (i = 0; i < days; i++) {
-            if (D_001962A4 == 0) {
+            if (time_skip_quiet == 0) {
                 spfx_walk_effect_records(player_entity->children, spfx_disease_daily);
             }
             frame_checkpoint = 2001;
@@ -213,7 +213,7 @@ void time_pass_minutes(int minutes)
             n = (start_minutes + i) % 120960;
             if (n == 0) disease_start_cure_quest(1);
             frame_checkpoint = 2013;
-            if (D_001962A4 == 0) {
+            if (time_skip_quiet == 0) {
                 frame_checkpoint = 2017;
                 spell_tick(player_entity);
                 spfx_walk_effect_records(player_entity, spfx_disease_recover);
@@ -226,7 +226,7 @@ void time_pass_minutes(int minutes)
             sky_update_moons();
             frame_checkpoint = 2020;
             crime_check_beast_form_in_town();
-            if (D_001962A5 != 0) quests_run_all();
+            if (politics_new_year != 0) quests_run_all();
             frame_checkpoint = 2022;
             loan_due_penalty();
             if (player_death_timer < 0) return;
@@ -255,7 +255,7 @@ void time_pass_minutes(int minutes)
         frame_checkpoint = 2028;
         disease_lycanthrope_tick();
         frame_checkpoint = 2029;
-        if (D_001962A4 == 0) disease_special_infection_tick();
+        if (time_skip_quiet == 0) disease_special_infection_tick();
         spfx_expire_created_items();
         quest_time_passed = 1;
         frame_checkpoint = 2030;
@@ -337,7 +337,7 @@ int building_is_open(struct building *building)
     }
     if (building->type > 16) return 0;
     hour = ((unsigned)(((unsigned)game_minutes) % 1440)) / 60;
-    return (((((int)(unsigned char)building_open_hours[building->type * 2]) <= hour) && (((int)(unsigned char)D_0017C5B9[building->type * 2]) > hour)) ? 1 : 0);
+    return (((((int)(unsigned char)building_open_hours[building->type * 2]) <= hour) && (((int)(unsigned char)building_close_hours[building->type * 2]) > hour)) ? 1 : 0);
 }
 
 int building_minutes_to_close(struct building *building)
@@ -345,8 +345,8 @@ int building_minutes_to_close(struct building *building)
     int hour;
 
     hour = ((unsigned)(((unsigned)game_minutes) % 1440)) / 60;
-    if (((int)(unsigned char)building_open_hours[building->type * 2]) <= hour && ((int)(unsigned char)D_0017C5B9[building->type * 2]) > hour) {
-        return (((int)(unsigned char)D_0017C5B9[building->type * 2]) * 60) - (((unsigned)game_minutes) % 1440);
+    if (((int)(unsigned char)building_open_hours[building->type * 2]) <= hour && ((int)(unsigned char)building_close_hours[building->type * 2]) > hour) {
+        return (((int)(unsigned char)building_close_hours[building->type * 2]) * 60) - (((unsigned)game_minutes) % 1440);
     }
     return 0;
 }
@@ -393,7 +393,7 @@ void reputation_decay(void)
 {
     int i;
 
-    if (D_001962B0 == 0) {
+    if (reputation_decay_off == 0) {
         for (i = 0; i < 62; i++) {
             if (regions[i].legal_reputation > 0) {
                 (regions[i].legal_reputation)--;

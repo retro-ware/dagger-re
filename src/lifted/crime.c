@@ -23,7 +23,7 @@ extern int creature_count;
 extern struct character *player_character;
 extern iptr window_image;
 extern int player_death_timer;
-extern short D_00195F34;
+extern short msgbox_buttons_y;
 extern signed char current_region;
 extern unsigned char popup_answer;
 extern signed char screen_active;
@@ -64,7 +64,7 @@ void court_frame(void)
     mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_crime_c, 172, 4);
     if (((int)(unsigned char)game_mode) == 8) return;
     ui_mode_flags |= 64;
-    D_00195F34 = 194;
+    msgbox_buttons_y = 194;
     switch (court_state) {
         return;
     case 1:
@@ -175,7 +175,7 @@ void crime_reputation_penalty(void)
 {
     iptr faction;
 
-    /* the loss of crimes 1-13 (D_00179EA8 + 4 * crime under Watcom: the table after it) */
+    /* the loss of crimes 1-13 (song_pattern_text + 4 * crime under Watcom: the table after it) */
     regions[(unsigned char)current_region].legal_reputation -= *(short *)&crime_reputation_loss[((int)(unsigned char)crime_current) - 1];
     faction = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15);
     faction_change_reputation(faction, (int)(-(crime_reputation_loss[((int)(unsigned char)crime_current) - 1] >> 1)));

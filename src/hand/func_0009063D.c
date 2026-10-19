@@ -23,9 +23,9 @@ extern int scratch_190be8;
 extern unsigned char scratch_190cee[];
 extern short scratch_190d64;
 extern short chargen_selected_attribute;
-extern short D_00190DEA;
+extern short chargen_bonus_points;
 extern short scratch_190dec;
-extern short D_00190DEE;
+extern short chargen_bonus_points_4;
 extern unsigned char ui_mode_flags;
 extern void *screen_image_1;
 extern void *screen_image_2;
@@ -66,7 +66,7 @@ int chargen_name_character(void)
     }
     player_character->level = 1;
     disk_read_file(str_tamriel_img, scratch_buffer);
-    D_00190DEA = scratch_190dec = D_00190DEE = scratch_190d64 = chargen_selected_attribute = 0;
+    chargen_bonus_points = scratch_190dec = chargen_bonus_points_4 = scratch_190d64 = chargen_selected_attribute = 0;
     scratch_190be8 = 0;
     player_character->name[0] = 0;
     text_colour = 146;
@@ -98,7 +98,7 @@ int chargen_name_character(void)
     chargen_screen = 8;
     window_image = disk_read_file(str_char03i0_img, 0);
     screen_image_2 = disk_read_file(str_char03i1_img, 0);
-    D_00190DEA = scratch_190dec = D_00190DEE = 6;
+    chargen_bonus_points = scratch_190dec = chargen_bonus_points_4 = 6;
     for (i = 0; i < 12; i++) {
         scratch_190cee[i] = player_character->skills[player_class->skills[i]].value;
     }
