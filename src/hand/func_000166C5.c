@@ -2,16 +2,16 @@
 #include "records.h"
 
 extern unsigned char player_environment;
-extern signed char D_00190D11;
-extern int D_00195A90;
-extern int D_00195A94;
+extern signed char talk_hint_quest_id;
+extern int talk_hint_x;
+extern int talk_hint_z;
 extern struct record *player_object;
 extern struct record *location_object;
-extern struct talk_where *D_00195D28;
-extern char D_00196488[];
+extern struct talk_where *talk_where_target;
+extern char talk_regional_rows[];
 extern short *talk_topics;
 extern struct faction *talk_npc_own_faction;
-extern int D_001965DC;
+extern int talk_answer_kind;
 extern char talk_selected_row[];
 extern signed char talk_topic_tab;
 extern signed char talk_news_asked;
@@ -35,18 +35,18 @@ int talk_hint_text_id(int variant)
 
     unused1 = 0;
     if ((unsigned char)talk_topic_tab == 3) {}
-    if (D_001965DC == 2) {
-        if (D_00195D28->pad04 == 0) {
-            if (D_00195D28->building == 0) {
-                if (talk_find_regional(*(unsigned char *)(D_00196488 + *(int *)talk_selected_row)) != 0)
+    if (talk_answer_kind == 2) {
+        if (talk_where_target->pad04 == 0) {
+            if (talk_where_target->building == 0) {
+                if (talk_find_regional(*(unsigned char *)(talk_regional_rows + *(int *)talk_selected_row)) != 0)
                     return 10;
                 return 11;
             }
-            building_object = object_find_by_id(location_object, D_00195D28->building->id);
-            D_00195A90 = building_object->x;
-            D_00195A94 = building_object->z;
+            building_object = object_find_by_id(location_object, talk_where_target->building->id);
+            talk_hint_x = building_object->x;
+            talk_hint_z = building_object->z;
             if (player_environment == 1 && (xn_math_approx_dist2d(building_object->x, building_object->z, player_object->x, player_object->z) < 2048 || rand_range(1, 100) <= 25)) {
-                town_map_note_building(building_object, (iptr)D_00195D28->building);
+                town_map_note_building(building_object, (iptr)talk_where_target->building);
                 return 7332;
             }
             return 7333;
@@ -55,7 +55,7 @@ int talk_hint_text_id(int variant)
         if (talk_npc_own_faction->id != 806 && talk_npc_own_faction->id != 842)
             talk_news_asked = 1;
         if (talk_topics[*(int *)talk_selected_row * 3 + 2] != 0) {
-            D_00190D11 = talk_topics[*(int *)talk_selected_row * 3 + 2];
+            talk_hint_quest_id = talk_topics[*(int *)talk_selected_row * 3 + 2];
             quest_bit = 32768;
         } else
             quest_bit = 0;

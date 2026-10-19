@@ -26,7 +26,7 @@ extern struct record *quest_root;
 extern struct building *current_building;
 extern struct record *location_object;
 extern struct record *found_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern char D_00195B85[];
 extern struct character *player_character;
 extern int game_minutes;
@@ -324,23 +324,23 @@ void quest_pick_for_npc(struct record *npc)
 
 void quest_count_givers_cb(struct record *object)
 {
-    if (object->type != 8 || *(int *)D_00195B84 == 0) return;
+    if (object->type != 8 || *(int *)shared_scratch == 0) return;
     if (((int)(unsigned char)(object->data.person.flags & 128)) == 0) return;
     if (((struct bf8_7_1 *)&D_00195B85)->f != 0) {
-        (*(int *)D_00195B84)++;
+        (*(int *)shared_scratch)++;
     } else {
-        (*(int *)D_00195B84)--;
+        (*(int *)shared_scratch)--;
     }
-    if (*(int *)D_00195B84 != 0) return;
+    if (*(int *)shared_scratch != 0) return;
     found_object = object;
 }
 
 iptr quest_find_potential_questor(void)
 {
-    *(int *)D_00195B84 = 32768;
+    *(int *)shared_scratch = 32768;
     object_foreach(location_object, quest_count_givers_cb);
-    if (*(int *)D_00195B84 == 32768) return 0;
-    *(int *)D_00195B84 = rand_range(0, (*(int *)D_00195B84 & 32767) - 1) + 1;
+    if (*(int *)shared_scratch == 32768) return 0;
+    *(int *)shared_scratch = rand_range(0, (*(int *)shared_scratch & 32767) - 1) + 1;
     found_object = 0;
     object_foreach(location_object, quest_count_givers_cb);
     quest_potential_questor = (iptr)found_object;

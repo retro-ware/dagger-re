@@ -15,7 +15,7 @@ extern char str_06fm_hmi[];
 extern char D_001789E8[];
 extern char D_001789F0[];
 extern unsigned char player_environment;
-extern char D_00187CA8;
+extern char world_running;
 extern struct building *current_building;
 extern struct record *player_object;
 extern struct record *location_object;
@@ -130,7 +130,7 @@ void music_choose_song(void)
     int idx;
     char *p;
 
-    if (D_00187CA8 == 0)
+    if (world_running == 0)
         return;
     seed = rand();
     if (player_environment == 3) {

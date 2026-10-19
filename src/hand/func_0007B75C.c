@@ -6,7 +6,7 @@ extern signed char D_0012B508;
 extern short D_00142928;
 extern short D_0014292C;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_loadsave_c[];
 extern struct rect saveload_buttons[];
 extern struct image *D_00195B5C;
@@ -26,7 +26,7 @@ void saveload_draw(int saving, int used_slots, int slot)
 L7B7D9:;
     for (i = 0; i < 6; i++) {
         if (((1 << i) & used_slots) != 0) {
-            xn_draw_image((((i) < 3) ? 40 : 200), ((i % 3) * 65) + 4, 80, 50, (*(char **)&D_00147954 + (i * 4000)));
+            xn_draw_image((((i) < 3) ? 40 : 200), ((i % 3) * 65) + 4, 80, 50, (*(char **)&big_buffer + (i * 4000)));
             text_draw_centred_coloured((iptr)(scratch_buffer + (i << 5)), (int)(short)(((i) < 3) ? 80 : 246), (int)(short)(((i % 3) * 65) + 57), 145, 156);
         }
     }

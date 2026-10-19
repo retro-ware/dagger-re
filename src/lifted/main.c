@@ -25,7 +25,7 @@ extern int D_001788E8[];
 extern int D_00178968[];
 extern unsigned char player_environment;
 extern iptr D_001845C8;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern int D_0018DBF8;
 extern int frame_checkpoint;
 extern int screen_shake;
@@ -182,7 +182,7 @@ void game_frame(void)
     frame_checkpoint = 103;
     world_render();
     frame_checkpoint = 104;
-    if (D_00187CA8 != 0) {
+    if (world_running != 0) {
         world_collect_objects();
         people_spawn_tick();
     }
@@ -209,7 +209,7 @@ void game_frame(void)
     spell_hud_draw_icons();
     hud_draw();
     frame_checkpoint = 110;
-    if (D_00187CA8 != 0) {
+    if (world_running != 0) {
         ai_update_creatures();
         frame_checkpoint = 111;
         people_update();
@@ -283,7 +283,7 @@ void world_render(void)
     int retries;
 
     retries = 0;
-    if (D_00187CA8 == 0) return;
+    if (world_running == 0) return;
     model_cache_flush_count = 0;
     doors_update();
     for (;;) {

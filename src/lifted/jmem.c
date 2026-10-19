@@ -9,7 +9,7 @@ extern char str_jmem_c[];
 extern char str_insufficent_memory_to_service_request[];
 extern char str_daggerfall_has_detected_the_error_press[];
 extern char str_lgbk00i0_img_2[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern int mem_check_level;
 extern int frame_checkpoint;
 extern struct record *player_object;
@@ -126,7 +126,7 @@ int logbook_open(int force)
         D_00196272 = 1;
         window_image = disk_read_file(str_lgbk00i0_img_2, 0);
         *(int *)logbook_show_notes = (logbook_first_entry = 0);
-        D_00187CA8 = 0;
+        world_running = 0;
         logbook_build_entries();
         sound_play(237, player_object, 100);
     }

@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern char disk_last_file_size[];
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_disk_c[];
 extern char str_error_opening_the_file[];
 extern char str_insufficent_memory_to_read_in[];
@@ -160,12 +160,12 @@ void disk_copy_file(char *name, char *from_dir, char *to_dir)
         close(src_handle);
         return;
     }
-    count = read(src_handle, (void *)D_00147954, 102400);
+    count = read(src_handle, (void *)big_buffer, 102400);
     while (count == 102400) {
-        write(dst_handle, (void *)D_00147954, count);
-        count = read(src_handle, (void *)D_00147954, 102400);
+        write(dst_handle, (void *)big_buffer, count);
+        count = read(src_handle, (void *)big_buffer, 102400);
     }
-    write(dst_handle, (void *)D_00147954, count);
+    write(dst_handle, (void *)big_buffer, count);
     close(dst_handle);
     close(src_handle);
     if (path == 0 || path == (char *)(iptr)-1751672937) return;

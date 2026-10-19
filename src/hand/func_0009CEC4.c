@@ -5,13 +5,13 @@
 extern char *screen_buffer;
 extern char str_travel_c[];
 extern unsigned short travel_options;
-extern char D_00190CE8;
+extern char travel_zoomed;
 extern struct character *player_character;
 extern struct career *player_class;
 extern int travel_ocean_pixels;
-extern char *D_001AA690;
-extern int D_001AA698;
-extern unsigned char D_001AA6A6;
+extern char *travel_saved_screen;
+extern int travel_show_progress;
+extern unsigned char travel_map_mode;
 extern int climate_update_at_player(void);
 extern void time_pass(int);
 extern struct membership *guild_find_membership_by_kind(unsigned char);
@@ -38,9 +38,9 @@ int travel_route(int x0, int y0, int x1, int y1, int go)
     struct membership *p;
 
     flag = 0;
-    if (D_001AA698 != 0) {
-        D_001AA690 = mc_malloc(64000, str_travel_c, 984);
-        mc_memcpy(D_001AA690, screen_buffer, 64000, str_travel_c, 985, 4);
+    if (travel_show_progress != 0) {
+        travel_saved_screen = mc_malloc(64000, str_travel_c, 984);
+        mc_memcpy(travel_saved_screen, screen_buffer, 64000, str_travel_c, 985, 4);
     }
     save = player_character->fatigue;
     x0 = x0 / 32768;
@@ -83,8 +83,8 @@ int travel_route(int x0, int y0, int x1, int y1, int go)
             v = v * 300 / 256;
         sum += v;
     }
-    if (!(go == 0 || D_001AA6A6 == 100)) {
-        if (D_00190CE8 != 0)
+    if (!(go == 0 || travel_map_mode == 100)) {
+        if (travel_zoomed != 0)
             travel_toggle_zoom();
         if ((int)(unsigned short)(travel_options & 3) == 2)
             sum = (sum << 7) / 256;
@@ -100,10 +100,10 @@ int travel_route(int x0, int y0, int x1, int y1, int go)
     } else {
         climate_update_at_player();
     }
-    if (D_001AA698 != 0) {
-        if (!(D_001AA690 == 0 || D_001AA690 == (char *)(iptr)-1751672937)) {
-            mc_free(D_001AA690, str_travel_c, 1058);
-            D_001AA690 = (char *)(iptr)-1751672937;
+    if (travel_show_progress != 0) {
+        if (!(travel_saved_screen == 0 || travel_saved_screen == (char *)(iptr)-1751672937)) {
+            mc_free(travel_saved_screen, str_travel_c, 1058);
+            travel_saved_screen = (char *)(iptr)-1751672937;
         }
     }
     p = guild_find_membership_by_kind(145);

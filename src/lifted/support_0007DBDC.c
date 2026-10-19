@@ -4,13 +4,13 @@
 #include "records.h"
 
 extern struct record *detect_target;
-extern char D_00195B84[];
+extern char shared_scratch[];
 
 
 void detect_consider_creature(struct record *creature, int distance)
 {
     creature->detect_distance = distance;
-    if (distance >= *(int *)D_00195B84 || distance >= 2048) return;
+    if (distance >= *(int *)shared_scratch || distance >= 2048) return;
     detect_target = creature;
-    *(int *)D_00195B84 = distance;
+    *(int *)shared_scratch = distance;
 }

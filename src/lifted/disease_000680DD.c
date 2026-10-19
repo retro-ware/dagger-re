@@ -9,7 +9,7 @@
 extern struct record *player_entity;
 extern struct record *scratch_current_object;
 extern char D_00195B08[];
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern int game_minutes;
 extern int nearest_creature_distance;
@@ -94,7 +94,7 @@ L68256:;
         }
         break;
     case 8:
-        *(int *)D_00195B84 = *(int *)D_00195B08;
+        *(int *)shared_scratch = *(int *)D_00195B08;
         object_foreach(player_entity->children, item_repair_cb);
         if ((rand() % 10) == 0) item_damage(scratch_current_object, 1);
         break;

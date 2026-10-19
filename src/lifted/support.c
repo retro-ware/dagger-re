@@ -16,7 +16,7 @@ extern short D_001343C2;
 extern signed char key_down[];
 extern signed char key_down_esc;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_support_c[];
 extern char str_pick00i0_img[];
 extern char D_00176A27[];
@@ -53,7 +53,7 @@ extern struct image *list_popup_image;
 extern int D_00195B00;
 extern int creature_count;
 extern struct record *scratch_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern int hud_message_expiry[];
 extern int hud_status_expiry;
 extern struct location *current_location;
@@ -490,9 +490,9 @@ void detect_consider(struct record *object)
     int distance;
 
     distance = xn_math_approx_dist2d(player_object->x, player_object->z, object->x, object->z);
-    if (distance >= *(int *)D_00195B84 || distance >= 2048) return;
+    if (distance >= *(int *)shared_scratch || distance >= 2048) return;
     detect_target = object;
-    *(int *)D_00195B84 = distance;
+    *(int *)shared_scratch = distance;
 }
 
 void world_collect_objects(void)
@@ -506,7 +506,7 @@ void world_collect_objects(void)
         current_building = object_building(player_object);
     }
     spell_cast_queue_count = (free_later_count = 0);
-    *(int *)D_00195B84 = 100000;
+    *(int *)shared_scratch = 100000;
     people_count = (creature_count = 0);
     detect_target = 0;
     grid_visit_func = object_foreach_pre;
@@ -743,7 +743,7 @@ void save_thumbnail_capture(void)
     out = 24000;
     for (y = 0; y < 200; y += 4) {
         for (x = 0; x < 320; x += 4) {
-            *(signed char *)((*(char **)&D_00147954 + out++)) = *(signed char *)((*(char **)&screen_buffer + ((y * 320) + x)));
+            *(signed char *)((*(char **)&big_buffer + out++)) = *(signed char *)((*(char **)&screen_buffer + ((y * 320) + x)));
         }
     }
 }
@@ -814,11 +814,11 @@ void gold_spend(int amount)
         return;
     }
     free_later_count = 0;
-    *(int *)D_00195B84 = amount;
+    *(int *)shared_scratch = amount;
     object_find(player_entity->children, gold_spend_credit_cb);
     object_free_pending();
-    if (*(int *)D_00195B84 == 0) return;
-    player_character->gold -= *(int *)D_00195B84;
+    if (*(int *)shared_scratch == 0) return;
+    player_character->gold -= *(int *)shared_scratch;
     if (player_character->gold >= 0) return;
     player_character->gold = 0;
 }
@@ -835,14 +835,14 @@ void gold_sum_credit_cb(struct record *object)
     if (object->type != 2) return;
     item_data = &object->data.item;
     if (item_data->group != 27 || item_data->index != 2) return;
-    *(int *)D_00195B84 += item_data->value;
+    *(int *)shared_scratch += item_data->value;
 }
 
 int gold_total(void)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, gold_sum_credit_cb);
-    return *(int *)D_00195B84 + player_character->gold;
+    return *(int *)shared_scratch + player_character->gold;
 }
 
 iptr gold_find_credit_cb(struct record *object)
@@ -851,7 +851,7 @@ iptr gold_find_credit_cb(struct record *object)
 
     if (object->type != 2) return 0;
     item_data = &object->data.item;
-    if (item_data->group == 27 && item_data->index == 2 && ((unsigned)item_data->value) >= *(int *)D_00195B84) {
+    if (item_data->group == 27 && item_data->index == 2 && ((unsigned)item_data->value) >= *(int *)shared_scratch) {
         found_object = object;
         return 1;
     }
@@ -863,15 +863,15 @@ iptr gold_spend_credit_cb(struct record *object)
     struct item *item_data;
 
     if (object->type != 2) return 0;
-    if (*(int *)D_00195B84 == 0) return 0;
+    if (*(int *)shared_scratch == 0) return 0;
     item_data = &object->data.item;
     if (item_data->group == 27 && item_data->index == 2) {
-        if (((unsigned)item_data->value) <= *(int *)D_00195B84) {
+        if (((unsigned)item_data->value) <= *(int *)shared_scratch) {
             object_free_later(object);
-            *(int *)D_00195B84 -= item_data->value;
+            *(int *)shared_scratch -= item_data->value;
         } else {
-            item_data->value -= *(int *)D_00195B84;
-            *(int *)D_00195B84 = 0;
+            item_data->value -= *(int *)shared_scratch;
+            *(int *)shared_scratch = 0;
         }
     }
     return 0;
@@ -879,7 +879,7 @@ iptr gold_spend_credit_cb(struct record *object)
 
 struct record *gold_find_credit(int amount)
 {
-    *(int *)D_00195B84 = amount;
+    *(int *)shared_scratch = amount;
     object_find(player_entity->children, gold_find_credit_cb);
     return found_object;
 }

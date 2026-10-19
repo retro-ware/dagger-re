@@ -29,7 +29,7 @@ extern struct collide_probe D_00187BB8;
 extern struct collide_probe D_00187C12;
 extern struct move_request D_00187C86;   /* the player's move */
 extern int player_momentum;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern signed char D_001940D6;
@@ -309,7 +309,7 @@ void click_activate(int at_view_centre)
     {
         struct pick_result pick;
 
-        if (D_00187CA8 == 0) return;
+        if (world_running == 0) return;
         if (at_view_centre == 0) {
             if (((int)(unsigned char)mouse_control_mode) == 1 && view_cursor_active != 0) {
                 engine_pick_object((int)(short)mouse_x, (int)(short)mouse_y, &pick);

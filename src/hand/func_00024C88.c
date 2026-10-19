@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char *D_00147954;
+extern char *big_buffer;
 extern char str_career_c[];        /* __FILE__ */
 extern char str_class_cfg_2[];
 extern char str_n[];
@@ -76,8 +76,8 @@ unsigned char *career_answer_effect(unsigned char *text)
         D_0018DDE4 += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x4541 || *(unsigned short *)text == 0x4641 || *(unsigned short *)text == 0x4F41) {
         kind = text[1];
-        person = (struct character *)(D_00147954 + 70000);
-        person_class = D_00147954 + 75000;
+        person = (struct character *)(big_buffer + 70000);
+        person_class = big_buffer + 75000;
         mc_memset(person, 0, REC_OFFSETOF(struct character, career), str_career_c, 279, 4);
         mc_memset(person_class, 0, 74, str_career_c, 280, 4);
         text = career_skip_word(text);

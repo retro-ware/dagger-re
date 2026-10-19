@@ -7,7 +7,7 @@ struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 #pragma pack()
 extern iptr xn_paperdoll_background;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_char_c[];
 extern char str_wolf00i0_img[];
 extern char str_boar00i0_img[];
@@ -66,11 +66,11 @@ void paperdoll_draw(int x, int y)
     }
     pic = disk_read_file(((char *)text_buffer), 0);
     xn_draw_image(pic->x + x, pic->y + y, pic->width, pic->height, pic->pixels);
-    mc_memset((void *)D_00147954, 0, 64000, str_char_c, 48, 4);
+    mc_memset((void *)big_buffer, 0, 64000, str_char_c, 48, 4);
     saved = screen_buffer;
-    screen_buffer = D_00147954;
+    screen_buffer = big_buffer;
     xn_draw_image(pic->x + x, pic->y + y, pic->width, pic->height, pic->pixels);
-    xn_paperdoll_background = D_00147954;
+    xn_paperdoll_background = big_buffer;
     screen_buffer = saved;
     if (pic != 0 && pic != (struct image *)(iptr)-1751672937) {
         mc_free(pic, str_char_c, 54);

@@ -12,7 +12,7 @@ extern iptr xn_str_find_u32(struct link **, struct link *, int);
 extern char str_links_c[];
 extern int link_step(struct link *);
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char D_0017596A[];
 extern signed char D_001940DA;
 extern signed char quest_global_states[];
@@ -243,7 +243,7 @@ int link_step(struct link *link)
             msgbox_show_rsc((int)(short)(((unsigned short)link->param) + 8600), 1);
             break;
         case 12:
-            mc_memcpy((void *)D_00147954, (void *)DOS_LOW(0xA0000), 64000, str_links_c, 315, 4);
+            mc_memcpy((void *)big_buffer, (void *)DOS_LOW(0xA0000), 64000, str_links_c, 315, 4);
             D_001940DA |= 1;
             link_show_text(link->param + 5400);
             message = hud_message_add(D_0017596A);
@@ -251,7 +251,7 @@ int link_step(struct link *link)
             xn_kbd_flush();
             inpstr_begin_text(message + 2, 16);
             while (inpstr_update() == 0) {
-                mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, str_links_c, 324, 4);
+                mc_memcpy((void *)screen_buffer, (void *)big_buffer, 64000, str_links_c, 324, 4);
                 hud_messages_draw();
                 xn_gfx_present_inclusive(1);
             }

@@ -30,7 +30,7 @@ extern char *scratch_buffer;
 extern unsigned char D_0019626F;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern signed char D_00196294;
+extern signed char time_skip_active;
 extern signed char D_00196299;
 extern signed char D_0019629E;
 extern int rest_ticks_per_hour;
@@ -136,7 +136,7 @@ void rest_update(void)
             inpstr_begin_number(0);
             msgbox_show_string(prompt, 2);
             rest_loitering = 1;
-            D_00196294 = 1;
+            time_skip_active = 1;
             while (key_down_enter != 0);
         }
         return;

@@ -21,7 +21,7 @@ extern struct record *D_001959E4;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern iptr window_image;
 extern char D_00195F28[];
 extern char spellmaker_spell[];
@@ -120,23 +120,23 @@ void potion_recipe_list_cb(struct record *object)
     if (object->type != 2) return;
     item = &object->data.item;
     if (item->group != 27 || item->index != 4) return;
-    *(iptr *)(scratch_190be4 + (*(int *)D_00195B84 << PTR_SHIFT)) = (iptr)item;
-    *(iptr *)(scratch_190de4 + ((*(int *)D_00195B84)++ << PTR_SHIFT)) = (((iptr)potion_recipes) + (item->stack_count * 109)) + 67;
+    *(iptr *)(scratch_190be4 + (*(int *)shared_scratch << PTR_SHIFT)) = (iptr)item;
+    *(iptr *)(scratch_190de4 + ((*(int *)shared_scratch)++ << PTR_SHIFT)) = (((iptr)potion_recipes) + (item->stack_count * 109)) + 67;
 }
 
 void potionmaker_recipes(void)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, potion_recipe_list_cb);
-    if (*(int *)D_00195B84 == 0) {
+    if (*(int *)shared_scratch == 0) {
         msgbox_show_string(str_you_have_no_recipies, 1);
         return;
     }
-    if (*(int *)D_00195B84 == 1) {
+    if (*(int *)shared_scratch == 1) {
         potion_make(*(struct item **)scratch_190be4);
         return;
     }
-    *(iptr *)(scratch_190de4 + (*(int *)D_00195B84 << PTR_SHIFT)) = 0;
+    *(iptr *)(scratch_190de4 + (*(int *)shared_scratch << PTR_SHIFT)) = 0;
     list_popup_open((iptr)scratch_190de4);
     sound_play(205, player_object, 100);
 }

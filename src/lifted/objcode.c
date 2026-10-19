@@ -23,7 +23,7 @@ extern char str_fmap_pal_col[];
 extern unsigned char player_environment;
 extern char travel_options[];
 extern iptr D_0018507B;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern int scratch_190cac;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190ce5;
@@ -35,7 +35,7 @@ extern struct record *location_object;
 extern struct record *found_object;
 extern int creature_count;
 extern struct image *D_00195B5C;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
 extern struct career *player_class;
@@ -55,19 +55,19 @@ extern signed char game_mode;
 extern signed char is_daytime;
 extern int marker_best;
 extern int marker_kind;
-extern struct image *D_001AA64C;
-extern struct image *D_001AA650;
-extern struct image *D_001AA654;
-extern struct image *D_001AA658;
-extern char *D_001AA65C[];
-extern iptr D_001AA660;
-extern struct image *D_001AA668;
-extern iptr D_001AA66C;
-extern struct image *D_001AA670;
-extern iptr D_001AA6A0;
-extern signed char D_001AA6A4;
-extern signed char D_001AA6A5;
-extern signed char D_001AA6A6;
+extern struct image *travel_border_image_a;
+extern struct image *travel_border_image_b;
+extern struct image *travel_border_image_c;
+extern struct image *travel_border_image_d;
+extern char *travel_buttons_image[];
+extern iptr travel_buttons_pressed_image;
+extern struct image *travel_region_image;
+extern iptr travel_region_index_image;
+extern struct image *travel_map_border_image;
+extern iptr travel_popup_image;
+extern signed char travel_map_parts;
+extern signed char travel_map_part;
+extern signed char travel_map_mode;
 
 extern iptr disk_read_file(char *, iptr);
 extern int gold_can_afford(int);
@@ -94,11 +94,11 @@ iptr marker_match_cb(struct record *object)
     switch (object->type) {
     case 34:
         if ((object->image >> 7) == 199 && ((object->image & 31) - 2) == marker_kind) {
-            if (*(int *)D_00195B84 == 0 && marker_best < 0) {
+            if (*(int *)shared_scratch == 0 && marker_best < 0) {
                 mc_memcpy(found_marker, object, RECORD_LINKS_OFFSET, str_objcode_c, 191, 4);
                 return 1;
             }
-            *(int *)D_00195B84 += marker_best;
+            *(int *)shared_scratch += marker_best;
         }
         break;
     case 43:
@@ -107,7 +107,7 @@ iptr marker_match_cb(struct record *object)
         for (i = 0; block->flat_count > i; i++, flat++) {
             if ((flat->image >> 7) == 199) {
                 if ((((int)(unsigned short)(flat->image & 31)) - 2) == marker_kind) {
-                    if (*(int *)D_00195B84 == 0 && marker_best < 0) {
+                    if (*(int *)shared_scratch == 0 && marker_best < 0) {
                         D_00195F71 = flat->x;
                         D_00195F79 = flat->z;
                         D_00195F75 = flat->y;
@@ -116,7 +116,7 @@ iptr marker_match_cb(struct record *object)
                         *(signed char *)found_marker = 34;
                         return 1;
                     }
-                    *(int *)D_00195B84 += marker_best;
+                    *(int *)shared_scratch += marker_best;
                 }
             }
         }
@@ -127,7 +127,7 @@ iptr marker_match_cb(struct record *object)
         for (i = 0; object->flat_count > i; i++, flat++) {
             if ((flat->image >> 7) == 199) {
                 if ((((int)(unsigned short)(flat->image & 31)) - 2) == marker_kind) {
-                    if (*(int *)D_00195B84 == 0 && marker_best < 0) {
+                    if (*(int *)shared_scratch == 0 && marker_best < 0) {
                         D_00195F71 = flat->x;
                         D_00195F79 = flat->z;
                         D_00195F75 = flat->y;
@@ -136,7 +136,7 @@ iptr marker_match_cb(struct record *object)
                         *(signed char *)found_marker = 34;
                         return 1;
                     }
-                    *(int *)D_00195B84 += marker_best;
+                    *(int *)shared_scratch += marker_best;
                 }
             }
         }
@@ -147,7 +147,7 @@ iptr marker_match_cb(struct record *object)
 struct record *marker_find_first(struct record *root, int kind)
 {
     marker_kind = kind;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     marker_best = -1;
     mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 261, 4);
     object_find_open(root, marker_match_cb);
@@ -160,7 +160,7 @@ struct record *marker_find_nth(struct record *root, int kind, int n)
     iptr cell;
 
     marker_kind = kind;
-    *(int *)D_00195B84 = n;
+    *(int *)shared_scratch = n;
     marker_best = -1;
     mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 287, 4);
     object_find_open(root, marker_match_cb);
@@ -175,12 +175,12 @@ struct record *marker_find_random(struct record *root, int kind)
     int n;
 
     marker_kind = kind;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     marker_best = 1;
     mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 317, 4);
     object_find_open(root, marker_match_cb);
-    if (*(int *)D_00195B84 == 0) return 0;
-    n = (*(int *)D_00195B84 = rand() % *(int *)D_00195B84);
+    if (*(int *)shared_scratch == 0) return 0;
+    n = (*(int *)shared_scratch = rand() % *(int *)shared_scratch);
     marker_best = -1;
     object_foreach_open(root, marker_match_cb);
     D_00195F81 = n;
@@ -266,11 +266,11 @@ struct record *marker_find_nearest(struct record *root, int kind)
 int marker_count(struct record *root, int kind)
 {
     marker_kind = kind;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     marker_best = 1;
     mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 456, 4);
     object_find_open(root, marker_match_cb);
-    return *(int *)D_00195B84;
+    return *(int *)shared_scratch;
 }
 
 int player_to_nearest_marker(struct record *root, int kind)
@@ -336,32 +336,32 @@ int travel_map_open(int mode)
         if (((int)(unsigned short)(*(short *)travel_options & 8)) != 0 && player_character->ship_owned == 0 && gold_can_afford(travel_trip_cost()) == 0) {
             *(signed char *)travel_options ^= 12;
         }
-        D_001AA6A6 = *(signed char *)&mode;
+        travel_map_mode = *(signed char *)&mode;
         window_image = disk_read_file(str_trav0i00_img, 0);
         if (mode == 100) {
-            D_001AA6A0 = disk_read_file(str_tele00i0_img, 0);
+            travel_popup_image = disk_read_file(str_tele00i0_img, 0);
         } else {
-            D_001AA6A0 = disk_read_file(str_trav0i04_img, 0);
+            travel_popup_image = disk_read_file(str_trav0i04_img, 0);
         }
-        D_001AA66C = disk_read_file(str_trav0i01_img, 0);
-        *(iptr *)&D_001AA65C[0] = disk_read_file(str_trav01i0_img, 0);
-        D_001AA660 = disk_read_file(str_trav01i1_img, 0);
-        *(iptr *)&D_001AA670 = disk_read_file(str_mbrd00i0_img, 0);
-        *(iptr *)&D_001AA64C = disk_read_file(str_travai05_img, 0);
-        *(iptr *)&D_001AA650 = disk_read_file(str_travbi05_img, 0);
-        *(iptr *)&D_001AA654 = disk_read_file(str_travci05_img, 0);
-        *(iptr *)&D_001AA658 = disk_read_file(str_travdi05_img, 0);
+        travel_region_index_image = disk_read_file(str_trav0i01_img, 0);
+        *(iptr *)&travel_buttons_image[0] = disk_read_file(str_trav01i0_img, 0);
+        travel_buttons_pressed_image = disk_read_file(str_trav01i1_img, 0);
+        *(iptr *)&travel_map_border_image = disk_read_file(str_mbrd00i0_img, 0);
+        *(iptr *)&travel_border_image_a = disk_read_file(str_travai05_img, 0);
+        *(iptr *)&travel_border_image_b = disk_read_file(str_travbi05_img, 0);
+        *(iptr *)&travel_border_image_c = disk_read_file(str_travci05_img, 0);
+        *(iptr *)&travel_border_image_d = disk_read_file(str_travdi05_img, 0);
         *(iptr *)&D_00195B5C = disk_read_file(str_trav0i03_img, 0);
         disk_read_file(str_fmap_pal_col, (iptr)scratch_buffer);
         xn_pal_set_all_8bit((char *)((iptr)scratch_buffer + 8));
         *(iptr *)&ticks_addr = (iptr)DOS_LOW(0x46C);
         scratch_190cac = *(int *)(*(char **)&ticks_addr);
-        D_001AA6A4 = (D_001AA6A5 = 0);
+        travel_map_parts = (travel_map_part = 0);
         scratch_190ce5 = (scratch_190ce4[0] = 0);
-        *(iptr *)&D_001AA668 = 0;
+        *(iptr *)&travel_region_image = 0;
         game_mode = 19;
         D_00196272 = 1;
-        D_00187CA8 = 0;
+        world_running = 0;
         scratch_190ce7 = 0;
     }
     return ((((int)(unsigned char)game_mode) == 19) ? 1 : 0);

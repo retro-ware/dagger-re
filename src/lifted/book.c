@@ -32,7 +32,7 @@ extern char str_books[];
 extern char D_001757D7[];
 extern iptr D_0017D1E6;
 extern struct rect book_buttons[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190d64[];
 extern char scratch_190d66[];
@@ -97,7 +97,7 @@ void book_open(short book_id)
     scratch_190d68 = 0;
     game_mode = 11;
     D_00196272 = 1;
-    D_00187CA8 = 0;
+    world_running = 0;
     sound_play(237, player_object, 100);
 }
 
@@ -149,7 +149,7 @@ void book_close(void)
     book_file = 0;
     game_mode = 0;
     D_00196272 = 0;
-    D_00187CA8 = 1;
+    world_running = 1;
     if (((struct bf8_7_1 *)&D_001940D8)->f == 0) return;
     D_001940D8 &= 127;
     inventory_open(2, trade_mode, (int)(unsigned char)inv_right_icon);

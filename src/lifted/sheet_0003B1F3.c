@@ -10,7 +10,7 @@ extern char str_info00i0_img[];
 extern char str_popu00i0_img[];
 extern char str_cust09i0_img_3[];
 extern char str_sheet_c[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern char scratch_190be4[];
 extern char scratch_190d64[];
 extern short D_00190D8C[];
@@ -73,7 +73,7 @@ int sheet_open(short opening)
         mc_memcpy(D_00190D8C, (signed char *)&player_character->base_attributes[0], 16, str_sheet_c, 97, 4);
         sheet_place_spinner(13);
         D_0019626C = 0;
-        D_00187CA8 = 0;
+        world_running = 0;
     }
     if (((int)(unsigned char)game_mode) == 3) {
         result = 1;

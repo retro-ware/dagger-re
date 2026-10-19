@@ -42,7 +42,7 @@ extern char D_001869D4[];
 extern char D_001869EA[];
 extern char D_001869FE[];
 extern char monster_soul_values[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern char book_list[];
 extern char D_0018E046[];
 extern signed char text_buffer[];
@@ -1065,7 +1065,7 @@ void ai_update_creatures(void)
     int *bios_ticks;
 
     removed = -1;
-    if (D_00187CA8 == 0) return;
+    if (world_running == 0) return;
     if (creature_count == 0) return;
     if (creature_count == 1 && ((int)(unsigned short)(creature_list[0]->data.character.flags & 2)) != 0) {
         object_delete(creature_list[0]);

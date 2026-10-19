@@ -9,7 +9,7 @@ extern char str_pickbook_c[];
 extern char str_spbk00i0_img[];
 extern char str_mask04i0_img_2[];
 extern iptr D_00184876;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char D_001940D4;
 extern signed char D_001940D8;
 extern struct record *player_object;
@@ -46,7 +46,7 @@ int spellbook_open(short force)
         D_001940D8 &= 254;
         if (spellbook_build_list() == 0) return 0;
         D_001940D4 |= 128;
-        D_00187CA8 = 0;
+        world_running = 0;
         D_001940D8 |= 2;
         spellbook_saved_screen = (iptr)mc_malloc(64000, str_pickbook_c, 101);
         mc_memcpy((void *)spellbook_saved_screen, (void *)screen_buffer, 64000, str_pickbook_c, 102, 4);

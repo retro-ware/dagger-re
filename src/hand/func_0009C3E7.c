@@ -7,8 +7,8 @@ extern unsigned char mouse_buttons;
 extern iptr screen_buffer;
 extern char str_travel_c[];
 extern short travel_options;
-extern unsigned char D_00187CA8;
-extern unsigned char D_001889BC;
+extern unsigned char world_running;
+extern unsigned char travel_selected_region;
 extern int travel_selected_location;
 extern unsigned char scratch_190ce5;
 extern unsigned last_skill_check_minutes;
@@ -20,15 +20,15 @@ extern int sky_loaded_frame;
 extern unsigned char D_00196271;
 extern unsigned char mouse_buttons_prev;
 extern unsigned char is_daytime;
-extern unsigned char D_00196294;
+extern unsigned char time_skip_active;
 extern unsigned char night_sky_loaded;
 extern unsigned char D_001962A2;
-extern unsigned char D_001962A8;
+extern unsigned char travel_in_progress;
 extern unsigned char quests_suspended;
 extern struct map_location *region_locations;
-extern int D_001AA678;
-extern int D_001AA67C;
-extern int D_001AA698;
+extern int travel_dest_x;
+extern int travel_dest_z;
+extern int travel_show_progress;
 extern iptr health_status_text(void);
 extern void raise_skills(void);
 extern void time_pass(int);
@@ -66,17 +66,17 @@ void travel_begin_trip(void)
     scratch_190ce5 = 0;
     func_0009BE38();
     quests_suspended = 1;
-    D_00196294 = 1;
-    D_00187CA8 = 1;
-    D_001962A8 = 1;
+    time_skip_active = 1;
+    world_running = 1;
+    travel_in_progress = 1;
     saved = player_character->fatigue;
-    D_001AA698 = 1;
-    t = travel_route(player_object->x, player_object->z, D_001AA678, D_001AA67C, 1);
-    D_001AA698 = 0;
+    travel_show_progress = 1;
+    t = travel_route(player_object->x, player_object->z, travel_dest_x, travel_dest_z, 1);
+    travel_show_progress = 0;
     func_0009BE38();
     travel_button_exit(100);
     if (t != -1)
-        map_goto_location(D_001889BC, 1, travel_selected_location, 0);
+        map_goto_location(travel_selected_region, 1, travel_selected_location, 0);
     if (t != -1 && (unsigned short)(travel_options & 3) == 1 && is_daytime == 0) {
         if (player_character->race != 8) {
             t = game_minutes % 1440;
@@ -103,8 +103,8 @@ void travel_begin_trip(void)
     }
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_travel_c, 782, 4);
     mc_memset((void *)screen_buffer, 0, 64000, str_travel_c, 783, 4);
-    D_00196294 = 0;
-    D_001962A8 = 0;
+    time_skip_active = 0;
+    travel_in_progress = 0;
     quests_suspended = 0;
     sky_loaded_frame = 10000;
     night_sky_loaded = 0;

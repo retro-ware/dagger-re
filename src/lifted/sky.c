@@ -11,7 +11,7 @@ extern char *xn_pal_current;
 extern char xn_cam_rotation[];
 extern char xn_cam_view_matrix[];
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern int xn_sin_table[];
 extern int xn_cos_table[];
 extern char str_moon00i0_cfa[];
@@ -288,26 +288,26 @@ void sky_draw_day(int horizon_y, int horizon_y2, int day, int climate)
     width = 511 - column;
     if (width >= 320) {
         if (section == b_section) {
-            xn_sky_copy_rows((char *)((sky_image_b + column) + src_offset), (char *)D_00147954, 320, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_b + column) + src_offset), (char *)big_buffer, 320, horizon_y);
         } else {
-            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)D_00147954, 320, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)big_buffer, 320, horizon_y);
         }
     } else {
         if (section == b_section) {
-            xn_sky_copy_rows((char *)((sky_image_b + column) + src_offset), (char *)D_00147954, width, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_b + column) + src_offset), (char *)big_buffer, width, horizon_y);
         } else {
-            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)D_00147954, width, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)big_buffer, width, horizon_y);
         }
         if ((section + 1) == b_section) {
-            xn_sky_copy_rows((char *)(sky_image_b + src_offset), (char *)(D_00147954 + width), 320 - width, horizon_y);
+            xn_sky_copy_rows((char *)(sky_image_b + src_offset), (char *)(big_buffer + width), 320 - width, horizon_y);
         } else {
-            xn_sky_copy_rows((char *)(sky_image_a + src_offset), (char *)(D_00147954 + width), 320 - width, horizon_y);
+            xn_sky_copy_rows((char *)(sky_image_a + src_offset), (char *)(big_buffer + width), 320 - width, horizon_y);
         }
     }
     for (row = horizon_y; row < view_bottom; row++) {
-        mc_memset((*(char **)&D_00147954 + (row * 320)), (int)(unsigned char)*(signed char *)(((char *)sky_image_a) + 109058), 320, D_00170A86, 636, 4);
+        mc_memset((*(char **)&big_buffer + (row * 320)), (int)(unsigned char)*(signed char *)(((char *)sky_image_a) + 109058), 320, D_00170A86, 636, 4);
     }
-    mc_memcpy((void *)screen_buffer, (void *)D_00147954, view_bottom * 320, D_00170A86, 638, 4);
+    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, D_00170A86, 638, 4);
 }
 
 void sky_set_time_colour(int minutes)
@@ -367,17 +367,17 @@ void sky_draw_night(int horizon_y, int horizon_y2)
     width = 511 - column;
     if (horizon_y > 0) {
         if (width >= 320) {
-            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)D_00147954, 320, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)big_buffer, 320, horizon_y);
         } else {
-            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)D_00147954, width, horizon_y);
-            xn_sky_copy_rows((char *)(sky_image_a + src_offset), (char *)(D_00147954 + width), 320 - width, horizon_y);
+            xn_sky_copy_rows((char *)((sky_image_a + column) + src_offset), (char *)big_buffer, width, horizon_y);
+            xn_sky_copy_rows((char *)(sky_image_a + src_offset), (char *)(big_buffer + width), 320 - width, horizon_y);
         }
     }
     if (horizon_y < 0) horizon_y = 0;
     for (row = horizon_y; row < view_bottom; row++) {
-        mc_memset((*(char **)&D_00147954 + (row * 320)), 15, 320, D_00170A86, 713, 4);
+        mc_memset((*(char **)&big_buffer + (row * 320)), 15, 320, D_00170A86, 713, 4);
     }
-    mc_memcpy((void *)screen_buffer, (void *)D_00147954, view_bottom * 320, D_00170A86, 715, 4);
+    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, D_00170A86, 715, 4);
 }
 
 void sky_add_stars(unsigned char *image)

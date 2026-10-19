@@ -15,7 +15,7 @@ extern char xn_cam_view_matrix[];
 extern iptr screen_buffer;
 extern char D_00170A86[];
 extern unsigned char player_environment;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern struct region regions[];
 extern int view_look_pitch;
 extern int view_look_yaw;
@@ -79,7 +79,7 @@ void sky_update(void)
 
     VEC3_LOCALS_SET(point_x, point_y, point_z, D_000346B8);
     sun_placed = 0;
-    if (D_00187CA8 == 0) return;
+    if (world_running == 0) return;
     if (((int)player_environment) == 3) {
         cell = location_cell_at(player_object->x, player_object->z);
         if (player_object->parent != cell) object_reparent(cell, player_object);

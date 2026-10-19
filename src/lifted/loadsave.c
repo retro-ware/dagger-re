@@ -11,7 +11,7 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char D_0012B508;
 extern int dungeon_water_level;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_loadsave_c[];
 extern char str_invalid_object_data[];
 extern char str_invalid_character_data[];
@@ -93,7 +93,7 @@ extern char clothing_gender_group[];
 extern char clothing_gender_offset[];
 extern int D_00195B44;
 extern struct image *D_00195B5C;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern int hud_message_expiry[];
 extern struct location *current_location;
 extern struct character *player_character;
@@ -428,7 +428,7 @@ void load_collect_spawned_ids_cb(struct record *object)
 case 18:
 case 33:
 case 44:
-    *(int *)((scratch_buffer + ((*(int *)D_00195B84)++ << 2))) = object->id;
+    *(int *)((scratch_buffer + ((*(int *)shared_scratch)++ << 2))) = object->id;
 default:;
 }
 }
@@ -440,7 +440,7 @@ void load_drop_spawned_marker_cb(struct record *object)
 
     if (object->type != 34 || object->type == 32) return;
     ids = (int *)scratch_buffer;
-    for (i = 0; i < *(int *)D_00195B84; i++, ids++) {
+    for (i = 0; i < *(int *)shared_scratch; i++, ids++) {
         if (object->id == *ids) {
             object_delete(object);
             *ids = 0;
@@ -451,7 +451,7 @@ void load_drop_spawned_marker_cb(struct record *object)
 
 void load_drop_spawned_markers(void)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(location_object->children, load_collect_spawned_ids_cb);
     object_foreach_post(location_object->children, load_drop_spawned_marker_cb);
 }
@@ -464,7 +464,7 @@ void save_write_image(void)
     if ((save_file_handle = open(D_001913E4, 546, 384)) < 0) {
         fatal_error(str_error_writing_to_drive);
     }
-    write(save_file_handle, (void *)(D_00147954 + 24000), 4000);
+    write(save_file_handle, (void *)(big_buffer + 24000), 4000);
     close(save_file_handle);
 }
 
@@ -568,7 +568,7 @@ void saveload_menu(int saving)
         D_001903A8 = *(signed char *)&i + 48;
         handle = open((char *)text_buffer, 512);
         if (handle < 1) continue;
-        read(handle, (*(char **)&D_00147954 + (i * 4000)), 4000);
+        read(handle, (*(char **)&big_buffer + (i * 4000)), 4000);
         close(handle);
         used_slots |= 1 << i;
     }

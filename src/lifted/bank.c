@@ -33,7 +33,7 @@ extern char str_you_cannot_carry_so_much_gold[];
 extern char str_price_gold[];
 extern char *region_names[];
 extern struct rect bank_buttons[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern char saved_location_name[];
 extern char saved_region_name[];
 extern signed char text_buffer[];
@@ -136,7 +136,7 @@ int bank_open(int opening)
         xn_cam_set_view_window(51, 45, 216, 72);
         D_00196272 = 1;
         game_mode = 15;
-        D_00187CA8 = 0;
+        world_running = 0;
         bank_house_count = (bank_ship_count = (bank_screen = (bank_selected = 0)));
         *(int *)bank_list_top = 0;
         D_001A41E0 = 1500;
@@ -181,7 +181,7 @@ void bank_close(void)
     func_0006CB02();
     game_mode = 0;
     D_00196272 = 0;
-    D_00187CA8 = 1;
+    world_running = 1;
 }
 
 void bank_frame(void)

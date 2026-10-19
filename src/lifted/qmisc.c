@@ -39,7 +39,7 @@ extern signed char current_region;
 extern signed char game_mode;
 extern signed char is_daytime;
 extern signed char D_0019629E;
-extern signed char D_001962A8;
+extern signed char travel_in_progress;
 extern int region_location_count;
 extern struct loaded_location loaded_location;
 extern struct map_location *region_locations;
@@ -477,7 +477,7 @@ void func_00031658(struct quest *quest, struct qbn_op *op, int immediate)
     if (immediate == 0) {
         if (D_0019629E != 0) return;
         if (creature_count != 0) return;
-        if (D_001962A8 != 0) return;
+        if (travel_in_progress != 0) return;
         if (game_mode != 0) return;
         if (player_character->race == 8 && is_daytime != 0) return;
         if (player_character->race != 8 && is_daytime == 0) return;

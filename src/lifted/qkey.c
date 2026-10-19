@@ -5,7 +5,7 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_qkey_c[];
 extern char str_books_bok_txt[];
 extern char str_t_2[];
@@ -132,7 +132,7 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
                         return (iptr)itoa(text_macro_item->value, (char *)text_rsc_buffer, 10);
                     }
                     if (text_macro_item->group == 7) {
-                        book_header = *(char **)&D_00147954 + 90000;
+                        book_header = *(char **)&big_buffer + 90000;
                         mc_set_location(115, str_qkey_c);
                         mc_sprintf((char *)text_buffer, str_books_bok_txt, (int)(unsigned short)(short)text_macro_item->message);
                         book_file = disk_open_data(text_buffer);

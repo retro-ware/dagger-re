@@ -16,12 +16,12 @@ extern signed char key_down_esc;
 extern short D_00142928;
 extern short D_0014292C;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_copyfile_dat_2[];
 extern char str_logbook_c[];
 extern struct rect logbook_buttons[];
 extern iptr logbook_notes_file;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern char scratch_190d64[];
@@ -100,7 +100,7 @@ int logbook_close(void)
         D_001940D8 &= 223;
         sheet_open(1);
     } else {
-        D_00187CA8 = 1;
+        world_running = 1;
     }
     return 1;
 }
@@ -311,14 +311,14 @@ void logbook_trim_notes(void)
 {
     char *line_end;
 
-    disk_read_file(logbook_notes_file, D_00147954);
+    disk_read_file(logbook_notes_file, big_buffer);
     while (*(int *)disk_last_file_size > 32768) {
-        line_end = (char *)D_00147954;
+        line_end = (char *)big_buffer;
         while (*(signed char *)line_end != 0) line_end++;
-        mc_memcpy((void *)D_00147954, line_end + 1, 40960, str_logbook_c, 401, 4);
-        *(int *)disk_last_file_size -= (int)((line_end + 1) - (char *)D_00147954);
+        mc_memcpy((void *)big_buffer, line_end + 1, 40960, str_logbook_c, 401, 4);
+        *(int *)disk_last_file_size -= (int)((line_end + 1) - (char *)big_buffer);
     }
-    disk_write_arena2_file(logbook_notes_file, D_00147954, *(int *)disk_last_file_size);
+    disk_write_arena2_file(logbook_notes_file, big_buffer, *(int *)disk_last_file_size);
 }
 
 void logbook_prune_quests(void)

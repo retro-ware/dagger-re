@@ -10,7 +10,7 @@ extern char str_crime_c[];       /* __FILE__ */
 extern unsigned char player_environment;
 extern int crime_reputation_loss[];
 extern struct shop crime_fine_table[];
-extern char D_00187CA8;
+extern char world_running;
 extern struct region regions[];
 extern int scratch_190cac;
 extern char scratch_190d16;
@@ -109,7 +109,7 @@ int court_open(int crime)
         mc_memcpy(screen_buffer, window_image, 64000, str_crime_c, 114, 4);
         xn_gfx_present_inclusive(1);
         scratch_190cac = fine;
-        D_00187CA8 = 0;
+        world_running = 0;
         D_001940D5 |= 64;
         D_00195F34 = 194;
         membership = guild_find_membership_by_kind(0);

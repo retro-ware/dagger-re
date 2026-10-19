@@ -11,7 +11,7 @@ extern char str_pris00i0_img[];
 extern char str_days_until_freedom[];
 extern signed char text_buffer[];
 extern int sky_loaded_frame;
-extern signed char D_00196294;
+extern signed char time_skip_active;
 extern signed char night_sky_loaded;
 extern signed char D_001962A4;
 extern signed char D_001962A5;
@@ -35,7 +35,7 @@ void prison_serve_sentence(int days)
     D_001962B0 = 1;
     D_001962A4 = 1;
     D_001962A5 = 0;
-    D_00196294 = 1;
+    time_skip_active = 1;
     image = disk_read_file(str_pris00i0_img, 0);
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_crime_c, 384, 4);
     for (day = 0; day < 768; day++) {
@@ -57,7 +57,7 @@ void prison_serve_sentence(int days)
         mc_free((void *)image, str_crime_c, 400);
         image = -1751672937;
     }
-    D_00196294 = 0;
+    time_skip_active = 0;
     D_001962A5 = 1;
     D_001962B0 = 0;
     sky_loaded_frame = 10000;

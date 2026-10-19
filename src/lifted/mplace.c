@@ -28,7 +28,7 @@ extern signed char player_on_ground;
 extern signed char current_climate;
 extern signed char is_daytime;
 extern signed char D_00196293;
-extern signed char D_00196294;
+extern signed char time_skip_active;
 extern signed char D_00196299;
 extern signed char D_001962A0;
 extern struct map_location *location_here;
@@ -381,7 +381,7 @@ void encounter_tick(int minutes, int forced)
 {
     if (D_001962A0 != 0) return;
     if (forced == 0) {
-        if (D_00196294 != 0) return;
+        if (time_skip_active != 0) return;
         if ((((unsigned)minutes) % 12) != 0) return;
     }
     if (((int)player_environment) == 1) {

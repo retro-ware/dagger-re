@@ -26,7 +26,7 @@ extern iptr guild_skill_lists[];
 extern short guild_service_factions[];
 extern iptr guild_service_labels[];
 extern struct rect guild_menu_buttons[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern int D_00190CBC;
 extern signed char D_00190D1A;
@@ -545,6 +545,6 @@ void rest_open(void)
     D_00190DD0 = 0;
     bios_ticks = (int *)DOS_LOW(0x46C);
     D_00190CBC = *bios_ticks;
-    D_00187CA8 = 0;
+    world_running = 0;
     D_00196299 = 0;
 }

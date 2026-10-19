@@ -6,7 +6,7 @@
 #include "doslow.h"
 #include "portio.h"
 
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_links_c[];
 extern signed char text_rsc_buffer[];
 extern signed char D_00190FE5[];
@@ -37,8 +37,8 @@ void links_save(int handle)
     int *indexes;
 
     if (active_link_count < 0) active_link_count = 0;
-    mc_memcpy((void *)D_00147954, links, link_count * REC_SIZEOF(struct link), str_links_c, 78, 4);
-    copy = (struct link *)D_00147954;
+    mc_memcpy((void *)big_buffer, links, link_count * REC_SIZEOF(struct link), str_links_c, 78, 4);
+    copy = (struct link *)big_buffer;
     for (i = 0; i < link_count; i++) {
         if (copy[i].object != 0) {
             copy[i].object = (struct record *)(uptr)copy[i].object->id;
@@ -47,7 +47,7 @@ void links_save(int handle)
     write(handle, &link_count, 4);
     PORT_WRITE_LINKS(handle, copy, link_count);
     write(handle, &active_link_count, 4);
-    indexes = (int *)D_00147954;
+    indexes = (int *)big_buffer;
     for (i = 0; i < active_link_count; i++) {
         indexes[i] = ((unsigned)(active_links[i] - ((iptr)links))) / REC_SIZEOF(struct link);
     }

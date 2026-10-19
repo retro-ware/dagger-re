@@ -10,7 +10,7 @@ extern struct record *location_object;
 extern struct character *player_character;
 extern struct career *player_class;
 extern unsigned char current_region;
-extern unsigned char D_00196294;
+extern unsigned char time_skip_active;
 extern int region_dungeon_type_counts;
 extern struct faction *faction_find_type_in_region(short, short);
 extern void location_load_nth_dungeon_of_type(struct loaded_location *, int, int);
@@ -62,10 +62,10 @@ void disease_become_vampire(void)
     player_character->special_infection_time = 0;
     player_character->special_infection = 0;
     msgbox_show_rsc(401, 1);
-    saved = D_00196294;
-    D_00196294 = 1;
+    saved = time_skip_active;
+    time_skip_active = 1;
     time_pass(30240);
-    D_00196294 = saved;
+    time_skip_active = saved;
     if (region_dungeon_type_counts != 0) {
         location_load_nth_dungeon_of_type(&s, 0, rand() % region_dungeon_type_counts);
         map_goto_location(current_region, 3, s.object->image, 0);

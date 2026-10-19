@@ -8,7 +8,7 @@ extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_optn00i0_img[];
 extern char str_options_c[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern iptr options_image;
@@ -26,7 +26,7 @@ int options_open(short force)
     if (force != 0 || (game_mode == 0 && key_pressed_once(1) != 0)) {
         while (key_down_esc != 0);
         save_thumbnail_capture();
-        D_00187CA8 = 0;
+        world_running = 0;
         game_mode = 7;
         options_image = disk_read_file(str_optn00i0_img, 0);
         D_00196272 = 1;

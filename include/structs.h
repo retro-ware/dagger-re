@@ -374,7 +374,7 @@ struct talk_place_topic {
 };                                  /* +0x13 */
 RECORD_SIZE_P(talk_place_topic, 19);
 
-/* what the player asked an NPC where to find (D_001965FC; talk_where_target points at it):
+/* what the player asked an NPC where to find (the global talk_where; talk_where_target points at it):
  * talk_prepare_where_answer fills it, talk_hint_text_id and the %loc, %reg macros read it */
 struct talk_where {
     char pad00[4];                  /* +0x00 */

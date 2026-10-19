@@ -11,7 +11,7 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char D_0012B508;
 extern signed char key_down_esc;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char D_001704CC[];
 extern char str_mapsave[];
 extern char str_maptable[];
@@ -39,7 +39,7 @@ extern char location_exterior[];
 extern int region_location_count;
 extern struct rmb_file *rmb_block;
 extern char region_dungeon_type_counts[];
-extern char *D_00196A7C;
+extern char *region_location_names;
 extern struct map_location *location_here;
 extern int region_dungeon_count;
 extern struct loaded_location loaded_location;
@@ -198,9 +198,9 @@ void region_load_location_names(int region)
 
     mc_set_location(170, D_001704CC);
     mc_sprintf((char *)text_buffer, str_mapnames, region);
-    *(iptr *)&D_00196A7C = D_00147954;
+    *(iptr *)&region_location_names = big_buffer;
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
-    archive_read_record(maps_bsa, record, D_00147954);
+    archive_read_record(maps_bsa, record, big_buffer);
 }
 
 void maploads_enter_region(int region)
@@ -210,8 +210,8 @@ void maploads_enter_region(int region)
 
 void region_location_names_release(void)
 {
-    if ((iptr)D_00196A7C == 0) return;
-    *(int *)&D_00196A7C = 0;
+    if ((iptr)region_location_names == 0) return;
+    *(int *)&region_location_names = 0;
 }
 
 void location_read_record(struct loaded_location *location, int fd)
@@ -432,7 +432,7 @@ void town_load_blocks(void)
 
     building = current_location->buildings;
     town_building_counter = 0;
-    rmb_block = (struct rmb_file *)D_00147954;
+    rmb_block = (struct rmb_file *)big_buffer;
     blocks_bsa = archive_open(str_blocks_bsa, 0, 0);
     switch (current_location->kind) {
     case 0:

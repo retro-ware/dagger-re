@@ -9,7 +9,7 @@ extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern signed char xn_mouse_cursor_drawn;
 extern char str_career_c[];
 extern char str_biog_t0_txt[];
@@ -90,10 +90,10 @@ void career_background_summary(int class_id, int ask)
     mc_memset(scratch_buffer, 0, 64000, str_career_c, 60, 4);
     disk_read_file(text_buffer, (iptr)scratch_buffer + 1);
     *scratch_buffer = 10;
-    if (ask != 0) disk_read_file(str_biog00i0_img, D_00147954);
+    if (ask != 0) disk_read_file(str_biog00i0_img, big_buffer);
     for (question = 0; question < 12; question++) {
         if (ask != 0) {
-            mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, str_career_c, 69, 4);
+            mc_memcpy((void *)screen_buffer, (void *)big_buffer, 64000, str_career_c, 69, 4);
             xn_mouse_cursor_drawn &= 254;
         }
         career_find_question(question + 1);

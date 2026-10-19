@@ -2,11 +2,11 @@
 #include "records.h"
 #include "clib.h"
 
-extern unsigned char D_00178E59;
-extern unsigned char D_00178E5F;
+extern unsigned char faction_politics_group_a;
+extern unsigned char faction_politics_group_b;
 extern int str_j[];
 extern struct region regions[];
-extern int D_00195B84;
+extern int shared_scratch;
 extern char current_region;
 extern char D_00196269;
 extern char D_001962A5;
@@ -120,19 +120,19 @@ void faction_politics_update(int mode)
                 faction_make_alliance(faction, j, other);
                 break;
             }
-            D_00195B84 = 0;
+            shared_scratch = 0;
             if (factions_can_war(faction, faction->enemies[0]) || factions_can_war(faction, faction->enemies[1]) || factions_can_war(faction, faction->enemies[2])) {
-                D_00195B84--;
+                shared_scratch--;
                 if (regions[faction->region].flags[2] || regions[faction->region].flags[3]) {
                     region_reset_war(faction);
-                    region_reset_war(faction->enemies[D_00195B84]);
-                    j = D_00195B84;
-                    D_00195B84 = 0;
+                    region_reset_war(faction->enemies[shared_scratch]);
+                    j = shared_scratch;
+                    shared_scratch = 0;
                     if (factions_can_war(faction->enemies[0], faction) || factions_can_war(faction->enemies[1], faction) || factions_can_war(faction->enemies[2], faction))
-                        faction->enemies[j]->enemies[D_00195B84 - 1] = 0;
+                        faction->enemies[j]->enemies[shared_scratch - 1] = 0;
                     faction->enemies[j] = 0;
                 } else if (regions[faction->region].flags[0]) {
-                    other = faction->enemies[D_00195B84];
+                    other = faction->enemies[shared_scratch];
                     rumor_add_faction(faction, other, 0, faction->region, 1479);
                     rumor_add_faction(other, faction, 0, other->region, 1479);
                     region_flag_set(faction->region, 1);
@@ -140,32 +140,32 @@ void faction_politics_update(int mode)
                 } else if (regions[faction->region].flags[1]) {
                     if (rand_range(1, 100) <= 5) {
                         region_flag_clear(faction->region, 1);
-                        region_flag_clear(faction->enemies[D_00195B84]->region, 1);
+                        region_flag_clear(faction->enemies[shared_scratch]->region, 1);
                     } else {
                         ally_power = (faction_power(faction->allies[0]) + faction_power(faction->allies[1]) + faction_power(faction->allies[2])) / 5;
                         strength = ally_power + faction->power;
-                        ally_power = (faction_power(faction->enemies[D_00195B84]->allies[0])
-                             + faction_power(faction->enemies[D_00195B84]->allies[1])
-                             + faction_power(faction->enemies[D_00195B84]->allies[2])) / 5;
-                        enemy_strength = ally_power + faction->enemies[D_00195B84]->power;
+                        ally_power = (faction_power(faction->enemies[shared_scratch]->allies[0])
+                             + faction_power(faction->enemies[shared_scratch]->allies[1])
+                             + faction_power(faction->enemies[shared_scratch]->allies[2])) / 5;
+                        enemy_strength = ally_power + faction->enemies[shared_scratch]->power;
                         faction->power -= rand_range(1, strength / 10);
-                        faction->enemies[D_00195B84]->power -= rand_range(1, enemy_strength / 10);
+                        faction->enemies[shared_scratch]->power -= rand_range(1, enemy_strength / 10);
                         if (strength < enemy_strength) {
                             if (enemy_strength - strength > strength) {
-                                rumor_add_faction(faction->enemies[D_00195B84], faction, 100, 0, 1408);
-                                faction_add_power(faction->enemies[D_00195B84], faction->power / 2);
-                                region_flag_set(faction->enemies[D_00195B84]->region, 2);
+                                rumor_add_faction(faction->enemies[shared_scratch], faction, 100, 0, 1408);
+                                faction_add_power(faction->enemies[shared_scratch], faction->power / 2);
+                                region_flag_set(faction->enemies[shared_scratch]->region, 2);
                                 region_flag_set(faction->region, 3);
                             } else {
-                                rumor_add_faction(faction, faction->enemies[D_00195B84], 100, 0, 1407);
+                                rumor_add_faction(faction, faction->enemies[shared_scratch], 100, 0, 1407);
                             }
                         } else if (strength - enemy_strength > enemy_strength) {
-                            rumor_add_faction(faction, faction->enemies[D_00195B84], 100, 0, 1408);
-                            faction_add_power(faction, faction->enemies[D_00195B84]->power / 2);
-                            region_flag_set(faction->enemies[D_00195B84]->region, 3);
+                            rumor_add_faction(faction, faction->enemies[shared_scratch], 100, 0, 1408);
+                            faction_add_power(faction, faction->enemies[shared_scratch]->power / 2);
+                            region_flag_set(faction->enemies[shared_scratch]->region, 3);
                             region_flag_set(faction->region, 2);
                         } else {
-                            rumor_add_faction(faction, faction->enemies[D_00195B84], 100, 0, 1407);
+                            rumor_add_faction(faction, faction->enemies[shared_scratch], 100, 0, 1407);
                         }
                     }
                 }
@@ -327,12 +327,12 @@ void faction_politics_update(int mode)
         if (j >= 3)
             faction_add_power(faction_find(510), -1);
         for (j = i = 0; i < 62; i++)
-            if (regions[i].groups[D_00178E5F])
+            if (regions[i].groups[faction_politics_group_b])
                 j++;
         if (j >= 3)
             faction_add_power(faction_find(510), -1);
         for (j = i = 0; i < 62; i++)
-            if (regions[i].groups[D_00178E59])
+            if (regions[i].groups[faction_politics_group_a])
                 j++;
         if (j >= 3)
             faction_add_power(faction_find(510), 1);

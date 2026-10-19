@@ -26,7 +26,7 @@ iptr faction_find(short id)
 int func_0001939C(int target, int faction)
 {
     scratch_190be4 = target;
-    D_00195B84 = 0;
+    shared_scratch = 0;
     func_000193DD(faction);
-    return D_00195B84;
+    return shared_scratch;
 }

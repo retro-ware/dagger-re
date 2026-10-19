@@ -53,7 +53,7 @@ extern iptr D_00184221;
 extern iptr key_names[];
 extern short spell_last_cast_id;
 extern short *item_group_templates[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char D_00187DAC[];
 extern signed char item_group_tab[];
 extern struct rect inv_mode_buttons[][7];   /* 5 trade modes */
@@ -90,7 +90,7 @@ extern int creature_count;
 extern struct record *inv_right_container;
 extern struct record *inv_right_container_base;
 extern struct record *scratch_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern char inpstr_result[];
 extern struct character *player_character;
 extern struct career *player_class;
@@ -367,7 +367,7 @@ int inventory_open(int how, int mode, int icon)
             how = 2;
         }
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        D_00187CA8 = 0;
+        world_running = 0;
         game_mode = 4;
         D_00196272 = 1;
         trade_mode = mode;
@@ -464,7 +464,7 @@ void inventory_close(void)
         }
     }
     D_001962B1 = 0;
-    D_00187CA8 = 1;
+    world_running = 1;
     inventory_free_images();
     quest_reward_container = 0;
     quest_items_release_on_close();
@@ -720,9 +720,9 @@ void inv_update_hidden_load(void)
     int capacity;
 
     capacity = equip_hiding_capacity(1);
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity, inv_sum_hidden_weight);
-    player_character->hidden_load_percent = (*(int *)D_00195B84 * 100) / capacity;
+    player_character->hidden_load_percent = (*(int *)shared_scratch * 100) / capacity;
 }
 
 void inv_unequip_item(struct record *object)
@@ -1132,14 +1132,14 @@ void item_repair_cb(struct record *object)
     struct item *item;
 
     if (object->type != 2) return;
-    if (*(int *)D_00195B84 == 0) return;
+    if (*(int *)shared_scratch == 0) return;
     item = &object->data.item;
     if (item->group == 3 && item->index == 18) return;
     if (item->enchantments[0].type != (-1) && cfg_magic_repair == 0) return;
     if (item->condition == item->max_condition) return;
-    item->condition += *(short *)D_00195B84;
+    item->condition += *(short *)shared_scratch;
     if (item->condition > item->max_condition) item->condition = item->max_condition;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
 }
 
 void item_break(struct record *object)
@@ -1548,9 +1548,9 @@ void inv_toggle_hidden(void)
         return;
     }
     capacity = equip_hiding_capacity(1);
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity, inv_sum_hidden_weight);
-    if ((object_weight(object) + *(int *)D_00195B84) > capacity) {
+    if ((object_weight(object) + *(int *)shared_scratch) > capacity) {
         msgbox_show_string((iptr)str_you_cannot_hide_anymore_stuff, 1);
         return;
     }

@@ -3,7 +3,7 @@
 #include "clib.h"
 
 struct cmd { unsigned short hash; void (*fn)(struct faction *, char **, int *, int *); };
-extern char *D_00147954;
+extern char *big_buffer;
 extern char str_faction_txt[];
 extern char str_error_reading_faction_file[];
 extern char str_faction_c[];
@@ -47,10 +47,10 @@ void faction_load_file(void)
     file = disk_open_data(str_faction_txt);
     if (file < 1)
         fatal_error(str_error_reading_faction_file);
-    len = read(file, D_00147954, 90000);
+    len = read(file, big_buffer, 90000);
     close(file);
     for (faction_count = i = 0; i < len; i++)
-        if (D_00147954[i] == '#')
+        if (big_buffer[i] == '#')
             faction_count++;
     if (factions != 0) {
         if (factions != 0 && factions != (struct faction *)(iptr)-1751672937) {
@@ -61,7 +61,7 @@ void faction_load_file(void)
     dest = factions = mc_malloc(faction_count * REC_SIZEOF(struct faction), str_faction_c, 975);
     mc_memset(dest, 0, faction_count * REC_SIZEOF(struct faction), str_faction_c, 976, 4);
     mc_memset(&parsed, 0, sizeof(parsed), str_faction_c, 977, 4);
-    text = D_00147954;
+    text = big_buffer;
     text[len] = 0;
     while (*text != 0) {
         switch (*text) {

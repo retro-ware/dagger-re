@@ -36,7 +36,7 @@ extern iptr prompt_enter_new_name;
 extern iptr D_00182682;
 extern iptr D_00184225;
 extern iptr D_00185073;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern signed char D_001903A5;
 extern char scratch_190be4[];
@@ -52,7 +52,7 @@ extern struct record *player_entity;
 extern struct record *player_object;
 extern int creature_count;
 extern struct image *D_00195B5C;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
 extern struct career *player_class;
@@ -140,7 +140,7 @@ int sheet_close(void)
     }
     while (key_down_esc != 0);
     player_character->skills_raised_lo = (player_character->skills_raised_hi = 0);
-    D_00187CA8 = 1;
+    world_running = 1;
     D_001940D9 &= 251;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
@@ -402,13 +402,13 @@ iptr health_status_text(void)
     short i;
 
     D_001962A7 = (D_001962A2 = 0);
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, health_status_add);
-    if (*(int *)D_00195B84 == 0) return 0;
+    if (*(int *)shared_scratch == 0) return 0;
     text = scratch_buffer + 55000;
     i = 0;
     *text = *(signed char *)&i;
-    for (; ((int)(short)i) < *(int *)D_00195B84; i++) {
+    for (; ((int)(short)i) < *(int *)shared_scratch; i++) {
         line = text_rsc_load((int)(short)((unsigned short)(unsigned char)*(signed char *)((char *)(((int)(short)i) + scratch_buffer) + 60000)), 0, 310);
         func_000A1054(text, (char *)line, str_sheet_c, 525, 4);
         if (line != 0 && line != (-1751672937)) {

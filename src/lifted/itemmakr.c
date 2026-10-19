@@ -28,7 +28,7 @@ extern char enchant_side_effect_excludes_param1[];
 extern char enchant_side_effect_excludes_type2[];
 extern char enchant_side_effect_excludes_param2[];
 extern char enchant_side_effect_exclusion_rows[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
@@ -54,7 +54,7 @@ extern struct spell *spell_records;
 extern struct record *scratch_object;
 extern iptr magic_window_image;
 extern iptr list_popup_callback;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
@@ -133,7 +133,7 @@ void itemmaker_reset(void)
 int itemmaker_close(void)
 {
     while (key_down_esc != 0);
-    D_00187CA8 = 1;
+    world_running = 1;
     if ((iptr)itemmaker_item != 0) inv_store_item(itemmaker_item_object);
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
@@ -300,10 +300,10 @@ void itemmaker_soul_list_cb(struct record *soul)
 {
     iptr next_name;
 
-    if (soul->type != 20 || *(int *)D_00195B84 > 62) return;
+    if (soul->type != 20 || *(int *)shared_scratch > 62) return;
     if (D_00190D63 == soul->soul_creature) scratch_object = soul;
-    text_rsc_buffer[*(int *)D_00195B84] = (signed char)soul->soul_creature;
-    *(iptr *)(scratch_190ee4 + ((*(int *)D_00195B84)++ << PTR_SHIFT)) = itemmaker_soul_name_next;
+    text_rsc_buffer[*(int *)shared_scratch] = (signed char)soul->soul_creature;
+    *(iptr *)(scratch_190ee4 + ((*(int *)shared_scratch)++ << PTR_SHIFT)) = itemmaker_soul_name_next;
     mc_strncpy((char *)itemmaker_soul_name_next, monster_names[soul->soul_creature], 4, str_itemmakr_c, 526);
     next_name = itemmaker_soul_name_next;
     next_name += strlen(monster_names[soul->soul_creature]) + 1;
@@ -321,13 +321,13 @@ int itemmaker_pick_param_list(iptr list_kind)
     case 4:
         *(iptr *)scratch_190ee4 = (iptr)scratch_buffer + 20000;
         itemmaker_soul_name_next = (iptr)scratch_buffer + 21000;
-        *(int *)D_00195B84 = 0;
+        *(int *)shared_scratch = 0;
         object_foreach(player_entity->children, itemmaker_soul_list_cb);
-        if (*(int *)D_00195B84 == 0 && ((int)(short)scratch_190d68) != 2) {
+        if (*(int *)shared_scratch == 0 && ((int)(short)scratch_190d68) != 2) {
             msgbox_show_string(str_you_have_no_captured_spirits, 1);
             return 0;
         }
-        *(iptr *)(scratch_190ee4 + (*(int *)D_00195B84 << PTR_SHIFT)) = 0;
+        *(iptr *)(scratch_190ee4 + (*(int *)shared_scratch << PTR_SHIFT)) = 0;
         itemmaker_show_param_list((iptr)scratch_190ee4, 1000);
     }
     return 1;
@@ -488,7 +488,7 @@ void itemmaker_consume_soul(void)
     return;
 L57E13:;
     D_00190D63 = (signed char)itemmaker_slots[slot].param;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, itemmaker_soul_list_cb);
     gem = scratch_object->parent;
     object_delete(scratch_object);

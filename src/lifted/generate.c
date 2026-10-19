@@ -31,7 +31,7 @@ extern struct record *inv_right_container;
 extern struct record *inv_right_container_base;
 extern struct image *D_00195B5C;
 extern struct image *D_00195B60;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
 extern struct career *player_class;
@@ -258,7 +258,7 @@ void inv_sum_hidden_weight(struct record *object)
     if (object->type != 2) return;
     item = &object->data.item;
     if (((int)(unsigned short)(item->item_flags & 64)) == 0) return;
-    *(int *)D_00195B84 += item->weight;
+    *(int *)shared_scratch += item->weight;
 }
 
 void trade_add_buy_price(struct record *object)

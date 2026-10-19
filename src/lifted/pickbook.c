@@ -22,7 +22,7 @@ extern char *spell_effect_subtype_names[][12];
 extern char D_0018320A[];
 extern iptr D_00184634;
 extern char monster_category[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern char scratch_190d64[];
@@ -213,7 +213,7 @@ int spellbook_close(void)
         D_001940D8 &= 127;
         inventory_open(2, trade_mode, (int)(unsigned char)inv_right_icon);
     } else {
-        D_00187CA8 = 1;
+        world_running = 1;
     }
     return 1;
 }

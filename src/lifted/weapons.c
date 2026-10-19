@@ -33,7 +33,7 @@ extern struct pick_result *click_hit;
 extern int creature_count;
 extern struct record *spell_ready_missile;
 extern struct image *hud_bar_image;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern struct settings *game_settings;
 extern struct record *D_00195C48;
@@ -301,7 +301,7 @@ int weapon_arrow_update(struct record *arrow)
                 object_free_later(arrow);
                 return 0;
             }
-            if (*(int *)D_00195B84 > 140) return 1;
+            if (*(int *)shared_scratch > 140) return 1;
             sound_play(7, monster, 100);
             damage_resolve_attack(player_entity, monster, 19);
             inv_merge_arrows(monster, arrow, 0);
@@ -359,7 +359,7 @@ struct record *monster_nearest_to_point(int x, int y, int z)
             best_index = i;
         }
     }
-    *(int *)D_00195B84 = best_dist;
+    *(int *)shared_scratch = best_dist;
     if (best_dist == 100000) return 0;
     return creature_list[best_index];
 }

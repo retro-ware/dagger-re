@@ -35,7 +35,7 @@ extern int trade_haggle_result;
 extern int creature_count;
 extern int calendar_month;
 extern int D_00195B44;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern char inpstr_result[];
 extern struct character *player_character;
 extern struct career *player_class;
@@ -706,13 +706,13 @@ void reaction_mod_item_cb(struct record *item)
     for (i = 0; i < 10; i++) {
         if (item_data->enchantments[i].type == (-1)) return;
         if (item_data->enchantments[i].type == 14 && item_data->enchantments[i].param == 5) {
-            *(int *)D_00195B84 += 10;
+            *(int *)shared_scratch += 10;
         } else if (item_data->enchantments[i].type == 25 && item_data->enchantments[i].param == 5) {
-            *(int *)D_00195B84 -= 10;
+            *(int *)shared_scratch -= 10;
         } else if (item_data->enchantments[i].type == 14 && (short)scratch_190ce4[0] == item_data->enchantments[i].param) {
-            *(int *)D_00195B84 += 10;
+            *(int *)shared_scratch += 10;
         } else if (item_data->enchantments[i].type == 25 && (short)scratch_190ce4[0] == item_data->enchantments[i].param) {
-            *(int *)D_00195B84 -= 10;
+            *(int *)shared_scratch -= 10;
         }
     }
 }

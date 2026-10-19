@@ -17,7 +17,7 @@ extern signed char key_down_ctrl;
 extern signed char key_down_lshift;
 extern signed char key_down_x;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_text_c[];
 extern char str_spop_rci[];
 extern char str_mpop_rci[];
@@ -150,7 +150,7 @@ void str_copy_double_nul(signed char *dest, signed char *src)
 void msgbox_show_more_pages(char **image)
 {
     while (msgbox_next_page != 0) {
-        mc_memcpy((void *)D_00147954, (void *)screen_buffer, 64000, str_text_c, 607, 4);
+        mc_memcpy((void *)big_buffer, (void *)screen_buffer, 64000, str_text_c, 607, 4);
         msgbox_kind = 1;
         mode_push();
         game_mode = 8;
@@ -158,7 +158,7 @@ void msgbox_show_more_pages(char **image)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         mouse_buttons = (mouse_buttons_prev = 0);
         while (((int)(unsigned char)game_mode) == 8) {
-            mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, str_text_c, 618, 4);
+            mc_memcpy((void *)screen_buffer, (void *)big_buffer, 64000, str_text_c, 618, 4);
             keys_world_actions();
             msgbox_update();
             player_movement_update();
@@ -177,7 +177,7 @@ void msgbox_show_more_pages(char **image)
     D_00196272 = 1;
     mouse_buttons = (mouse_buttons_prev = 0);
     while (((int)(unsigned char)game_mode) == 8) {
-        mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, str_text_c, 641, 4);
+        mc_memcpy((void *)screen_buffer, (void *)big_buffer, 64000, str_text_c, 641, 4);
         keys_world_actions();
         msgbox_update();
         player_movement_update();

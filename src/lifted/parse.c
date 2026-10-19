@@ -109,8 +109,8 @@ extern struct record *wagon_container;
 extern struct record *house_container;
 extern struct item *text_macro_item;
 extern struct character *text_macro_npc;
-extern int D_00195A90;
-extern int D_00195A94;
+extern int talk_hint_x;
+extern int talk_hint_z;
 extern struct building *current_building;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -126,7 +126,7 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
 extern char *scratch_buffer;
-extern struct talk_where *D_00195D28;
+extern struct talk_where *talk_where_target;
 extern int trade_total;
 extern int trade_price;
 extern iptr quest_potential_questor;
@@ -437,7 +437,7 @@ iptr macro_dpr_other_random_province(void)
 
 iptr macro_di_direction(void)
 {
-    return direction_names[((((xn_math_angle_to_point(player_object->x, player_object->z, D_00195A90, D_00195A94) >> 2) + 32) & 511) >> 6)];
+    return direction_names[((((xn_math_angle_to_point(player_object->x, player_object->z, talk_hint_x, talk_hint_z) >> 2) + 32) & 511) >> 6)];
 }
 
 int macro_du_blank(void)
@@ -917,7 +917,7 @@ iptr macro_lt2_faction2_ruler_title(void)
 
 iptr macro_loc_where_building(void)
 {
-    return building_name((iptr)D_00195D28->building);
+    return building_name((iptr)talk_where_target->building);
 }
 
 iptr macro_ltn_legal_standing(void)
@@ -1567,7 +1567,7 @@ int macro_sng_blank(void)
 
 iptr macro_reg_where_target_region(void)
 {
-    return (iptr)region_names[D_00195D28->region];
+    return (iptr)region_names[talk_where_target->region];
 }
 
 iptr macro_t_ruler_title(void)
@@ -1587,7 +1587,7 @@ iptr macro_tem_town_temple(void)
 
 iptr func_00049AE7(void)
 {
-    return (iptr)faction_find_type_in_region(D_00195D28->region, 13)->child->name;
+    return (iptr)faction_find_type_in_region(talk_where_target->region, 13)->child->name;
 }
 
 iptr macro_tcn_travel_city(void)

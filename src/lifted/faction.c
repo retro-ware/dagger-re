@@ -6,7 +6,7 @@
 #include "portio.h"
 
 extern char disk_last_file_size[];
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_faction_c[];
 extern char str_invalid_alliance_count[];
 extern char str_invalid_enemy_count[];
@@ -15,7 +15,7 @@ extern char D_001704C5[];
 extern signed char D_00178630[];
 extern signed char D_0017A25C[];
 extern struct record *player_entity;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
@@ -459,16 +459,16 @@ void func_0001CB3C(struct record *object)
         if (faction_has_ally(faction, D_0019671C) == 0) return;
     }
     guild_membership = &object->data.membership;
-    (*(int *)D_00195B84)++;
+    (*(int *)shared_scratch)++;
 }
 
 int faction_player_related(struct faction *faction)
 {
     if (faction == 0) return 0;
     D_0019671C = faction;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, func_0001CB3C);
-    return *(int *)D_00195B84;
+    return *(int *)shared_scratch;
 }
 
 int faction_count_allies(struct faction *faction)
@@ -569,17 +569,17 @@ iptr rumor_collect_local(void)
     struct rumor *rumor;
     iptr end;
 
-    out = (char *)(D_00147954 + 60000);
+    out = (char *)(big_buffer + 60000);
     mc_set_location(1642, str_faction_c);
     mc_sprintf(out, D_001704C5, (iptr)current_location);
     out += strlen(out);
     *out = 0;
     out[1] = 0;
-    if (disk_file_exists(str_rumor_dat) == 0) return D_00147954 + 60000;
-    disk_read_file(str_rumor_dat, D_00147954);
+    if (disk_file_exists(str_rumor_dat) == 0) return big_buffer + 60000;
+    disk_read_file(str_rumor_dat, big_buffer);
     if (*(int *)disk_last_file_size == 0) return 0;
-    end = (iptr)(*(char **)&D_00147954 + *(int *)disk_last_file_size);
-    rumor = (struct rumor *)D_00147954;
+    end = (iptr)(*(char **)&big_buffer + *(int *)disk_last_file_size);
+    rumor = (struct rumor *)big_buffer;
     while (((uptr)rumor) < end) {
         if (rumor_is_eligible((iptr)rumor, 0, 1, 0) != 0) {
             mc_memcpy(out, (void *)((iptr)rumor + 34), rumor->text_length, str_faction_c, 1658, 4);
@@ -592,7 +592,7 @@ iptr rumor_collect_local(void)
     }
     *out = 0;
     out[1] = 0;
-    return D_00147954 + 60000;
+    return big_buffer + 60000;
 }
 
 iptr rumor_pick_news(short faction_id)
@@ -684,11 +684,11 @@ void rumor_file_purge(void)
 
     npc_count = 0;
     if (disk_file_exists(str_rumor_dat) == 0) return;
-    disk_read_file(str_rumor_dat, D_00147954);
+    disk_read_file(str_rumor_dat, big_buffer);
     if (*(int *)disk_last_file_size == 0) return;
-    rumor = (struct rumor *)D_00147954;
+    rumor = (struct rumor *)big_buffer;
     out = (iptr)scratch_buffer;
-    end = (iptr)(*(char **)&D_00147954 + *(int *)disk_last_file_size);
+    end = (iptr)(*(char **)&big_buffer + *(int *)disk_last_file_size);
     while (((uptr)rumor) < end) {
         if (((int)(unsigned char)(rumor->flags & 4)) != 0) {
             quest = quest_find_by_id((int)(short)((unsigned short)rumor->quest_id));

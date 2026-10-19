@@ -9,7 +9,7 @@ extern char region_legal_reputation[];  /* court_frame: regions[].legal_reputati
 extern iptr screen_buffer;
 extern char str_crime_c[];
 extern int crime_reputation_loss[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern struct record *creature_list[];
 extern int scratch_190cac;
 extern signed char scratch_190d16;
@@ -199,7 +199,7 @@ void court_close(void)
     *(int *)&fatigue = player_character->fatigue;
     time_pass(240);
     player_character->fatigue = *(int *)&fatigue;
-    D_00187CA8 = 1;
+    world_running = 1;
     game_mode = 0;
     D_00196272 = 0;
     if (window_image != 0 && window_image != (-1751672937)) {

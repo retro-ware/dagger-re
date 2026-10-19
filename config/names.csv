@@ -519,7 +519,7 @@ global,0x00147900,xn_mem_msg_alloc_failed,confirmed,'SYSTEM: Unable to allocate 
 global,0x00147926,xn_mem_msg_lock_failed,confirmed,'SYSTEM: Unable to Lock Memory Region.' printed by 0x149F0C
 global,0x00147950,xn_sel_bios_data,strong,selector for real-mode segment 40h (DPMI 0002h in 0x149E00)
 global,0x00147952,xn_sel_vga,strong,selector for real-mode segment A000h (DPMI 0002h in 0x149E00)
-global,0x00147954,big_buffer,candidate,"pointer to a large shared buffer; talk uses +16384 (topics), +90000 (answer text), +95000 (logbook copy)"
+global,0x00147954,big_buffer,strong,"pointer to a large shared buffer: faction file, sky, talk (+16384 topics, +90000 answers), logbook, saves"
 global,0x00147958,xn_mem_work_block,strong,workMem as allocated (before 32-alignment into big_buffer); freed by 0x149EF8
 global,0x0014795C,xn_sys_cmd_tail,candidate,PSP linear address + 80h (command tail) from 0x149E00; nothing reads it
 global,0x00147960,xn_sys_psp_addr,candidate,int 21h AH=51h result << 4 (PSP linear address) from 0x149E00; nothing reads it
@@ -946,7 +946,7 @@ global,0x00178EAF,region_event_durations,strong,"29 x {min, max} bytes for regio
 global,0x001798DF,region_event_names,strong,"26 pointers: War Beg, War Mid, War Won, War Lost, Plague Beg/Mid/End, Famine Beg/Mid/End, Witch Burnings, Crime, New Ruler, Bad Harvest, TGM in Jail, TGM Set Free, TGM Executed, New TGM, Religious Per, Prices Up, Prices Dn, Happy Holi, Scary Holi, Holy Holi, Mad Wizard Nearby, Mad Wizard Dies: short names of the region event flags 0-25; no reader"
 global,0x001799AC,talk_faction_greetings,strong,9 relations x 3 TEXT ids 8550-8571 ('I am also a member of %fpc'...)
 global,0x001799E2,talk_question_attitude_mods,strong,"attitude modifier per question kind (talk_roll_attitude): 10,-5,0,0,0,-10,-5,-5. New: Daggerfall Unity TalkManager.questionTypeReactionMods notes 'Changed from classic (classic uses { 10, -5, 0, 0, 0, -10, -5, -5 })', this table"
-global,0x001799F2,talk_knows_mods,candidate,[question kind][style] modifier to the 1d20 knows roll. Keep: code only; Daggerfall Unity has no counterpart. A talk session that varies the question kind and tone would settle it
+global,0x001799F2,talk_knows_mods,strong,[question kind][style] short modifier to the 1d20 knows roll (talk_roll_knows)
 global,0x00179A42,talk_where_answers,confirmed,[knows][style][attitude] TEXT ids 7250-7289 for where-is; experiment: knows 1 style 1 attitude 1 -> 7271
 global,0x00179A7E,talk_tell_answers,strong,[knows][style][attitude] TEXT ids 7250-7294 for tell-me-about
 global,0x00179ACC,talk_creature_language,strong,"per creature type (record +0x43): {language skill, syllable text}: 1 Imp->12, 2 Spriggan->10, 8 Centaur->11, 10 Nymph->8, 13 Harpy->5, 16 Giant->6, 25-31 Daedra->9, 34 Dragonling->7"
@@ -955,7 +955,7 @@ global,0x00179C5C,talk_place_names,strong,"8 pointers: City, Store, Tavern, Temp
 global,0x00179C7C,talk_greeting_texts,confirmed,"per tone {address 7221-7223, greeting 7215-7217} for %1com; experiment 'Greetings to you.'"
 global,0x00179C88,talk_ack_texts,confirmed,"per tone acknowledgement 7218-7220 for %1com; experiment 'Mmm.', 'Quite.', 'So ....'"
 global,0x00179C8E,talk_regional_ids,strong,"28 faction ids or building types of the regional groups (temples, knightly orders, guilds, shops)"
-global,0x00179CFA,talk_regional_regions,candidate,"region of each knightly order (only listed in its region). Keep: code only (talk_draw_regional_list); bytes 6,0,7,0,8,0,10,0,5,17,... not explained. A regional list screenshot would settle it"
+global,0x00179CFA,talk_regional_regions,strong,region of each regional group (knightly orders listed only in their region)
 global,0x00179D0C,talk_category_building_types,strong,"13 building types that have a where-is category (alchemist 0, armorer 2, bank 3 ... weapon smith 13, temple 14, tavern 15)"
 global,0x00179D19,talk_category_names,strong,"15 pointers: Alchemists, Armorers, Banks, Bookstores, Clothing stores, Gem stores, General stores, Libraries, Guilds, Pawn shops, Weapon smiths, Local temples, Taverns, General, Regional"
 global,0x00179D55,talk_organisations,strong,"34 faction ids of the tell-me-about organisations (42 Thieves Guild, 40 Mages Guild, 108 Dark Brotherhood, 129 Blades ...)"
@@ -1179,7 +1179,7 @@ global,0x00187B38,savetree_version,strong,u32 294 (0x126) that save_game writes 
 global,0x00187B3C,fire_flat_records,strong,"8 TEXTURE.210 record numbers that burn: 0, 1, 6, 16-20"
 global,0x00187C86,player_move_request,candidate,struct move_request the player's movement passes to collide_move_object (phase 3 struct pass: intrface/colstuff read it as one 30-byte request)
 global,0x00187CA4,player_momentum,strong,"last speed, kept while airborne (no steering off the ground); player_horse_sounds and ai_stealth_check read it. audit: build/names/scratch/audit_euw/B/exp_run.py walk (save_tlalac_s): 0 standing, 8-9 (= player_speed) while Up was held, 15-18 riding (character flags 0x200), back to 0 when the key was released; 0 in all 18 save snapshots"
-global,0x00187CA8,world_running,candidate,byte cleared when the inventory opens and set at close; ai_update_creatures returns while it is 0
+global,0x00187CA8,world_running,strong,"byte cleared while a modal screen (talk, court, bank, inventory) is open, set at close; sky_update, weather and ai return while 0"
 global,0x00187CAD,mem_check_level,strong,"non-zero turns the heap checks on (mem_check_heap, mem_check_crt_heap); args.c prints 'Memory checking is active for this session.' when set; mem_check_now raises it around a forced check; fatal_error and game_exit clear it"
 global,0x00187F40,world_cell_header_ptr,strong,"pointer to xn_world_cell_header (0xC2879), after D_00187F30's 4 quadrant offsets; no reader"
 global,0x00187FB8,undead_daedra_ids,strong,"2 x 7 monster ids: undead 15 18 19 23 28 30 32, daedra 1 25 26 27 29 31 100; spfx_dispel_creatures indexes it by kind (0 undead, 1 daedra), monster_sees_invisible memchr()s all 14 (= DFU SeesThroughInvisibility, combat agent); was dispel_monster_ids"
@@ -1198,7 +1198,7 @@ global,0x00188782,location_type_category,strong,"14 bytes 3,3,3,1,0,2,3,0,1,2,0,
 global,0x001887A0,travel_bar_buttons,confirmed,"7 x {x0,y0,x1,y1,handler}: FIND, EXIT, map area, two part arrows, I'M AT, filter quadrants; matches the travel-map screenshot"
 global,0x001887F4,travel_popup_buttons,confirmed,"10 x {x0,y0,x1,y1,handler}: six option boxes, BEGIN, EXIT, teleport YES/NO"
 global,0x00188898,region_map_origins,strong,"per view (region+1) x/y of the region map's corner (travel_map_update, travel_draw_locations...). New: region 0 (212,340), region 1 (583,279), region 5 (381,4) = Daggerfall Unity DaggerfallTravelMapWindow offsetLookup FMAPAI00 (212,340), FMAPAI01 (583,279), FMAP0I05 (381,4)"
-global,0x001889BC,travel_selected_region,candidate,"byte: region clicked on the world map, passed to the trip's teleport. Keep: code only (travel_button_map, travel_begin_trip, travel_teleport_yes)"
+global,0x001889BC,travel_selected_region,strong,byte: region clicked on the world map (pixel - 128); travel_begin_trip and func_0009C29C go there
 global,0x001889BD,travel_selected_location,strong,"index of the location under the cursor / found by name (travel_location_at_cursor, travel_find_location), -1 none; the popup prints its name"
 global,0x001889C5,terrain_travel_modifiers,strong,"240,220,200,200,230,250 = DFU terrainMovementModifiers; travel_pixel_time indexes it with the terrain at each pixel"
 global,0x001889E0,library_data,strong,"the libraries' initialised data, after the game's (terrain_travel_modifiers ends at 0x1889DD) up to D_0018DBF8: MemCheck's (its API name table at 0x188F01, its messages at 0x18D683), then the Watcom C runtime's (tables, tzname 'EST'/'EDT' at 0x18DA86, the init/fini records at 0x18DA90, handlers); only library code (0x9DA1C..) reads it"
@@ -1242,10 +1242,10 @@ global,0x00190CAC,scratch_190cac,strong,"shared by unrelated units (consistency 
 global,0x00190CE4,scratch_190ce4,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): itemmakr 10 bytes of slot kinds (-1 empty, 0 power, 1 side effect); travel.c the region shown (region+1, 0 world; 16 functions); object.c the type/quest key of object_find_quest/object_delete_type/object_random_child_of_type; chargen roll arrays; collide_line_of_sight flag; climate texture set; inv_count_cart_cb; was itemmaker_slot_kinds"
 global,0x00190CE5,scratch_190ce5,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): travel, town notes, climate textures"
 global,0x00190CE7,scratch_190ce7,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): travel, town notes, climate textures"
-global,0x00190CE8,travel_zoomed,candidate,"4x zoom on the region map, toggled by travel_toggle_zoom (right click). Keep: code only; a right-click on the region map would settle it"
+global,0x00190CE8,travel_zoomed,strong,"4x zoom on the region map, toggled by right click; travel_map_update, travel_route"
 global,0x00190CEE,scratch_190cee,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): travel, town notes, climate textures"
-global,0x00190D0F,talk_wrap_to_question,candidate,"while set, talk_wrap_text writes to the question pane instead of the answer log. Keep: code only (talk_wrap_text)"
-global,0x00190D10,talk_face_loaded,candidate,set when talk_load_face has loaded a portrait. Keep: code only (talk_load_face)
+global,0x00190D0F,talk_wrap_to_question,strong,while set talk_wrap_text writes to the question pane instead of the answer log
+global,0x00190D10,talk_face_loaded,strong,set when talk_load_face has loaded a portrait
 global,0x00190D16,scratch_190d16,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): byte: the court verdict (court_open/court_frame, %pen), saveload_exit/saveload_confirm cancel flag, transport_menu/transport_choose, rumor_add_faction, title_menu; was saveload_cancelled"
 global,0x00190D17,scratch_190d17,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): the crime index, faction, parse"
 global,0x00190D18,court_state,confirmed,"byte: the court state machine (1 plea, 2 guilty sentence, 3 prison, 5 banished, 6 execution, 7 executed, 8 argument, 9 acquitted, 100 close); experiment: 1 -> 100 (guilty), 1 -> 2 (lie failed)"
@@ -1379,7 +1379,7 @@ global,0x00195B74,paperdoll_mask,confirmed,"125-wide mask filled by paperdoll_dr
 global,0x00195B78,hud_portrait,confirmed,"2048-byte copy of the player's face picture (paperdoll_draw copies it from the race/gender face CIF), drawn centred at (23,176) by hud_draw; audit: build/names/scratch/audit_euw/C/s3_engine.py save_morthag1: hud_draw put all 678 opaque pixels of its 31x27 image at (8,163) of the screen buffer; its header matched the face image paperdoll_draw loaded"
 global,0x00195B7C,list_popup_callback,strong,"function called with the entry picked in a list popup (spells_list_poll): spellmaker_pick_effect_cb/pick_subtype_cb, itemmaker_add_power_cb, ..."
 global,0x00195B80,color_remap,strong,"pointer to the current 256-byte colour remap (a dye): func_000934F6 sets it to color_remap_tables + dye << 8; xn_draw_image_scaled (flag 8000h), xn_draw_cif_rle_frame, xn_draw_img_masked_remap and xn_draw_paperdoll_item remap through it"
-global,0x00195B84,shared_scratch,candidate,"a scratch int shared by unrelated code: faction walks, the Detect distance, gold amounts, spell code (text, magic and combat agents); was faction_scratch. Keep: an honestly neutral name for an int reused by unrelated code (faction walks, rumours, detect distance, gold sums, the reaction mod...); nothing to settle"
+global,0x00195B84,shared_scratch,strong,"a scratch int shared by unrelated code: faction walks, Detect distance, gold amounts, spell code"
 global,0x00195B88,icon_image,strong,icon00i0.img loaded by init_game_data
 global,0x00195B8C,inpstr_result,strong,"value of the finished entry (atoi), set by inpstr_update"
 global,0x00195B90,buttons_rci,strong,buttons.rci loaded by init_game_data
@@ -1422,7 +1422,7 @@ global,0x00195D00,quest_tick_object,strong,build/names/scratch/audit_tq/exp_glob
 global,0x00195D04,quest_face_images,strong,"face00i0.cif, then face01i0, face10i0, face11i0 (+4, +8, +12): escort face sets by gender and name bank (quest_face_add, quest_faces_after_load); build/names/scratch/audit_tq/exp_final.py save_tlalac_s; audit keep: already strong; the file names are init_game_data's strings"
 global,0x00195D14,quest_face_images_special,candidate,code reading (faction 514 persons); not tested
 global,0x00195D18,haze_table_1,candidate,"the game's haze.001 table, 64 rows of 256 (src/hand/func_0004ED36.c init_game_data: disk_read_file(..., D_00195D18 = xn_mem_align_up(D_00195CF8, 256))); xn_shade_init_reserved (0C9EF8) maps colour 255 to 77h in each row; src/lifted/init.c update_fog uses D_00195D18 + 16128 (its last row) as xn_fog_table_last"
-global,0x00195D28,talk_where_target,candidate,"points at a struct (0x1965FC) the %hnt macro reads: +0x12 target building, +0x07 region, +0x10 kind. Keep: code only; the evidence agent's parse.c macros read it"
+global,0x00195D28,talk_where_target,strong,points at the struct talk_where (talk_where) the where-is macros read
 global,0x00195D2C,trade_total,strong,"trade total (the 'cost'): trade_total_buy/sell/repair/identify set it, inventory_draw shows it at (77,15). New: exp_inven/exp_inven2/exp_inven3: each trade_total_* left its total here; Daggerfall Unity DaggerfallTradeWindow keeps the same 'cost' (UpdateCostAndGold) and ShowTradePopup compares the price with cost>>1 and cost-(cost>>2) as trade_make_offer does"
 global,0x00195D30,trade_price,strong,"price after trade_adjust_price (the merchant's offer), paid or received when accepted. New: exp_inven: set by trade_total_*; exp_glob: trade_settle_offer returned it (900) on YES; Daggerfall Unity's tradePrice (CalculateTradePrice)"
 global,0x00195D34,talk_disposition,strong,"faction rep + player rep with the sgroup + temple rank + PER/5...; < -20 'You get no response'; greeting 7206-7209 by <0, <10, <30, more; experiment value 99"
@@ -1549,8 +1549,8 @@ global,0x00196474,marquee_text,strong,build/names/scratch/audit_tq/exp_quest.py 
 global,0x00196478,pick_hit_flat,candidate,engine_pick_object: the flat hit; pick_sprite_cb compares it with the objects' draw handles
 global,0x0019647C,pick_hit_model,candidate,engine_pick_object: the hit polygon's model slot; pick_model_cb compares it with &block_model->model / &instance.model
 global,0x00196484,pick_result,confirmed,"pointer to engine_pick_object's 18-byte result (its third argument): +0 flags (1 hit, 2 sprite, 4 model, 8 block model), +4 object, +8 plane index, +12 block model index, +14 model id, +16 variant; audit: build/names/scratch/audit_euw/C/s3_engine.py save_morthag1: during 20 picks it held the buffer passed in, and the callbacks wrote flags 0D (type-43 block, plane 16), 05 (type-56 object, model 437 variant 50) into it"
-global,0x00196488,talk_regional_rows,candidate,row -> regional group index. Keep: code only (talk lists)
-global,0x001964B0,talk_place_rows,candidate,row -> talk_place_topics index for the place list. Keep: code only (talk lists)
+global,0x00196488,talk_regional_rows,strong,row -> regional group index
+global,0x001964B0,talk_place_rows,strong,row -> talk_place_topics index for the place list
 global,0x00196570,talk_question_lines,confirmed,char* per line of the composed question; experiment read the questions through it
 global,0x00196574,talk_place_topic_count,strong,entries in talk_place_topics
 global,0x00196578,talk_list_max_width,strong,"widest topic row drawn, for horizontal scrolling; talk_list_scroll_right stops when it fits in 100 px. New: talk_list_scroll_left/right's boxes are Daggerfall Unity's rectButtonTopicLeft/Right (4,177)/(86,177), the topic list's horizontal scroll buttons"
@@ -1563,33 +1563,33 @@ global,0x00196590,talk_npc_own_faction,strong,the NPC's own faction before the w
 global,0x00196594,talk_npc_faction,strong,"faction_find(npc+0x227), then walked up to the nearest group/noble/temple parent; its rep and sgroup drive the disposition"
 global,0x00196598,talk_place_topics,strong,"where-is topics, 19 bytes: +0 category, +1 kind (0 building, 1 quest place, 2 quest person, 3 quest item), +2 quest, +3 pointer, +0x0B distance"
 global,0x0019659C,talk_npc_record,strong,"the NPC's character-format record (object+0x47, or char.c lookup for objects 8/53): +0x43 creature, +0x40 gender, +0x227 faction"
-global,0x001965A0,talk_text_pool,candidate,20 KB line text pool. Keep: code only (talk_init_text)
+global,0x001965A0,talk_text_pool,strong,20 KB line text pool (talk_init_text)
 global,0x001965A4,talk_npc_speech_style,strong,0-4 from the faction's social group with 0 and 1 swapped; picks the answer text family (TEXT 7250-7254 ...)
 global,0x001965A8,talk_answer_line_count,confirmed,lines in the answer log; experiment read the answers through it
-global,0x001965AC,talk_question_line_buffer,candidate,20 KB array behind talk_question_lines. Keep: code only (talk_clear_question)
+global,0x001965AC,talk_question_line_buffer,strong,20 KB array behind talk_question_lines
 global,0x001965B4,talk_answer_scroll,strong,first visible line of the answer log
 global,0x001965B8,talk_list_count,strong,rows in the topic list
 global,0x001965BC,talk_npc_attitude,confirmed,"0 dislikes, 1 neutral, 2 likes the question (talk_roll_attitude); experiment: forcing it picks work answers 8075/8076/8077"
 global,0x001965C0,talk_npc_knows,strong,1 if the NPC knows the answer (talk_roll_knows); answer table row
-global,0x001965C4,talk_answer_line_buffer,candidate,20 KB array behind talk_answer_lines. Keep: code only (talk_init_text)
+global,0x001965C4,talk_answer_line_buffer,strong,20 KB array behind talk_answer_lines
 global,0x001965CC,talk_attitude_cache,confirmed,"3 ints, attitude score per tone, kept for the conversation; experiment: writing [2]=1000 then blunt -> attitude 2"
 global,0x001965D8,talk_question_line_count,confirmed,lines of the composed question
-global,0x001965DC,talk_answer_kind,candidate,"2 where-is answer, 3 news answer. Keep: code only (2 where-is, 3 news)"
+global,0x001965DC,talk_answer_kind,strong,"2 where-is answer, 3 news answer"
 global,0x001965E0,talk_npc_object,strong,"the clicked object, set by talk_start; its +0x1F id seeds talk_roll_knows"
-global,0x001965E4,talk_tabs_image,candidate,"talk02i0.img, drawn over the tab area. Keep: code only; the image name comes from the code's string"
+global,0x001965E4,talk_tabs_image,strong,"talk02i0.img, drawn over the tab area"
 global,0x001965E8,talk_selected_row,strong,selected topic row; 0 = 'Any news?' in tell-me-about
 global,0x001965EC,talk_face_image,strong,"4096-byte 64x64 portrait from faces.cif/chld00i0.rci, drawn at (119,65)"
 global,0x001965F0,talk_list_bottom,strong,last visible topic row = top+13
 global,0x001965F4,talk_list_top,strong,first visible topic row (scroll arrows)
-global,0x001965F8,talk_mode_image,candidate,"talk03i0.img, drawn over the mode buttons. Keep: code only; the image name comes from the code's string"
-global,0x001965FC,talk_where,candidate,struct talk_where: what talk_where_target points at (talk_open sets it)
-global,0x00196612,talk_category_rows,candidate,row -> category for the category list. Keep: code only (talk_draw_categories)
+global,0x001965F8,talk_mode_image,strong,"talk03i0.img, drawn over the mode buttons"
+global,0x001965FC,talk_where,strong,struct talk_where that talk_where_target points at
+global,0x00196612,talk_category_rows,strong,row -> category for the category list
 global,0x00196620,talk_key_text,strong,the %key text macro returns it (parse.c 4811C); %key2 is +65 (parse.c 4813E): the selected topic's name
-global,0x001966A2,talk_topic_count,candidate,"entries in talk_topics. Keep: code only (talk_draw_tell_list, talk_add_quest_topics)"
-global,0x001966A6,talk_language_text,candidate,"text id of the creature's language syllables (4512-4519). Keep: code only; note it is passed to parse_bio_answer_text as an index into the bio answer table (talk_garble_word, dead code), so 'TEXT.RSC syllables' is not shown"
+global,0x001966A2,talk_topic_count,strong,entries in talk_topics
+global,0x001966A6,talk_language_text,strong,text id of the creature's language syllables
 global,0x001966A8,talk_language_skill,strong,"skill id of the creature's language from table 0x179ACC (Imp->12 Impish, Spriggan->10, Centaur->11, Nymph->8, Harpy->5, Giant->6, Daedra->9, Dragonling->7); 0 = cannot talk"
 global,0x001966AA,talk_flags,confirmed,"bit 0 the NPC needs a language skill, bit 1 no question asked yet (greeting); experiment: 2 at open, 0 after the first OKAY, first question began 'Greetings to you.'"
-global,0x001966AC,talk_faction_disposition,candidate,"talk_faction_relation/talk_faction_greeting score (rep + relation bonuses). Keep: code only (talk_faction_relation, talk_faction_greeting)"
+global,0x001966AC,talk_faction_disposition,strong,talk_faction_relation / talk_faction_greeting score
 global,0x001966AE,talk_question_mode,confirmed,"0 tell me about, 1 where is (default at open); experiment with the two top-left buttons"
 global,0x001966B0,talk_showing_categories,strong,1 while LOCATION shows the category list; experiment: 1 -> 0 after double-clicking a category
 global,0x001966B1,talk_topic_tab,confirmed,"0 LOCATION, 1 PEOPLE, 2 THINGS, 3 WORK; experiment: WORK click -> 3, LOCATION -> 0"
@@ -1598,11 +1598,11 @@ global,0x001966B3,talk_redraw,strong,set by every button handler; talk_update ca
 global,0x001966B4,talk_news_asked,confirmed,set after the first 'Any news?' (unless faction 806/842); experiment: the second OKAY answered 1457 'Since I have nothing nice to say'
 global,0x001966B5,talk_location_category,strong,"chosen where-is category 0-14 (Alchemists ... General, Regional); experiment: Taverns -> 12"
 global,0x001966B6,talk_prostitute_state,strong,"0 offer, 1 answer, 2 freebie, 3 price asked"
-global,0x001966B7,talk_question_ready,candidate,"set by talk_draw once a question is composed; OKAY needs it outside the category list. Keep: code only (talk_draw, talk_button_okay)"
-global,0x001966B8,talk_key_index,candidate,which of the two 65-byte key texts the list writes. Keep: code only (talk list drawing)
+global,0x001966B7,talk_question_ready,strong,set by talk_draw once a question is composed; OKAY needs it
+global,0x001966B8,talk_key_index,strong,which of the two 65-byte key texts the list writes
 global,0x001966B9,talk_prostitute_offer,strong,set by talk_start for faction 512 (The Prostitutes) and opposite gender; talk_prostitute_update runs the offer (TEXT 7200-7203)
-global,0x001966BA,talk_refused,candidate,set when talk_faction_greeting rolls badly: the greeting is shown as a popup and the window closes; only GOODBYE/scroll buttons work. Keep: code only (talk_faction_greeting)
-global,0x001966BB,talk_logbook_ready,candidate,set when an answer is copied to the logbook buffer; COPY TO LOGBOOK needs it. Keep: code only (COPY TO LOGBOOK)
+global,0x001966BA,talk_refused,strong,"set when talk_faction_greeting rolls badly: popup greeting, only GOODBYE works"
+global,0x001966BB,talk_logbook_ready,strong,set when an answer can be copied to the logbook
 global,0x001966BC,faction_parse_parents,candidate,last record at each tab depth (16) while faction_add_record builds the tree. Keep: code only (faction_add_record)
 global,0x001966FC,bio_person_counts,candidate,"per kind (enemy, friend) the biography persons made, at most 8 (bio_person_add). Keep: code only (bio_person_add)"
 global,0x00196704,rumor_file,strong,"rumor.dat file handle (rumor_file_open/close, rumor_add_faction/quest)"
@@ -1627,7 +1627,7 @@ global,0x0019693D,location_block_letters,strong,"location_exterior+0xB1: per blo
 global,0x00196A28,region_location_count,confirmed,"number of map_location records at region_locations; audit: build/names/scratch/audit_euw/C/s1_survey.py: 719, 851, 3, 1833, 549 in regions 21, 23, 31, 16, 20 = MAPS.BSA MAPTABLE.nnn size / 17; build/names/scratch/audit_euw/C/s2_world.py: maploads_enter_region(17) made it 1331 = MAPTABLE.017 (22627 bytes) / 17"
 global,0x00196A2C,rmb_block,strong,"pointer to the RMB block being built (in big_buffer): town_block_load_rmb reads it from BLOCKS.BSA, rmb_index_records indexes it"
 global,0x00196A30,region_dungeon_type_counts,confirmed,19 ints: locations per dungeon type (map_location+0x0C); exp2: equal to the records' histogram
-global,0x00196A7C,region_location_names,candidate,"pointer to 32-byte records, name at +4, parallel to region_locations. Keep: code only (travel lists)"
+global,0x00196A7C,region_location_names,strong,"pointer (into big_buffer) to 32-byte records, name at +4, parallel to region_locations"
 global,0x00196A80,location_here,confirmed,"pointer to the map_location record at the player's map pixel (region_find_location), 0 in the wilderness; exp2: its map id matched the region record of Ipscart Rock"
 global,0x00196A84,region_dungeon_count,confirmed,"locations with a dungeon type; 173 in region 21 (exp2, the histogram's sum)"
 global,0x00196A88,loaded_location,strong,"20-byte struct of the MAPS location record being loaded: +0 index, +4 door count, +8 doors, +12 object header, +16 data (location_read_record); town_load/dungeon_load copy +12/+16 into location_object/current_location"
@@ -1990,18 +1990,18 @@ global,0x001AA600,color_remap_tables,strong,"256-byte aligned 32 x 256 translati
 global,0x001AA604,doors_moving,strong,16 pointers to doors swinging (door_start_swing / doors_update)
 global,0x001AA644,marker_best,strong,"the marker searches' step or best: -1 for find first/nth (shared_scratch counts down), 1 to count or for random, 500000 then the best distance sqrt(dx^2 + 2dy^2 + dz^2) in marker_find_nearest; audit: build/names/scratch/audit_euw/A/dungeon2.py save_blades: marker_find_nearest(location, 14) left 1442 = that distance to the marker it found, 8 left 10827 likewise; marker_count left 1; a kind with none left 500000"
 global,0x001AA648,marker_kind,strong,the marker kind (TEXTURE.199 record - 2) being searched
-global,0x001AA668,travel_region_image,candidate,"the loaded region map fmap0iNN.img / fmap%ci%02d.img, freed by travel_close_region. Keep: code only (travel map)"
-global,0x001AA66C,travel_region_index_image,candidate,"world-map image whose pixels are 128+region; hover and clicks read it, the player's region is painted from it. Keep: code only (travel map)"
+global,0x001AA668,travel_region_image,strong,"the loaded region map fmap image, copied to the screen by travel_map_update"
+global,0x001AA66C,travel_region_index_image,strong,"trav0i01.img: pixels are 128+region; hover, clicks and the player's region paint read it"
 global,0x001AA674,travel_ocean_pixels,strong,"ocean pixels on the route, counted by travel_pixel_time, used in the ship fare. New: Daggerfall Unity's TravelTimeCalculator pixelsTraveledOnOcean plays the same part"
-global,0x001AA678,travel_dest_x,candidate,destination x (location record +4 & 0x1FFFFFF) set by travel_open_trip. Keep: code only (travel_open_trip)
-global,0x001AA67C,travel_dest_z,candidate,destination z (location record +8 & 0xFFFFFF) set by travel_open_trip. Keep: code only (travel_open_trip)
-global,0x001AA680,travel_trip_minutes,candidate,"trip time from travel_route; the popup shows /1440+1 days, travel_trip_cost hours=(t+59)/60. Keep: code only (travel_open_trip, travel_trip_cost)"
-global,0x001AA688,travel_marker_x,candidate,"x of the blinking marker on the map (player or found place), -1 none; I'M AT set it to 0 in the experiment. Keep: the travel agent's I'M AT experiment set it to 0; the 'blinking marker' part is code only"
-global,0x001AA68C,travel_marker_y,candidate,y of the travel map marker. Keep: code only
+global,0x001AA678,travel_dest_x,strong,destination x (location x & 0x1FFFFFF) set by travel_open_trip
+global,0x001AA67C,travel_dest_z,strong,destination z (location z & 0xFFFFFF) set by travel_open_trip
+global,0x001AA680,travel_trip_minutes,strong,trip time from travel_route; the popup shows /1440+1 days
+global,0x001AA688,travel_marker_x,strong,"x of the blinking map marker (player or found place), -1 none"
+global,0x001AA68C,travel_marker_y,strong,y of the blinking map marker
 global,0x001AA69C,travel_transport_factor,strong,"256 on foot, 192 with a cart, 128 with a horse (travel_find_transport; DFU's values); scales travel_pixel_time"
-global,0x001AA6A4,travel_map_parts,candidate,"number of parts of the region map: 2 for region 0, 4 for 1 and 16, else 0. Keep: code only (travel map parts)"
-global,0x001AA6A5,travel_map_part,candidate,bit 0 / bit 1: which horizontal / vertical part of a multi-part region map is shown (travel_button_arrows). Keep: code only (travel map parts)
-global,0x001AA6A6,travel_map_mode,candidate,"how the map was opened (objcode func_0009A993): 1 the W key, 100 teleport (tele00i0.img, guilds.c): mode 100 skips the clock and shows YES/NO. Keep: code only (travel_map_open)"
+global,0x001AA6A4,travel_map_parts,strong,"number of parts of the region map (2, 4 or 0)"
+global,0x001AA6A5,travel_map_part,strong,bit 0 / bit 1: which horizontal / vertical part of a multi-part region map is shown
+global,0x001AA6A6,travel_map_mode,strong,"how the map was opened: 1 W key, 100 teleport (no clock, YES/NO)"
 field,arch3d_header+0x00,version,strong,"DFU Arch3dFile FileHeader Version (""v2.7"")"
 field,arch3d_header+0x04,point_count,strong,DFU PointCount
 field,arch3d_header+0x08,plane_count,strong,DFU PlaneCount; arch3d_plane_at / arch3d_plane_index / arch3d_apply_climate_textures
@@ -7189,3 +7189,43 @@ global,0x001998CD,itemmaker_soul_codes_code,strong,itemmaker_soul_codes+1: index
 global,0x001998D6,itemmaker_soul_side_codes,strong,"10 x (flag, code) after itemmaker_soul_codes, side-effect codes"
 global,0x001998D7,itemmaker_soul_side_codes_code,strong,itemmaker_soul_side_codes+1: index of the side-effect code
 global,0x001AA586,inv_left_item_count,strong,items counted into the left inventory list (inv_list_left_item); itemmaker uses it for its list too
+global,0x00177460,travel_find_prompt_fmt,strong,"""%s : "" plus 0xF8 text end; travel_button_find formats its prompt with prompt_enter_place_name"
+global,0x001835E8,travel_hover_names,strong,"pointers to map label texts (""The King's"", ""The Dirty"", ...) indexed by the hovered map pixel (travel_draw_hover_name)"
+global,0x001837E4,travel_region_area_names,strong,"pointers to area names (""Lady"", ""Alik'r Desert"", ""Dragontail Mountains"") indexed by the shown region; travel_draw_hover_name prints ""%s %s"" with the location name"
+global,0x001846F4,prompt_enter_place_name,strong,"pointer to ""Enter name of place"" (next: ""Enter description""); travel_button_find's prompt"
+global,0x00188790,travel_button_xs,strong,short x of each travel map button graphic (travel_draw_buttons)
+global,0x00188798,travel_button_ys,strong,short y of each travel map button graphic (travel_draw_buttons)
+global,0x0018886C,travel_trip_option_marks,strong,"4 shorts per trip option: x, y of its 4x4 mark in the trip popup (travel_draw_trip_popup)"
+global,0x00188994,travel_part_origins_a,strong,"per-part (x, y) origin shorts of a multi-part region map; travel_open_region points travel_part_origins here"
+global,0x0018899C,travel_part_origins_b,strong,second per-part origin table chosen by travel_open_region
+global,0x001889AC,travel_part_origins_c,strong,third per-part origin table chosen by travel_open_region
+global,0x001889C1,travel_cursor_location,strong,"last location under the cursor (travel_location_at_cursor), -1 none; func_0009CD32 returns it when nothing is near"
+global,0x00190FE8,travel_find_text,strong,"text the FIND prompt typed, copied into text_rsc_buffer by travel_button_find"
+global,0x00196294,time_skip_active,strong,"set while time passes in bulk (rest, travel, prison, vampire change); encounter_tick returns while set"
+global,0x001962A8,travel_in_progress,strong,set by travel_begin_trip for the duration of a trip; func_00031658 (qmisc) returns while set
+global,0x001AA64C,travel_border_image_a,strong,"travai05.img, drawn by travel_map_update, freed by travel_button_exit"
+global,0x001AA650,travel_border_image_b,strong,travbi05.img
+global,0x001AA654,travel_border_image_c,strong,travci05.img
+global,0x001AA658,travel_border_image_d,strong,travdi05.img
+global,0x001AA65C,travel_buttons_image,strong,"trav01i0.img, the travel map buttons (travel_draw_buttons)"
+global,0x001AA660,travel_buttons_pressed_image,strong,"trav01i1.img, loaded with travel_buttons_image"
+global,0x001AA664,travel_hover_region_name,strong,region name under the cursor (region_names[travel_selected_region]); travel_draw_hover_name
+global,0x001AA670,travel_map_border_image,strong,mbrd00i0.img drawn transparent over the map
+global,0x001AA684,travel_part_origins,strong,"pointer to the (x, y) origin shorts of each region map part (travel_part_origins_a/b/c)"
+global,0x001AA690,travel_saved_screen,strong,64000-byte copy of the screen travel_route keeps while it runs
+global,0x001AA694,travel_message_until,strong,tick until which a map message stays (prompt_ticks + 24); travel_location_at_cursor ignores the cursor meanwhile
+global,0x001AA698,travel_show_progress,strong,set by travel_begin_trip; time_pass_minutes then shows days left every 1024 steps
+global,0x001AA6A0,travel_popup_image,strong,"trip popup image (trav0i04.img, tele00i0.img when teleporting)"
+global,0x0017041B,str_empty,strong,"empty string literal """" (next ""Previous List""); talk adds it as a blank line"
+global,0x00178E59,faction_politics_group_a,strong,byte index into regions[].groups tested by faction_politics_update
+global,0x00178E5F,faction_politics_group_b,strong,second byte index into regions[].groups tested by faction_politics_update
+global,0x00179ACE,talk_race_language_texts,strong,"per race 4 bytes, short at +0: text id of its language syllables (talk_start)"
+global,0x00179CC8,talk_regional_services,strong,short service per regional group: location_pick_random_with_service in talk_find_regional
+global,0x00190D11,talk_hint_quest_id,strong,quest id of the selected topic (talk_hint_text_id); talk_macro_hint finds the quest by it
+global,0x00191016,talk_garbled_text,strong,buffer func_000169D4 fills with the creature language text
+global,0x00195A90,talk_hint_x,strong,x of the building the hint points at; macro_di_direction measures the direction to it
+global,0x00195A94,talk_hint_z,strong,z of the building the hint points at
+global,0x001965C8,talk_rand_seed,strong,srand seed talk_draw uses so redraws pick the same random text; new on open and OKAY
+global,0x001965D0,talk_attitude_cache_2,strong,"cleared with talk_attitude_cache by talk_open, otherwise unused"
+global,0x001965D4,talk_etiquette_counted,strong,talk_roll_attitude adds an Etiquette use while 0; cleared by talk_open
+global,0x001966A4,talk_okay_state,strong,short cleared by talk_open and talk_button_okay

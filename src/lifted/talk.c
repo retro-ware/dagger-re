@@ -19,10 +19,10 @@ extern signed char key_down_pgdn;
 extern short xn_gfx_clip_left;
 extern short xn_gfx_clip_right;
 extern iptr screen_buffer;
-extern iptr D_00147954;
+extern iptr big_buffer;
 extern char str_talk_c[];
 extern char str_no_response[];
-extern char D_0017041B[];
+extern char str_empty[];
 extern char str_previous_list[];
 extern char str_any[];
 extern signed char D_00178630[];
@@ -31,42 +31,42 @@ extern char talk_faction_greetings[];
 extern char str_g_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w[];
 extern char str_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w_x[];
 extern short talk_question_attitude_mods[];
-extern char D_001799F2[];
+extern char talk_knows_mods[];
 extern char talk_where_answers[];
 extern char talk_tell_answers[];
 extern char talk_creature_language[];
-extern char D_00179ACE[];
+extern char talk_race_language_texts[];
 extern struct rect talk_buttons[19];
 extern char talk_greeting_texts[];
 extern short talk_ack_texts[];
 extern short talk_regional_ids[];
-extern short D_00179CC8[];
-extern signed char D_00179CFA[];
+extern short talk_regional_services[];
+extern signed char talk_regional_regions[];
 extern char talk_category_building_types[];
 extern iptr talk_category_names[];
 extern iptr talk_regional_names[];
 extern char region_neighbours[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern struct region regions[];
 extern signed char text_buffer[];
 extern char scratch_190be4[];
-extern signed char D_00190D0F;
-extern signed char D_00190D10;
-extern signed char D_00190D11;
+extern signed char talk_wrap_to_question;
+extern signed char talk_face_loaded;
+extern signed char talk_hint_quest_id;
 extern signed char text_rsc_buffer[];
-extern char D_00191016[];
+extern char talk_garbled_text[];
 extern signed char D_001940D4;
 extern char text_macro_fcn[];
 extern struct record *quest_root;
 extern struct character *text_macro_npc;
 extern struct record *player_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct location *current_location;
 extern struct character *player_character;
 extern iptr window_image;
 extern struct settings *game_settings;
 extern struct record *quest_tick_object;
-extern struct talk_where *D_00195D28;
+extern struct talk_where *talk_where_target;
 extern int talk_disposition;
 extern int talk_prostitute_price;
 extern short text_macro_n_text;
@@ -75,8 +75,8 @@ extern unsigned char D_00196271;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern char D_00196488[];
-extern signed char D_001964B0[];
+extern char talk_regional_rows[];
+extern signed char talk_place_rows[];
 extern char *talk_question_lines;
 extern int talk_place_topic_count;
 extern int talk_list_max_width;
@@ -89,35 +89,35 @@ extern struct faction *talk_npc_own_faction;
 extern struct faction *talk_npc_faction;
 extern struct talk_place_topic *talk_place_topics;
 extern struct character *talk_npc_record;
-extern iptr D_001965A0;
+extern iptr talk_text_pool;
 extern int talk_npc_speech_style;
 extern int talk_answer_line_count;
-extern iptr D_001965AC;
+extern iptr talk_question_line_buffer;
 extern int talk_answer_scroll;
 extern int talk_list_count;
 extern int talk_npc_attitude;
 extern int talk_npc_knows;
-extern iptr D_001965C4;
-extern int D_001965C8;
+extern iptr talk_answer_line_buffer;
+extern int talk_rand_seed;
 extern int talk_attitude_cache[];
-extern int D_001965D4;
+extern int talk_etiquette_counted;
 extern int talk_question_line_count;
-extern int D_001965DC;
+extern int talk_answer_kind;
 extern struct record *talk_npc_object;
-extern iptr D_001965E4;
+extern iptr talk_tabs_image;
 extern char talk_selected_row[];
 extern iptr talk_face_image;
 extern int talk_list_bottom;
 extern int talk_list_top;
-extern iptr D_001965F8;
-extern signed char D_00196612[];
+extern iptr talk_mode_image;
+extern signed char talk_category_rows[];
 extern char talk_key_text[];
-extern short D_001966A2;
-extern short D_001966A4;
-extern short D_001966A6;
+extern short talk_topic_count;
+extern short talk_okay_state;
+extern short talk_language_text;
 extern short talk_language_skill;
 extern char talk_flags[];
-extern short D_001966AC;
+extern short talk_faction_disposition;
 extern signed char talk_question_mode;
 extern signed char talk_showing_categories;
 extern signed char talk_topic_tab;
@@ -126,11 +126,11 @@ extern signed char talk_redraw;
 extern signed char talk_news_asked;
 extern signed char talk_location_category;
 extern unsigned char talk_prostitute_state;
-extern signed char D_001966B7;
-extern signed char D_001966B8;
+extern signed char talk_question_ready;
+extern signed char talk_key_index;
 extern unsigned char talk_prostitute_offer;
-extern signed char D_001966BA;
-extern signed char D_001966BB;
+extern signed char talk_refused;
+extern signed char talk_logbook_ready;
 extern struct faction *D_0019670C;
 extern int faction_count;
 extern struct faction *D_0019671C;
@@ -260,7 +260,7 @@ void talk_update(void)
     if (((struct bf8_2_1 *)&D_001940D4)->f != 0 || ((mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) && (key_down_enter == 0 && key_down_esc == 0))) {
         return;
     }
-    if (D_001966BA != 0) {
+    if (talk_refused != 0) {
         for (button = 10; button < 17; button++) {
             if (mouse_x > talk_buttons[button].x0 && mouse_x < talk_buttons[button].x1 && mouse_y > talk_buttons[button].y0 && mouse_y < talk_buttons[button].y1) {
                 sound_play(203, player_object, 110);
@@ -288,7 +288,7 @@ void talk_draw(void)
     int unused2;
 
     seed = rand();
-    srand(D_001965C8);
+    srand(talk_rand_seed);
     if (talk_npc_own_faction->type == 4) {
         text_draw_centred_coloured((iptr)((char *)talk_npc_own_faction + 3), 213, 53, 145, 156);
     } else {
@@ -300,7 +300,7 @@ void talk_draw(void)
     talk_list_max_width = 0;
     D_0012B508 = 244;
     xn_draw_fill_rect(talk_buttons[((int)(unsigned char)talk_tone) + 6].x0, talk_buttons[((int)(unsigned char)talk_tone) + 6].y0, (int)(short)((talk_buttons[((int)(unsigned char)talk_tone) + 6].x1 - talk_buttons[((int)(unsigned char)talk_tone) + 6].x0) + 1), (int)(short)((talk_buttons[((int)(unsigned char)talk_tone) + 6].y1 - talk_buttons[((int)(unsigned char)talk_tone) + 6].y0) + 1));
-    xn_draw_image(4, 26, 107, 40, (char *)D_001965E4);
+    xn_draw_image(4, 26, 107, 40, (char *)talk_tabs_image);
     if (talk_question_mode != 0) {
         for (offset = (talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].y0) * 320; ((talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].y1) * 320) >= offset; offset += 320) {
             mc_memcpy((void *)((talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0) + (screen_buffer + offset)), (void *)((window_image + offset) + (talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0)), 107, str_talk_c, 417, 4);
@@ -308,17 +308,17 @@ void talk_draw(void)
     }
     src_offset = ((int)(unsigned char)talk_question_mode) * 1070;
     for (offset = (talk_buttons[(int)(unsigned char)talk_question_mode].y0) * 320; ((talk_buttons[(int)(unsigned char)talk_question_mode].y1) * 320) >= offset; offset += 320, src_offset += 107) {
-        mc_memcpy((void *)((talk_buttons[(int)(unsigned char)talk_question_mode].x0) + (screen_buffer + offset)), (void *)(D_001965F8 + src_offset), 107, str_talk_c, 423, 4);
+        mc_memcpy((void *)((talk_buttons[(int)(unsigned char)talk_question_mode].x0) + (screen_buffer + offset)), (void *)(talk_mode_image + src_offset), 107, str_talk_c, 423, 4);
     }
-    D_001966B7 = 1;
+    talk_question_ready = 1;
     if (((int)(unsigned char)talk_topic_tab) == 3) {
         parse_rsc_text(7211, 0, 0);
         mc_strncpy(talk_key_text, (char *)text_rsc_buffer, 4, str_talk_c, 430);
         parse_rsc_text(((int)(unsigned char)talk_tone) + 7212, 0, 0);
-        D_00190D0F = 1;
-        mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 433);
-        talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
-        D_00190D0F = 0;
+        talk_wrap_to_question = 1;
+        mc_strncpy((((char *)big_buffer) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 433);
+        talk_wrap_text((signed char *)(((char *)big_buffer) + 90000), 134, 10, 245, 45);
+        talk_wrap_to_question = 0;
     } else {
         switch ((unsigned char)talk_question_mode) {
         case 1:
@@ -328,10 +328,10 @@ void talk_draw(void)
                 talk_draw_place_list();
                 if (talk_list_count == 0) break;
                 parse_rsc_text(((int)(unsigned char)talk_tone) + 7225, 0, 0);
-                D_00190D0F = 1;
-                mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 448);
-                talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
-                D_00190D0F = 0;
+                talk_wrap_to_question = 1;
+                mc_strncpy((((char *)big_buffer) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 448);
+                talk_wrap_text((signed char *)(((char *)big_buffer) + 90000), 134, 10, 245, 45);
+                talk_wrap_to_question = 0;
             }
             break;
         case 0:
@@ -341,10 +341,10 @@ void talk_draw(void)
             } else {
                 parse_rsc_text(((int)(unsigned char)talk_tone) + 7212, 0, 0);
             }
-            D_00190D0F = 1;
-            mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 461);
-            talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
-            D_00190D0F = 0;
+            talk_wrap_to_question = 1;
+            mc_strncpy((((char *)big_buffer) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 461);
+            talk_wrap_text((signed char *)(((char *)big_buffer) + 90000), 134, 10, 245, 45);
+            talk_wrap_to_question = 0;
         }
     }
     talk_draw_question(125, 10, 245, 45);
@@ -358,7 +358,7 @@ void talk_start(struct record *npc)
     struct faction *faction;
 
     talk_face_image = 0;
-    D_00190D10 = 0;
+    talk_face_loaded = 0;
     talk_npc_object = npc;
     if (((int)(unsigned short)(npc->npc_flags & 32768)) != 0) {
         msgbox_show_rsc(7205, 1);
@@ -379,7 +379,7 @@ void talk_start(struct record *npc)
     } else {
         if ((talk_npc_record = &npc->data.character)->race < 43) *(signed char *)talk_flags |= 1;
         talk_language_skill = *(short *)(talk_creature_language + (talk_npc_record->race << 2));
-        D_001966A6 = *(short *)(D_00179ACE + (talk_npc_record->race << 2));
+        talk_language_text = *(short *)(talk_race_language_texts + (talk_npc_record->race << 2));
         if (talk_language_skill == 0) {
             msgbox_show_rsc(7204, 1);
             return;
@@ -484,23 +484,23 @@ void talk_button_where_is(void)
 void talk_prepare_where_answer(void)
 {
     talk_npc_knows = talk_roll_knows();
-    D_001965DC = 2;
+    talk_answer_kind = 2;
     if ((unsigned char)talk_topic_tab > 0) {
-        D_00195D28->building = talk_place_topics[*(int *)talk_selected_row].building;
-        D_00195D28->pad04 = 0;
+        talk_where_target->building = talk_place_topics[*(int *)talk_selected_row].building;
+        talk_where_target->pad04 = 0;
         return;
     }
     if (((int)(unsigned char)talk_location_category) == 14) {
-        D_00195D28->kind = 5;
-        D_00195D28->region = current_region;
-        D_00195D28->building = 0;
-        D_00195D28->pad04 = 0;
+        talk_where_target->kind = 5;
+        talk_where_target->region = current_region;
+        talk_where_target->building = 0;
+        talk_where_target->pad04 = 0;
         return;
     }
-    D_00195D28->kind = 5;
-    D_00195D28->region = current_region;
-    D_00195D28->building = talk_place_topics[(unsigned char)D_001964B0[*(int *)talk_selected_row]].building;
-    D_00195D28->pad04 = 0;
+    talk_where_target->kind = 5;
+    talk_where_target->region = current_region;
+    talk_where_target->building = talk_place_topics[(unsigned char)talk_place_rows[*(int *)talk_selected_row]].building;
+    talk_where_target->pad04 = 0;
 }
 
 void talk_button_tell_me_about(void)
@@ -518,14 +518,14 @@ int talk_ask_news(void)
     iptr news;
 
     talk_npc_knows = talk_roll_knows();
-    D_001965DC = 3;
+    talk_answer_kind = 3;
     if (*(int *)talk_selected_row != 0) return 0;
     news = rumor_pick_news((int)(short)talk_npc_faction->id);
     if (news == 0) return 0;
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)news, 4, str_talk_c, 699);
-    D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)news, 4, str_talk_c, 701);
-    talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
+    mc_strncpy((char *)(big_buffer + 90000), (char *)news, 4, str_talk_c, 699);
+    talk_logbook_ready = 1;
+    mc_strncpy((char *)(big_buffer + 95000), (char *)news, 4, str_talk_c, 701);
+    talk_wrap_text((signed char *)(big_buffer + 90000), 190, 66, 302, 191);
     return 1;
 }
 
@@ -567,8 +567,8 @@ void talk_button_tone(int button)
 
 void talk_button_copy_to_logbook(void)
 {
-    if (D_001966BB == 0) return;
-    logbook_copy_text(D_00147954 + 95000);
+    if (talk_logbook_ready == 0) return;
+    logbook_copy_text(big_buffer + 95000);
 }
 
 void talk_close(void)
@@ -577,7 +577,7 @@ void talk_close(void)
 
     while (key_down_esc != 0);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
-    if (D_001966BA != 0) {
+    if (talk_refused != 0) {
         talk_npc_object->npc_flags |= 0x8000;
         if (talk_npc_object->type == 53) talk_npc_object->image2 |= 1;
     }
@@ -585,26 +585,26 @@ void talk_close(void)
         mc_free((void *)talk_face_image, str_talk_c, 760);
         talk_face_image = -1751672937;
     }
-    D_00190D10 = 0;
+    talk_face_loaded = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_talk_c, 762);
         window_image = -1751672937;
     }
-    if (D_001965E4 != 0 && D_001965E4 != (-1751672937)) {
-        mc_free((void *)D_001965E4, str_talk_c, 763);
-        D_001965E4 = -1751672937;
+    if (talk_tabs_image != 0 && talk_tabs_image != (-1751672937)) {
+        mc_free((void *)talk_tabs_image, str_talk_c, 763);
+        talk_tabs_image = -1751672937;
     }
     if (talk_saved_screen != 0 && talk_saved_screen != (-1751672937)) {
         mc_free((void *)talk_saved_screen, str_talk_c, 764);
         talk_saved_screen = -1751672937;
     }
-    if (D_001965F8 != 0 && D_001965F8 != (-1751672937)) {
-        mc_free((void *)D_001965F8, str_talk_c, 765);
-        D_001965F8 = -1751672937;
+    if (talk_mode_image != 0 && talk_mode_image != (-1751672937)) {
+        mc_free((void *)talk_mode_image, str_talk_c, 765);
+        talk_mode_image = -1751672937;
     }
     game_mode = 0;
     D_00196272 = 0;
-    D_00187CA8 = 1;
+    world_running = 1;
 }
 
 void talk_list_scroll_up(void)
@@ -664,12 +664,12 @@ void talk_button_okay(void)
         talk_list_click(100);
         return;
     }
-    if ((talk_question_mode != 0 && talk_topic_tab == 0 && talk_showing_categories != 0) || D_001966B7 == 0) {
+    if ((talk_question_mode != 0 && talk_topic_tab == 0 && talk_showing_categories != 0) || talk_question_ready == 0) {
         return;
     }
-    D_001965C8 = rand();
+    talk_rand_seed = rand();
     talk_redraw = 1;
-    D_001966A4 = 0;
+    talk_okay_state = 0;
     talk_log_question();
     switch ((unsigned char)talk_question_mode) {
     case 1:
@@ -717,7 +717,7 @@ void talk_button_okay(void)
 
 void func_0001647E(iptr text_ids)
 {
-    talk_say_text(*(int *)((char *)((D_001965DC << 2) + text_ids)));
+    talk_say_text(*(int *)((char *)((talk_answer_kind << 2) + text_ids)));
 }
 
 int func_000164AB(void)
@@ -733,18 +733,18 @@ int func_000164CD(void)
 void talk_say_text(int text_id)
 {
     parse_rsc_text(text_id, 0, 0);
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 934);
-    D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)text_rsc_buffer, 4, str_talk_c, 936);
-    talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
+    mc_strncpy((char *)(big_buffer + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 934);
+    talk_logbook_ready = 1;
+    mc_strncpy((char *)(big_buffer + 95000), (char *)text_rsc_buffer, 4, str_talk_c, 936);
+    talk_wrap_text((signed char *)(big_buffer + 90000), 190, 66, 302, 191);
 }
 
 void talk_say_string(iptr text)
 {
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)text, 4, str_talk_c, 942);
-    D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)text, 4, str_talk_c, 944);
-    talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
+    mc_strncpy((char *)(big_buffer + 90000), (char *)text, 4, str_talk_c, 942);
+    talk_logbook_ready = 1;
+    mc_strncpy((char *)(big_buffer + 95000), (char *)text, 4, str_talk_c, 944);
+    talk_wrap_text((signed char *)(big_buffer + 90000), 190, 66, 302, 191);
 }
 
 iptr talk_macro_hint(int variant)
@@ -753,7 +753,7 @@ iptr talk_macro_hint(int variant)
 
     text_id = talk_hint_text_id(variant);
     if ((text_id & 32768) != 0) {
-        *(iptr *)&current_quest = (*(iptr *)&quest_tick_data = quest_find_by_id((int)(short)(short)D_00190D11));
+        *(iptr *)&current_quest = (*(iptr *)&quest_tick_data = quest_find_by_id((int)(short)(short)talk_hint_quest_id));
         quest_load_text(current_quest, text_id & 32767, 0, 0);
     } else {
         parse_rsc_text(text_id, 0, 0);
@@ -795,11 +795,11 @@ iptr func_000169D4(iptr word)
         return word;
     }
     count = rand_range(2, 4);
-    *(signed char *)D_00191016 = 0;
+    *(signed char *)talk_garbled_text = 0;
     for (i = 0; i < count; i++) {
-        func_000A1054(D_00191016, (char *)parse_bio_answer_text((int)(unsigned short)D_001966A6), str_talk_c, 1059, 4);
+        func_000A1054(talk_garbled_text, (char *)parse_bio_answer_text((int)(unsigned short)talk_language_text), str_talk_c, 1059, 4);
     }
-    return (iptr)D_00191016;
+    return (iptr)talk_garbled_text;
 }
 
 void talk_draw_face(void)
@@ -814,8 +814,8 @@ void talk_wrap_text(signed char *text, int left, int top, int right, int bottom)
 
     line_width = 0;
     text_rsc_buffer[0] = 0;
-    if (D_00190D0F == 0 && talk_answer_line_count != 0) {
-        talk_add_line((iptr)D_0017041B);
+    if (talk_wrap_to_question == 0 && talk_answer_line_count != 0) {
+        talk_add_line((iptr)str_empty);
     }
     while (*text != 0) {
         word_width = talk_next_word(&text);
@@ -829,7 +829,7 @@ void talk_wrap_text(signed char *text, int left, int top, int right, int bottom)
         }
     }
     talk_add_line((iptr)text_rsc_buffer);
-    if (D_00190D0F != 0) return;
+    if (talk_wrap_to_question != 0) return;
     if ((talk_answer_scroll = talk_answer_line_count - 18) >= 0) return;
     talk_answer_scroll = 0;
 }
@@ -838,7 +838,7 @@ void talk_log_question(void)
 {
     int i;
 
-    talk_add_line((iptr)D_0017041B);
+    talk_add_line((iptr)str_empty);
     for (i = 0; i < talk_question_line_count; i++) {
         *(signed char *)((char **)talk_question_lines)[i] |= 128;
         talk_add_line(((iptr *)talk_question_lines)[i]);
@@ -848,7 +848,7 @@ void talk_log_question(void)
 
 void talk_add_line(iptr line)
 {
-    if (D_00190D0F != 0) {
+    if (talk_wrap_to_question != 0) {
         ((iptr *)talk_question_lines)[talk_question_line_count] = talk_alloc_line();
         mc_strncpy((char *)((iptr *)talk_question_lines)[talk_question_line_count++], (char *)line, 4, str_talk_c, 1148);
         return;
@@ -886,21 +886,21 @@ iptr talk_alloc_line(void)
 
 void talk_init_text(void)
 {
-    if (D_001965A0 == 0) D_001965A0 = (iptr)mc_malloc(20480, str_talk_c, 1238);
-    if (D_001965C4 == 0) D_001965C4 = (iptr)mc_malloc(20480, str_talk_c, 1241);
-    mc_memset((void *)D_001965A0, 0, 20480, str_talk_c, 1243, 4);
-    mc_memset((void *)D_001965C4, 0, 20480, str_talk_c, 1244, 4);
-    talk_text_pool_next = D_001965A0;
-    *(iptr *)&talk_answer_lines = D_001965C4;
+    if (talk_text_pool == 0) talk_text_pool = (iptr)mc_malloc(20480, str_talk_c, 1238);
+    if (talk_answer_line_buffer == 0) talk_answer_line_buffer = (iptr)mc_malloc(20480, str_talk_c, 1241);
+    mc_memset((void *)talk_text_pool, 0, 20480, str_talk_c, 1243, 4);
+    mc_memset((void *)talk_answer_line_buffer, 0, 20480, str_talk_c, 1244, 4);
+    talk_text_pool_next = talk_text_pool;
+    *(iptr *)&talk_answer_lines = talk_answer_line_buffer;
     talk_answer_line_count = 0;
     talk_clear_question();
 }
 
 void talk_clear_question(void)
 {
-    if (D_001965AC == 0) D_001965AC = (iptr)mc_malloc(20480, str_talk_c, 1257);
-    mc_memset((void *)D_001965AC, 0, 20480, str_talk_c, 1259, 4);
-    *(iptr *)&talk_question_lines = D_001965AC;
+    if (talk_question_line_buffer == 0) talk_question_line_buffer = (iptr)mc_malloc(20480, str_talk_c, 1257);
+    mc_memset((void *)talk_question_line_buffer, 0, 20480, str_talk_c, 1259, 4);
+    *(iptr *)&talk_question_lines = talk_question_line_buffer;
     talk_question_line_count = 0;
 }
 
@@ -931,12 +931,12 @@ void talk_draw_place_list(void)
                 name = building_name((iptr)talk_place_topics[i].building);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1300);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1300);
                 } else {
                     colour = 145;
                 }
                 talk_list_draw_item(name, 6, (int)(iptr)&*(signed char *)((char *)(iptr)((talk_list_count - talk_list_top) * 7) + 71), colour, 156);
-                D_001964B0[talk_list_count++] = *(signed char *)&i;
+                talk_place_rows[talk_list_count++] = *(signed char *)&i;
             }
         }
     } else if (((int)(unsigned char)talk_topic_tab) == 1) {
@@ -963,11 +963,11 @@ void talk_list_click(int button)
     if (talk_topic_tab == 0 && ((int)(unsigned char)talk_question_mode) == 1) {
         if (talk_showing_categories != 0) {
             if (mouse_double_click != 0 || key_pressed_once(28) != 0) {
-                talk_location_category = D_00196612[row];
+                talk_location_category = talk_category_rows[row];
                 talk_showing_categories = 0;
                 *(int *)talk_selected_row = 1;
             } else {
-                *(int *)talk_selected_row = (int)(unsigned char)D_00196612[row];
+                *(int *)talk_selected_row = (int)(unsigned char)talk_category_rows[row];
             }
         } else if (key_pressed_once(1) != 0 || (row == 0 && (mouse_double_click != 0 || key_pressed_once(28) != 0))) {
             while (key_down_esc != 0);
@@ -1049,7 +1049,7 @@ L1776B:;
                     }
                     if (*(int *)talk_selected_row == talk_list_count) {
                         colour = 244;
-                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1448);
+                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1448);
                     } else {
                         colour = 145;
                     }
@@ -1072,7 +1072,7 @@ L1790A:;
                     }
                     if (*(int *)talk_selected_row == talk_list_count) {
                         colour = 244;
-                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1477);
+                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1477);
                     } else {
                         colour = 145;
                     }
@@ -1126,7 +1126,7 @@ void talk_draw_regional_list(void)
 
     for (i = 0; i < 28; i++) {
         if (i >= 8 && i <= 17) {
-            if (current_region != D_00179CFA[i]) continue;
+            if (current_region != talk_regional_regions[i]) continue;
             if (town_has_building((int)(short)talk_regional_ids[i], 0) == 0) {
                 talk_add_regional_item(i);
             }
@@ -1152,12 +1152,12 @@ void talk_add_regional_item(int index)
     mc_sprintf((char *)text_buffer, str_any, talk_regional_names[index]);
     if (*(int *)talk_selected_row == talk_list_count) {
         colour = 244;
-        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)text_buffer, 4, str_talk_c, 1595);
+        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)text_buffer, 4, str_talk_c, 1595);
     } else {
         colour = 145;
     }
     talk_list_draw_item((iptr)text_buffer, 6, (int)(iptr)&*(signed char *)((char *)(iptr)((talk_list_count - talk_list_top) * 7) + 71), colour, 156);
-    *(signed char *)(D_00196488 + talk_list_count++) = *(signed char *)&index;
+    *(signed char *)(talk_regional_rows + talk_list_count++) = *(signed char *)&index;
 }
 
 int talk_find_regional(int index)
@@ -1165,7 +1165,7 @@ int talk_find_regional(int index)
     {
         struct loaded_location found;
 
-        location_pick_random_with_service(&found, (int)(short)D_00179CC8[index], (int)(short)talk_regional_ids[index]);
+        location_pick_random_with_service(&found, (int)(short)talk_regional_services[index], (int)(short)talk_regional_ids[index]);
         if (found.object == 0) return 0;
         mc_strncpy(text_macro_fcn, found.data->name, 32, str_talk_c, 1610);
         location_free(&found);
@@ -1241,7 +1241,7 @@ void talk_draw_categories(void)
                 colour = 145;
             }
             talk_list_draw_item(talk_category_names[category], 6, (int)(iptr)&*(signed char *)((char *)(iptr)((talk_list_count - talk_list_top) * 7) + 71), colour, 156);
-            D_00196612[talk_list_count++] = *(signed char *)&category;
+            talk_category_rows[talk_list_count++] = *(signed char *)&category;
         }
     }
 }
@@ -1304,10 +1304,10 @@ void talk_add_quest_info_topics(void)
             for (i = 0; quest_tick_data->section_counts[4] > i; i++, place++) {
                 if (place->messages[0] == 0 && place->messages[1] == 0) continue;
                 if (((int)(unsigned char)(place->flags & 128)) != 0) continue;
-                *(short *)((((char *)talk_topics) + (((int)(short)D_001966A2) * 6))) = place->messages[0];
-                talk_topics[((int)(short)D_001966A2) * 3 + 1] = place->messages[1];
-                talk_topics[((int)(short)D_001966A2) * 3 + 2] = quest_tick_data->id;
-                D_001966A2++;
+                *(short *)((((char *)talk_topics) + (((int)(short)talk_topic_count) * 6))) = place->messages[0];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 1] = place->messages[1];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 2] = quest_tick_data->id;
+                talk_topic_count++;
                 if (talk_list_count < talk_list_top || talk_list_count > talk_list_bottom) {
                     talk_list_count++;
                     continue;
@@ -1315,7 +1315,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(place->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1790);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1790);
                 } else {
                     colour = 145;
                 }
@@ -1329,10 +1329,10 @@ void talk_add_quest_info_topics(void)
                 if (person->object->twin != 0 && (iptr)person->object->twin == (iptr)talk_npc_object) {
                     continue;
                 }
-                *(short *)((((char *)talk_topics) + (((int)(short)D_001966A2) * 6))) = person->messages[0];
-                talk_topics[((int)(short)D_001966A2) * 3 + 1] = person->messages[1];
-                talk_topics[((int)(short)D_001966A2) * 3 + 2] = quest_tick_data->id;
-                D_001966A2++;
+                *(short *)((((char *)talk_topics) + (((int)(short)talk_topic_count) * 6))) = person->messages[0];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 1] = person->messages[1];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 2] = quest_tick_data->id;
+                talk_topic_count++;
                 if (talk_list_count < talk_list_top || talk_list_count > talk_list_bottom) {
                     talk_list_count++;
                     continue;
@@ -1340,7 +1340,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(person->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1821);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1821);
                 } else {
                     colour = 145;
                 }
@@ -1352,10 +1352,10 @@ void talk_add_quest_info_topics(void)
                 if (item->messages[0] == 0 && item->messages[1] == 0) continue;
                 if (((int)(unsigned char)(item->flags & 128)) != 0) continue;
                 if (item->group == 9 && item->index == 5) continue;
-                *(short *)((((char *)talk_topics) + (((int)(short)D_001966A2) * 6))) = item->messages[0];
-                talk_topics[((int)(short)D_001966A2) * 3 + 1] = item->messages[1];
-                talk_topics[((int)(short)D_001966A2) * 3 + 2] = quest_tick_data->id;
-                D_001966A2++;
+                *(short *)((((char *)talk_topics) + (((int)(short)talk_topic_count) * 6))) = item->messages[0];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 1] = item->messages[1];
+                talk_topics[((int)(short)talk_topic_count) * 3 + 2] = quest_tick_data->id;
+                talk_topic_count++;
                 if (talk_list_count < talk_list_top || talk_list_count > talk_list_bottom) {
                     talk_list_count++;
                     continue;
@@ -1363,7 +1363,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(item->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1852);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)talk_key_index) * 65)), (char *)name, 4, str_talk_c, 1852);
                 } else {
                     colour = 145;
                 }
@@ -1386,18 +1386,18 @@ int talk_faction_greeting(short faction_id)
         return 0;
     }
     relation = talk_faction_relation((int)(short)faction_id);
-    D_001966AC += *(short *)(*(char **)&faction + 29);
+    talk_faction_disposition += *(short *)(*(char **)&faction + 29);
     if (((int)(unsigned char)*(signed char *)(*(char **)&faction + 54)) < 5) {
-        D_001966AC += player_character->reputation[(int)(unsigned char)*(signed char *)(*(char **)&faction + 54)];
+        talk_faction_disposition += player_character->reputation[(int)(unsigned char)*(signed char *)(*(char **)&faction + 54)];
     }
     roll = rand_range(0, 15) - 10;
-    if (((int)(short)D_001966AC) >= roll && ((int)(short)*(short *)(*(char **)&faction + 29)) >= 30) {
+    if (((int)(short)talk_faction_disposition) >= roll && ((int)(short)*(short *)(*(char **)&faction + 29)) >= 30) {
         return (int)(short)*(short *)(talk_faction_greetings + (relation * 6));
     }
-    if (((int)(short)D_001966AC) >= roll) {
+    if (((int)(short)talk_faction_disposition) >= roll) {
         return (int)(short)*(short *)(str_g_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w + (relation * 6));
     }
-    D_001966BA = 1;
+    talk_refused = 1;
     return (int)(short)*(short *)(str_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w_x + (relation * 6));
 }
 
@@ -1412,7 +1412,7 @@ int talk_roll_knows(void)
     if (talk_npc_own_faction->id == 806 || talk_npc_own_faction->id == 842) return 1;
     question_kind = ((1 - ((int)(unsigned char)talk_question_mode)) << 2) + ((int)(unsigned char)talk_topic_tab);
     srand(((talk_npc_object->id ^ (((unsigned)talk_npc_object->id) >> 16)) + question_kind) + *(int *)talk_selected_row);
-    if (rand_range(1, 20) <= (((int)(short)*(short *)(D_001799F2 + ((question_kind * 10) + (talk_npc_speech_style * 2)))) + 10)) {
+    if (rand_range(1, 20) <= (((int)(short)*(short *)(talk_knows_mods + ((question_kind * 10) + (talk_npc_speech_style * 2)))) + 10)) {
         knows = 1;
     } else {
         knows = 0;
@@ -1442,7 +1442,7 @@ int talk_roll_attitude(void)
         } else {
             attitude += -5;
         }
-        if (D_001965D4 == 0) skill_add_uses(2, 1);
+        if (talk_etiquette_counted == 0) skill_add_uses(2, 1);
     }
     attitude += (int)(short)talk_question_attitude_mods[(((1 - ((int)(unsigned char)talk_question_mode)) << 2) + ((int)(unsigned char)talk_topic_tab))];
     attitude += player_character->attributes[5] / 5;
@@ -1497,10 +1497,10 @@ void func_000193DD(struct faction *faction)
     int i;
 
     while (faction != 0) {
-        if ((iptr)faction == *(iptr *)scratch_190be4) *(signed char *)D_00195B84 |= 1;
+        if ((iptr)faction == *(iptr *)scratch_190be4) *(signed char *)shared_scratch |= 1;
         for (i = 0; i < 3; i++) {
-            if ((iptr)faction->allies[i] == *(iptr *)scratch_190be4) *(signed char *)D_00195B84 |= 1;
-            if ((iptr)faction->enemies[i] == *(iptr *)scratch_190be4) *(signed char *)D_00195B84 |= 2;
+            if ((iptr)faction->allies[i] == *(iptr *)scratch_190be4) *(signed char *)shared_scratch |= 1;
+            if ((iptr)faction->enemies[i] == *(iptr *)scratch_190be4) *(signed char *)shared_scratch |= 2;
         }
         if (faction->child != 0) func_000193DD(faction->child);
         faction = faction->next;
@@ -1509,7 +1509,7 @@ void func_000193DD(struct faction *faction)
 
 struct faction *faction_random(void)
 {
-    *(int *)D_00195B84 = rand_range(0, faction_count - 1);
+    *(int *)shared_scratch = rand_range(0, faction_count - 1);
     return faction_nth_r(factions);
 }
 
@@ -1518,8 +1518,8 @@ struct faction *faction_nth_r(struct faction *faction)
     struct faction *found;
 
     while (faction != 0) {
-        if (*(int *)D_00195B84 == 0) return faction;
-        (*(int *)D_00195B84)--;
+        if (*(int *)shared_scratch == 0) return faction;
+        (*(int *)shared_scratch)--;
         if (faction->child != 0) {
             found = faction_nth_r(faction->child);
             if (found != 0) return found;
@@ -1534,12 +1534,12 @@ struct faction *faction_nth_of_type_r(struct faction *faction, unsigned char typ
     pslot16 found;
 
     while (faction != 0) {
-        if (*(int *)D_00195B84 == 0 && faction->type == type) return faction;
+        if (*(int *)shared_scratch == 0 && faction->type == type) return faction;
         if (faction->child != 0) {
             *(iptr *)&found = (iptr)faction_nth_of_type_r(faction->child, (int)(unsigned char)type);
             if (*(iptr *)&found != 0) return (struct faction *)*(iptr *)&found;
         }
-        if (faction->type == type) (*(int *)D_00195B84)--;
+        if (faction->type == type) (*(int *)shared_scratch)--;
         faction = faction->next;
     }
     return 0;
@@ -1550,7 +1550,7 @@ void faction_count_of_type_r(struct faction *faction, unsigned char type)
     int unused;
 
     while (faction != 0) {
-        if (faction->type == type) (*(int *)D_00195B84)++;
+        if (faction->type == type) (*(int *)shared_scratch)++;
         if (faction->child != 0) faction_count_of_type_r(faction->child, (int)(unsigned char)type);
         faction = faction->next;
     }
@@ -1558,9 +1558,9 @@ void faction_count_of_type_r(struct faction *faction, unsigned char type)
 
 struct faction *faction_random_of_type(unsigned char type)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     faction_count_of_type_r(factions, (int)(unsigned char)type);
-    *(int *)D_00195B84 = rand_range(0, *(int *)D_00195B84 - 1);
+    *(int *)shared_scratch = rand_range(0, *(int *)shared_scratch - 1);
     return faction_nth_of_type_r(factions, (int)(unsigned char)type);
 }
 
@@ -1569,7 +1569,7 @@ int factions_can_war(struct faction *faction1, struct faction *faction2)
     {
         int result;
 
-        (*(int *)D_00195B84)++;
+        (*(int *)shared_scratch)++;
         if (faction_is_regional_noble(faction1) != 0 && faction_is_regional_noble(faction2) != 0 && faction_has_enemy(faction1, faction2) != 0 && faction_regions_border(faction1, faction2) != 0) {
             result = 1;
         } else {
@@ -1633,16 +1633,16 @@ void faction_max_power_r(struct faction *faction)
 {
     while (faction != 0) {
         if (faction->child != 0) faction_max_power_r(faction->child);
-        if (faction->power > *(int *)D_00195B84) *(int *)D_00195B84 = faction->power;
+        if (faction->power > *(int *)shared_scratch) *(int *)shared_scratch = faction->power;
         faction = faction->next;
     }
 }
 
 int faction_max_child_power(struct faction *faction)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     faction_max_power_r(faction->child);
-    return *(int *)D_00195B84;
+    return *(int *)shared_scratch;
 }
 
 int faction_shared_relations(struct faction *faction1, struct faction *faction2)
@@ -1662,22 +1662,22 @@ int faction_shared_relations(struct faction *faction1, struct faction *faction2)
             if (faction_has_enemy(faction1->enemies[i], faction2->enemies[j]) != 0) shared += 3;
         }
     }
-    return *(int *)D_00195B84;
+    return *(int *)shared_scratch;
 }
 
 int faction_subtree_search_r(struct faction *faction)
 {
-    if (*(int *)D_00195B84 != 0) return *(int *)D_00195B84;
+    if (*(int *)shared_scratch != 0) return *(int *)shared_scratch;
     while (faction != 0) {
-        if ((iptr)faction == (iptr)D_0019670C) *(signed char *)D_00195B84 |= 2;
+        if ((iptr)faction == (iptr)D_0019670C) *(signed char *)shared_scratch |= 2;
         if (faction == D_0019671C) {
-            *(signed char *)D_00195B84 |= 1;
-            return *(int *)D_00195B84;
+            *(signed char *)shared_scratch |= 1;
+            return *(int *)shared_scratch;
         }
-        if (faction->child != 0 && ((struct bf8_1_1 *)&D_00195B84)->f == 0) faction_subtree_search_r(faction->child);
+        if (faction->child != 0 && ((struct bf8_1_1 *)&shared_scratch)->f == 0) faction_subtree_search_r(faction->child);
         faction = faction->next;
     }
-    return *(int *)D_00195B84;
+    return *(int *)shared_scratch;
 }
 
 int faction_regions_border(struct faction *faction1, struct faction *faction2)

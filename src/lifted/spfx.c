@@ -38,7 +38,7 @@ extern struct record *player_object;
 extern struct record *location_object;
 extern int creature_count;
 extern iptr spfx_popup_handler;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern struct character *player_character;
 extern int game_minutes;
 extern char *scratch_buffer;
@@ -928,7 +928,7 @@ void spfx_created_item_expire_cb(struct record *item)
     for (slot = 0; slot < 27; slot++) {
         if (player_character->equipped[slot] == item) {
             player_character->equipped[slot] = 0;
-            (*(int *)D_00195B84)++;
+            (*(int *)shared_scratch)++;
         }
     }
     object_free_later(item);
@@ -936,11 +936,11 @@ void spfx_created_item_expire_cb(struct record *item)
 
 void spfx_expire_created_items(void)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     free_later_count = 0;
     object_foreach(player_object->children, spfx_created_item_expire_cb);
     object_free_pending();
-    if (*(int *)D_00195B84 == 0) return;
+    if (*(int *)shared_scratch == 0) return;
     weapon_reload_hand_sprites();
 }
 

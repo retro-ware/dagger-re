@@ -3,7 +3,7 @@
 
 extern short xn_gfx_clip_bottom;
 extern unsigned char player_environment;
-extern char D_00187CA8;
+extern char world_running;
 extern struct region regions[];
 extern struct image *hud_bar_image;
 extern struct settings *game_settings;
@@ -20,7 +20,7 @@ void weather_draw_precipitation(void)
     int saved_clip;
 
     climate = climate_category();
-    if (D_00187CA8 == 0)
+    if (world_running == 0)
         return;
     if (player_environment != 1)
         return;

@@ -7,7 +7,7 @@
 extern short spell_impact_sounds[];
 extern struct record *player_object;
 extern int frame_ticks;
-extern int D_00195B84;
+extern int shared_scratch;
 extern struct record *D_00195C48;
 extern unsigned char collide_flags;
 extern int collide_move_missile(struct record *, struct vec3 *, struct vec3 *);
@@ -57,7 +57,7 @@ int spell_missile_update(struct record *m, int launch)
     obj = monster_nearest_to_point(m->x, m->y, m->z);
     if (obj == 0)
         return 0;
-    if (D_00195B84 > 120)
+    if (shared_scratch > 120)
         return 0;
     links_trigger(obj, 6);
     sound_play(spell_impact_sounds[m->data.spell.element], m, 110);

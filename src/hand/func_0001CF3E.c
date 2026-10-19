@@ -6,7 +6,7 @@ extern char str_faction_c[];        /* __FILE__ */
 extern unsigned char scratch_190d16;
 extern unsigned char scratch_190d17;
 extern signed char text_rsc_buffer[];
-extern int D_00195B84;
+extern int shared_scratch;
 extern int game_minutes;
 extern unsigned char D_00196269;
 extern unsigned char D_001962A5;
@@ -25,12 +25,12 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
     struct rumor rumor;
     int saved;
 
-    saved = D_00195B84;
+    saved = shared_scratch;
     if (D_001962A5 == 0)
         return;
     if (text_id != 455 && text_id != 456)
         if (kind == 100 && faction_player_related(faction1) == 0 && faction_player_related(faction2) == 0) {
-            D_00195B84 = saved;
+            shared_scratch = saved;
             return;
         }
     D_0019671C = faction1;
@@ -66,5 +66,5 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
     rumor.expires = game_minutes + 43140;
     write(rumor_file, &rumor, 34);
     write(rumor_file, ((char *)text_rsc_buffer), rumor.text_length);
-    D_00195B84 = saved;
+    shared_scratch = saved;
 }

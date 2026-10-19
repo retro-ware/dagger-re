@@ -15,7 +15,7 @@ extern char str_o[];
 extern char str_t_4[];
 extern char str_main02i0_img[];
 extern struct rect hud_buttons[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern short D_00188208[];
 extern char D_00190B44[];
 extern char scratch_190d64[];
@@ -208,7 +208,7 @@ void magic_items_open(void)
         picklist_free(&shared_picklist);
         return;
     }
-    D_00187CA8 = 0;
+    world_running = 0;
     D_001940D8 &= 254;
     D_001940D4 |= 32;
     magic_items_image = (struct image *)disk_read_file(str_main02i0_img, 0);
@@ -249,7 +249,7 @@ void magic_items_close(void)
     }
     picklist_free(&shared_picklist);
     D_00196272 = 0;
-    D_00187CA8 = 1;
+    world_running = 1;
     if (magic_items_saved_screen == 0 || magic_items_saved_screen == (-1751672937)) {
         return;
     }

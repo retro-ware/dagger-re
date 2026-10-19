@@ -15,7 +15,7 @@ extern signed char D_0017C5B9[];
 extern iptr month_names[];
 extern iptr ordinal_suffixes[];
 extern iptr D_001830E2;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern int frame_checkpoint;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
@@ -59,7 +59,7 @@ extern struct quest *quest_tick_data;
 extern int quest_ended_id;
 extern short qbn_record_sizes[];
 extern short quest_event_code;
-extern int D_001AA698;
+extern int travel_show_progress;
 
 extern struct faction *faction_find_type_in_region(short, short);
 extern struct faction *faction_find(short);
@@ -131,7 +131,7 @@ void time_update_realtime(void)
     int *bios_clock;
     int *bios_clock2;
 
-    if (((struct bf8_6_1 *)&D_001940D8)->f != 0 || D_00187CA8 == 0) {
+    if (((struct bf8_6_1 *)&D_001940D8)->f != 0 || world_running == 0) {
         bios_clock = (int *)DOS_LOW(0x46C);
         realtime_clock_tick = *bios_clock;
         return;
@@ -193,7 +193,7 @@ void time_pass_minutes(int minutes)
         frame_checkpoint = 2005;
         for (i = 0; ((unsigned)i) < minutes; i++) {
             steps++;
-            if (D_001AA698 != 0 && (steps & 1023) == 0) travel_show_days_left(minutes - i);
+            if (travel_show_progress != 0 && (steps & 1023) == 0) travel_show_days_left(minutes - i);
             frame_checkpoint = 2006;
             n = (start_minutes + i) % 10080;
             if (n == 0) {

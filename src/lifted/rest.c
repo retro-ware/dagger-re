@@ -13,7 +13,7 @@ extern char str_anim0002_vid[];
 extern char str_anim0004_vid[];
 extern unsigned char player_environment;
 extern iptr D_00185087;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern int D_0018DDE4;
 extern signed char D_001940D9;
 extern signed char player_motion_flags;
@@ -37,7 +37,7 @@ extern signed char game_mode;
 extern signed char in_dungeon_water;
 extern signed char crime_current;
 extern signed char fog_colour;
-extern signed char D_00196294;
+extern signed char time_skip_active;
 extern signed char night_sky_loaded;
 extern signed char D_001962A4;
 extern int breath_last_tick;
@@ -77,8 +77,8 @@ void rest_close(void)
     D_00196272 = 0;
     game_mode = 0;
     D_0019626F = 16;
-    D_00187CA8 = 1;
-    D_00196294 = 0;
+    world_running = 1;
+    time_skip_active = 0;
     night_sky_loaded = 0;
     sky_loaded_frame = 10000;
     if (player_character->special_infection_time != 0 && player_character->special_infection != 0 && ((int)(unsigned short)(player_character->flags & 16)) != 0) {
@@ -161,7 +161,7 @@ void breath_update(void)
     int *bios_clock4;
 
     endurance = player_character->attributes[4];
-    if (D_00187CA8 == 0) return;
+    if (world_running == 0) return;
     if (endurance > 100) endurance = 100;
     if (((int)(unsigned char)fog_colour) != 107) {
         *(int *)breath_remaining = 0;

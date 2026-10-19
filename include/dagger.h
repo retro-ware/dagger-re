@@ -16,7 +16,7 @@ extern char *nonworld_root;
 extern char *player_object;
 extern char *location_object;
 extern iptr found_object;
-extern int D_00195B84;
+extern int shared_scratch;
 extern char *player_character;
 extern char mouse_control_mode;
 extern iptr factions;

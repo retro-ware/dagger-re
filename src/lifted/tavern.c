@@ -25,7 +25,7 @@ extern struct record *player_object;
 extern struct record *location_object;
 extern struct building *tavern_building;
 extern struct record *found_object;
-extern char D_00195B84[];
+extern char shared_scratch[];
 extern char inpstr_result[];
 extern struct location *current_location;
 extern struct character *player_character;
@@ -293,16 +293,16 @@ void func_0001F89F(void)
 
     func_0001FE4D();
     D_00196ABC = (struct building *)scratch_buffer;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     func_0001FB3F();
     func_0001FAB2();
-    if (*(int *)D_00195B84 != 0) {
+    if (*(int *)shared_scratch != 0) {
         object_delete(found_object);
-        stored = object_create_child(nonworld_root, 0, *(int *)D_00195B84 * 26);
+        stored = object_create_child(nonworld_root, 0, *(int *)shared_scratch * 26);
         stored->type = 57;
-        stored->owner = *(short *)D_00195B84;
+        stored->owner = *(short *)shared_scratch;
         stored->id = location_object->id;
-        mc_memcpy(RECORD_DATA(stored), D_00196ABC, *(int *)D_00195B84 * 26, str_tavern_c, 369, 4);
+        mc_memcpy(RECORD_DATA(stored), D_00196ABC, *(int *)shared_scratch * 26, str_tavern_c, 369, 4);
     }
     object_foreach(location_object, func_0001F6E2);
 }
@@ -314,9 +314,9 @@ void func_0001F958(void)
 
     func_0001FE4D();
     D_00196ABC = (struct building *)scratch_buffer;
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     func_0001FAB2();
-    for (i = 0; i < *(int *)D_00195B84; i++) {
+    for (i = 0; i < *(int *)shared_scratch; i++) {
         for (j = 0; current_location->building_count > j; j++) {
             if (current_location->buildings[j].id == D_00196ABC[i].id) {
                 mc_memcpy(&current_location->buildings[j], &D_00196ABC[i], 26, str_tavern_c, 388, 4);
@@ -340,12 +340,12 @@ iptr func_0001FA3A(struct record *object)
 
 void func_0001FAB2(void)
 {
-    *(int *)D_00195B84 = 0;
+    *(int *)shared_scratch = 0;
     found_object = 0;
     object_find(nonworld_root, func_0001FA3A);
     if (found_object == 0) return;
-    mc_memcpy(&D_00196ABC[*(int *)D_00195B84], RECORD_DATA(found_object), found_object->owner * 26, str_tavern_c, 417, 4);
-    *(int *)D_00195B84 += found_object->owner;
+    mc_memcpy(&D_00196ABC[*(int *)shared_scratch], RECORD_DATA(found_object), found_object->owner * 26, str_tavern_c, 417, 4);
+    *(int *)shared_scratch += found_object->owner;
 }
 
 void func_0001FB3F(void)
@@ -354,7 +354,7 @@ void func_0001FB3F(void)
 
     for (i = 0; current_location->building_count > i; i++) {
         if ((current_location->buildings[i].flags & 3) != 0 && ((unsigned)current_location->buildings[i].flags) > game_minutes) {
-            mc_memcpy(&D_00196ABC[(*(int *)D_00195B84)++], &current_location->buildings[i], 26, str_tavern_c, 428, 4);
+            mc_memcpy(&D_00196ABC[(*(int *)shared_scratch)++], &current_location->buildings[i], 26, str_tavern_c, 428, 4);
         }
     }
 }

@@ -34,7 +34,7 @@ extern char str_at_amf_2[];
 extern unsigned char player_environment;
 extern struct rect automap_buttons[];
 extern signed char D_0017A11D;
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
@@ -1049,7 +1049,7 @@ void qaction_op87_respawn(struct quest *quest, struct qbn_op *op)
     if (foe->object->twin != 0) {
         if (foe->object->twin->type != 34) return;
         object_delete(foe->object->twin);
-        if (D_00187CA8 != 0) world_collect_objects();
+        if (world_running != 0) world_collect_objects();
     }
     if ((rand() % 100) > op->args[3].value) return;
     if (op->args[4].value != (-1)) op->args[4].value--;

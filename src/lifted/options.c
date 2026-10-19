@@ -36,7 +36,7 @@ extern struct rect controls_buttons[];
 extern struct rect options_joystick_buttons[];
 extern iptr key_names[];
 extern char default_key_map[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern struct record *player_object;
 extern struct image *D_00195B5C;
 extern struct image *D_00195B60;
@@ -119,7 +119,7 @@ void options_frame(void)
 int options_close(void)
 {
     while (key_down_esc != 0);
-    D_00187CA8 = 1;
+    world_running = 1;
     game_mode = 0;
     if (options_image != 0 && options_image != (-1751672937)) {
         mc_free((void *)options_image, str_options_c, 164);

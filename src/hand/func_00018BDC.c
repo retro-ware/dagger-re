@@ -9,7 +9,7 @@ extern struct faction *scratch_190df4;
 extern struct faction *scratch_190df8;
 extern struct faction *scratch_190dfc;
 extern struct record *player_entity;
-extern short D_001966AC;
+extern short talk_faction_disposition;
 extern struct faction *faction_find(short);
 extern int faction_has_enemy(struct faction *, struct faction *);
 extern int faction_has_ally(struct faction *, struct faction *);
@@ -41,14 +41,14 @@ int talk_faction_relation(short faction_id)
                     scratch_190dfc = other;
                 if (relation > 1)
                     relation = 1;
-                D_001966AC += 15;
+                talk_faction_disposition += 15;
             }
             if ((faction_has_ally(other, faction) || faction_has_ally(faction, other)) && relation > 2) {
-                D_001966AC += 10;
+                talk_faction_disposition += 10;
                 relation = 2;
             }
             if ((faction_has_enemy(other, faction) || faction_has_enemy(faction, other)) && relation > 3) {
-                D_001966AC = 20;
+                talk_faction_disposition = 20;
                 relation = 3;
             }
             for (i = 0; i < 3; i++)
@@ -56,28 +56,28 @@ int talk_faction_relation(short faction_id)
                     if (other->enemies[i] != 0 && other->enemies[i] == faction->enemies[j] && relation > 4) {
                         scratch_190dec = other->enemies[i];
                         relation = 4;
-                        D_001966AC += 5;
+                        talk_faction_disposition += 5;
                     }
             for (i = 0; i < 3; i++)
                 for (j = 0; j < 3; j++)
                     if (other->allies[i] != 0 && other->allies[i] == faction->allies[j] && relation > 5) {
                         scratch_190df0 = other->allies[i];
                         relation = 5;
-                        D_001966AC += 5;
+                        talk_faction_disposition += 5;
                     }
             for (i = 0; i < 3; i++)
                 for (j = 0; j < 3; j++)
                     if (other->allies[i] != 0 && faction_has_ally(other, faction->enemies[j]) && relation > 6) {
                         scratch_190df4 = other->allies[i];
                         relation = 6;
-                        D_001966AC -= 5;
+                        talk_faction_disposition -= 5;
                     }
             for (i = 0; i < 3; i++)
                 for (j = 0; j < 3; j++)
                     if (other->enemies[i] != 0 && faction_has_enemy(other, faction->allies[j]) && relation > 7) {
                         scratch_190df8 = other->enemies[i];
                         relation = 7;
-                        D_001966AC -= 5;
+                        talk_faction_disposition -= 5;
                     }
         }
         object = object->next;

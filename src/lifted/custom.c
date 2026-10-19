@@ -78,7 +78,7 @@ extern iptr D_00185658;
 extern struct rect classmaker_reputation_buttons[];
 extern struct rect classmaker_specials_buttons[];
 extern short classmaker_help_texts[];
-extern signed char D_00187CA8;
+extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
@@ -858,7 +858,7 @@ int itemmaker_open(int opening)
     }
     if (opening != 0) {
         scratch_190d68 = opening;
-        D_00187CA8 = 0;
+        world_running = 0;
         D_001940D8 |= 4;
         game_mode = 10;
         window_image = disk_read_file(str_item00i0_img, 0);
