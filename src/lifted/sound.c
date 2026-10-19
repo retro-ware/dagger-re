@@ -9,8 +9,8 @@ extern unsigned char player_environment;
 extern int sound_volume;
 extern iptr music_song_buffer;
 extern int sos_midi_device;
+extern int sos_digi_device;
 extern int sos_digi_driver;
-extern int sos_digi_handle;
 extern struct record *player_object;
 extern struct settings *game_settings;
 extern int sound_last_size;
@@ -102,15 +102,15 @@ int sound_play_sample_loud(iptr sample, int length)
 
     loop = 1;
     if (sound_enabled == 0) return -1;
-    if (sos_digi_driver == (-1)) return -1;
+    if (sos_digi_device == (-1)) return -1;
     for (channel = 0; channel < 3; channel++) {
         if (sound_channels[channel].handle == 305419896) break;
-        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) != 0) break;
+        if ((short)func_000A2460(sos_digi_driver, sound_channels[channel].handle) != 0) break;
     }
     if (channel == 3) {
         for (channel = 0; channel < 3; channel++) {
             if (sound_channels[channel].priority < 127) {
-                func_000A2687(sos_digi_handle, sound_channels[channel].handle);
+                func_000A2687(sos_digi_driver, sound_channels[channel].handle);
                 break;
             }
         }
@@ -131,7 +131,7 @@ int sound_play_sample_loud(iptr sample, int length)
     sound_channels[channel].sample.bits = 8;
     sound_channels[channel].sample.channels = 1;
     sound_channels[channel].source = 0;
-    sound_channels[channel].handle = func_000A2504(sos_digi_handle, &sound_channels[channel].sample);
+    sound_channels[channel].handle = func_000A2504(sos_digi_driver, &sound_channels[channel].sample);
     return channel;
 }
 
@@ -145,15 +145,15 @@ int sound_play_sample_flat(iptr sample, int length)
 
     loop = 0;
     if (sound_enabled == 0) return -1;
-    if (sos_digi_driver == (-1)) return -1;
+    if (sos_digi_device == (-1)) return -1;
     for (channel = 0; channel < 3; channel++) {
         if (sound_channels[channel].handle == 305419896) break;
-        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) != 0) break;
+        if ((short)func_000A2460(sos_digi_driver, sound_channels[channel].handle) != 0) break;
     }
     if (channel == 3) {
         for (channel = 0; channel < 3; channel++) {
             if (sound_channels[channel].priority < 90) {
-                func_000A2687(sos_digi_handle, sound_channels[channel].handle);
+                func_000A2687(sos_digi_driver, sound_channels[channel].handle);
                 break;
             }
         }
@@ -170,21 +170,21 @@ int sound_play_sample_flat(iptr sample, int length)
     sound_channels[channel].sample.bits = 8;
     sound_channels[channel].sample.channels = 1;
     sound_channels[channel].source = 0;
-    sound_channels[channel].handle = func_000A2504(sos_digi_handle, &sound_channels[channel].sample);
+    sound_channels[channel].handle = func_000A2504(sos_digi_driver, &sound_channels[channel].sample);
     return channel;
 }
 
 void sound_stop_channel(int channel)
 {
     if (sound_channels[channel].handle == 305419896) return;
-    func_000A2687(sos_digi_handle, sound_channels[channel].handle);
+    func_000A2687(sos_digi_driver, sound_channels[channel].handle);
     sound_channels[channel].handle = 305419896;
 }
 
 int sound_channel_done(int channel)
 {
     if (sound_channels[channel].handle == 305419896) return 1;
-    return (int)(short)func_000A2460(sos_digi_handle, sound_channels[channel].handle);
+    return (int)(short)func_000A2460(sos_digi_driver, sound_channels[channel].handle);
 }
 
 void music_play(char *name)
@@ -348,8 +348,8 @@ void sound_stop_all(void)
 
     for (channel = 0; channel < 4; channel++) {
         if (sound_channels[channel].handle == 305419896) continue;
-        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) == 0) {
-            func_000A2687(sos_digi_handle, sound_channels[channel].handle);
+        if ((short)func_000A2460(sos_digi_driver, sound_channels[channel].handle) == 0) {
+            func_000A2687(sos_digi_driver, sound_channels[channel].handle);
         }
         sound_channels[channel].handle = 305419896;
     }

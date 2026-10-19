@@ -14,8 +14,8 @@ extern char sos_digi_lock_4[];
 extern char sos_digi_timer_handle[];
 extern int sos_midi_device;
 extern int sos_midi_driver;
+extern int sos_digi_device;
 extern int sos_digi_driver;
-extern int sos_digi_handle;
 extern char sos_midi_settings[];
 extern iptr music_song_data;
 extern int music_song_locked_size;
@@ -28,15 +28,15 @@ extern int dpmi_unlock_region(iptr, int);
 int sos_shutdown(void)
 {
     func_0009E61A(*(int *)sos_digi_timer_handle);
-    if (sos_digi_driver != (-1)) func_0009F9A7(sos_digi_handle, 1, 1);
+    if (sos_digi_device != (-1)) func_0009F9A7(sos_digi_driver, 1, 1);
     if (sos_midi_device != (-1)) func_0009F253(sos_midi_driver, 1);
     func_0009EC0A();
     func_0009E95B();
     func_0009E281(0);
     dpmi_unlock_region((iptr)sos_digi_settings, 268);
     dpmi_unlock_region((iptr)sos_midi_settings, 46);
+    dpmi_unlock_region((iptr)&sos_digi_device, 4);
     dpmi_unlock_region((iptr)&sos_digi_driver, 4);
-    dpmi_unlock_region((iptr)&sos_digi_handle, 4);
     dpmi_unlock_region((iptr)sos_digi_timer_handle, 4);
     dpmi_unlock_region((iptr)&sos_midi_device, 4);
     dpmi_unlock_region((iptr)&sos_midi_driver, 4);

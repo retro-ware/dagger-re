@@ -10,7 +10,7 @@ extern iptr music_song_buffer;
 extern char sos_digi_settings[];
 extern int sos_digi_rate;
 extern int sos_digi_buffer_size;
-extern int sos_digi_device;
+extern int sos_digi_settings_device;
 extern iptr sos_digi_timer_callback;
 extern iptr sos_drum_bank;
 extern iptr sos_melodic_bank;
@@ -18,8 +18,8 @@ extern char sos_digi_lock_4[];
 extern char sos_digi_timer_handle[];
 extern int sos_midi_device;
 extern int sos_midi_driver;
+extern int sos_digi_device;
 extern int sos_digi_driver;
-extern int sos_digi_handle;
 extern char sos_midi_settings[];
 extern signed char music_uses_fm;
 
@@ -40,15 +40,15 @@ int sos_init(int digi_device, int midi_device)
     if (midi_device != (-1)) {
         *(int *)sos_midi_settings = midi_device;
         if (func_0009EC82(sos_midi_settings, &sos_midi_driver) != 0) {
-            func_0009F9A7(sos_digi_handle, 1, 1);
+            func_0009F9A7(sos_digi_driver, 1, 1);
             func_0009E95B();
             func_0009EC0A();
             return 2;
         }
     }
     if (digi_device != (-1)) {
-        sos_digi_device = digi_device;
-        if (func_0009F4DE(sos_digi_settings, &sos_digi_handle) != 0) {
+        sos_digi_settings_device = digi_device;
+        if (func_0009F4DE(sos_digi_settings, &sos_digi_driver) != 0) {
             func_0009E95B();
             return 1;
         }
@@ -75,8 +75,8 @@ int sos_init(int digi_device, int midi_device)
     }
     dpmi_lock_region((iptr)sos_digi_settings, 268);
     dpmi_lock_region((iptr)sos_midi_settings, 46);
+    dpmi_lock_region((iptr)&sos_digi_device, 4);
     dpmi_lock_region((iptr)&sos_digi_driver, 4);
-    dpmi_lock_region((iptr)&sos_digi_handle, 4);
     dpmi_lock_region((iptr)sos_digi_timer_handle, 4);
     dpmi_lock_region((iptr)&sos_midi_device, 4);
     dpmi_lock_region((iptr)&sos_midi_driver, 4);

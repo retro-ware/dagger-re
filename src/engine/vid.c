@@ -33,10 +33,10 @@ int func_000A2504(int driver, xn_vid_sos_sample *sample);  /* SOS: start a sampl
 void func_000A2687(int driver, int handle);                 /* SOS: stop a sample */
 #define sos_start_sample func_000A2504
 #define sos_stop_sample  func_000A2687
-extern s32 sos_digi_driver;                  /* the SOS digital device: -1 none */
-extern s32 sos_digi_handle;                  /* the SOS digital driver's handle */
-#define sound_digi_device D_0018DD5C
-#define sound_digi_driver D_0018DD60
+extern s32 sos_digi_device;                  /* the SOS digital device: -1 none */
+extern s32 sos_digi_driver;                  /* the SOS digital driver's handle */
+#define sound_digi_device sos_digi_device
+#define sound_digi_driver sos_digi_driver
 extern u8 mouse_buttons;
 
 /* ---- other groups' (group A's: xstr.h, xmouse.h, xkbd.h) ------------------------------------ */

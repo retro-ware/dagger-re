@@ -7584,8 +7584,8 @@ global,0x0019962A,spellmaker_drag_row,strong,spellmaker slider drag
 global,0x0019962F,spellmaker_allowed_target_class,strong,spellmaker target filter
 global,0x00199630,spellbook_find_id,strong,spell id searched in the spellbook
 global,0x0018DC34,music_song_buffer,strong,music song buffer
-global,0x0018DD5C,sos_digi_driver,strong,SOS digital driver
-global,0x0018DD60,sos_digi_handle,strong,SOS digital driver handle
+global,0x0018DD5C,sos_digi_device,strong,"SOS digital device id, -1 none (sosez reads DeviceID into it; tested before every sample)"
+global,0x0018DD60,sos_digi_driver,strong,"SOS digital driver handle (sosDIGIInitDriver's out; passed to every sample call)"
 global,0x001A3F2C,sound_pan_range,strong,pan computation
 global,0x001A3F34,sound_last_channel,strong,last used channel
 global,0x001A3F38,sound_listener_yaw,strong,listener angle for pan
@@ -7716,7 +7716,7 @@ global,0x001A9B42,object_find_index,strong,"object_find_item, object_count_type"
 global,0x0018DC38,sos_digi_settings,strong,"268 bytes, sos_init"
 global,0x0018DC3C,sos_digi_rate,strong,11025
 global,0x0018DC7C,sos_digi_buffer_size,strong,4096
-global,0x0018DD3C,sos_digi_device,strong,digi_device
+global,0x0018DD3C,sos_digi_settings_device,strong,"digi_device, copied into the settings block"
 global,0x0018DD40,sos_digi_timer_callback,strong,sos_init
 global,0x0018DD4C,sos_digi_lock_4,strong,sos_init lock region
 global,0x0018DD50,sos_digi_timer_handle,strong,"sos_init, sos_shutdown"

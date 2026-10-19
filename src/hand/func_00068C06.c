@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern int sos_digi_handle;
+extern int sos_digi_driver;
 extern struct record *player_object;
 extern struct career *player_class;
 extern struct sound_channel sound_channels[];
@@ -27,7 +27,7 @@ void sound_update_channels(void)
         sound_last_channel = i;
         if (sound_channels[i].handle == 0x12345678)
             continue;
-        if (func_000A2460(sos_digi_handle, sound_channels[i].handle) != 0) {
+        if (func_000A2460(sos_digi_driver, sound_channels[i].handle) != 0) {
             sound_channels[i].handle = 0x12345678;
             continue;
         }
@@ -45,8 +45,8 @@ void sound_update_channels(void)
             sound_stop_channel(3);
             continue;
         }
-        func_000A20BF(sos_digi_handle, sound_channels[i].handle, pan);
-        func_000A1ED5(sos_digi_handle, sound_channels[i].handle, (short)volume << 16 | (short)volume);
+        func_000A20BF(sos_digi_driver, sound_channels[i].handle, pan);
+        func_000A1ED5(sos_digi_driver, sound_channels[i].handle, (short)volume << 16 | (short)volume);
     }
     sound_listener_yaw = player_object->yaw;
 }

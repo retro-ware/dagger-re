@@ -787,7 +787,7 @@ RECORD_OFFSET(xn_model_sphere, faces, 0x12);
    bytes; the engine writes +0x04, +0x08, +0x14..+0x1C, +0x38, +0x39, the game the rest.
    Instances: the data of a type-6 or type-32 object record (record +0x47; object_create_child
    gives them 62 bytes: the game's struct model_instance, which records.h makes only 56 bytes
-   long), D_001A945E (the arrow in flight), &block_model.model (block_model +0x04: RMB block
+   long), model_instance_scratch (the arrow in flight), &block_model.model (block_model +0x04: RMB block
    models of type-43 and type-56 objects, bank_draw_preview's ship; the engine then scribbles
    its +0x04/+0x08/+0x14..+0x1C over the RMB record's DFU Unknown2, Unknown3, XPos1..ZPos1).
    xn_model_set_angles C7F07, xn_model_compose_angles C7F14 and xn_model_set_angles_yaw_offset
@@ -893,7 +893,7 @@ RECORD_SIZE(xn_collide_probe_sphere, 16);
 
 /* A collision probe ("sphere set"): the mover's shape that the game passes to
    xn_collide_spheres_model 0x14AA92 (edx) and the dead 0x14AF30 / 0x14B017 (the game's struct
-   collide_probe: D_00187B44.., D_00179F48; D_00196D4C points at the one under test). */
+   collide_probe: monster_collide_probe.., collide_object_probe; xn_collide_probe points at the one under test). */
 struct xn_collide_probe {
     xn_vec3 position;               /* +0x00: world units (the game writes the tested position) */
     int angle_x;                    /* +0x0C: the probe's rotation, pitch / yaw / roll for
@@ -1073,7 +1073,7 @@ XN_NATIVE_SIZE(xn_anim, 32);            /* natively the game's struct monster_an
 /* The ASCR record (MONSTER.BSA ASCRnnnn.ANC, kept in memory as read): the header, a word
    state table, a byte table the engine never reads, then the script bytes. 60 records; 59
    have 98 states (scripts start at 0x12C), ASCR0029 (the seducer) 120 (at 0x16E). The game
-   loads it (monster_init, monster_reload_anim_cb) into monster_anim_records D_00190704 and
+   loads it (monster_init, monster_reload_anim_cb) into monster_anim_records (0x190704) and
    xn_anim.script. Script: a byte >= 80h is a frame (-b-1) and yields; 0..11 are opcodes
    (handlers in xn_anim_opcodes 0xC0000), each followed by its operands. */
 struct xn_ascr {
@@ -1124,7 +1124,7 @@ RECORD_SIZE(xn_wld_header, 144);
    big_buffer. */
 struct xn_wld_cell_header {
     unsigned int seed;              /* +0x00: the generator's seed (copied to xn_rand_seed
-                                       D_00153800 by C3570: the cell is the same each visit) */
+                                       xn_rand_seed by C3570: the cell is the same each visit) */
     unsigned short nature_archive;  /* +0x04: 0 in WOODS.WLD; world_render stores
                                        nature_texture_archive in the copy each frame */
     unsigned short ground_archive;  /* +0x06: TEXTURE archive of the ground (2, 102, 302,
@@ -1189,7 +1189,7 @@ RECORD_SIZE(xn_terrain_vert_coord, 12);
 /* ---- flats (billboards, xn_154D00) ------------------------------------------------------- */
 
 /* A flat (billboard): a 0x64-byte record taken from the render polygon pool
-   (xn_render_poly_next D_000CEA64) by xn_flat_add 154D00/154D20 or xn_flat_add_view 154DA5,
+   (xn_render_poly_next, 0xCEA64) by xn_flat_add 154D00/154D20 or xn_flat_add_view 154DA5,
    up to 512 a frame, listed in xn_flat_sort_list; drawn after the world spans by
    xn_render_draw_flats 12A814 -> xn_flat_draw 154E20 -> 158360 -> xn_flat_raster 1552A0 ->
    xn_flat_span_clip 155200 -> xn_flat_span_emit 15526C -> [+0x3C]. Shares the pool with the
@@ -1241,7 +1241,7 @@ struct xn_flat {
         int frame;                  /* +0x4C: at add: the frame for xn_tex_cache_lookup
                                        (-1 = by the animation clock) (154D74; 154E2A) */
         unsigned char *table;       /* +0x4C: from xn_flat_draw on: the translucency table of
-                                       the archive (D_00136921[record word +0x0A], 0 = none;
+                                       the archive (xn_shade_blend_tables[record word +0x0A], 0 = none;
                                        154E43); non-zero selects 157E20 (155610); then the fog
                                        row when lit and fogged (1556D7, read 157B84) */
     };

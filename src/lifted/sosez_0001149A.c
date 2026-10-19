@@ -16,7 +16,7 @@ extern char sos_digi_port[];
 extern char sos_digi_irq[];
 extern char sos_digi_dma[];
 extern int sos_midi_device;
-extern int sos_digi_driver;
+extern int sos_digi_device;
 extern char sos_midi_settings[];
 extern char sos_midi_port[];
 
@@ -42,7 +42,7 @@ int sos_read_settings(char *path)
         profile_close(&profile);
         return 0;
     }
-    profile.result = profile_get_item_number(&profile, str_deviceid, &sos_digi_driver);
+    profile.result = profile_get_item_number(&profile, str_deviceid, &sos_digi_device);
     profile.result = profile_get_item_number(&profile, str_deviceport, (int *)sos_digi_port);
     profile.result = profile_get_item_number(&profile, str_devicedma, (int *)sos_digi_dma);
     profile.result = profile_get_item_number(&profile, str_deviceirq, (int *)sos_digi_irq);

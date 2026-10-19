@@ -35,7 +35,8 @@ CLANGD = os.environ.get("CLANGD", "/opt/homebrew/opt/llvm/bin/clangd")
 
 
 def sources():
-    pats = ["src/lifted/*.c", "src/hand/*.c", "src/*.c", "include/*.h"]
+    # LSP_SOURCES: other globs (space-separated), e.g. the native build's engine and port files
+    pats = os.environ.get("LSP_SOURCES", "src/lifted/*.c src/hand/*.c src/*.c include/*.h").split()
     return sorted(p for g in pats for p in glob.glob(os.path.join(ROOT, g)))
 
 
