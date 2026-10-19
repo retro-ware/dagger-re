@@ -32,7 +32,7 @@ extern char *skill_names[];
 extern signed char skill_governing_attributes[];
 extern iptr attribute_abbrevs[];
 extern char *faction_rank_names[];
-extern iptr D_0017D1EA;
+extern iptr prompt_enter_new_name;
 extern iptr D_00182682;
 extern iptr D_00184225;
 extern iptr D_00185073;
@@ -189,7 +189,7 @@ void sheet_rename(void)
 
     text = scratch_buffer + 55000;
     mc_set_location(232, str_sheet_c);
-    mc_sprintf(text, D_00170C79, D_0017D1EA);
+    mc_sprintf(text, D_00170C79, prompt_enter_new_name);
     *(strlen(text) + text + 1) = 0;
     inpstr_begin_text(player_character->name, 23);
     msgbox_show_string((iptr)text, 2);

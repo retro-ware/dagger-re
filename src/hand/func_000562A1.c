@@ -18,16 +18,16 @@ extern iptr enchant_side_effect_params[];
 extern signed char text_buffer[];
 extern signed char scratch_190ce4[];
 extern signed char scratch_190cee[];
-extern char D_00190CEF[];
-extern char D_00190CF0[];
-extern signed char D_00190D02[];
-extern char D_00190D03[];
-extern char D_00190D04[];
+extern char itemmaker_power_row_slots[];
+extern char itemmaker_power_row_slots_1[];
+extern signed char itemmaker_side_row_slots[];
+extern char itemmaker_side_row_slots_1[];
+extern char itemmaker_side_row_slots_2[];
 extern char *magic_window_image;
 extern struct enchantment itemmaker_slots[];
 extern struct item *itemmaker_item;
 extern struct record *itemmaker_item_object;
-extern signed char D_00199910[];
+extern signed char itemmaker_slot_from_soul[];
 extern unsigned char inv_tab;
 extern char *spell_name_by_id(unsigned char);
 extern int itemmaker_points_used(void);
@@ -64,11 +64,11 @@ void itemmaker_draw(void)
     for (power_row = side_row = slot = 0; slot < 10; slot++) {
         if (scratch_190ce4[slot] == -1) continue;
         D_0012B508 = 146;
-        if (((char *)D_00199910)[slot] != 0)
+        if (((char *)itemmaker_slot_from_soul)[slot] != 0)
             D_0012B508 = 193;
         if (scratch_190ce4[slot] == 0) {
             ((char *)scratch_190cee)[power_row] = slot;
-            D_00190CEF[power_row] = 255;
+            itemmaker_power_row_slots[power_row] = 255;
             mc_set_location(179, str_itemmakr_c);
             mc_sprintf(((char *)text_buffer), str_fmt_s_3, enchant_power_names[itemmaker_slots[slot].type]);
             text_draw_coloured(((char *)text_buffer), 10, power_row * font_height + 60, D_0012B508, 156);
@@ -76,8 +76,8 @@ void itemmaker_draw(void)
             if (itemmaker_slots[slot].param == -1) {
                 power_row++;
             } else {
-                D_00190CEF[power_row] = slot;
-                D_00190CF0[power_row] = 255;
+                itemmaker_power_row_slots[power_row] = slot;
+                itemmaker_power_row_slots_1[power_row] = 255;
                 if (itemmaker_slots[slot].type < 3) {
                     mc_set_location(189, str_itemmakr_c);
                     mc_sprintf(((char *)text_buffer), str_fmt_s_4, spell_name_by_id(enchant_spell_lists[itemmaker_slots[slot].type][itemmaker_slots[slot].param]));
@@ -89,8 +89,8 @@ void itemmaker_draw(void)
                 power_row += 2;
             }
         } else {
-            ((char *)D_00190D02)[side_row] = slot;
-            D_00190D03[side_row] = 255;
+            ((char *)itemmaker_side_row_slots)[side_row] = slot;
+            itemmaker_side_row_slots_1[side_row] = 255;
             mc_set_location(200, str_itemmakr_c);
             mc_sprintf(((char *)text_buffer), str_fmt_s_3, enchant_side_effect_names[itemmaker_slots[slot].type]);
             text_draw_coloured(((char *)text_buffer), 108, side_row * font_height + 60, D_0012B508, 156);
@@ -98,8 +98,8 @@ void itemmaker_draw(void)
             if (itemmaker_slots[slot].param == -1) {
                 side_row++;
             } else {
-                D_00190D03[side_row] = slot;
-                D_00190D04[side_row] = 255;
+                itemmaker_side_row_slots_1[side_row] = slot;
+                itemmaker_side_row_slots_2[side_row] = 255;
                 if (itemmaker_slots[slot].type == 0) {
                     mc_set_location(210, str_itemmakr_c);
                     mc_sprintf(((char *)text_buffer), str_fmt_s_4, monster_names[itemmaker_slots[slot].param]);

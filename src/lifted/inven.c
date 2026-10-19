@@ -156,7 +156,7 @@ extern int inv_right_scroll;
 extern iptr inv_left_rows[];
 extern struct record *inv_left_container;
 extern int D_001AA580;
-extern short D_001AA586;
+extern short inv_left_item_count;
 extern signed char trade_offer_pending;
 extern signed char D_001AA5F8;
 
@@ -997,16 +997,16 @@ void inv_list_left_item(struct record *object, iptr rects)
             return;
         }
     }
-    if (((int)(short)D_001AA586) >= *(int *)inv_left_scroll && ((int)(short)D_001AA586) < (*(int *)inv_left_scroll + 4)) {
-        inv_left_rows[(((int)(short)D_001AA586) - *(int *)inv_left_scroll)] = (iptr)object;
+    if (((int)(short)inv_left_item_count) >= *(int *)inv_left_scroll && ((int)(short)inv_left_item_count) < (*(int *)inv_left_scroll + 4)) {
+        inv_left_rows[(((int)(short)inv_left_item_count) - *(int *)inv_left_scroll)] = (iptr)object;
         if (object->type != 50) {
-            inv_draw_item_cell(object, (int)(short)(D_001AA586 - *(short *)inv_left_scroll), rects);
+            inv_draw_item_cell(object, (int)(short)(inv_left_item_count - *(short *)inv_left_scroll), rects);
         }
     }
     if (((int)(unsigned char)game_mode) == 10) {
         if (item->enchantments[0].type != (-1)) return;
     }
-    D_001AA586++;
+    inv_left_item_count++;
 }
 
 void inv_equip_in_slot_pair(struct record *object, int slot, int step)

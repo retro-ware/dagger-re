@@ -3,7 +3,7 @@
 extern short scratch_190d64;
 extern iptr scratch_190ee4[];
 extern char *scratch_buffer;
-extern struct magic_enchantment D_00199868[][5];   /* itemmaker_slot_exclusions */
+extern struct magic_enchantment itemmaker_slot_exclusions[][5];   /* itemmaker_slot_exclusions */
 extern struct enchantment itemmaker_slots[];
 extern int itemmaker_param_excluded(int, int);
 extern void list_popup_open(iptr *);
@@ -19,11 +19,11 @@ void itemmaker_show_param_list(iptr *names, short type)
     param = index = count = 0;
     while (*names != 0) {
         for (i = 0; i < 12; i++) {
-            if (D_00199868[i][0].type == type && D_00199868[i][0].param == param
-                || D_00199868[i][1].type == type && D_00199868[i][1].param == param
-                || D_00199868[i][2].type == type && D_00199868[i][2].param == param
-                || D_00199868[i][3].type == type && D_00199868[i][3].param == param
-                || D_00199868[i][4].type == type && D_00199868[i][4].param == param)
+            if (itemmaker_slot_exclusions[i][0].type == type && itemmaker_slot_exclusions[i][0].param == param
+                || itemmaker_slot_exclusions[i][1].type == type && itemmaker_slot_exclusions[i][1].param == param
+                || itemmaker_slot_exclusions[i][2].type == type && itemmaker_slot_exclusions[i][2].param == param
+                || itemmaker_slot_exclusions[i][3].type == type && itemmaker_slot_exclusions[i][3].param == param
+                || itemmaker_slot_exclusions[i][4].type == type && itemmaker_slot_exclusions[i][4].param == param)
                 goto next;
         }
         saved = itemmaker_slots[scratch_190d64].type;

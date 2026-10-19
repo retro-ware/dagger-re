@@ -26,7 +26,7 @@ extern iptr inv_left_rows[];
 extern struct record *D_001AA578;
 extern struct record *inv_left_container;
 extern short inv_right_count;
-extern short D_001AA586;
+extern short inv_left_item_count;
 extern short D_001AA588;
 extern short inv_left_count;
 extern void msgbox_show_string(char *, short);
@@ -53,7 +53,7 @@ void inv_draw_left_list(struct rect *rects)
 {
     struct record *object;
 
-    inv_left_count = D_001AA586 = 0;
+    inv_left_count = inv_left_item_count = 0;
     mc_memset((char *)inv_left_rows, 0, 20, str_inven_c, 1627, 20);
     if (inv_left_container->type == 2 && inv_left_container != wagon_container) {
         inv_draw_item_cell(inv_left_container, 0, rects);
@@ -68,7 +68,7 @@ void inv_draw_left_list(struct rect *rects)
         inv_list_left_item(object, rects + 1);
         object = object->next;
     }
-    inv_left_count = D_001AA586;
+    inv_left_count = inv_left_item_count;
 }
 
 void inv_draw_right_list(struct rect *rects)

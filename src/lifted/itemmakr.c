@@ -7,44 +7,44 @@
 
 extern signed char key_down_esc;
 extern char str_itemmakr_c[];
-extern char D_001756BE[];
+extern char itemmaker_name_prompt_fmt[];
 extern char str_you_have_no_captured_spirits[];
 extern char str_error[];
-extern char D_00175723[];
+extern char enchant_text_powers_unknown[];
 extern char str_fmt_s_5[];
-extern char D_00175738[];
-extern iptr D_0017D1EA;
+extern char enchant_text_empty[];
+extern iptr prompt_enter_new_name;
 extern char *enchant_power_names[];
 extern char *enchant_side_effect_names[];
 extern char *monster_names[];
 extern iptr enchant_power_params[];
 extern iptr enchant_power_costs[];
 extern iptr enchant_side_effect_params[];
-extern int D_00185871[];
+extern int enchant_spell_lists_by_kind[];
 extern char *enchant_spell_lists[];
-extern iptr D_001858DB[];
-extern char D_00185907[];
-extern char D_00185908[];
-extern char D_00185909[];
-extern char D_0018590A[];
-extern char D_0018597F[];
+extern iptr enchant_side_effect_costs[];
+extern char enchant_side_effect_excludes_type1[];
+extern char enchant_side_effect_excludes_param1[];
+extern char enchant_side_effect_excludes_type2[];
+extern char enchant_side_effect_excludes_param2[];
+extern char enchant_side_effect_exclusion_rows[];
 extern signed char D_00187CA8;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190cee[];
-extern signed char D_00190D02[];
+extern signed char itemmaker_side_row_slots[];
 extern signed char D_00190D63;
 extern char scratch_190d64[];
 extern char scratch_190d66[];
 extern short scratch_190d68;
-extern iptr D_00190EDC;
+extern iptr itemmaker_soul_name_next;
 extern char scratch_190ee4[];
 extern signed char text_rsc_buffer[];
 extern char D_001913E4[];
 extern signed char D_001940D8;
-extern char D_0019574C[];
+extern char enchant_reference_character[];
 extern signed char D_001957CD;
 extern char D_001957E9[];
 extern struct record *player_entity;
@@ -61,17 +61,17 @@ extern char *scratch_buffer;
 extern char cfg_item_file[];
 extern signed char D_00196272;
 extern signed char game_mode;
-extern struct magic_enchantment D_00199868[][5];   /* itemmaker_slot_exclusions */
-extern char D_001998CC[];
+extern struct magic_enchantment itemmaker_slot_exclusions[][5];   /* itemmaker_slot_exclusions */
+extern char itemmaker_soul_codes[];
 extern struct enchantment itemmaker_slots[];
 extern struct item *itemmaker_item;
 extern struct record *itemmaker_item_object;
-extern signed char D_00199910[];
+extern signed char itemmaker_slot_from_soul[];
 extern char inv_left_scroll[];
 extern iptr inv_left_rows[];
 extern iptr D_001AA578;
 extern struct record *inv_left_container;
-extern short D_001AA586;
+extern short inv_left_item_count;
 extern short inv_left_count;
 
 extern iptr spells_std_names_for_ids(iptr);
@@ -124,10 +124,10 @@ void itemmaker_reset(void)
     *(int *)inv_left_scroll = 0;
     mc_memset(scratch_190ce4, -1, 10, str_itemmakr_c, 77, 128);
     mc_memset(scratch_190cee, -1, 30, str_itemmakr_c, 78, 4);
-    mc_memset(D_00190D02, -1, 30, str_itemmakr_c, 79, 4);
-    mc_memset((void *)D_00199868, -1, 120, str_itemmakr_c, 80, 120);
+    mc_memset(itemmaker_side_row_slots, -1, 30, str_itemmakr_c, 79, 4);
+    mc_memset((void *)itemmaker_slot_exclusions, -1, 120, str_itemmakr_c, 80, 120);
     mc_memset(itemmaker_slots, 0, 40, str_itemmakr_c, 81, 40);
-    mc_memset(D_00199910, 0, 10, str_itemmakr_c, 82, 10);
+    mc_memset(itemmaker_slot_from_soul, 0, 10, str_itemmakr_c, 82, 10);
 }
 
 int itemmaker_close(void)
@@ -160,7 +160,7 @@ void itemmaker_enter_name(void)
     }
     prompt = scratch_buffer + 55000;
     mc_set_location(242, str_itemmakr_c);
-    mc_sprintf(prompt, D_001756BE, D_0017D1EA);
+    mc_sprintf(prompt, itemmaker_name_prompt_fmt, prompt_enter_new_name);
     *(strlen(prompt) + prompt + 1) = 0;
     inpstr_begin_text((iptr)itemmaker_item, 23);
     msgbox_show_string(prompt, 2);
@@ -200,13 +200,13 @@ void itemmaker_set_side_effect_param_cb(slot16 param)
         itemmaker_add_soul_powers((int)(short)param);
     }
     itemmaker_slots[(int)(short)*(short *)scratch_190d64].param = *(int *)&param;
-    *(int *)&exclusion_row = (int)(unsigned char)*(signed char *)(D_0018597F + ((int)(short)*(short *)scratch_190d66));
+    *(int *)&exclusion_row = (int)(unsigned char)*(signed char *)(enchant_side_effect_exclusion_rows + ((int)(short)*(short *)scratch_190d66));
     if ((short)exclusion_row == 0) {
         func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, -1, -1, -1, -1);
         return;
     }
     (*(int *)&exclusion_row)--;
-    func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, (int)(short)((unsigned short)(unsigned char)*(signed char *)(D_00185907 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(D_00185908 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(D_00185909 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(D_0018590A + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))));
+    func_00057147((int)(short)*(short *)scratch_190d64, (int)(short)(*(short *)scratch_190d66 + 15), (int)(short)choice, (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param1 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_type2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))), (int)(short)((unsigned short)(unsigned char)*(signed char *)(enchant_side_effect_excludes_param2 + ((((int)(short)exclusion_row) * 20) + (((int)(short)choice) << 2)))));
 }
 
 void itemmaker_add_side_effects(void)
@@ -287,11 +287,11 @@ void itemmaker_store_item(void)
 
 void itemmaker_remove_slot(short slot)
 {
-    if (((int)(short)slot) == (-1) || D_00199910[(int)(short)slot] != 0) return;
+    if (((int)(short)slot) == (-1) || itemmaker_slot_from_soul[(int)(short)slot] != 0) return;
     if (((int)(signed char)scratch_190ce4[(int)(short)slot]) == 1 && itemmaker_slots[(short)slot].type == 0) {
         itemmaker_clear_soul_slots();
     }
-    mc_memset((void *)(((iptr)D_00199868) + (((int)(short)slot) * 10)), -1, 10, str_itemmakr_c, 511, 4);
+    mc_memset((void *)(((iptr)itemmaker_slot_exclusions) + (((int)(short)slot) * 10)), -1, 10, str_itemmakr_c, 511, 4);
     scratch_190ce4[(int)(short)slot] = 255;
     itemmaker_slots[(short)slot].param = 0;
 }
@@ -303,11 +303,11 @@ void itemmaker_soul_list_cb(struct record *soul)
     if (soul->type != 20 || *(int *)D_00195B84 > 62) return;
     if (D_00190D63 == soul->soul_creature) scratch_object = soul;
     text_rsc_buffer[*(int *)D_00195B84] = (signed char)soul->soul_creature;
-    *(iptr *)(scratch_190ee4 + ((*(int *)D_00195B84)++ << PTR_SHIFT)) = D_00190EDC;
-    mc_strncpy((char *)D_00190EDC, monster_names[soul->soul_creature], 4, str_itemmakr_c, 526);
-    next_name = D_00190EDC;
+    *(iptr *)(scratch_190ee4 + ((*(int *)D_00195B84)++ << PTR_SHIFT)) = itemmaker_soul_name_next;
+    mc_strncpy((char *)itemmaker_soul_name_next, monster_names[soul->soul_creature], 4, str_itemmakr_c, 526);
+    next_name = itemmaker_soul_name_next;
     next_name += strlen(monster_names[soul->soul_creature]) + 1;
-    D_00190EDC = next_name;
+    itemmaker_soul_name_next = next_name;
 }
 
 int itemmaker_pick_param_list(iptr list_kind)
@@ -316,11 +316,11 @@ int itemmaker_pick_param_list(iptr list_kind)
     case 1:
     case 2:
     case 3:
-        itemmaker_show_param_list(spells_std_names_for_ids(D_00185871[list_kind]), (int)(short)(list_kind - 1));
+        itemmaker_show_param_list(spells_std_names_for_ids(enchant_spell_lists_by_kind[list_kind]), (int)(short)(list_kind - 1));
         break;
     case 4:
         *(iptr *)scratch_190ee4 = (iptr)scratch_buffer + 20000;
-        D_00190EDC = (iptr)scratch_buffer + 21000;
+        itemmaker_soul_name_next = (iptr)scratch_buffer + 21000;
         *(int *)D_00195B84 = 0;
         object_foreach(player_entity->children, itemmaker_soul_list_cb);
         if (*(int *)D_00195B84 == 0 && ((int)(short)scratch_190d68) != 2) {
@@ -368,7 +368,7 @@ void itemmaker_show_list(iptr *names, int type)
     index = count;
     while (*names != 0) {
         for (slot = 0; ((int)(short)*(short *)&slot) < 10; slot++) {
-            if (((short)((unsigned short)(unsigned char)D_00199868[(int)(short)*(short *)&slot][0].type) == *(short *)&type && ((int)(unsigned char)D_00199868[(int)(short)*(short *)&slot][0].param) == 255) || ((short)((unsigned short)(unsigned char)D_00199868[(int)(short)*(short *)&slot][1].type) == *(short *)&type && ((int)(unsigned char)D_00199868[(int)(short)*(short *)&slot][1].param) == 255) || ((short)((unsigned short)(unsigned char)D_00199868[(int)(short)*(short *)&slot][2].type) == *(short *)&type && ((int)(unsigned char)D_00199868[(int)(short)*(short *)&slot][2].param) == 255) || ((short)((unsigned short)(unsigned char)D_00199868[(int)(short)*(short *)&slot][3].type) == *(short *)&type && ((int)(unsigned char)D_00199868[(int)(short)*(short *)&slot][3].param) == 255) || ((short)((unsigned short)(unsigned char)D_00199868[(int)(short)*(short *)&slot][4].type) == *(short *)&type && ((int)(unsigned char)D_00199868[(int)(short)*(short *)&slot][4].param) == 255)) {
+            if (((short)((unsigned short)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][0].type) == *(short *)&type && ((int)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][0].param) == 255) || ((short)((unsigned short)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][1].type) == *(short *)&type && ((int)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][1].param) == 255) || ((short)((unsigned short)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][2].type) == *(short *)&type && ((int)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][2].param) == 255) || ((short)((unsigned short)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][3].type) == *(short *)&type && ((int)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][3].param) == 255) || ((short)((unsigned short)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][4].type) == *(short *)&type && ((int)(unsigned char)itemmaker_slot_exclusions[(int)(short)*(short *)&slot][4].param) == 255)) {
                 goto L576C2;
             }
         }
@@ -420,7 +420,7 @@ int enchant_spell_cost(unsigned char spell_id)
     for (; i < 128; i++) {
         if (spell_records[i].name[0] == 0) continue;
         if (spell_records[i].id == spell_id) {
-            return spell_cost(&spell_records[i], (struct character *)D_0019574C) * 10;
+            return spell_cost(&spell_records[i], (struct character *)enchant_reference_character) * 10;
         }
     }
     return 0;
@@ -437,11 +437,11 @@ int itemmaker_points_used(void)
     points = slot;
     for (; slot < 10; slot++) {
         if (((int)(signed char)scratch_190ce4[slot]) == (-1)) continue;
-        if (D_00199910[slot] != 0) continue;
+        if (itemmaker_slot_from_soul[slot] != 0) continue;
         if (scratch_190ce4[slot] == 0) {
             cost_table = (iptr)(char *)enchant_power_costs;
         } else {
-            cost_table = (iptr)(char *)D_001858DB;
+            cost_table = (iptr)(char *)enchant_side_effect_costs;
         }
         cost_code = *(iptr *)((char *)(((itemmaker_slots[slot].type) << PTR_SHIFT) + cost_table));
         if (cost_code == 0) continue;
@@ -535,20 +535,20 @@ void itemmaker_clear_soul_slots(void)
     int slot;
 
     for (slot = 0; slot < 10; slot++) {
-        if (D_00199910[slot] == 0) continue;
-        D_00199910[slot] = 0;
+        if (itemmaker_slot_from_soul[slot] == 0) continue;
+        itemmaker_slot_from_soul[slot] = 0;
         scratch_190ce4[slot] = 255;
         itemmaker_slots[slot].type = (itemmaker_slots[slot].param = 0);
-        mc_memset((void *)(((iptr)D_00199868) + (slot * 10)), -1, 10, str_itemmakr_c, 939, 4);
+        mc_memset((void *)(((iptr)itemmaker_slot_exclusions) + (slot * 10)), -1, 10, str_itemmakr_c, 939, 4);
     }
-    mc_memset(D_001998CC, -1, 20, str_itemmakr_c, 942, 4);
+    mc_memset(itemmaker_soul_codes, -1, 20, str_itemmakr_c, 942, 4);
 }
 
 void func_0005852D(int cells)
 {
     struct record *item;
 
-    inv_left_count = (D_001AA586 = 0);
+    inv_left_count = (inv_left_item_count = 0);
     mc_memset((char *)inv_left_rows, 0, 20, str_itemmakr_c, 951, 20);
     if (inv_left_container != player_entity) {
         inv_draw_item_cell(inv_left_container, 0, cells);
@@ -559,7 +559,7 @@ void func_0005852D(int cells)
         func_000585D6(item, cells + 12);
         item = item->next;
     }
-    inv_left_count = D_001AA586;
+    inv_left_count = inv_left_item_count;
 }
 
 void func_000585D6(struct record *item, int cells)
@@ -567,11 +567,11 @@ void func_000585D6(struct record *item, int cells)
     int unused;
 
     if (item->type != 2 || ((int)(unsigned short)(item->flags & 2)) != 0) return;
-    if (((int)(short)D_001AA586) >= *(int *)inv_left_scroll && ((int)(short)D_001AA586) < (*(int *)inv_left_scroll + 4)) {
-        inv_left_rows[(((int)(short)D_001AA586) - *(int *)inv_left_scroll)] = (iptr)item;
-        inv_draw_item_cell(item, (int)(short)(D_001AA586 - *(short *)inv_left_scroll), cells);
+    if (((int)(short)inv_left_item_count) >= *(int *)inv_left_scroll && ((int)(short)inv_left_item_count) < (*(int *)inv_left_scroll + 4)) {
+        inv_left_rows[(((int)(short)inv_left_item_count) - *(int *)inv_left_scroll)] = (iptr)item;
+        inv_draw_item_cell(item, (int)(short)(inv_left_item_count - *(short *)inv_left_scroll), cells);
     }
-    D_001AA586++;
+    inv_left_item_count++;
 }
 
 void itemmaker_list_parent(void)
@@ -686,7 +686,7 @@ iptr enchant_powers_text(struct item *item)
 
     i = 0;
     out = D_001913E4;
-    if (((int)(unsigned short)(item->item_flags & 32)) == 0) return (iptr)D_00175723;
+    if (((int)(unsigned short)(item->item_flags & 32)) == 0) return (iptr)enchant_text_powers_unknown;
     for (i = 0; i < 10; i++) {
         if (item->enchantments[i].type == (-1)) continue;
         if (item->enchantments[i].type < 15) {
@@ -710,7 +710,7 @@ iptr enchant_powers_text(struct item *item)
                 }
             }
         }
-        func_000A1054((char *)text_buffer, D_00175738, str_itemmakr_c, 1148, 160);
+        func_000A1054((char *)text_buffer, enchant_text_empty, str_itemmakr_c, 1148, 160);
         mc_strncpy(out, (char *)text_buffer, 4, str_itemmakr_c, 1149);
         out += strlen(out);
     }

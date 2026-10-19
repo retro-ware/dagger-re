@@ -6,7 +6,7 @@
 extern short mouse_y;
 extern short font_height;
 extern signed char scratch_190cee[];
-extern signed char D_00190D02[];
+extern signed char itemmaker_side_row_slots[];
 
 extern int xn_font_select(int);
 
@@ -18,6 +18,6 @@ int itemmaker_row_slot(short side)
     row = mouse_y - 60;
     if ((short)row < 0) return -1;
     *(int *)&row = ((int)(short)row) / ((int)(short)font_height);
-    if (side != 0) return (int)(signed char)D_00190D02[(int)(short)row];
+    if (side != 0) return (int)(signed char)itemmaker_side_row_slots[(int)(short)row];
     return (int)(signed char)scratch_190cee[(int)(short)row];
 }

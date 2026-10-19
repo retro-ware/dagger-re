@@ -2,40 +2,40 @@
 #include "records.h"
 #include "clib.h"
 extern char str_no_room_in_item[];
-extern char D_00185716[];
-extern char D_00185717[];
-extern char D_00185718[];
-extern char D_00185719[];
-extern char D_00185766[];
-extern char D_00185825[];
-extern char D_0018584D[];
-extern char D_00185907[];
-extern char D_00185908[];
-extern char D_00185909[];
-extern char D_0018590A[];
-extern char D_0018597F[];
-extern char D_001859A4[];
-extern char D_001859A6[];
-extern unsigned char D_00185A94[];
-extern unsigned char D_00185A95[];
-extern char D_00185A96[];
-extern char D_00185A97[];
-extern char D_00185AC4[];
-extern char *D_00185AE4[];
+extern char enchant_power_excludes_type1[];
+extern char enchant_power_excludes_param1[];
+extern char enchant_power_excludes_type2[];
+extern char enchant_power_excludes_param2[];
+extern char enchant_power_exclusion_rows[];
+extern char enchant_soul_power_codes[];
+extern char enchant_soul_side_effect_codes[];
+extern char enchant_side_effect_excludes_type1[];
+extern char enchant_side_effect_excludes_param1[];
+extern char enchant_side_effect_excludes_type2[];
+extern char enchant_side_effect_excludes_param2[];
+extern char enchant_side_effect_exclusion_rows[];
+extern char enchant_soul_powers_type[];
+extern char enchant_soul_powers_param[];
+extern unsigned char enchant_soul_codes_kind[];
+extern unsigned char enchant_soul_codes_list[];
+extern char enchant_soul_codes_kind2[];
+extern char enchant_soul_codes_list2[];
+extern char enchant_soul_creatures[];
+extern char *enchant_soul_code_lists[];
 extern signed char scratch_190ce4[];
 extern char scratch_190d64[];
-extern signed char D_0019986A[];
-extern signed char D_0019986B[];
-extern signed char D_0019986E[];
-extern signed char D_0019986F[];
-extern signed char D_00199870[];
-extern signed char D_00199871[];
-extern char D_001998CC[];
-extern char D_001998CD[];
-extern char D_001998D6[];
-extern char D_001998D7[];
+extern signed char itemmaker_slot_exclusions_2[];
+extern signed char itemmaker_slot_exclusions_3[];
+extern signed char itemmaker_slot_exclusions_6[];
+extern signed char itemmaker_slot_exclusions_7[];
+extern signed char itemmaker_slot_exclusions_8[];
+extern signed char itemmaker_slot_exclusions_9[];
+extern char itemmaker_soul_codes[];
+extern char itemmaker_soul_codes_code[];
+extern char itemmaker_soul_side_codes[];
+extern char itemmaker_soul_side_codes_code[];
 extern struct enchantment itemmaker_slots[];
-extern signed char D_00199910[];
+extern signed char itemmaker_slot_from_soul[];
 extern void msgbox_show_string(char *, short);
 extern void func_00057147(short, short, short, short, short, short, short);
 extern int itemmaker_free_slot(void);
@@ -52,33 +52,33 @@ void itemmaker_add_soul_powers(int soul)
     int slot;
     char *found;
 
-    found = memchr(D_00185AC4, soul, 12);
+    found = memchr(enchant_soul_creatures, soul, 12);
     if (found == 0) return;
-    soul_row = (int)(found - D_00185AC4);
+    soul_row = (int)(found - enchant_soul_creatures);
     for (i = 0; i < 4; i += 2) {
-        if (D_00185A94[soul_row * 4 + i] == 128) {
+        if (enchant_soul_codes_kind[soul_row * 4 + i] == 128) {
             for (j = 0; j < 5; j++) {
-                found = memchr(D_00185825, ((unsigned char *)D_00185AE4[D_00185A95[soul_row * 4 + i]])[j], 39);
+                found = memchr(enchant_soul_power_codes, ((unsigned char *)enchant_soul_code_lists[enchant_soul_codes_list[soul_row * 4 + i]])[j], 39);
                 if (found == 0)
                     continue;
-                D_001998CC[j * 2] = 0;
-                D_001998CD[j * 2] = found - D_00185825;
+                itemmaker_soul_codes[j * 2] = 0;
+                itemmaker_soul_codes_code[j * 2] = found - enchant_soul_power_codes;
             }
-        } else if (D_00185A94[soul_row * 4 + i] == 129) {
+        } else if (enchant_soul_codes_kind[soul_row * 4 + i] == 129) {
             for (j = 0; j < 5; j++) {
-                found = memchr(D_0018584D, ((unsigned char *)D_00185AE4[D_00185A95[soul_row * 4 + i]])[j], 26);
+                found = memchr(enchant_soul_side_effect_codes, ((unsigned char *)enchant_soul_code_lists[enchant_soul_codes_list[soul_row * 4 + i]])[j], 26);
                 if (found == 0)
                     continue;
-                D_001998D6[j * 2] = 1;
-                D_001998D7[j * 2] = found - D_0018584D;
+                itemmaker_soul_side_codes[j * 2] = 1;
+                itemmaker_soul_side_codes_code[j * 2] = found - enchant_soul_side_effect_codes;
             }
-        } else if (D_00185A94[soul_row * 4 + i] == 255)
+        } else if (enchant_soul_codes_kind[soul_row * 4 + i] == 255)
             continue;
-        ((char (*)[10])((char *)D_0019986A))[*(short *)scratch_190d64][i * 2] = ((char *)D_00185A94)[soul_row * 4 + i];
-        ((char (*)[10])((char *)D_0019986B))[*(short *)scratch_190d64][i * 2] = ((char *)D_00185A95)[soul_row * 4 + i];
+        ((char (*)[10])((char *)itemmaker_slot_exclusions_2))[*(short *)scratch_190d64][i * 2] = ((char *)enchant_soul_codes_kind)[soul_row * 4 + i];
+        ((char (*)[10])((char *)itemmaker_slot_exclusions_3))[*(short *)scratch_190d64][i * 2] = ((char *)enchant_soul_codes_list)[soul_row * 4 + i];
     }
     count = 0;
-    while (*(short *)(D_001859A4 + soul_row * 20 + count * 4) != -1)
+    while (*(short *)(enchant_soul_powers_type + soul_row * 20 + count * 4) != -1)
         count++;
     if (count > 5)
         count = 5;
@@ -88,34 +88,34 @@ void itemmaker_add_soul_powers(int soul)
     }
     for (i = 0; i < count; i++) {
         slot = itemmaker_free_slot();
-        ((char *)D_00199910)[slot] = 1;
-        itemmaker_slots[slot].type = *(short *)(D_001859A4 + soul_row * 20 + i * 4);
-        itemmaker_slots[slot].param = *(short *)(D_001859A6 + soul_row * 20 + i * 4);
-        type = *(short *)(D_001859A4 + soul_row * 20 + i * 4);
-        param = *(short *)(D_001859A6 + soul_row * 20 + i * 4);
-        if (*(short *)(D_001859A4 + soul_row * 20 + i * 4) < 15) {
+        ((char *)itemmaker_slot_from_soul)[slot] = 1;
+        itemmaker_slots[slot].type = *(short *)(enchant_soul_powers_type + soul_row * 20 + i * 4);
+        itemmaker_slots[slot].param = *(short *)(enchant_soul_powers_param + soul_row * 20 + i * 4);
+        type = *(short *)(enchant_soul_powers_type + soul_row * 20 + i * 4);
+        param = *(short *)(enchant_soul_powers_param + soul_row * 20 + i * 4);
+        if (*(short *)(enchant_soul_powers_type + soul_row * 20 + i * 4) < 15) {
             ((char *)scratch_190ce4)[slot] = 0;
-            j = *(unsigned char *)(D_00185766 + type);
+            j = *(unsigned char *)(enchant_power_exclusion_rows + type);
             if (j == 0)
                 func_00057147(slot, type, param, -1, -1, -1, -1);
             else {
                 j--;
-                func_00057147(slot, type, param, *(unsigned char *)(D_00185716 + j * 20 + param * 4), *(unsigned char *)(D_00185717 + j * 20 + param * 4), *(unsigned char *)(D_00185718 + j * 20 + param * 4), *(unsigned char *)(D_00185719 + j * 20 + param * 4));
+                func_00057147(slot, type, param, *(unsigned char *)(enchant_power_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_power_excludes_param2 + j * 20 + param * 4));
             }
         } else {
             ((char *)scratch_190ce4)[slot] = 1;
             itemmaker_slots[slot].type -= 15;
-            j = *(unsigned char *)(D_0018597F + type);
+            j = *(unsigned char *)(enchant_side_effect_exclusion_rows + type);
             if (j == 0)
                 func_00057147(slot, type, param, -1, -1, -1, -1);
             else {
                 j--;
-                func_00057147(slot, type, param, *(unsigned char *)(D_00185907 + j * 20 + param * 4), *(unsigned char *)(D_00185908 + j * 20 + param * 4), *(unsigned char *)(D_00185909 + j * 20 + param * 4), *(unsigned char *)(D_0018590A + j * 20 + param * 4));
+                func_00057147(slot, type, param, *(unsigned char *)(enchant_side_effect_excludes_type1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param1 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_type2 + j * 20 + param * 4), *(unsigned char *)(enchant_side_effect_excludes_param2 + j * 20 + param * 4));
             }
         }
-        ((char *)D_0019986E)[slot * 10] = ((char *)D_00185A94)[soul_row * 4];
-        ((char *)D_0019986F)[slot * 10] = ((char *)D_00185A95)[soul_row * 4];
-        ((char *)D_00199870)[slot * 10] = D_00185A96[soul_row * 4];
-        ((char *)D_00199871)[slot * 10] = D_00185A97[soul_row * 4];
+        ((char *)itemmaker_slot_exclusions_6)[slot * 10] = ((char *)enchant_soul_codes_kind)[soul_row * 4];
+        ((char *)itemmaker_slot_exclusions_7)[slot * 10] = ((char *)enchant_soul_codes_list)[soul_row * 4];
+        ((char *)itemmaker_slot_exclusions_8)[slot * 10] = enchant_soul_codes_kind2[soul_row * 4];
+        ((char *)itemmaker_slot_exclusions_9)[slot * 10] = enchant_soul_codes_list2[soul_row * 4];
     }
 }

@@ -1109,7 +1109,7 @@ global,0x001857A1,enchant_power_params,strong,"15 entries: 1-3 the spell lists, 
 global,0x001857E5,enchant_power_costs,strong,"per power: cost code (< 100) or a pointer to costs by parameter (itemmaker_points_used, itemmaker_gold_cost, enchant_item_value). New: power 3 -> 500,500,500,500,200,200; 4 -> 800,900,1000,1200; 5 -> 4000,3000,3000 = Daggerfall Unity ItemBuilder extraSpellPtsEnchantPts / potentVsEnchantPts / regensHealthEnchantPts"
 global,0x00185875,enchant_spell_lists,strong,3 pointers to 255-terminated SPELLS.STD id lists for cast when used / held / strikes
 global,0x001858AB,enchant_side_effect_params,strong,"11 entries: 4 souls, else parameter labels"
-global,0x001858DB,enchant_side_effect_costs,candidate,per side effect: cost code (99 soul) or costs by parameter. Keep: code only (itemmaker_points_used); Daggerfall Unity's side-effect costs were not compared
+global,0x001858DB,enchant_side_effect_costs,strong,per side effect: cost code (99 soul) or costs by parameter. Keep: code only (itemmaker_points_used)
 global,0x0018598A,enchant_fixed_costs,strong,"shorts by cost code: 0, -3000, -2500, -100, -700, 0, 0, 0, 900, 1500, 900, 100, 700. New: identical to Daggerfall Unity ItemBuilder.enchantmentPointCostsForNonParamTypes (0, 0xF448, 0xF63C, 0xFF9C, 0xFD44, 0, 0, 0, 0x384, 0x5DC, 0x384, 0x64, 0x2BC)"
 global,0x00185AF4,itemmaker_buttons,strong,"20 x {rect, handler}: ITEM NAME, powers list, ADD POWERS, side effects list, ADD SIDE EFFECTS, item slot, ENCHANT, EXIT, item column (8-12), scroll (13-14, inven.c), tabs (15-18); layout matches open_0x55E35.png"
 global,0x00185BE4,book_buttons,strong,"4 x {x0,y0,x1,y1,handler}: prev, goto page, next, exit"
@@ -1295,7 +1295,7 @@ global,0x001952EC,quest_global_states,strong,"byte array of global (main quest) 
 global,0x0019532C,ai_characters,strong,"entity+0x47 (character record) per AI index, made with ai_entities"
 global,0x0019552C,ai_entities,strong,"copy of creature_list (entity pointers) per AI index, made by ai_update_creatures each frame; ai_pick_target and weapon code index it"
 global,0x0019572C,text_macro_fcn,strong,%fcn text (parse.c 47815): name of the nearest town with the asked-for group (talk_find_regional)
-global,0x0019574C,enchant_reference_character,candidate,a character record whose 35 skills enchant_spell_cost sets to 50 before costing a spell. Keep: code only (enchant_spell_cost)
+global,0x0019574C,enchant_reference_character,strong,a character record whose 35 skills enchant_spell_cost sets to 50 before costing a spell. Keep: code only (enchant_spell_cost)
 global,0x0019597C,right_hand_ready_delay,candidate,accumulates the ready time of a changed right-hand weapon (inv_track_hand_weapons); >0 at close gives 'Equipping %it'. Keep: code only; swapping the right-hand weapon and closing the inventory ('Equipping %it') would settle it
 global,0x00195980,left_hand_ready_delay,confirmed,"accumulates the ready time of a changed left-hand weapon (equipped[21], inv_track_hand_weapons); player_frame_update counts it down by frame_ticks; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: set to 1, player_frame_update brought it to 0 and called hud_message_add with 'Left hand equipped.' (0x17008C); at 0 no message"
 global,0x00195984,quest_passed_items,candidate,code reading (opcode 75)
@@ -1775,11 +1775,11 @@ global,0x0019980C,class_questions_asked,strong,10 question numbers already asked
 global,0x00199819,class_answer_counts,strong,"3 bytes: answers of each kind (warrior, rogue, mage), max 10; class_question_pick_class reads them"
 global,0x00199820,classmaker_specials,strong,"[2][7] {kind, sub-choice} of the picked advantages and disadvantages"
 global,0x0019983C,classmaker_current_buttons,strong,"the button table for classmaker_screen: classmaker_buttons (28), the reputation table (6) or the specials table (1 or 3)"
-global,0x00199868,itemmaker_slot_exclusions,candidate,"10 x 10 bytes: per slot 5 (type, param) pairs ruled out. Keep: code only (itemmaker exclusions)"
+global,0x00199868,itemmaker_slot_exclusions,strong,"10 slots x 5 (type, param) pairs ruled out by the slot; func_00057147 fills, itemmaker_show_param_list reads"
 global,0x001998E0,itemmaker_slots,strong,"10 x {s16 type, s16 param}: the enchantments being made, copied to item+0x43 by itemmaker_enchant"
 global,0x00199908,itemmaker_item,strong,item data being enchanted (itemmaker_pick_item); enchant points item+0x3D
 global,0x0019990C,itemmaker_item_object,strong,its object
-global,0x00199910,itemmaker_slot_from_soul,candidate,10 bytes: slot was filled by a bound soul. Keep: code only (itemmaker)
+global,0x00199910,itemmaker_slot_from_soul,strong,"10 bytes: slot was filled by a bound soul (itemmaker_draw, itemmaker_remove_slot refuses it)"
 global,0x0019991C,npc_record_buffer,confirmed,"560-byte character-format record npc_talk_record_build fills for pedestrians and building NPCs (types 53, 8); talk_npc_record and text_macro_npc point at it; exp4 (scratch/text/exp4.py save_morthag1): returned by npc_talk_record_build"
 global,0x00199B4C,paperdoll_slots,strong,"build/names/scratch/audit_tq/exp_small.py: a byte per paperdoll_items entry: the equipment slot (12 helm, 14 cloak, 26 boots ...)"
 global,0x00199B50,paperdoll_items,strong,build/names/scratch/audit_tq/exp_misc.py save_tlalac_s: 11 item pointers sorted by draw layer after paperdoll_draw
@@ -7147,3 +7147,45 @@ global,0x00187784,str_e,confirmed,"String literal ""'e"", used by music_select_t
 global,0x001877A0,str_e_2,confirmed,"String literal ""]e"", used by music_select_tables."
 global,0x00188249,str_x,confirmed,"String literal ""x"", used by inv_draw_armor_values."
 global,0x0018889A,str_y,confirmed,"String literal ""Y"", used by travel_map_update, travel_draw_locations, travel_mark_player, travel_location_at_cursor, func_0009CD32."
+global,0x001756BE,itemmaker_name_prompt_fmt,strong,"""%s : "" plus text-record end byte 0xF8; itemmaker_enter_name formats the name prompt with it"
+global,0x00175723,enchant_text_powers_unknown,strong,"text record ""Powers unknown."" (0xFD end); enchant_powers_text returns it for an unidentified item"
+global,0x00175738,enchant_text_empty,strong,empty text record (0xFD); enchant_powers_text starts its text buffer with it
+global,0x0017D1EA,prompt_enter_new_name,strong,"pointer to ""Enter new name""; itemmaker_enter_name and sheet_rename format their prompts with it"
+global,0x00185716,enchant_power_excludes_type1,strong,"per power row (20 bytes) and param (4 bytes): first excluded (type, param) pair, type byte; read by itemmaker_add_soul_powers and itemmaker_set_power_param_cb for func_00057147"
+global,0x00185717,enchant_power_excludes_param1,strong,byte 1 of the 4-byte power exclusion entry (enchant_power_excludes_type1+1): first excluded param
+global,0x00185718,enchant_power_excludes_type2,strong,byte 2 of the 4-byte power exclusion entry: second excluded type
+global,0x00185719,enchant_power_excludes_param2,strong,byte 3 of the 4-byte power exclusion entry: second excluded param
+global,0x00185766,enchant_power_exclusion_rows,strong,"per power type: row in the enchant_power_excludes_* table (0 none); itemmaker_add_soul_powers, itemmaker_set_power_param_cb"
+global,0x00185825,enchant_soul_power_codes,strong,39 power codes; itemmaker_add_soul_powers memchr's a soul power code here and stores its index as the power param
+global,0x0018584D,enchant_soul_side_effect_codes,strong,26 side-effect codes; itemmaker_add_soul_powers memchr's a soul code here and stores its index as the side-effect param
+global,0x00185871,enchant_spell_lists_by_kind,strong,enchant_spell_lists minus 4: itemmaker_pick_param_list indexes it with list_kind starting at 1
+global,0x00185907,enchant_side_effect_excludes_type1,strong,"per side-effect row (20 bytes) and param (4 bytes): first excluded (type, param) pair, type byte; itemmaker_add_soul_powers, itemmaker_set_side_effect_param_cb"
+global,0x00185908,enchant_side_effect_excludes_param1,strong,byte 1 of the 4-byte side-effect exclusion entry
+global,0x00185909,enchant_side_effect_excludes_type2,strong,byte 2 of the 4-byte side-effect exclusion entry
+global,0x0018590A,enchant_side_effect_excludes_param2,strong,byte 3 of the 4-byte side-effect exclusion entry
+global,0x0018597F,enchant_side_effect_exclusion_rows,strong,per side-effect type: row in enchant_side_effect_excludes_* (0 none)
+global,0x001859A4,enchant_soul_powers_type,strong,"per soul row 5 x (short type, short param), -1 ends; itemmaker_add_soul_powers adds them as the soul's slots; type < 15 is a power"
+global,0x001859A6,enchant_soul_powers_param,strong,the param short of each enchant_soul_powers_type entry (+2)
+global,0x00185A94,enchant_soul_codes_kind,strong,"per soul row 4 x 1 byte: 128 power code list, 129 side-effect code list, 255 end; copied to the slot exclusions"
+global,0x00185A95,enchant_soul_codes_list,strong,byte after enchant_soul_codes_kind: index into enchant_soul_code_lists
+global,0x00185A96,enchant_soul_codes_kind2,strong,"byte 2 of the soul row's 4-byte code entry, copied to slot exclusions"
+global,0x00185A97,enchant_soul_codes_list2,strong,"byte 3 of the soul row's 4-byte code entry, copied to slot exclusions"
+global,0x00185AC4,enchant_soul_creatures,strong,12 monster ids with fixed soul powers; itemmaker_add_soul_powers memchr's the soul's creature to get its row
+global,0x00185AE4,enchant_soul_code_lists,strong,"pointers to 0xFF-terminated code lists, indexed by enchant_soul_codes_list"
+global,0x00190CEF,itemmaker_power_row_slots,strong,per visible power row: its slot (255 none); written by itemmaker_draw
+global,0x00190CF0,itemmaker_power_row_slots_1,strong,itemmaker_power_row_slots+1: itemmaker_draw clears the next row
+global,0x00190D02,itemmaker_side_row_slots,strong,"per side-effect row: its slot (-1 none); itemmaker_reset fills 30 bytes, itemmaker_row_slot(1) reads it"
+global,0x00190D03,itemmaker_side_row_slots_1,strong,"itemmaker_side_row_slots+1, written by itemmaker_draw"
+global,0x00190D04,itemmaker_side_row_slots_2,strong,"itemmaker_side_row_slots+2, cleared by itemmaker_draw"
+global,0x00190EDC,itemmaker_soul_name_next,strong,pointer to the next free 4-char soul name in the soul list buffer (itemmaker_soul_list_cb)
+global,0x0019986A,itemmaker_slot_exclusions_2,strong,"itemmaker_slot_exclusions+2 (second pair's type), written by itemmaker_add_soul_powers"
+global,0x0019986B,itemmaker_slot_exclusions_3,strong,itemmaker_slot_exclusions+3 (second pair's param)
+global,0x0019986E,itemmaker_slot_exclusions_6,strong,itemmaker_slot_exclusions+6 (fourth pair's type)
+global,0x0019986F,itemmaker_slot_exclusions_7,strong,itemmaker_slot_exclusions+7
+global,0x00199870,itemmaker_slot_exclusions_8,strong,itemmaker_slot_exclusions+8
+global,0x00199871,itemmaker_slot_exclusions_9,strong,itemmaker_slot_exclusions+9
+global,0x001998CC,itemmaker_soul_codes,strong,"10 x (flag, code) of the bound soul's code powers; itemmaker_clear_soul_slots sets -1"
+global,0x001998CD,itemmaker_soul_codes_code,strong,itemmaker_soul_codes+1: index of the power code
+global,0x001998D6,itemmaker_soul_side_codes,strong,"10 x (flag, code) after itemmaker_soul_codes, side-effect codes"
+global,0x001998D7,itemmaker_soul_side_codes_code,strong,itemmaker_soul_side_codes+1: index of the side-effect code
+global,0x001AA586,inv_left_item_count,strong,items counted into the left inventory list (inv_list_left_item); itemmaker uses it for its list too
