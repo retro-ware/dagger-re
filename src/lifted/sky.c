@@ -16,7 +16,7 @@ extern int xn_sin_table[];
 extern int xn_cos_table[];
 extern char str_moon00i0_cfa[];
 extern char str_moon01i0_cfa[];
-extern char D_00170A86[];
+extern char str_sky_c[];
 extern char str_sky_dat[];
 extern char str_nightsky_col[];
 extern char str_nite_i0_img[];
@@ -88,8 +88,8 @@ void sky_init(void)
     sky_loaded_frame = 10000;
     moon0_image = (struct cfa_header *)disk_read_file(str_moon00i0_cfa, 0);
     moon1_image = (struct cfa_header *)disk_read_file(str_moon01i0_cfa, 0);
-    sky_image_a = (iptr)mc_malloc(112640, D_00170A86, 93);
-    sky_image_b = (iptr)mc_malloc(112640, D_00170A86, 94);
+    sky_image_a = (iptr)mc_malloc(112640, str_sky_c, 93);
+    sky_image_b = (iptr)mc_malloc(112640, str_sky_c, 94);
     sky_init_value = 13;
     for (i = 0; i < 32; i++) {
         sky_palette_r[i * 3] <<= 2;
@@ -146,19 +146,19 @@ void sky_free(void)
     int unused;
 
     if ((iptr)moon0_image != 0 && (iptr)moon0_image != (-1751672937)) {
-        mc_free(moon0_image, D_00170A86, 368);
+        mc_free(moon0_image, str_sky_c, 368);
         moon0_image = (struct cfa_header *)(iptr)-1751672937;
     }
     if ((iptr)moon1_image != 0 && (iptr)moon1_image != (-1751672937)) {
-        mc_free(moon1_image, D_00170A86, 369);
+        mc_free(moon1_image, str_sky_c, 369);
         moon1_image = (struct cfa_header *)(iptr)-1751672937;
     }
     if (sky_image_a != 0 && sky_image_a != (-1751672937)) {
-        mc_free((void *)sky_image_a, D_00170A86, 370);
+        mc_free((void *)sky_image_a, str_sky_c, 370);
         sky_image_a = -1751672937;
     }
     if (sky_image_b == 0 || sky_image_b == (-1751672937)) return;
-    mc_free((void *)sky_image_b, D_00170A86, 371);
+    mc_free((void *)sky_image_b, str_sky_c, 371);
     sky_image_b = -1751672937;
 }
 
@@ -238,14 +238,14 @@ void sky_load_day(int minutes)
     srand(saved_seed);
     if (frame == sky_loaded_frame) return;
     sky_loaded_frame = frame;
-    mc_set_location(558, D_00170A86);
+    mc_set_location(558, str_sky_c);
     mc_sprintf((char *)text_buffer, str_sky_dat, frame >> 5);
     fd = disk_open_data(text_buffer);
     frame &= 31;
     lseek(fd, (int)(iptr)&*(signed char *)((char *)(iptr)(frame * 776) + 11), 0);
     read(fd, (void *)scratch_buffer, 93);
     xn_pal_set_range_8bit(scratch_buffer, 1, 31);
-    mc_memcpy((xn_pal_current + 3), (void *)scratch_buffer, 93, D_00170A86, 565, 4);
+    mc_memcpy((xn_pal_current + 3), (void *)scratch_buffer, 93, str_sky_c, 565, 4);
     sky_set_time_colour(game_minutes);
     lseek(fd, (frame << 14) + 24832, 0);
     read(fd, (void *)haze_table_0, 16384);
@@ -270,7 +270,7 @@ void sky_draw_day(int horizon_y, int horizon_y2, int day, int climate)
     night_sky_loaded = 0;
     view_bottom = ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y);
     if (((int)(unsigned char)(climate_weathers[climate] & 127)) == 3 || ((int)(unsigned char)(climate_weathers[climate] & 128)) != 0) {
-        mc_memset((void *)screen_buffer, 119, view_bottom * 320, D_00170A86, 598, 4);
+        mc_memset((void *)screen_buffer, 119, view_bottom * 320, str_sky_c, 598, 4);
         return;
     }
     view_bottom = ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y);
@@ -305,9 +305,9 @@ void sky_draw_day(int horizon_y, int horizon_y2, int day, int climate)
         }
     }
     for (row = horizon_y; row < view_bottom; row++) {
-        mc_memset((*(char **)&big_buffer + (row * 320)), (int)(unsigned char)*(signed char *)(((char *)sky_image_a) + 109058), 320, D_00170A86, 636, 4);
+        mc_memset((*(char **)&big_buffer + (row * 320)), (int)(unsigned char)*(signed char *)(((char *)sky_image_a) + 109058), 320, str_sky_c, 636, 4);
     }
-    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, D_00170A86, 638, 4);
+    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, str_sky_c, 638, 4);
 }
 
 void sky_set_time_colour(int minutes)
@@ -337,8 +337,8 @@ void sky_load_night(void)
 {
     disk_read_file(str_nightsky_col, (iptr)scratch_buffer);
     xn_pal_set_range_8bit((char *)((iptr)scratch_buffer + 11), 1, 31);
-    mc_memcpy((void *)((iptr)xn_pal_current + 3), (scratch_buffer + 11), 93, D_00170A86, 671, 4);
-    mc_set_location(673, D_00170A86);
+    mc_memcpy((void *)((iptr)xn_pal_current + 3), (scratch_buffer + 11), 93, str_sky_c, 671, 4);
+    mc_set_location(673, str_sky_c);
     mc_sprintf((char *)text_buffer, str_nite_i0_img, (int)(unsigned char)night_sky_images[climate_category()]);
     disk_read_file(text_buffer, sky_image_a);
     sky_add_stars((unsigned char *)sky_image_a);
@@ -375,9 +375,9 @@ void sky_draw_night(int horizon_y, int horizon_y2)
     }
     if (horizon_y < 0) horizon_y = 0;
     for (row = horizon_y; row < view_bottom; row++) {
-        mc_memset((*(char **)&big_buffer + (row * 320)), 15, 320, D_00170A86, 713, 4);
+        mc_memset((*(char **)&big_buffer + (row * 320)), 15, 320, str_sky_c, 713, 4);
     }
-    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, D_00170A86, 715, 4);
+    mc_memcpy((void *)screen_buffer, (void *)big_buffer, view_bottom * 320, str_sky_c, 715, 4);
 }
 
 void sky_add_stars(unsigned char *image)

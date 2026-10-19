@@ -9,8 +9,8 @@ extern char daedra_summon_days[];
 extern char daedra_day_special[];
 extern unsigned char daedra_weather[];
 extern unsigned char daedra_summon_monsters[];
-extern unsigned char D_00179E94[];
-extern unsigned char D_001850D4[];
+extern unsigned char daedra_regions[];
+extern unsigned char quest_letters[];
 extern iptr quest_letter_text_ids[];
 extern signed char text_buffer[];
 extern unsigned game_minutes;
@@ -34,7 +34,7 @@ extern int gold_can_afford(int);
 extern char *xn_str_find_u16(char *, short, int);
 #pragma aux mc_set_location parm routine [];
 
-#define REGION(o) D_001850D4[D_00179E94[(o)->id]]
+#define REGION(o) quest_letters[daedra_regions[(o)->id]]
 
 void daedra_summon(struct record *object)
 {
@@ -176,7 +176,7 @@ void daedra_summon(struct record *object)
         daedra_entry = &REGION(daedra);
         mc_memset(flc, 0, sizeof(flc), str_daedra_c, 189, 4);
         current_quest = 0;
-        flc_play_with_text(quest_letter_text_ids[daedra_entry - D_001850D4], flc, 482, 0);
+        flc_play_with_text(quest_letter_text_ids[daedra_entry - quest_letters], flc, 482, 0);
         object = monster_summon_near_player(daedra_summon_monsters[rand_range(0, 4)]);
         if (object != 0)
             object->data.character.team = 1;

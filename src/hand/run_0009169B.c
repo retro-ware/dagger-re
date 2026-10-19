@@ -9,7 +9,7 @@ extern short mouse_y;
 extern unsigned char text_colour;
 extern short font_height;
 extern char *screen_buffer;
-extern char D_00176F41[];       /* __FILE__ */
+extern char str_generate_c[];       /* __FILE__ */
 extern char str_am[];
 extern char str_nc[];
 extern char str_pt[];
@@ -54,7 +54,7 @@ int chargen_screen_loop(int first, int last)
 
     for (;;) {
         chargen_draw();
-        mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_00176F41, 238, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_generate_c, 238, 4);
         if (mouse_buttons != 0 && mouse_buttons_prev == 0 &&
             mouse_x > chargen_buttons[0].x0 && mouse_x < chargen_buttons[0].x1 &&
             mouse_y > chargen_buttons[0].y0 && mouse_y < chargen_buttons[0].y1) {

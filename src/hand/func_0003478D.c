@@ -13,7 +13,7 @@ extern int xn_light_ambient;
 extern char xn_cam_rotation[];
 extern char xn_cam_view_matrix[];
 extern iptr screen_buffer;
-extern char D_00170A86[];
+extern char str_sky_c[];
 extern unsigned char player_environment;
 extern signed char world_running;
 extern struct region regions[];
@@ -170,18 +170,18 @@ void sky_update(void)
             sky_draw_day(screen_y, horizon_y, daylight, climate);
             return;
         }
-        mc_memset((void *)screen_buffer, (int)(unsigned char)*(signed char *)(((char *)haze_table_0)), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y) * 320, D_00170A86, 251, 4);
+        mc_memset((void *)screen_buffer, (int)(unsigned char)*(signed char *)(((char *)haze_table_0)), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y) * 320, str_sky_c, 251, 4);
     } else {
         sky_draw_night(screen_y, horizon_y);
     }
     if (horizon_row == 0) return;
     if (daylight == 0 && ((int)(unsigned char)weather) > 1) {
-        mc_memset((void *)screen_buffer, 223, 64000, D_00170A86, 262, 4);
+        mc_memset((void *)screen_buffer, 223, 64000, str_sky_c, 262, 4);
         sun_light = 0;
         return;
     }
     moons_visible = 0;
-    VEC3_LOCALS_MEMCPY(moon_x, moon_y, moon_z, moon0_direction, D_00170A86, 271);
+    VEC3_LOCALS_MEMCPY(moon_x, moon_y, moon_z, moon0_direction, str_sky_c, 271);
     xn_mat_transform_ptr(&moon_x, &moon_y, &moon_z, xn_cam_rotation);
     if (moon_z > 100) {
         xn_cam_project_ptr(moon_x, moon_y, moon_z, &screen_x, &screen_y);
@@ -189,7 +189,7 @@ void sky_update(void)
         moon0_image->y = (((int)(short)xn_cam_centre_y) + screen_y) - (moon0_image->height >> 1);
         moons_visible |= 1;
     }
-    VEC3_LOCALS_MEMCPY(moon_x, moon_y, moon_z, moon1_direction, D_00170A86, 281);
+    VEC3_LOCALS_MEMCPY(moon_x, moon_y, moon_z, moon1_direction, str_sky_c, 281);
     xn_mat_transform_ptr(&moon_x, &moon_y, &moon_z, xn_cam_rotation);
     if (moon_z > 100) {
         xn_cam_project_ptr(moon_x, moon_y, moon_z, &screen_x, &screen_y);

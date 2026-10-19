@@ -3,11 +3,11 @@
 #include "clib.h"
 
 #define FREED ((void *)(iptr)-1751672937)
-#define FREE(p, line) if ((p) != 0 && (p) != FREED) { mc_free((p), D_00176F41, (line)); (p) = FREED; }
+#define FREE(p, line) if ((p) != 0 && (p) != FREED) { mc_free((p), str_generate_c, (line)); (p) = FREED; }
 extern unsigned char text_colour;
 extern char str_tamriel_img[];
 extern char str_char00i0_img[];
-extern char D_00176F41[];       /* __FILE__ */
+extern char str_generate_c[];       /* __FILE__ */
 extern char str_face_i0_cif_2[];
 extern char str_char01i0_img[];
 extern char str_char02i0_img[];
@@ -80,7 +80,7 @@ int chargen_name_character(void)
         classmaker_input_text(player_character, 31, chargen_draw);
         FREE(window_image, 114);
     }
-    mc_set_location(117, D_00176F41);
+    mc_set_location(117, str_generate_c);
     mc_sprintf(((char *)text_buffer), str_face_i0_cif_2, player_character->flags & 1, player_character->race);
     chargen_face_images = disk_read_file(((char *)text_buffer), 0);
     chargen_screen = 2;
@@ -117,13 +117,13 @@ int chargen_name_character(void)
     ui_mode_flags |= 32;
     msgbox_update();
     chargen_screen = 255;
-    mc_set_location(155, D_00176F41);
+    mc_set_location(155, str_generate_c);
     mc_sprintf(((char *)text_buffer), str_face_i0_cif_2, player_character->flags & 1, player_character->race);
     chargen_face_images = disk_read_file(((char *)text_buffer), 0);
     screen_image_2 = disk_read_file(str_char03i1_img, 0);
     window_image = disk_read_file(str_char04i0_img, 0);
     chargen_reflex_image = disk_read_file(str_char05i1_img, 0);
-    mc_memcpy(player_character->base_attributes, player_character->attributes, 16, D_00176F41, 161, 16);
+    mc_memcpy(player_character->base_attributes, player_character->attributes, 16, str_generate_c, 161, 16);
     player_character->level_skill_sum_start = level_skill_sum();
     if (chargen_screen_loop(0, 39)) {
         chargen_free_images();

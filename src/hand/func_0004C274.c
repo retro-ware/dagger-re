@@ -3,7 +3,7 @@
 #include <dos.h>
 #include "clib.h"
 
-extern char D_00174F47[];        /* __FILE__ */
+extern char str_quests_c[];        /* __FILE__ */
 extern char str_qbn_2[];
 extern signed char text_buffer[];
 extern char arena2_path[];
@@ -26,7 +26,7 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
 
     entry = scratch_buffer;
     file_count = 0;
-    mc_set_location(323, D_00174F47);
+    mc_set_location(323, str_quests_c);
     mc_sprintf(((char *)text_buffer), str_qbn_2, arena2_cd_path);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     while (status == 0) {
@@ -41,7 +41,7 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
                         file_count = quest_file_list_add(find_data.name, file_count);
         status = func_000A13F7(&find_data);
     }
-    mc_set_location(338, D_00174F47);
+    mc_set_location(338, str_quests_c);
     mc_sprintf(((char *)text_buffer), str_qbn_2, arena2_path);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     while (status == 0) {
@@ -64,6 +64,6 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
         entry += strlen(entry) + 1;
         file_count--;
     }
-    mc_strncpy(pending_quest_file, entry, 13, D_00174F47, 365);
+    mc_strncpy(pending_quest_file, entry, 13, str_quests_c, 365);
     return 1;
 }

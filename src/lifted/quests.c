@@ -7,7 +7,7 @@
 #include "portio.h"
 
 extern char disk_last_file_size[];
-extern char D_00174F47[];
+extern char str_quests_c[];
 extern char str_fmt_s_s_3[];
 extern char str_n0c00y01_qbn[];
 extern char str_invalid_person_selected[];
@@ -85,11 +85,11 @@ iptr quest_start(char *file_name)
     if (file_name[0] == 0) return 0;
     if (stricmp(file_name, str_n0c00y01_qbn) == 0) return 0;
     if (quest_is_active(file_name) != 0) return 0;
-    mc_set_location(172, D_00174F47);
+    mc_set_location(172, str_quests_c);
     mc_sprintf((char *)text_buffer, str_fmt_s_s_3, (iptr)arena2_path, file_name);
     handle = open((char *)text_buffer, 512);
     if (handle < 0) {
-        mc_set_location(177, D_00174F47);
+        mc_set_location(177, str_quests_c);
         mc_sprintf((char *)text_buffer, str_fmt_s_s_3, (iptr)arena2_cd_path, file_name);
         handle = open((char *)text_buffer, 512);
         if (handle < 0) return 0;
@@ -101,13 +101,13 @@ iptr quest_start(char *file_name)
     quest_object->type = 14;
     quest_object->flags = 3;
     quest = &quest_object->data.quest;
-    PORT_QBN_COPY(quest, file_data, (int)(short)*(short *)disk_last_file_size, D_00174F47, 193);
+    PORT_QBN_COPY(quest, file_data, (int)(short)*(short *)disk_last_file_size, str_quests_c, 193);
     if (file_data != 0 && file_data != (-1751672937)) {
-        mc_free((void *)file_data, D_00174F47, 194);
+        mc_free((void *)file_data, str_quests_c, 194);
         file_data = -1751672937;
     }
     quest_object->quest_id = (quest->id = quest_free_id());
-    func_000A14E8(quest->name, file_name, 8, D_00174F47, 197, 9);
+    func_000A14E8(quest->name, file_name, 8, str_quests_c, 197, 9);
     if (((int)(short)quest_giver_faction) == 240) {
         quest_giver_faction = current_building->faction_id;
     }
@@ -152,7 +152,7 @@ int quest_file_list_add(char *file_name, int file_count)
         if (stricmp(entry, file_name) == 0) return file_count;
         entry += strlen(entry) + 1;
     }
-    mc_strncpy(entry, file_name, 4, D_00174F47, 383);
+    mc_strncpy(entry, file_name, 4, str_quests_c, 383);
     return file_count + 1;
 }
 
@@ -177,12 +177,12 @@ void func_0004C588(struct record *object)
         object_find(location_object, quest_match_person_cb);
         if (found_object == 0) return;
         if (found_object->twin != 0) {
-            mc_set_location(422, D_00174F47);
+            mc_set_location(422, str_quests_c);
             mc_sprintf((char *)text_buffer, str_invalid_person_selected, (int)(unsigned short)(short)found_object->image);
             fatal_error(text_buffer);
         }
         object->id = found_object->id;
-        mc_memcpy(&object->x, &found_object->x, 12, D_00174F47, 427, 4);
+        mc_memcpy(&object->x, &found_object->x, 12, str_quests_c, 427, 4);
         found_object->quest_id = object->quest_id;
         object->twin = found_object;
         found_object->twin = object;
@@ -218,7 +218,7 @@ int quest_free_id(void)
 
     quest_object = quest_root->children;
     id_used = scratch_buffer;
-    mc_memset(id_used, 0, 256, D_00174F47, 478, 4);
+    mc_memset(id_used, 0, 256, str_quests_c, 478, 4);
     while (quest_object != 0) {
         quest = &quest_object->data.quest;
         id_used[quest->id]++;

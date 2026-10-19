@@ -3,7 +3,7 @@
 #include "clib.h"
 #include "portio.h"
 struct bits { unsigned char lo:4; unsigned char b4:1; unsigned char b5:2; };
-extern char D_001704CC[];
+extern char str_maploads_c[];
 extern char str_fmt_s_2[];
 extern char str_alms[];
 extern char rmb_name_templates[][13];   /* 'TVRN????.RMB'... */
@@ -45,10 +45,10 @@ void town_block_load_rmb(int block_index)
         rmb_name_templates[template][7] = digits[1];
     }
     if (cfg_debug == 0) {
-        mc_set_location(476, D_001704CC);
+        mc_set_location(476, str_maploads_c);
         mc_sprintf(((char *)text_buffer), str_fmt_s_2, rmb_name_templates[template]);
     } else {
-        mc_strncpy(((char *)text_buffer), cfg_block_str, 160, D_001704CC, 478);
+        mc_strncpy(((char *)text_buffer), cfg_block_str, 160, str_maploads_c, 478);
     }
     record = archive_find_record(blocks_bsa, ((char *)text_buffer), 8);
     PORT_READ_RMB(blocks_bsa, record, rmb_block);

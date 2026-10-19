@@ -12,7 +12,7 @@ extern short mouse_y;
 extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr big_buffer;
-extern char D_001704CC[];
+extern char str_maploads_c[];
 extern char str_mapsave[];
 extern char str_maptable[];
 extern char str_mapnames[];
@@ -105,8 +105,8 @@ void region_locations_load_discovered(int region)
 
     location = region_locations;
     saved = (signed char *)scratch_buffer;
-    name = (iptr)mc_malloc(4096, D_001704CC, 57);
-    mc_set_location(59, D_001704CC);
+    name = (iptr)mc_malloc(4096, str_maploads_c, 57);
+    mc_set_location(59, str_maploads_c);
     mc_sprintf((char *)name, str_mapsave, region);
     archive = archive_open(cfg_mapsave_file, 0, 1);
     record = archive_find_record(archive, name, 12);
@@ -121,7 +121,7 @@ void region_locations_load_discovered(int region)
         }
     }
     if (name == 0 || name == (-1751672937)) return;
-    mc_free((void *)name, D_001704CC, 72);
+    mc_free((void *)name, str_maploads_c, 72);
     name = -1751672937;
 }
 
@@ -136,20 +136,20 @@ void region_locations_save_discovered(int region)
 
     location = region_locations;
     saved = (signed char *)scratch_buffer;
-    name = (iptr)mc_malloc(4096, D_001704CC, 88);
+    name = (iptr)mc_malloc(4096, str_maploads_c, 88);
     for (i = 0; i < region_location_count; i++, location++, saved++) {
         *saved = rand() & -193;
         if ((location->x_type_flags & 0x40000000) != 0) *saved |= 64;
         if ((location->x_type_flags & 0x80000000) != 0) *saved |= 128;
     }
-    mc_set_location(97, D_001704CC);
+    mc_set_location(97, str_maploads_c);
     mc_sprintf((char *)name, str_mapsave, region);
     archive = archive_open(cfg_mapsave_file, 0, 1);
     record = archive_find_record(archive, name, 12);
     archive_write_record(archive, record, (iptr)scratch_buffer);
     archive_close(archive);
     if (name == 0 || name == (-1751672937)) return;
-    mc_free((void *)name, D_001704CC, 103);
+    mc_free((void *)name, str_maploads_c, 103);
     name = -1751672937;
 }
 
@@ -163,20 +163,20 @@ void maploads_load_region(int region)
     if ((iptr)region_locations != 0) {
         region_locations_save_discovered((int)(unsigned short)region_locations_region);
         if ((iptr)region_locations != 0 && (iptr)region_locations != (-1751672937)) {
-            mc_free(region_locations, D_001704CC, 123);
+            mc_free(region_locations, str_maploads_c, 123);
             region_locations = (struct map_location *)(iptr)-1751672937;
         }
     }
     region_locations_region = region;
-    mc_set_location(127, D_001704CC);
+    mc_set_location(127, str_maploads_c);
     mc_sprintf((char *)text_buffer, str_maptable, region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     size = archive_record_size(maps_bsa, record);
     region_location_count = ((unsigned)size) / 17;
-    location = (struct map_location *)(*(iptr *)&region_locations = (iptr)mc_malloc(size, D_001704CC, 133));
+    location = (struct map_location *)(*(iptr *)&region_locations = (iptr)mc_malloc(size, str_maploads_c, 133));
     archive_read_record(maps_bsa, record, (iptr)region_locations);
-    mc_memset(region_location_type_counts, 0, 56, D_001704CC, 137, 56);
-    mc_memset(region_dungeon_type_counts, 0, 76, D_001704CC, 138, 76);
+    mc_memset(region_location_type_counts, 0, 56, str_maploads_c, 137, 56);
+    mc_memset(region_dungeon_type_counts, 0, 76, str_maploads_c, 138, 76);
     region_dungeon_count = 0;
     for (i = 0; i < region_location_count; i++, location++) {
         (region_location_type_counts[((location->x_type_flags << 2) >> 27)])++;
@@ -196,7 +196,7 @@ void region_load_location_names(int region)
     int unused2;
     int unused3;
 
-    mc_set_location(170, D_001704CC);
+    mc_set_location(170, str_maploads_c);
     mc_sprintf((char *)text_buffer, str_mapnames, region);
     *(iptr *)&region_location_names = big_buffer;
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
@@ -219,13 +219,13 @@ void location_read_record(struct loaded_location *location, int fd)
     int unused;
 
     read(fd, &location->door_count, 4);
-    location->doors = (struct location_door *)mc_malloc(location->door_count * 6, D_001704CC, 219);
+    location->doors = (struct location_door *)mc_malloc(location->door_count * 6, str_maploads_c, 219);
     read(fd, location->doors, location->door_count * 6);
-    location->object = (struct record *)mc_malloc(LOCATION_RECORD_SIZE, D_001704CC, 223);
+    location->object = (struct record *)mc_malloc(LOCATION_RECORD_SIZE, str_maploads_c, 223);
     location->data = &location->object->data.location;
     PORT_READ_LOCATION(fd, location->object, 119);
     if (location->data->building_count == 0) return;
-    location->data->buildings = (struct building *)mc_malloc(location->data->building_count * 26, D_001704CC, 231);
+    location->data->buildings = (struct building *)mc_malloc(location->data->building_count * 26, str_maploads_c, 231);
     read(fd, location->data->buildings, location->data->building_count * 26);
 }
 
@@ -237,7 +237,7 @@ void location_load_dungeon(struct loaded_location *location, int dungeon_index)
     struct dungeon_entry *table;
 
     table = (struct dungeon_entry *)scratch_buffer;
-    mc_set_location(248, D_001704CC);
+    mc_set_location(248, str_maploads_c);
     mc_sprintf((char *)text_buffer, str_mapditem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
@@ -264,7 +264,7 @@ void location_load_dungeon_by_id(struct loaded_location *location, int id)
     struct dungeon_entry *entry;
 
     entry = (struct dungeon_entry *)scratch_buffer;
-    mc_set_location(287, D_001704CC);
+    mc_set_location(287, str_maploads_c);
     mc_sprintf((char *)text_buffer, str_mapditem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
@@ -293,7 +293,7 @@ void location_load_exterior(struct loaded_location *location, int location_index
     int block_count;
     int location_offset;
 
-    mc_set_location(361, D_001704CC);
+    mc_set_location(361, str_maploads_c);
     mc_sprintf((char *)text_buffer, str_mappitem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
@@ -375,8 +375,8 @@ void town_block_create_misc_objects(struct record *block_object)
     object->id = location_object->id;
     model = (struct block_model *)RECORD_DATA(object);
     flat = (struct block_flat *)(model + rmb_block->misc_model_count);
-    PORT_COPY_BLOCK_MODELS(model, RMB_MISC_MODELS(rmb_block), rmb_block->misc_model_count, D_001704CC, 565);
-    mc_memcpy(flat, RMB_MISC_FLATS(rmb_block), rmb_block->misc_flat_count * REC_SIZEOF(struct block_flat), D_001704CC, 566, 4);
+    PORT_COPY_BLOCK_MODELS(model, RMB_MISC_MODELS(rmb_block), rmb_block->misc_model_count, str_maploads_c, 565);
+    mc_memcpy(flat, RMB_MISC_FLATS(rmb_block), rmb_block->misc_flat_count * REC_SIZEOF(struct block_flat), str_maploads_c, 566, 4);
     for (i = 0; rmb_block->misc_model_count > i; i++, model++) {
         model->model = 0;
         model->x += block_origin_x;
@@ -417,7 +417,7 @@ void town_block_create_misc_objects(struct record *block_object)
             }
         }
     }
-    mc_memcpy(RECORD_DATA(block_object), rmb_block->name, 429, D_001704CC, 607, 4);
+    mc_memcpy(RECORD_DATA(block_object), rmb_block->name, 429, str_maploads_c, 607, 4);
 }
 
 void town_load_blocks(void)

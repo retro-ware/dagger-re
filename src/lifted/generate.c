@@ -11,7 +11,7 @@ extern short mouse_x;
 extern short mouse_y;
 extern iptr screen_buffer;
 extern signed char xn_mouse_cursor_drawn;
-extern char D_00176F41[];
+extern char str_generate_c[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
 extern int trade_total_weight;
@@ -85,7 +85,7 @@ int chargen_draw(void)
 
     mouse_buttons_prev = mouse_buttons;
     xn_mouse_poll_clamped();
-    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_00176F41, 181, 4);
+    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_generate_c, 181, 4);
     if (((int)(unsigned char)(chargen_screen & 2)) != 0) chargen_draw_face();
     if (((int)(unsigned char)(chargen_screen & 4)) != 0) chargen_draw_attributes();
     if (((int)(unsigned char)(chargen_screen & 8)) != 0) chargen_draw_skills();
@@ -123,23 +123,23 @@ void chargen_free_images(void)
 {
     chargen_screen = 0;
     if (chargen_face_images != 0 && chargen_face_images != (-1751672937)) {
-        mc_free((void *)chargen_face_images, D_00176F41, 224);
+        mc_free((void *)chargen_face_images, str_generate_c, 224);
         chargen_face_images = -1751672937;
     }
     if ((iptr)screen_image_2 != 0 && (iptr)screen_image_2 != (-1751672937)) {
-        mc_free(screen_image_2, D_00176F41, 225);
+        mc_free(screen_image_2, str_generate_c, 225);
         screen_image_2 = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
-        mc_free(screen_image_1, D_00176F41, 226);
+        mc_free(screen_image_1, str_generate_c, 226);
         screen_image_1 = (struct image *)(iptr)-1751672937;
     }
     if (chargen_reflex_image != 0 && chargen_reflex_image != (-1751672937)) {
-        mc_free((void *)chargen_reflex_image, D_00176F41, 227);
+        mc_free((void *)chargen_reflex_image, str_generate_c, 227);
         chargen_reflex_image = -1751672937;
     }
     if (window_image == 0 || window_image == (-1751672937)) return;
-    mc_free((void *)window_image, D_00176F41, 228);
+    mc_free((void *)window_image, str_generate_c, 228);
     window_image = -1751672937;
 }
 

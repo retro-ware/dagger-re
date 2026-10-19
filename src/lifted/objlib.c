@@ -6,7 +6,7 @@
 #include "portio.h"
 
 extern int xn_anim_ticks;
-extern char D_00176C20[];
+extern char str_objlib_c[];
 extern char str_insufficent_memory_to_load_3d_object[];
 extern char str_error_reading_from_disk_2[];
 extern char str_unable_to_add_bnode[];
@@ -128,7 +128,7 @@ struct record *rmb_add_subrecord(struct record *parent)
     object->id = location_object->id + ((int)(unsigned short)(current_location->object_counter)++);
     rmb_last_object_id = object->id;
     block = &object->data.block;
-    PORT_COPY_BLOCK(block, rmb_record_ptr, size, D_00176C20, 803);
+    PORT_COPY_BLOCK(block, rmb_record_ptr, size, str_objlib_c, 803);
     block->models = (struct block_model *)((iptr)block + REC_SIZEOF(struct block));
     model = block->models;
     block->flats = (struct block_flat *)((iptr)model + (block->model_count * REC_SIZEOF(struct block_model)));
@@ -313,7 +313,7 @@ iptr model_load(int slot, int key)
         }
     }
     if (archive_read_record(arch3d_bsa, record, (iptr)model_cache_nodes[slot].model) == 0) {
-        mc_set_location(1104, D_00176C20);
+        mc_set_location(1104, str_objlib_c);
         mc_sprintf(scratch_buffer, str_error_reading_from_disk_2, record);
         fatal_error((iptr)scratch_buffer);
     }
@@ -405,7 +405,7 @@ void model_cache_flush(struct model_node *root)
     }
     root->left = 0;
     root->right = root->left;
-    mc_memset(&model_cache_nodes[1], 0, 511 * REC_SIZEOF(struct model_node), D_00176C20, 1189, 4);
+    mc_memset(&model_cache_nodes[1], 0, 511 * REC_SIZEOF(struct model_node), str_objlib_c, 1189, 4);
 }
 
 void model_cache_purge_unused(struct model_node *parent, int age, struct model_node *node)
@@ -522,7 +522,7 @@ iptr sound_cache_load(int id)
     sound_cache[slot].last_frame = *(int *)frame_counter;
     sound_cache[slot].id = id;
     sound_cache[slot].size = size;
-    sound_cache[slot].data = (char *)mc_malloc(size, D_00176C20, 1338);
+    sound_cache[slot].data = (char *)mc_malloc(size, str_objlib_c, 1338);
     dpmi_lock_region((iptr)sound_cache[slot].data, size + 4096);
     archive_read_record(dagger_snd, record, (iptr)sound_cache[slot].data);
     sound_cache_bytes += size;
@@ -551,7 +551,7 @@ void sound_cache_trim(void)
         if (oldest == (-1)) return;
         dpmi_unlock_region((iptr)sound_cache[oldest].data, sound_cache[oldest].size + 4096);
         if (sound_cache[oldest].data != 0 && (iptr)sound_cache[oldest].data != (-1751672937)) {
-            mc_free(sound_cache[oldest].data, D_00176C20, 1375);
+            mc_free(sound_cache[oldest].data, str_objlib_c, 1375);
             sound_cache[oldest].data = (char *)(iptr)-1751672937;
         }
         sound_cache[oldest].data = 0;
@@ -568,7 +568,7 @@ void sound_cache_free_all(void)
         if ((iptr)sound_cache[i].data != 0) {
             dpmi_unlock_region((iptr)sound_cache[i].data, sound_cache[i].size + 1024);
             if ((iptr)sound_cache[i].data != 0 && (iptr)sound_cache[i].data != (-1751672937)) {
-                mc_free(sound_cache[i].data, D_00176C20, 1392);
+                mc_free(sound_cache[i].data, str_objlib_c, 1392);
                 sound_cache[i].data = (char *)(iptr)-1751672937;
             }
             sound_cache[i].data = (char *)0;

@@ -7053,7 +7053,7 @@ global,0x00176EEC,str_unknown_powers,confirmed,"String literal ""Unknown Powers"
 global,0x00176EFB,str_you_do_not_have_the_ingredients_required,confirmed,"String literal ""You do not have the ingredients required."", used by potion_make."
 global,0x00176F28,str_tamriel_img,confirmed,"String literal ""tamriel.img"", used by chargen_name_character."
 global,0x00176F34,str_char00i0_img,confirmed,"String literal ""char00i0.img"", used by chargen_name_character."
-global,0x00176F41,str_generate_c,confirmed,"String literal ""generate.c"", used by chargen_free_images, chargen_name_character, chargen_screen_loop, chargen_draw."
+global,0x00176F41,str_generate_c,strong,"""generate.c"""
 global,0x00176F4C,str_face_i0_cif_2,confirmed,"String literal ""face%d%di0.cif"", used by chargen_name_character."
 global,0x00176F5B,str_char01i0_img,confirmed,"String literal ""char01i0.img"", used by chargen_name_character."
 global,0x00176F68,str_char02i0_img,confirmed,"String literal ""char02i0.img"", used by chargen_name_character."
@@ -7912,3 +7912,13 @@ global,0x00178848,hex_digits_and_powers,strong,profile_hex_to_int
 global,0x00178EB0,region_event_durations_max,strong,region_flag_set
 global,0x00199638,sheet_popup_image,strong,popu00i0.img
 global,0x0017B631,msgbox_border_style_tiles,strong,msgbox_set_border_style
+global,0x00187FE2,potion_cauldron_rects,strong,rect table declared by potionmaker_update (x0)
+global,0x00187FE4,potion_cauldron_rects_y0,strong,field alias of potion_cauldron_rects
+global,0x00187FE6,potion_cauldron_rects_x1,strong,field alias of potion_cauldron_rects
+global,0x00187FE8,potion_cauldron_rects_y1,strong,field alias of potion_cauldron_rects
+global,0x00174F47,str_quests_c,strong,"""quests.c"""
+global,0x001850D4,quest_letters,strong,"""TUVWXYZ123..."" first letters of quest names"
+global,0x001704CC,str_maploads_c,strong,"""maploads.c"""
+global,0x00179E94,daedra_regions,strong,daedra REGION macro
+global,0x00170A86,str_sky_c,strong,"""sky.c"""
+global,0x00176C20,str_objlib_c,strong,"""objlib.c"""

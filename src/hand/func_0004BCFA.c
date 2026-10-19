@@ -2,7 +2,7 @@
 #include "ptrint.h"
 #include <dos.h>
 #include "clib.h"
-extern char D_00174F47[];        /* __FILE__ */
+extern char str_quests_c[];        /* __FILE__ */
 extern char str_qbn[];
 extern char str_fmt_s_s_3[];
 extern signed char text_buffer[];
@@ -18,11 +18,11 @@ void quests_start_initial(void)
     struct find_t find_data;
     int status;
 
-    mc_set_location(142, D_00174F47);
+    mc_set_location(142, str_quests_c);
     mc_sprintf(((char *)text_buffer), str_fmt_s_s_3, arena2_path, str_qbn);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     if (status != 0) {
-        mc_set_location(146, D_00174F47);
+        mc_set_location(146, str_quests_c);
         mc_sprintf(((char *)text_buffer), str_fmt_s_s_3, arena2_cd_path, str_qbn);
         status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     }
