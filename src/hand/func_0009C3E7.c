@@ -17,7 +17,7 @@ extern struct character *player_character;
 extern struct career *player_class;
 extern unsigned game_minutes;
 extern int sky_loaded_frame;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern unsigned char mouse_buttons_prev;
 extern unsigned char is_daytime;
 extern unsigned char time_skip_active;
@@ -56,7 +56,7 @@ void travel_begin_trip(void)
     r = health_status_text();
     if (r != 0 || health_status_changed != 0) {
         msgbox_yes_no_rsc(1010);
-        if (D_00196271 != 1) return;
+        if (popup_answer != 1) return;
     }
     if (gold_can_afford(travel_trip_cost()) != 0)
         gold_spend(travel_trip_cost());

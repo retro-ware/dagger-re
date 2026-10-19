@@ -50,7 +50,7 @@ extern iptr window_image;
 extern int game_minutes;
 extern char trade_container[];
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char player_on_ground;
@@ -503,7 +503,7 @@ void guild_heal(void)
     }
     if (lowered == 0) return;
     msgbox_yes_no_rsc(403);
-    if (((int)D_00196271) == 2) return;
+    if (((int)popup_answer) == 2) return;
     disease_remove_skill_bonuses();
     object_foreach_post(location_object, guild_heal_cleanup);
     player_character->conditions = 0;

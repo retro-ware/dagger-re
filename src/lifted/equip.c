@@ -75,7 +75,7 @@ extern short painting_prefix2_text;
 extern short book_count;
 extern struct record *equip_scratch_item;
 extern signed char forced_material;
-extern int D_00199D74;
+extern int anim_changed_this_frame;
 
 extern int collide_line_of_sight(struct record *, struct record *);
 extern struct record *item_add_to_container(struct record *, int, int, int);
@@ -915,7 +915,7 @@ void ai_creature_think(struct character *monster_char, struct record *monster, s
         cell = location_cell_at(monster->x, monster->z);
         if (monster->parent != cell) object_reparent(cell, monster);
     }
-    D_00199D74 = 0;
+    anim_changed_this_frame = 0;
     ai_monster_flags = (int)(unsigned short)monster_table[monster_char->race].flags;
     monster->yaw &= ~0xF800;
     monster_ambient_sound(monster, monster_char);

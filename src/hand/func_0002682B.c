@@ -4,7 +4,7 @@
 
 struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 extern char str_mplace_c[];
-extern struct collide_probe D_00187B6E;
+extern struct collide_probe player_collide_probe;
 extern struct bits8 world_state_flags;
 extern struct bits8 player_motion_flags;
 extern int ceiling_height;
@@ -27,7 +27,7 @@ void place_settle_creature(struct record *creature)
         world_state_flags.b7 = 1;
         mc_memcpy((char *)&request, (char *)&creature->x, 12, str_mplace_c, 477, 4);
         mc_memset(&request.angle_x, 0, 12, str_mplace_c, 478, 4);
-        request.probe = &D_00187B6E;
+        request.probe = &player_collide_probe;
         player_motion_flags.b3 = 1;
         collide_move_object(creature, 0, &request, 0);
         player_motion_flags.b3 = 0;

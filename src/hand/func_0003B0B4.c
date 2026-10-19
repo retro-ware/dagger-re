@@ -13,11 +13,11 @@ extern unsigned char game_state_flags;
 extern unsigned char ui_mode_flags;
 extern char *scratch_buffer;
 extern unsigned char msgbox_button_keys;
-extern unsigned char D_00196034;
+extern unsigned char msgbox_key_2;
 extern unsigned char msgbox_button_ids;
 extern unsigned char msgbox_button_2;
 extern unsigned char msgbox_button_3;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern void msgbox_show_rsc(int, int);
 extern void msgbox_update(void);
 extern void keys_world_actions(void);
@@ -28,13 +28,13 @@ extern void xn_gfx_clear(int);
 
 int chargen_popup_choice(short text_id, short button1, short button2, char *image, unsigned char key1, unsigned char key2)
 {
-    D_00196271 = 0;
+    popup_answer = 0;
     game_state_flags &= 254;
     while (mouse_buttons != 0)
         xn_mouse_poll_clamped();
     text_colour = 146;
     msgbox_button_keys = key1;
-    D_00196034 = key2;
+    msgbox_key_2 = key2;
     msgbox_button_ids = button1;
     msgbox_button_2 = button2;
     msgbox_button_3 = 0;
@@ -47,12 +47,12 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
     ui_mode_flags |= 128;
     msgbox_show_rsc(text_id, 5);
     xn_mouse_cursor_drawn &= 254;
-    while (D_00196271 == 0) {
+    while (popup_answer == 0) {
         keys_world_actions();
         xn_mouse_poll_clamped();
         msgbox_update();
         xn_mouse_cursor_move(mouse_x, mouse_y);
         mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_intro_c, 412, 4);
     }
-    return D_00196271 - 1;
+    return popup_answer - 1;
 }

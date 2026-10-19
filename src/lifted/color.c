@@ -8,10 +8,10 @@
 
 extern char str_color_c[];
 extern unsigned char player_environment;
-extern struct collide_probe D_00187B6E;
-extern signed char D_001886A8[];
-extern signed char D_001886A9[];
-extern char D_001886D2[];
+extern struct collide_probe player_collide_probe;
+extern signed char colour_remap_starts[];
+extern signed char colour_remap_ends[];
+extern char colour_remap_rows[];
 extern char scratch_190be4[];
 extern struct record *player_object;
 extern struct record *location_object;
@@ -42,7 +42,7 @@ void color_init_remap_tables(void)
         }
     }
     for (table = 1; table < 16; table++) {
-        xn_str_fill_ascending((char *)(iptr)((iptr)(color_remap_tables + (table << 8)) + ((int)(unsigned char)D_001886A8[table * 2])), (int)(unsigned char)D_001886A9[table * 2], 16);
+        xn_str_fill_ascending((char *)(iptr)((iptr)(color_remap_tables + (table << 8)) + ((int)(unsigned char)colour_remap_starts[table * 2])), (int)(unsigned char)colour_remap_ends[table * 2], 16);
     }
     xn_str_fill_ascending((char *)(iptr)((iptr)color_remap_tables + 6689), 161, 15);
     xn_str_fill_ascending((char *)(iptr)((iptr)color_remap_tables + 6721), 193, 15);
@@ -57,7 +57,7 @@ void color_init_remap_tables(void)
     xn_str_fill_ascending((char *)(iptr)((iptr)color_remap_tables + 7489), 129, 15);
     color_remap_tables[7677] = 216;
     for (table = 0; table < 10; table++) {
-        mc_memcpy((void *)(iptr)((iptr)(color_remap_tables + ((table << 8) + 4096)) + 112), (void *)(((iptr)D_001886D2) + (table << 4)), 16, str_color_c, 87, 4);
+        mc_memcpy((void *)(iptr)((iptr)(color_remap_tables + ((table << 8) + 4096)) + 112), (void *)(((iptr)colour_remap_rows) + (table << 4)), 16, str_color_c, 87, 4);
     }
 }
 
@@ -115,12 +115,12 @@ int door_blocked_by_player(struct record *door)
     int *model;
     iptr hit;
 
-    D_00187B6E.position.x = player_object->x;
-    D_00187B6E.position.y = player_object->y;
-    D_00187B6E.position.z = player_object->z;
+    player_collide_probe.position.x = player_object->x;
+    player_collide_probe.position.y = player_object->y;
+    player_collide_probe.position.z = player_object->z;
     model = (int *)RECORD_DATA(door);
     if (*model != 0) {
-        hit = xn_collide_spheres_model(model, &D_00187B6E, 0);
+        hit = xn_collide_spheres_model(model, &player_collide_probe, 0);
         return (((hit != 0) && (hit != (-1))) ? 1 : 0);
     }
     return 0;

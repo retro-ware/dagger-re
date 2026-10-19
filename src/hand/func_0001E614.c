@@ -8,7 +8,7 @@ extern char str_fmt_s_2[];
 extern char str_alms[];
 extern char rmb_name_templates[][13];   /* 'TVRN????.RMB'... */
 extern signed char text_buffer[];
-extern char D_001968BA;
+extern char rmb_template_char;
 extern unsigned char location_block_indexes[];
 extern unsigned char location_block_numbers[];
 extern struct bits location_block_letters[];
@@ -29,7 +29,7 @@ void town_block_load_rmb(int block_index)
 
     template = location_block_indexes[block_index];
     if (location_block_letters[block_index].b4)
-        rmb_name_templates[template][4] = D_001968BA;
+        rmb_name_templates[template][4] = rmb_template_char;
     else
         rmb_name_templates[template][4] = 'A';
     rmb_name_templates[template][5] = str_alms[location_block_letters[block_index].b5];

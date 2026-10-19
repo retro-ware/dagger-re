@@ -773,8 +773,8 @@ RECORD_SIZE_P(block, 17);
 /* where a building's subrecords go in an RMB block (DFU RmbFldBlockPositions, 20 bytes;
  * town_block_place_building) */
 struct rmb_block_position {
-    int unknown1;                   /* +0x00: town_block_place_building keeps it in D_00196804 */
-    int unknown2;                   /* +0x04: and this in D_001967EC */
+    int unknown1;                   /* +0x00: town_block_place_building keeps it in rmb_building_unknown1 */
+    int unknown2;                   /* +0x04: and this in rmb_building_unknown2 */
     int x;                          /* +0x08: from the block's corner */
     int z;                          /* +0x0C */
     int yaw;                        /* +0x10: DFU YRotation */

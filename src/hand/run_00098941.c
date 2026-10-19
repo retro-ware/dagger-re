@@ -18,8 +18,8 @@ extern struct rect transport_buttons[];
 extern signed char scratch_190d16;
 extern unsigned char player_motion_flags;
 extern unsigned char *inv_right_container;
-extern char *D_00195B5C;
-extern char *D_00195B60;
+extern char *screen_image_1;
+extern char *screen_image_2;
 extern char *player_character;
 extern int game_minutes;
 extern unsigned char current_region;
@@ -86,8 +86,8 @@ void transport_menu(void)
         hud_message_add(str_you_cannot_change_transportation_indoors);
         return;
     }
-    D_00195B5C = disk_read_file(str_move00i0_img, 0);
-    D_00195B60 = disk_read_file(str_move01i0_img, 0);
+    screen_image_1 = disk_read_file(str_move00i0_img, 0);
+    screen_image_2 = disk_read_file(str_move01i0_img, 0);
     scratch_190d16 = 0;
     travel_find_transport();
     if (func_00098B20() != 0) {
@@ -103,10 +103,10 @@ void transport_menu(void)
     while (done == 0) {
         mouse_buttons_prev = mouse_buttons;
         xn_mouse_poll_clamped();
-        xn_draw_image(*(unsigned short *)D_00195B5C, *(unsigned short *)(D_00195B5C + 2), *(unsigned short *)(D_00195B5C + 4), *(unsigned short *)(D_00195B5C + 6), D_00195B5C + 12);
+        xn_draw_image(*(unsigned short *)screen_image_1, *(unsigned short *)(screen_image_1 + 2), *(unsigned short *)(screen_image_1 + 4), *(unsigned short *)(screen_image_1 + 6), screen_image_1 + 12);
         for (button = 0; button < 4; button++) {
             if (((1 << button) & enabled) == 0)
-                xn_draw_image(transport_buttons[button].x0, transport_buttons[button].y0, *(unsigned short *)(D_00195B60 + 4), 9, D_00195B60 + 12 + button * (*(unsigned short *)(D_00195B60 + 4) * 9));
+                xn_draw_image(transport_buttons[button].x0, transport_buttons[button].y0, *(unsigned short *)(screen_image_2 + 4), 9, screen_image_2 + 12 + button * (*(unsigned short *)(screen_image_2 + 4) * 9));
         }
         cursor_draw_arrow();
         if (mouse_buttons != 0 && mouse_buttons_prev == 0) {
@@ -122,13 +122,13 @@ void transport_menu(void)
         }
         xn_gfx_present_inclusive(0);
     }
-    if (D_00195B5C != 0 && D_00195B5C != FREED) {
-        mc_free(D_00195B5C, str_inven_c, 2870);
-        D_00195B5C = FREED;
+    if (screen_image_1 != 0 && screen_image_1 != FREED) {
+        mc_free(screen_image_1, str_inven_c, 2870);
+        screen_image_1 = FREED;
     }
-    if (D_00195B60 != 0 && D_00195B60 != FREED) {
-        mc_free(D_00195B60, str_inven_c, 2871);
-        D_00195B60 = FREED;
+    if (screen_image_2 != 0 && screen_image_2 != FREED) {
+        mc_free(screen_image_2, str_inven_c, 2871);
+        screen_image_2 = FREED;
     }
 }
 

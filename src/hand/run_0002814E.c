@@ -18,8 +18,8 @@ extern char str_at_atf_2[];
 extern char str_town00i0_img[];
 extern unsigned char player_environment;
 extern struct rect town_map_buttons[6];
-extern char D_0017A104[];            /* the town map's colour per map pixel 1..: indexed from pixel - 1 */
-extern iptr D_0018507F;
+extern char town_map_colours[];            /* the town map's colour per map pixel 1..: indexed from pixel - 1 */
+extern iptr text_automap_unavailable;
 extern signed char text_buffer[];
 extern signed char scratch_190ce5;
 extern char scratch_190de4[];
@@ -32,10 +32,10 @@ extern signed char screen_active;
 extern signed char mouse_buttons_prev;
 extern int town_map_view_x;
 extern int town_map_view_y;
-extern int D_00196D90;
+extern int town_map_scroll_y;
 extern int town_note_selected;
-extern int D_00196D98;
-extern struct image *D_00196D9C;
+extern int town_map_scroll_x;
+extern struct image *town_map_frame;
 extern iptr town_map_pixels;
 extern void screenshot_poll(void);
 extern int automap_move_forward(int);
@@ -76,14 +76,14 @@ void town_map_open(void)
     done = 0;
     if (((int)player_environment) != 1) return;
     if (location_contains(player_object->x, player_object->z) == 0) {
-        hud_message_add(D_0018507F);
+        hud_message_add(text_automap_unavailable);
         return;
     }
     if (current_location->kind == 7 || current_location->kind == 4 || current_location->kind >= 9) {
-        hud_message_add(D_0018507F);
+        hud_message_add(text_automap_unavailable);
         return;
     }
-    D_00196D98 = (D_00196D90 = 0);
+    town_map_scroll_x = (town_map_scroll_y = 0);
     town_note_selected = 0;
     scratch_190ce5 = 0;
     mc_memset(scratch_buffer, 0, 50000, str_automap_c, 624, 4);
@@ -101,11 +101,11 @@ void town_map_open(void)
     saved_screen_active = (int)(unsigned char)screen_active;
     screen_active = 1;
     *(iptr *)scratch_190de4 = disk_read_file(str_amap00i0_img, 0);
-    D_00196D9C = (struct image *)disk_read_file(str_town00i0_img, 0);
+    town_map_frame = (struct image *)disk_read_file(str_town00i0_img, 0);
     while (done == 0) {
         xn_mouse_cursor_erase();
         town_map_draw();
-        xn_draw_image(D_00196D9C->x, D_00196D9C->y, D_00196D9C->width, D_00196D9C->height, D_00196D9C->pixels);
+        xn_draw_image(town_map_frame->x, town_map_frame->y, town_map_frame->width, town_map_frame->height, town_map_frame->pixels);
         xn_mouse_cursor_draw();
         mouse_buttons_prev = mouse_buttons;
         xn_mouse_poll_clamped();
@@ -138,9 +138,9 @@ void town_map_open(void)
         mc_free((void *)*(iptr *)scratch_190de4, str_automap_c, 679);
         *(iptr *)scratch_190de4 = -1751672937;
     }
-    if ((iptr)D_00196D9C != 0 && (iptr)D_00196D9C != (-1751672937)) {
-        mc_free(D_00196D9C, str_automap_c, 680);
-        D_00196D9C = (struct image *)(iptr)-1751672937;
+    if ((iptr)town_map_frame != 0 && (iptr)town_map_frame != (-1751672937)) {
+        mc_free(town_map_frame, str_automap_c, 680);
+        town_map_frame = (struct image *)(iptr)-1751672937;
     }
     screen_active = *(signed char *)&saved_screen_active;
     if (scratch_190ce5 == 0) return;
@@ -173,23 +173,23 @@ void town_map_draw(void)
     VY = player_y;
     VX -= 37;
     VY -= 20;
-    VX += D_00196D98;
-    VY += D_00196D90;
+    VX += town_map_scroll_x;
+    VY += town_map_scroll_y;
     map_height = current_location->height << 6;
     map_width = current_location->width << 6;
     if (VX < 0) {
-        D_00196D98 -= VX;
+        town_map_scroll_x -= VX;
         VX = 0;
     }
     if (VX > map_width - 38) {
-        D_00196D98 -= VX - (map_width - 38);
+        town_map_scroll_x -= VX - (map_width - 38);
     }
     if (VY < 0) {
-        D_00196D90 -= VY;
+        town_map_scroll_y -= VY;
         VY = 0;
     }
     if (VY > map_height - 10) {
-        D_00196D90 -= VY - (map_height - 10);
+        town_map_scroll_y -= VY - (map_height - 10);
     }
     screen_y = 10;
     map_y = VY;
@@ -200,7 +200,7 @@ void town_map_draw(void)
             while (screen_x < 310 && map_x < map_width) {
                 pixel = MAP[map_width * map_y + map_x];
                 if (!(pixel == 0 || pixel == 251 || pixel == 250)) {
-                    colour = D_0017A104[MAP[map_width * map_y + map_x] - 1];
+                    colour = town_map_colours[MAP[map_width * map_y + map_x] - 1];
                     SCR[screen_y * 320 + screen_x] = colour;
                     SCR[screen_y * 320 + screen_x + 1] = colour;
                 }
@@ -226,16 +226,16 @@ void town_map_scroll(int direction)
 {
     switch (direction) {
     case 0:
-        D_00196D90--;
+        town_map_scroll_y--;
         break;
     case 1:
-        D_00196D90++;
+        town_map_scroll_y++;
         break;
     case 2:
-        D_00196D98--;
+        town_map_scroll_x--;
         break;
     case 3:
-        D_00196D98++;
+        town_map_scroll_x++;
         break;
     }
 }

@@ -29,8 +29,8 @@ extern struct building *current_building;
 extern struct record *found_object;
 extern struct record *inv_right_container;
 extern struct record *inv_right_container_base;
-extern struct image *D_00195B5C;
-extern struct image *D_00195B60;
+extern struct image *screen_image_1;
+extern struct image *screen_image_2;
 extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
@@ -126,13 +126,13 @@ void chargen_free_images(void)
         mc_free((void *)chargen_face_images, D_00176F41, 224);
         chargen_face_images = -1751672937;
     }
-    if ((iptr)D_00195B60 != 0 && (iptr)D_00195B60 != (-1751672937)) {
-        mc_free(D_00195B60, D_00176F41, 225);
-        D_00195B60 = (struct image *)(iptr)-1751672937;
+    if ((iptr)screen_image_2 != 0 && (iptr)screen_image_2 != (-1751672937)) {
+        mc_free(screen_image_2, D_00176F41, 225);
+        screen_image_2 = (struct image *)(iptr)-1751672937;
     }
-    if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free(D_00195B5C, D_00176F41, 226);
-        D_00195B5C = (struct image *)(iptr)-1751672937;
+    if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
+        mc_free(screen_image_1, D_00176F41, 226);
+        screen_image_1 = (struct image *)(iptr)-1751672937;
     }
     if (chargen_reflex_image != 0 && chargen_reflex_image != (-1751672937)) {
         mc_free((void *)chargen_reflex_image, D_00176F41, 227);

@@ -3,7 +3,7 @@ struct Glyph { short w; short h; };
 struct Font { char pad[6]; struct Glyph g[1]; };
 extern short font_space_width;
 extern short font_char_spacing;
-extern struct Font *D_0012DA74;
+extern struct Font *font_glyphs;
 
 int font_text_width(char *text)
 {
@@ -22,7 +22,7 @@ int font_text_width(char *text)
         } else {
             char_count++;
             glyph_index = (unsigned char)*p - 33;
-            glyph = &D_0012DA74->g[glyph_index];
+            glyph = &font_glyphs->g[glyph_index];
             width += glyph->w;
         }
         p++;

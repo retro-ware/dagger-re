@@ -28,7 +28,7 @@ extern struct settings *game_settings;
 extern char *scratch_buffer;
 extern char *paperdoll_slots;
 extern char *paperdoll_items;
-extern struct item D_00199B54[];
+extern struct item paperdoll_item_copies[];
 extern iptr color_remap_tables;
 extern void character_update_armor_values(struct record *);
 extern void paperdoll_add_item(struct item *, int);
@@ -129,8 +129,8 @@ void paperdoll_draw(int x, int y)
                 sub = it->index;
                 if (n == 6 || n == 12 || n == 2 || n == 3) {
                     if (n == 3) {
-                        mc_memcpy(&D_00199B54[cnt], &player_character->equipped[i]->data.item, 107, str_char_c, 121, 4);
-                        paperdoll_add_item(&D_00199B54[cnt++], i);
+                        mc_memcpy(&paperdoll_item_copies[cnt], &player_character->equipped[i]->data.item, 107, str_char_c, 121, 4);
+                        paperdoll_add_item(&paperdoll_item_copies[cnt++], i);
                     } else {
                         paperdoll_add_item(&player_character->equipped[i]->data.item, i);
                     }

@@ -8,12 +8,12 @@
 extern signed char key_down_backslash;
 extern char str_camera_c[];
 extern char str_pics_scr_bmp[];
-extern char D_00178A1C[];
-extern signed char D_00178A52[];
-extern signed char D_00178A53[];
-extern signed char D_00178A54[];
+extern char bmp_header[];
+extern signed char bmp_palette_b[];
+extern signed char bmp_palette_g[];
+extern signed char bmp_palette_r[];
 extern short screenshot_number;
-extern char D_0019645A[];
+extern char screenshot_name[];
 
 extern void xn_pal_read_dac(char *);
 extern int xn_kbd_flush(void);
@@ -24,8 +24,8 @@ void screenshot_poll(void)
 {
     if (key_down_backslash == 0) return;
     mc_set_location(44, str_camera_c);
-    mc_sprintf(D_0019645A, str_pics_scr_bmp, (int)(short)screenshot_number);
-    screenshot_save_bmp(D_0019645A);
+    mc_sprintf(screenshot_name, str_pics_scr_bmp, (int)(short)screenshot_number);
+    screenshot_save_bmp(screenshot_name);
     while (key_down_backslash != 0) xn_kbd_flush();
 }
 
@@ -39,15 +39,15 @@ void screenshot_save_bmp(char *filename)
     xn_pal_read_dac((char *)buffer);
     *(int *)&i = 0;
     for (; ((int)(short)i) < 256; (*(int *)&i)++) {
-        D_00178A52[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer) + 2) << 2;
-        D_00178A53[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer) + 1) << 2;
-        D_00178A54[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer)) << 2;
+        bmp_palette_b[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer) + 2) << 2;
+        bmp_palette_g[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer) + 1) << 2;
+        bmp_palette_r[((int)(short)i) << 2] = *(signed char *)((char *)((((int)(short)i) * 3) + buffer)) << 2;
     }
     screenshot_number++;
     unlink(filename);
     *(int *)&fd = open(filename, 546, 384);
     if (((int)(short)fd) != (-1) && buffer != 0) {
-        write((int)(short)fd, D_00178A1C, 1078);
+        write((int)(short)fd, bmp_header, 1078);
         if (buffer != 0 && buffer != (-1751672937)) {
             mc_free((void *)buffer, str_camera_c, 82);
             buffer = -1751672937;

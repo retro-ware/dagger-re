@@ -71,7 +71,7 @@ extern int talk_disposition;
 extern int talk_prostitute_price;
 extern short text_macro_n_text;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -439,7 +439,7 @@ int talk_prostitute_update(void)
             talk_prostitute_state = 1;
             break;
         case 1:
-            if (((int)D_00196271) == 2) {
+            if (((int)popup_answer) == 2) {
                 talk_open(talk_npc_object);
             } else if ((talk_prostitute_price = rand_range(50, 75) - talk_disposition) > 0) {
                 msgbox_yes_no_rsc(7202);
@@ -450,7 +450,7 @@ int talk_prostitute_update(void)
             }
             break;
         case 3:
-            if (((int)D_00196271) != 1) goto L15B7E;
+            if (((int)popup_answer) != 1) goto L15B7E;
             player_character->gold -= talk_prostitute_price;
             if (((unsigned)(player_character->gold + talk_prostitute_price)) >= talk_prostitute_price) goto L15B7E;
             player_character->gold += talk_prostitute_price;
@@ -459,7 +459,7 @@ int talk_prostitute_update(void)
             break;
         case 2:
 L15B7E:;
-            if (((int)D_00196271) == 2) {
+            if (((int)popup_answer) == 2) {
                 talk_open(talk_npc_object);
             } else {
                 func_000164EF();

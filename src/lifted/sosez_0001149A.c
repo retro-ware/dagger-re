@@ -12,13 +12,13 @@ extern char str_devicedma[];
 extern char str_deviceirq[];
 extern char str_midi[];
 extern char sos_digi_settings[];
-extern char D_0018DC94[];
-extern char D_0018DC98[];
-extern char D_0018DC9C[];
+extern char sos_digi_port[];
+extern char sos_digi_irq[];
+extern char sos_digi_dma[];
 extern int D_0018DD54;
 extern int sos_digi_driver;
 extern char sos_midi_settings[];
-extern char D_0018DD86[];
+extern char sos_midi_port[];
 
 extern int profile_open(struct profile *, char *);
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
@@ -43,9 +43,9 @@ int sos_read_settings(char *path)
         return 0;
     }
     profile.result = profile_get_item_number(&profile, str_deviceid, &sos_digi_driver);
-    profile.result = profile_get_item_number(&profile, str_deviceport, (int *)D_0018DC94);
-    profile.result = profile_get_item_number(&profile, str_devicedma, (int *)D_0018DC9C);
-    profile.result = profile_get_item_number(&profile, str_deviceirq, (int *)D_0018DC98);
+    profile.result = profile_get_item_number(&profile, str_deviceport, (int *)sos_digi_port);
+    profile.result = profile_get_item_number(&profile, str_devicedma, (int *)sos_digi_dma);
+    profile.result = profile_get_item_number(&profile, str_deviceirq, (int *)sos_digi_irq);
     if ((short)profile.result == 0) {
         profile_close(&profile);
         return 0;
@@ -55,7 +55,7 @@ int sos_read_settings(char *path)
         return 0;
     }
     profile.result = profile_get_item_number(&profile, str_deviceid, &D_0018DD54);
-    profile.result = profile_get_item_number(&profile, str_deviceport, (int *)D_0018DD86);
+    profile.result = profile_get_item_number(&profile, str_deviceport, (int *)sos_midi_port);
     if ((short)profile.result == 0) {
         profile_close(&profile);
         return 0;

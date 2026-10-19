@@ -16,7 +16,7 @@ extern struct record *player_entity;
 extern struct record *found_object;
 extern struct character *player_character;
 extern unsigned int game_minutes;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern struct faction *found_faction;
 extern struct membership *guild_membership;
 extern unsigned char guild_join_asked;
@@ -138,7 +138,7 @@ void guild_join_or_promote(int guild, int joining)
             return;
         }
         msgbox_yes_no_rsc(guild_messages[guild].start);
-        if (D_00196271 == 2)
+        if (popup_answer == 2)
             return;
         object = object_create_child(player_entity, 0, 13);
         object->type = 10;

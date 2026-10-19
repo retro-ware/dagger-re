@@ -32,7 +32,7 @@ extern char str_j[];
 extern short holiday_days[];
 extern signed char holiday_regions[];
 extern iptr holiday_names[];
-extern char *D_0017CCFA[];   /* class names, then guilds, gods (temple kind 128|k: [kind - 91]) ... */
+extern char *class_name_list[];   /* class names, then guilds, gods (temple kind 128|k: [kind - 91]) ... */
 extern iptr month_names[];
 extern iptr day_names[];
 extern iptr ordinal_suffixes[];
@@ -687,7 +687,7 @@ iptr macro_gtp_fine(void)
 
 iptr macro_gdd_temple_god(void)
 {
-    if ((iptr)guild_membership != 0) return (iptr)D_0017CCFA[guild_membership->kind - 91];
+    if ((iptr)guild_membership != 0) return (iptr)class_name_list[guild_membership->kind - 91];
     return text_blank;
 }
 

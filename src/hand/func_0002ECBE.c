@@ -9,7 +9,7 @@ extern char str_damage_c[];
 extern char str_just_died[];
 struct pic { short file, rec; };
 extern struct pic monster_corpse_textures[];
-extern struct collide_probe D_00187B44;
+extern struct collide_probe monster_collide_probe;
 extern signed char text_buffer[];
 extern unsigned char world_state_flags;
 extern struct record *player_entity;
@@ -107,7 +107,7 @@ found:
     world_state_flags |= 32;
     mc_memcpy(&move, &creature->x, 12, str_damage_c, 605, 4);
     mc_memset(&move.angle_x, 0, 12, str_damage_c, 606, 4);
-    move.probe = &D_00187B44;
+    move.probe = &monster_collide_probe;
     collide_move_object(creature, 0, &move, 0);
     player_on_ground = saved_on_ground;
     ceiling_height = saved_ceiling;

@@ -7,13 +7,13 @@
 extern signed char text_colour;
 extern char str_steal_c[];
 extern short msgbox_wrap_width;
-extern iptr D_00183258;
-extern iptr D_0018325C;
-extern iptr D_00183260;
-extern iptr D_00183264[];
-extern iptr D_0018328C;
-extern iptr D_0018333C;
-extern iptr D_00183340;
+extern iptr text_lock_trivial;
+extern iptr text_lock_miracle;
+extern iptr text_lock_beyond;
+extern iptr text_lock_difficulty[];
+extern iptr text_lock_magic;
+extern iptr text_pickpocket_failed;
+extern iptr text_pinched_gold_fmt;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
 extern struct record *found_object;
@@ -49,7 +49,7 @@ void pickpocket_attempt(struct record *target)
     }
     if ((rand() % 101) > chance) {
         if (target->type == 18) monster_wake_all();
-        hud_message_add(D_0018333C);
+        hud_message_add(text_pickpocket_failed);
         crime_current = 12;
         guards_summon(1);
         if (target->type == 53) target->npc_flags |= 0x8000;
@@ -64,7 +64,7 @@ void pickpocket_attempt(struct record *target)
     gold = (rand() % 5) + 1;
     player_character->gold += gold;
     mc_set_location(155, str_steal_c);
-    mc_sprintf((char *)text_buffer, (char *)D_00183340, gold);
+    mc_sprintf((char *)text_buffer, (char *)text_pinched_gold_fmt, gold);
     msgbox_show_string(text_buffer, 1);
     guild_count_crime(5, 1);
 }
@@ -74,23 +74,23 @@ void lock_show_difficulty(int lock_level)
     int chance;
 
     if (lock_level >= 20) {
-        hud_status_set(D_0018328C);
+        hud_status_set(text_lock_magic);
         return;
     }
     chance = player_character->skills[13].value - (lock_level * 5);
     if (chance < 30) {
-        hud_status_set(D_00183258);
+        hud_status_set(text_lock_trivial);
         return;
     }
     if (chance < 35) {
-        hud_status_set(D_0018325C);
+        hud_status_set(text_lock_miracle);
         return;
     }
     if (chance < 45) {
-        hud_status_set(D_00183260);
+        hud_status_set(text_lock_beyond);
         return;
     }
-    hud_status_set(D_00183264[((chance - 45) / 5)]);
+    hud_status_set(text_lock_difficulty[((chance - 45) / 5)]);
 }
 
 void door_key_match_cb(struct record *object)

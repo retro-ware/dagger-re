@@ -28,8 +28,8 @@ extern short D_00190DEA[];
 extern short scratch_190dec;
 extern short D_00190DEE;
 extern short scratch_190df0[3];
-extern struct image *D_00195B5C;
-extern char *D_00195B60;
+extern struct image *screen_image_1;
+extern char *screen_image_2;
 extern struct character *player_character;
 extern struct career *player_class;
 extern char mouse_buttons_prev;
@@ -107,7 +107,7 @@ void chargen_draw_attributes(void)
     int i;
     short x;
 
-    xn_draw_image_transparent(44, scratch_190d6a, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
+    xn_draw_image_transparent(44, scratch_190d6a, screen_image_1->width, screen_image_1->height, screen_image_1->pixels);
     text_colour = 146;
     x = (chargen_buttons[20].x0 + chargen_buttons[20].x1) >> 1;
     xn_font_select(4);
@@ -139,7 +139,7 @@ void chargen_draw_skills(void)
     int skill;
 
     for (i = 0; i < 3; i++) {
-        xn_draw_image(203, scratch_190de4[i], *(unsigned short *)(D_00195B60 + 4), *(unsigned short *)(D_00195B60 + 6), D_00195B60 + 12);
+        xn_draw_image(203, scratch_190de4[i], *(unsigned short *)(screen_image_2 + 4), *(unsigned short *)(screen_image_2 + 6), screen_image_2 + 12);
         text_draw_centred_coloured(itoa(D_00190DEA[i], ((char *)text_buffer), 10), 221, scratch_190de4[i] + 8 - font_height + 1, 145, 141);
     }
     for (i = 0; i < 12; i++) {

@@ -7,7 +7,7 @@ struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 #pragma pack()
 extern int dungeon_water_level;
 extern char str_monster_c[];
-extern struct collide_probe D_00187B44;
+extern struct collide_probe monster_collide_probe;
 extern int player_speed_bonus;
 extern unsigned char world_state_flags;
 extern unsigned char misc_state_flags;
@@ -18,7 +18,7 @@ extern struct character *player_character;
 extern int ceiling_height;
 extern struct bits8 ai_monster_flags;
 extern unsigned char player_on_ground;
-extern struct vec3 D_00196D54;
+extern struct vec3 monster_move_pos;
 extern short collide_flags;
 extern int collide_move_object(struct record *, int, struct move_request *, int);
 extern struct record *object_delete(struct record *);
@@ -73,15 +73,15 @@ int monster_move_step(struct record *o, struct record *target, int angle)
     collide_flags |= 4;
     r = (vertical_velocity = p->fall_velocity);
     world_state_flags |= 128;
-    mv.probe = &D_00187B44;
+    mv.probe = &monster_collide_probe;
     mv.flags &= 65534;
-    mc_memcpy(&saved, &D_00196D54, 12, str_monster_c, 1114, 4);
-    D_00196D54.x = o->x;
-    D_00196D54.y = o->y - vertical_velocity / 256;
-    D_00196D54.z = o->z;
+    mc_memcpy(&saved, &monster_move_pos, 12, str_monster_c, 1114, 4);
+    monster_move_pos.x = o->x;
+    monster_move_pos.y = o->y - vertical_velocity / 256;
+    monster_move_pos.z = o->z;
     collide_move_object(o, 0, &mv, 0);
     player_on_ground = saved277;
-    mc_memcpy(&D_00196D54, &saved, 12, str_monster_c, 1121, 4);
+    mc_memcpy(&monster_move_pos, &saved, 12, str_monster_c, 1121, 4);
     if (p != player_character)
         p->ceiling_y = ceiling_height;
     if ((collide_flags & (short)16) != 0 && !ai_monster_flags.b0)

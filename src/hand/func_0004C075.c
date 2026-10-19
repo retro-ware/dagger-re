@@ -8,7 +8,7 @@ extern char D_00174F47[];
 extern char D_001850D4[];
 extern iptr quest_letter_text_ids[];
 extern int sky_loaded_frame;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char night_sky_loaded;
 extern struct quest *current_quest;
@@ -48,7 +48,7 @@ int quest_offer_prompt(struct quest *quest)
             player_movement_update();
             xn_gfx_present_inclusive(1);
         }
-        accepted = D_00196271 == 1;
+        accepted = popup_answer == 1;
         text_colour = 146;
         msgbox_show_quest_text(current_quest, accepted ? 1002 : 1001, 1);
         break;

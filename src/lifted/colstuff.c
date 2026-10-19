@@ -57,7 +57,7 @@ extern struct record *collide_candidates[];
 extern struct collide_hits *xn_collide_result;
 extern struct collide_probe *xn_collide_probe;
 extern iptr xn_slide_planes;
-extern char D_00196D54[];
+extern char monster_move_pos[];
 extern int collide_previous_y;
 extern int collide_previous_z;
 extern int collide_height;
@@ -359,7 +359,7 @@ int collide_step_player(struct record *object, int unused_arg, struct move_reque
         *(signed char *)collide_flags &= 251;
     }
     if (vertical_velocity > 5120) {
-        *(int *)collide_segment_start = *(int *)D_00196D54;
+        *(int *)collide_segment_start = *(int *)monster_move_pos;
         collide_segment_start_y = collide_previous_y - 20;
         collide_segment_start_z = collide_previous_z;
         *(int *)collide_vertical_end = request->x;
@@ -472,7 +472,7 @@ int collide_step_player(struct record *object, int unused_arg, struct move_reque
     }
     *(signed char *)collide_flags &= 251;
     if (object == player_object) {
-        *(int *)D_00196D54 = object->x;
+        *(int *)monster_move_pos = object->x;
         collide_previous_y = object->y;
         collide_previous_z = object->z;
     }
@@ -683,7 +683,7 @@ int func_00023FA5(struct record *object, int unused_arg, struct move_request *re
         *(signed char *)collide_flags &= 251;
     }
     if (character->fall_velocity > 5120) {
-        *(int *)collide_segment_start = *(int *)D_00196D54;
+        *(int *)collide_segment_start = *(int *)monster_move_pos;
         collide_segment_start_y = collide_previous_y - 20;
         collide_segment_start_z = collide_previous_z;
         *(int *)collide_vertical_end = request->x;

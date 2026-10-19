@@ -16,7 +16,7 @@ extern char str_t_4[];
 extern char str_main02i0_img[];
 extern struct rect hud_buttons[];
 extern signed char world_running;
-extern short D_00188208[];
+extern short weapon_equip_sounds[];
 extern char D_00190B44[];
 extern char scratch_190d64[];
 extern char scratch_190de4[];
@@ -124,7 +124,7 @@ void hud_toggle_weapon(void)
     if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
     if (player_character->equipped[19] == 0) return;
     *(iptr *)&item_data = (iptr)player_character->equipped[19] + RECORD_HEADER_SIZE;
-    sound_play((int)(short)D_00188208[((int)(unsigned short)*(short *)(*(char **)&item_data + 34))], player_object, 100);
+    sound_play((int)(short)weapon_equip_sounds[((int)(unsigned short)*(short *)(*(char **)&item_data + 34))], player_object, 100);
 }
 
 void hud_button_status(void)

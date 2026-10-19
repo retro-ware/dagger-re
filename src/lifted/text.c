@@ -47,14 +47,14 @@ extern short msgbox_delay;
 extern short D_00195F34;
 extern unsigned short text_cursor_y;
 extern signed char msgbox_button_keys;
-extern signed char D_00196034;
+extern signed char msgbox_key_2;
 extern signed char msgbox_hotkey;
 extern signed char msgbox_button_ids;
 extern signed char msgbox_button_2;
 extern signed char msgbox_button_3;
 extern signed char current_region;
 extern signed char msgbox_kind;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -195,7 +195,7 @@ void msgbox_show_quest_text(struct quest *quest, short message_id, int kind)
     mc_memcpy((void *)msgbox_saved_screen, (void *)screen_buffer, 64000, str_text_c, 736, 4);
     xn_font_select(4);
     if ((short)kind == 5) {
-        D_00196271 = 0;
+        popup_answer = 0;
         single_page = msgbox_render_quest_text(quest, message_id, (iptr)msgbox_image, 4);
     } else {
         single_page = msgbox_render_quest_text(quest, message_id, (iptr)msgbox_image, 0);
@@ -244,7 +244,7 @@ void msgbox_show_rsc(int text_id, int kind)
         mc_memcpy((void *)msgbox_saved_screen, (void *)screen_buffer, 64000, str_text_c, 825, 4);
         xn_font_select(4);
         if ((short)kind == 5) {
-            D_00196271 = 0;
+            popup_answer = 0;
             single_page = msgbox_render_rsc((short)text_id, (iptr)msgbox_image, 4);
         } else {
             single_page = msgbox_render_rsc((short)text_id, (iptr)msgbox_image, 0);
@@ -271,7 +271,7 @@ void msgbox_open_rsc(int text_id, int kind)
         mc_memcpy((void *)msgbox_saved_screen, (void *)screen_buffer, 64000, str_text_c, 855, 4);
         xn_font_select(4);
         if ((short)kind == 5) {
-            D_00196271 = 0;
+            popup_answer = 0;
             single_page = msgbox_render_rsc((short)text_id, (iptr)msgbox_image, 4);
         } else {
             single_page = msgbox_render_rsc((short)text_id, (iptr)msgbox_image, 0);
@@ -355,7 +355,7 @@ L3F47F:;
     button = msgbox_button_at((int)(short)mouse_x, (int)(short)mouse_y);
     if ((short)button == 0) return;
     sound_play(203, player_object, 110);
-    D_00196271 = button;
+    popup_answer = button;
     msgbox_close();
 }
 
@@ -428,7 +428,7 @@ int msgbox_button_at(short x, short y)
         if (msgbox_button_keys != 0 && key_down[(int)(unsigned char)msgbox_button_keys] != 0) {
             return 1;
         }
-        if (D_00196034 != 0 && key_down[(int)(unsigned char)D_00196034] != 0) {
+        if (msgbox_key_2 != 0 && key_down[(int)(unsigned char)msgbox_key_2] != 0) {
             return 2;
         }
         if (mouse_buttons == 0) return 0;
@@ -443,7 +443,7 @@ int msgbox_button_at(short x, short y)
         if (msgbox_button_keys != 0 && key_down[(int)(unsigned char)msgbox_button_keys] != 0) {
             return 1;
         }
-        if (D_00196034 != 0 && key_down[(int)(unsigned char)D_00196034] != 0) {
+        if (msgbox_key_2 != 0 && key_down[(int)(unsigned char)msgbox_key_2] != 0) {
             return 2;
         }
         if (msgbox_hotkey != 0 && key_down[(int)(unsigned char)msgbox_hotkey] != 0) {

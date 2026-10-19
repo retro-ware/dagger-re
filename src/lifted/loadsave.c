@@ -92,7 +92,7 @@ extern char cheat_flags[];
 extern char clothing_gender_group[];
 extern char clothing_gender_offset[];
 extern int effects_last_minute;
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern char shared_scratch[];
 extern int hud_message_expiry[];
 extern struct location *current_location;
@@ -561,7 +561,7 @@ void saveload_menu(int saving)
     used_slots = 0;
     slot = 0;
     window = (window_image = disk_read_file(str_load00i0_img, 0));
-    *(iptr *)&D_00195B5C = disk_read_file(str_save00i0_img, 0);
+    *(iptr *)&screen_image_1 = disk_read_file(str_save00i0_img, 0);
     mc_memset((void *)scratch_buffer, 0, 256, str_loadsave_c, 862, 4);
     mc_strncpy((char *)text_buffer, str_savex_image_raw, 160, str_loadsave_c, 864);
     for (i = 0; i < 6; i++) {
@@ -611,9 +611,9 @@ void saveload_menu(int saving)
         mc_free((void *)window, str_loadsave_c, 924);
         window = -1751672937;
     }
-    if ((iptr)D_00195B5C == 0 || (iptr)D_00195B5C == (-1751672937)) return;
-    mc_free((void *)D_00195B5C, str_loadsave_c, 925);
-    *(iptr *)&D_00195B5C = -1751672937;
+    if ((iptr)screen_image_1 == 0 || (iptr)screen_image_1 == (-1751672937)) return;
+    mc_free((void *)screen_image_1, str_loadsave_c, 925);
+    *(iptr *)&screen_image_1 = -1751672937;
 }
 
 int saveload_click_slot(int button, int saving, int slot, int used_slots)

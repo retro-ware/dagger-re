@@ -34,7 +34,7 @@ extern int game_minutes;
 extern struct settings *game_settings;
 extern int sky_loaded_frame;
 extern short D_00195DA0;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char cast_strike_spell;
 extern signed char night_sky_loaded;
@@ -401,7 +401,7 @@ void quest_prompt_answer(void)
     struct qbn_state *state;
 
     if (((struct bf8_5_1 *)&misc_state_flags)->f == 0 || game_mode != 0) return;
-    state = (struct qbn_state *)quest_prompt_op->args[(int)D_00196271].record;
+    state = (struct qbn_state *)quest_prompt_op->args[(int)popup_answer].record;
     if (state->is_global != 0) {
         quest_global_states[state->value] = 1;
     } else {

@@ -4,7 +4,7 @@
 #pragma pack(1)
 struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 #pragma pack()
-extern struct collide_probe D_00187B6E;
+extern struct collide_probe player_collide_probe;
 extern struct collide_probe player_probe_climb;
 extern struct collide_probe player_probe_crouched;
 extern struct collide_probe player_probe_riding;
@@ -42,7 +42,7 @@ int player_try_move(int distance)
         collide_flags |= 8;
         return collide_flags;
     }
-    player_move_request.probe = player_motion_flags.b2 ? &player_probe_crouched : &D_00187B6E;
+    player_move_request.probe = player_motion_flags.b2 ? &player_probe_crouched : &player_collide_probe;
     player_move_request.probe = ((unsigned short)player_character->flags & 1536) != 0 ? &player_probe_riding : player_move_request.probe;
     if (player_motion_flags.b5)
         player_move_request.probe = &player_probe_climb;

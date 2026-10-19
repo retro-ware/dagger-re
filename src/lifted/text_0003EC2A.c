@@ -9,7 +9,7 @@ extern iptr screen_buffer;
 extern char str_text_c[];
 extern short msgbox_wrap_width;
 extern signed char msgbox_kind;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -42,7 +42,7 @@ void msgbox_show_string(char *text, short kind)
     mc_strncpy(copy, text, 4, str_text_c, 705);
     if (kind == 5) {
         flags = 4;
-        D_00196271 = 0;
+        popup_answer = 0;
     } else {
         flags = 0;
     }

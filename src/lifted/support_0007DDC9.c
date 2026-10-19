@@ -4,22 +4,22 @@
 
 extern signed char text_colour;
 extern signed char msgbox_button_keys;
-extern signed char D_00196034;
+extern signed char msgbox_key_2;
 extern signed char msgbox_button_ids;
 extern signed char msgbox_button_2;
 extern signed char msgbox_button_3;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 
 extern void msgbox_show_rsc(int, int);
 
 void msgbox_yes_no_rsc(int text_id)
 {
-    D_00196271 = 0;
+    popup_answer = 0;
     msgbox_button_ids = 4;
     msgbox_button_2 = 5;
     msgbox_button_3 = 0;
     msgbox_button_keys = 21;
-    D_00196034 = 49;
+    msgbox_key_2 = 49;
     text_colour = 146;
     msgbox_show_rsc((int)(short)text_id, 5);
 }

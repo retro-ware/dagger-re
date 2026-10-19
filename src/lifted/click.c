@@ -85,7 +85,7 @@ extern char furniture_container_3[];
 extern char pending_quest_file[];
 extern signed char in_knightly_order_hall;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern unsigned char interaction_mode;
@@ -341,9 +341,9 @@ int click_world_face(struct pick_result *hit)
             if (wagon_container != 0) {
                 msgbox_yes_no_rsc(38);
             } else {
-                D_00196271 = 2;
+                popup_answer = 2;
             }
-            if (((int)D_00196271) == 1) {
+            if (((int)popup_answer) == 1) {
                 inv_wagon_reached = 1;
                 inventory_open(1, 0, 2);
             } else {
@@ -971,7 +971,7 @@ void click_interior_model(struct pick_result *hit, struct record *object)
                 inventory_open_container((struct record *)furniture_container_1, 0, 4);
             } else {
                 msgbox_yes_no_rsc(37);
-                if (((int)D_00196271) != 1) return;
+                if (((int)popup_answer) != 1) return;
                 if (stock_count != 0 && ((int)player_environment) == 2 && rand_range(0, 255) >= (108 - player_character->skills[15].value)) {
                     crime_current = 13;
                     guards_summon(1);

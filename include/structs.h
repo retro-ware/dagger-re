@@ -50,7 +50,7 @@ struct record;
 /* ---- the engine -------------------------------------------------------------------------- */
 
 /* a point or a vector in world units (1/40 m): a record's x, y, z, the collision probe's
- * position (D_00196D54) */
+ * position (monster_move_pos) */
 struct vec3 {
     int x;                          /* +0x00 */
     int y;                          /* +0x04 */
@@ -66,8 +66,8 @@ struct xz_step {
 };                                  /* +0x04 */
 RECORD_SIZE(xz_step, 4);
 
-/* a collision probe: spheres around a position (the movers' shapes: D_00187B44 the creatures',
- * D_00187B6E, player_probe_climb, player_probe_crouched, player_probe_riding the player's, collide_object_probe); the collision code
+/* a collision probe: spheres around a position (the movers' shapes: monster_collide_probe the creatures',
+ * player_collide_probe, player_probe_climb, player_probe_crouched, player_probe_riding the player's, collide_object_probe); the collision code
  * keeps the current one in xn_collide_probe and writes the tested position into it */
 struct probe_sphere {
     int x;                          /* +0x00: from the position */

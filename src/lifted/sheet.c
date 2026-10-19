@@ -51,7 +51,7 @@ extern signed char player_view_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern int creature_count;
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
@@ -64,7 +64,7 @@ extern int text_rsc_main_file;
 extern short text_cursor_x;
 extern signed char sheet_selected_attribute;
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -151,9 +151,9 @@ int sheet_close(void)
         mc_free(D_00199638, str_sheet_c, 129);
         D_00199638 = (struct image *)(iptr)-1751672937;
     }
-    if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free(D_00195B5C, str_sheet_c, 130);
-        D_00195B5C = (struct image *)(iptr)-1751672937;
+    if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
+        mc_free(screen_image_1, str_sheet_c, 130);
+        screen_image_1 = (struct image *)(iptr)-1751672937;
     }
     screen_active = 0;
     return 1;
@@ -424,7 +424,7 @@ iptr health_status_text(void)
 void sheet_draw_levelup_points(void)
 {
     if (((struct bf8_2_1 *)&player_view_flags)->f == 0) return;
-    xn_draw_image_transparent(176, (int)(short)scratch_190d6a, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
+    xn_draw_image_transparent(176, (int)(short)scratch_190d6a, screen_image_1->width, screen_image_1->height, screen_image_1->pixels);
     text_draw_centred_coloured((iptr)itoa((int)(short)*(short *)scratch_190d64, (char *)text_buffer, 10), 182, (int)(short)(((scratch_190d6a + 13) - font_height) + 1), 145, 141);
 }
 
@@ -476,7 +476,7 @@ void training_update(void)
     if (((int)(unsigned char)game_mode) != 23) return;
     switch (training_state) {
     case 1234:
-        if (((int)D_00196271) == 2) {
+        if (((int)popup_answer) == 2) {
             training_state = 1235;
             return;
         }

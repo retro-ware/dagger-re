@@ -25,7 +25,7 @@ extern iptr window_image;
 extern int player_death_timer;
 extern short D_00195F34;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char crime_current;
@@ -68,7 +68,7 @@ void court_frame(void)
     switch (court_state) {
         return;
     case 1:
-        if (((int)D_00196271) == 1) {
+        if (((int)popup_answer) == 1) {
             if (scratch_190d16 == 0) {
                 court_state = 5;
                 return;
@@ -127,7 +127,7 @@ void court_frame(void)
         court_state = 100;
         return;
     case 8:
-        if (((int)D_00196271) == 2) {
+        if (((int)popup_answer) == 2) {
             skill_value = player_character->skills[2].value;
         } else {
             skill_value = player_character->skills[1].value;

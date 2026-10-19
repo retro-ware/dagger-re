@@ -5,10 +5,10 @@
 extern char str_today_is_a_day_for_summoning_enemies_we[];
 extern char str_daedra_c[];
 extern char str_0c0_y00_qbn[];
-extern char D_00179E60[];
-extern char D_00179E66[];
-extern unsigned char D_00179E7F[];
-extern unsigned char D_00179E90[];
+extern char daedra_summon_days[];
+extern char daedra_day_special[];
+extern unsigned char daedra_weather[];
+extern unsigned char daedra_summon_monsters[];
 extern unsigned char D_00179E94[];
 extern unsigned char D_001850D4[];
 extern iptr quest_letter_text_ids[];
@@ -18,7 +18,7 @@ extern struct settings *game_settings;
 extern int trade_price;
 extern unsigned char climate_weathers[];
 extern char pending_quest_file[];
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern struct faction *found_faction;
 extern iptr current_quest;
 extern struct faction *faction_find(short);
@@ -62,12 +62,12 @@ void daedra_summon(struct record *object)
     }
     switch (guild->id) {
     case 40:
-        day_entry = xn_str_find_u16(D_00179E60, game_minutes % 518400 / 1440, 16);
-        if (day_entry == 0 || D_00179E66 == day_entry) {
+        day_entry = xn_str_find_u16(daedra_summon_days, game_minutes % 518400 / 1440, 16);
+        if (day_entry == 0 || daedra_day_special == day_entry) {
             msgbox_show_rsc(480, 1);
             return;
         }
-        daedra_id = (int)((day_entry - D_00179E60) / 2) + 1;
+        daedra_id = (int)((day_entry - daedra_summon_days) / 2) + 1;
         daedra = faction_find(daedra_id);
         found_faction = daedra;
         if (REGION(daedra) == 56) {
@@ -79,7 +79,7 @@ void daedra_summon(struct record *object)
         }
         trade_price = (100 - guild->reputation) * 1000 + 100000;
         msgbox_yes_no_rsc(481);
-        if (D_00196271 == 2) return;
+        if (popup_answer == 2) return;
         chance = 30;
         break;
     case 21:
@@ -98,12 +98,12 @@ void daedra_summon(struct record *object)
     case 94:
     case 98:
     case 106:
-        day_entry = xn_str_find_u16(D_00179E60, game_minutes % 518400 / 1440, 16);
-        if (day_entry == 0 || D_00179E66 == day_entry) {
+        day_entry = xn_str_find_u16(daedra_summon_days, game_minutes % 518400 / 1440, 16);
+        if (day_entry == 0 || daedra_day_special == day_entry) {
             msgbox_show_rsc(480, 1);
             return;
         }
-        daedra_id = (int)((day_entry - D_00179E60) / 2) + 1;
+        daedra_id = (int)((day_entry - daedra_summon_days) / 2) + 1;
         for (n = 0; n < 3; n++) {
             if (guild->enemies[n] != 0 && guild->enemies[n]->id == daedra_id) {
                 msgbox_show_string(str_today_is_a_day_for_summoning_enemies_we, 1);
@@ -121,7 +121,7 @@ void daedra_summon(struct record *object)
         }
         trade_price = (100 - guild->reputation) * 1000 + 100000;
         msgbox_yes_no_rsc(481);
-        if (D_00196271 == 2) return;
+        if (popup_answer == 2) return;
         chance = 30;
         break;
     default:
@@ -143,7 +143,7 @@ void daedra_summon(struct record *object)
         }
         trade_price = (100 - guild->reputation) * 1000 + 100000;
         msgbox_yes_no_rsc(481);
-        if (D_00196271 == 2) return;
+        if (popup_answer == 2) return;
         chance = 30;
         srand(saved_seed);
         break;
@@ -165,7 +165,7 @@ void daedra_summon(struct record *object)
         daedra = faction_find(daedra_id);
     }
     chance += daedra->reputation;
-    if (D_00179E7F[daedra_id] == 100 || weather == D_00179E7F[daedra_id])
+    if (daedra_weather[daedra_id] == 100 || weather == daedra_weather[daedra_id])
         chance += 30;
     gold_spend(trade_price);
     if (rand_range(1, 100) > chance) {
@@ -177,7 +177,7 @@ void daedra_summon(struct record *object)
         mc_memset(flc, 0, sizeof(flc), str_daedra_c, 189, 4);
         current_quest = 0;
         flc_play_with_text(quest_letter_text_ids[daedra_entry - D_001850D4], flc, 482, 0);
-        object = monster_summon_near_player(D_00179E90[rand_range(0, 4)]);
+        object = monster_summon_near_player(daedra_summon_monsters[rand_range(0, 4)]);
         if (object != 0)
             object->data.character.team = 1;
         return;

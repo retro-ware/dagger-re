@@ -45,7 +45,7 @@ extern char *scratch_buffer;
 extern int free_later_count;
 extern short spell_ready_cost;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char player_ailment_flags;
 extern int scratch_1a99f4;
@@ -850,7 +850,7 @@ void spfx_popup_update(void)
     if (spfx_popup_handler == 0) return;
     text_colour = 146;
     if (spfx_popup_handler == 1 && ((int)(unsigned char)game_mode) != 8) {
-        if (((int)D_00196271) == 1) {
+        if (((int)popup_answer) == 1) {
             recall_anchor_environment = (int)player_environment;
             recall_anchor_location = location_object->image;
             recall_anchor_region = (int)(unsigned char)current_region;

@@ -10,7 +10,7 @@ extern char str_mplace_c[];
 extern unsigned char player_environment;
 extern signed char loan_collector_monsters[];
 extern iptr encounter_tables[];
-extern struct collide_probe D_00187B6E;
+extern struct collide_probe player_collide_probe;
 extern unsigned char world_state_flags;
 extern signed char player_motion_flags;
 extern signed char dungeon_water_monster_table[];
@@ -103,7 +103,7 @@ int place_spawn_from_marker(struct record *marker)
         world_state_flags |= 128;
         mc_memcpy(&request, &creature->x, 12, str_mplace_c, 119, 4);
         mc_memset(&request.angle_x, 0, 12, str_mplace_c, 120, 4);
-        request.probe = &D_00187B6E;
+        request.probe = &player_collide_probe;
         player_motion_flags |= 8;
         collide_move_object(creature, 0, &request, 0);
         player_motion_flags &= 247;

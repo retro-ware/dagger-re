@@ -26,7 +26,7 @@ extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern short spell_effect_slot;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern short spellmaker_alter_row;
@@ -88,8 +88,8 @@ void spellmaker_update(void)
     if (game_state_flags.f && (i = list_popup_poll()) > -1)
         (*(void (**)(int))((char *)&list_popup_callback))(((unsigned char *)scratch_buffer)[i + 32000]);
     spellmaker_settings_update();
-    if (spellmaker_alter_row > -1 && *((char *)&D_00196271)) {
-        if (D_00196271 == 1) {
+    if (spellmaker_alter_row > -1 && *((char *)&popup_answer)) {
+        if (popup_answer == 1) {
             i = selected_spell->effects[spell_effect_slot = spellmaker_alter_row].subtype;
             if (i == 255)
                 i = 0;

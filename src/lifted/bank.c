@@ -38,7 +38,7 @@ extern char saved_location_name[];
 extern char saved_region_name[];
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
-extern char D_00191020[];
+extern char bank_amount_text[];
 extern int bank_ship_price;
 extern int bank_house_price;
 extern struct record *inventory_container_2;
@@ -46,7 +46,7 @@ extern struct record *bank_accounts;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern struct location *current_location;
 extern struct character *player_character;
 extern iptr window_image;
@@ -59,7 +59,7 @@ extern short text_cursor_x;
 extern unsigned short text_cursor_y;
 extern signed char current_region;
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -67,13 +67,13 @@ extern signed char current_climate;
 extern signed char location_is_port;
 extern struct house_for_sale bank_houses_for_sale[];
 extern char bank_list_top[];
-extern iptr D_001A4140;
+extern iptr bank_house_image;
 extern iptr bank_saved_screen;
 extern struct ship_for_sale bank_ships_for_sale[];
 extern iptr bank_bought_house_building;
-extern int D_001A41E0;
+extern int bank_preview_distance;
 extern iptr bank_bought_house;
-extern iptr D_001A41E8;
+extern iptr bank_list_image;
 extern struct bank_account *bank_account;
 extern signed char bank_ship_count;
 extern unsigned char bank_screen;
@@ -130,16 +130,16 @@ int bank_open(int opening)
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         bank_bought_house = 0;
         window_image = disk_read_file(str_bank00i0_img, 0);
-        *(iptr *)&D_00195B5C = disk_read_file(str_bank01i0_img, 0);
-        D_001A41E8 = disk_read_file(str_bank01i1_img, 0);
-        D_001A4140 = disk_read_file(str_bank01i2_img, 0);
+        *(iptr *)&screen_image_1 = disk_read_file(str_bank01i0_img, 0);
+        bank_list_image = disk_read_file(str_bank01i1_img, 0);
+        bank_house_image = disk_read_file(str_bank01i2_img, 0);
         xn_cam_set_view_window(51, 45, 216, 72);
         screen_active = 1;
         game_mode = 15;
         world_running = 0;
         bank_house_count = (bank_ship_count = (bank_screen = (bank_selected = 0)));
         *(int *)bank_list_top = 0;
-        D_001A41E0 = 1500;
+        bank_preview_distance = 1500;
         bank_saved_screen = (iptr)mc_malloc(64000, str_bank_c, 89);
         mc_memcpy((void *)bank_saved_screen, (void *)screen_buffer, 64000, str_bank_c, 90, 4);
         bank_account = &bank_accounts->data.bank_accounts[(int)(unsigned char)current_region];
@@ -165,17 +165,17 @@ void bank_close(void)
         mc_free((void *)window_image, str_bank_c, 111);
         window_image = -1751672937;
     }
-    if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free((void *)D_00195B5C, str_bank_c, 112);
-        *(iptr *)&D_00195B5C = -1751672937;
+    if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
+        mc_free((void *)screen_image_1, str_bank_c, 112);
+        *(iptr *)&screen_image_1 = -1751672937;
     }
-    if (D_001A41E8 != 0 && D_001A41E8 != (-1751672937)) {
-        mc_free((void *)D_001A41E8, str_bank_c, 113);
-        D_001A41E8 = -1751672937;
+    if (bank_list_image != 0 && bank_list_image != (-1751672937)) {
+        mc_free((void *)bank_list_image, str_bank_c, 113);
+        bank_list_image = -1751672937;
     }
-    if (D_001A4140 != 0 && D_001A4140 != (-1751672937)) {
-        mc_free((void *)D_001A4140, str_bank_c, 114);
-        D_001A4140 = -1751672937;
+    if (bank_house_image != 0 && bank_house_image != (-1751672937)) {
+        mc_free((void *)bank_house_image, str_bank_c, 114);
+        bank_house_image = -1751672937;
     }
     mc_memset(text_rsc_buffer, 0, 2048, str_bank_c, 116, 2048);
     func_0006CB02();
@@ -425,16 +425,16 @@ void bank_draw_preview(int model_count, struct block_model *models)
     xn_cam_x = 0;
     xn_cam_y = -100;
     if (key_down_minus != 0) {
-        D_001A41E0 -= 8;
+        bank_preview_distance -= 8;
     } else if (key_down_equals != 0) {
-        D_001A41E0 += 8;
+        bank_preview_distance += 8;
     }
-    if (D_001A41E0 < 100) {
-        D_001A41E0 = 100;
-    } else if (D_001A41E0 > 2000) {
-        D_001A41E0 = 2000;
+    if (bank_preview_distance < 100) {
+        bank_preview_distance = 100;
+    } else if (bank_preview_distance > 2000) {
+        bank_preview_distance = 2000;
     }
-    xn_cam_z = -D_001A41E0;
+    xn_cam_z = -bank_preview_distance;
     xn_cam_pitch = 0;
     xn_cam_yaw = 0;
     xn_cam_roll = 0;
@@ -495,15 +495,15 @@ void bank_draw_house_list(void)
         text_draw_coloured((iptr)text_buffer, 52, (int)(short)(((row - *(short *)bank_list_top) * 7) + 38), (int)(short)*(short *)&colour, 156);
     }
     if (*(int *)bank_list_top != 0) {
-        arrow_image = D_001A41E8;
+        arrow_image = bank_list_image;
     } else {
-        arrow_image = D_001A4140;
+        arrow_image = bank_house_image;
     }
     xn_draw_image_transparent(153, 38, 9, 20, (char *)arrow_image);
     if ((*(int *)bank_list_top + 11) < ((int)(unsigned char)bank_house_count)) {
-        arrow_image = D_001A41E8;
+        arrow_image = bank_list_image;
     } else {
-        arrow_image = D_001A4140;
+        arrow_image = bank_house_image;
     }
     xn_draw_image_transparent(153, 102, 9, 16, (char *)(arrow_image + 576));
 }
@@ -599,8 +599,8 @@ int bank_confirm(int text_id)
         msgbox_update();
         cursor_draw_arrow();
         xn_gfx_present_inclusive(1);
-        if (((int)D_00196271) == 1) return 1;
-        if (((int)D_00196271) == 2) return 0;
+        if (((int)popup_answer) == 1) return 1;
+        if (((int)popup_answer) == 2) return 0;
     }
 }
 
@@ -613,10 +613,10 @@ int bank_input_amount(void)
     text_colour = 146;
     input = scratch_buffer + 55000;
     *input = 0;
-    *(signed char *)D_00191020 = 0;
+    *(signed char *)bank_amount_text = 0;
     text_cursor_x = 157;
     text_cursor_y = 152;
-    inpstr_begin_text(D_00191020, 10);
+    inpstr_begin_text(bank_amount_text, 10);
     xn_kbd_flush();
     mouse_buttons = (mouse_buttons_prev = 0);
     while (done == 0) {
@@ -624,7 +624,7 @@ int bank_input_amount(void)
         done = inpstr_update();
         xn_gfx_present_inclusive(1);
     }
-    return atoi(D_00191020);
+    return atoi(bank_amount_text);
 }
 
 void func_0006CB02(void)

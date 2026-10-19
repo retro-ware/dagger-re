@@ -19,7 +19,7 @@ extern char str_the_material_of_the_weapon_you_are_using[];
 extern signed char weapon_skills[];
 extern signed char quest_symbol_name_kinds[];
 extern signed char struck_body_part_table[];
-extern char *D_0017CCFA[];   /* class names, by mobile id - 128 */
+extern char *class_name_list[];   /* class names, by mobile id - 128 */
 extern char material_to_hit[];
 extern char weapon_damage_min[];
 extern char weapon_damage_max[];
@@ -50,7 +50,7 @@ extern struct record *scratch_object;
 extern struct character *player_character;
 extern struct career *player_class;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char guards_alerted;
 extern signed char player_moving;
@@ -224,7 +224,7 @@ L2D3DB:;
                             return name_generate_seeded((int)(unsigned char)quest_symbol_name_kinds[current_quest->id % 3], 0, object->name_seed);
                         }
                         if (creature->mobile_id >= 128) {
-                            return (iptr)D_0017CCFA[creature->mobile_id - 128];
+                            return (iptr)class_name_list[creature->mobile_id - 128];
                         }
                         return (iptr)monster_names[creature->race];
                     }
@@ -537,7 +537,7 @@ int damage_apply(struct record *target, int damage, struct record *weapon)
         crime_reputation_penalty();
         msgbox_yes_no_rsc(15);
         guards_alerted = 1;
-        if (((int)D_00196271) == 1) {
+        if (((int)popup_answer) == 1) {
             crime_guards_or_court(1);
             return 0;
         }

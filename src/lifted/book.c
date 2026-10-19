@@ -16,7 +16,7 @@ extern signed char text_shadow_colour;
 extern signed char text_colour;
 extern short font_space_width;
 extern short font_char_spacing;
-extern char *D_0012DA74;
+extern char *font_glyphs;
 extern signed char key_down_esc;
 extern short D_00142928;
 extern short D_0014292C;
@@ -29,8 +29,8 @@ extern char str_book_c[];
 extern char str_books_bok_txt_2[];
 extern char str_book00i0_img[];
 extern char str_books[];
-extern char D_001757D7[];
-extern iptr D_0017D1E6;
+extern char book_goto_prompt_fmt[];
+extern iptr text_enter_new_page;
 extern struct rect book_buttons[];
 extern signed char world_running;
 extern signed char text_buffer[];
@@ -50,12 +50,12 @@ extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char inv_right_icon;
-extern iptr D_00199C2C[];
+extern iptr book_images[];
 extern iptr book_page_offsets;
 extern char book_header[];
 extern short book_file;
 extern short book_page;
-extern short D_00199D5E;
+extern short book_image_count;
 extern short book_page_count;
 
 extern int sound_play(int, struct record *, int);
@@ -171,20 +171,20 @@ void func_0005A1C8(char *name)
 {
     mc_set_location(218, str_book_c);
     mc_sprintf((char *)text_buffer, str_books, name);
-    D_00199C2C[((int)(short)(D_00199D5E)++)] = disk_read_file(text_buffer, 0);
+    book_images[((int)(short)(book_image_count)++)] = disk_read_file(text_buffer, 0);
 }
 
 void func_0005A230(void)
 {
     int i;
 
-    for (i = 0; ((int)(short)D_00199D5E) > i; i++) {
-        if (D_00199C2C[i] != 0 && D_00199C2C[i] != (-1751672937)) {
-            mc_free((void *)D_00199C2C[i], str_book_c, 228);
-            D_00199C2C[i] = -1751672937;
+    for (i = 0; ((int)(short)book_image_count) > i; i++) {
+        if (book_images[i] != 0 && book_images[i] != (-1751672937)) {
+            mc_free((void *)book_images[i], str_book_c, 228);
+            book_images[i] = -1751672937;
         }
     }
-    D_00199D5E = 0;
+    book_image_count = 0;
 }
 
 void func_0005A2BE(void)
@@ -193,8 +193,8 @@ void func_0005A2BE(void)
     slot16 i;
 
     *(int *)&i = 0;
-    for (; (short)(short)*(int *)&i < D_00199D5E; (*(int *)&i)++) {
-        image = (struct image *)D_00199C2C[((int)(short)i)];
+    for (; (short)(short)*(int *)&i < book_image_count; (*(int *)&i)++) {
+        image = (struct image *)book_images[((int)(short)i)];
         xn_draw_image_transparent(image->x, image->y, image->width, image->height, image->pixels);
     }
 }
@@ -220,7 +220,7 @@ void book_goto_page_prompt(void)
     text_colour = 146;
     prompt = scratch_buffer + 55000;
     mc_set_location(268, str_book_c);
-    mc_sprintf(prompt, D_001757D7, D_0017D1E6);
+    mc_sprintf(prompt, book_goto_prompt_fmt, text_enter_new_page);
     *(signed char *)((char *)(strlen(prompt) + prompt) + 1) = 0;
     msgbox_show_string(prompt, 2);
     inpstr_begin_number(((int)(short)book_page) + 1);
@@ -234,7 +234,7 @@ int font_char_width(unsigned char ch)
 
     if (((int)(unsigned char)ch) == 32) return (int)(short)font_space_width;
     *(int *)&glyph_index = ((int)(unsigned char)ch) - 33;
-    glyph = D_0012DA74 + 6 + (((int)(short)glyph_index) << 2);
+    glyph = font_glyphs + 6 + (((int)(short)glyph_index) << 2);
     return ((int)(short)*(short *)glyph) + ((int)(short)font_char_spacing);
 }
 

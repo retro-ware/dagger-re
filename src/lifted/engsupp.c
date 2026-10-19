@@ -7,9 +7,9 @@
 
 extern char str_engsupp_c[];
 extern unsigned char player_environment;
-extern short D_00179954[];
+extern short dungeon_texture_offsets[];
 extern char str_w[];
-extern short D_00179966[];
+extern short dungeon_texture_archives[];
 extern signed char climate_texture_sets[];
 extern signed char scratch_190ce4[];
 extern signed char scratch_190ce5;
@@ -24,8 +24,8 @@ extern char picked_model_index[];
 extern struct arch3d_plane *click_face_texture;
 extern char furniture_container_3[];
 extern signed char automap_is_open;
-extern iptr D_00196478;
-extern iptr D_0019647C;
+extern iptr pick_hit_flat;
+extern iptr pick_hit_model;
 extern struct pick_result *pick_result;
 extern int climate_index;
 
@@ -61,11 +61,11 @@ int engine_pick_object(int x, int y, struct pick_result *result)
     if ((iptr)(pick_hit = (struct xn_pick_hit *)xn_render_pick(x, y))->model == 1) return 0;
 #endif
     if (DOS_NULL(pick_hit)->model != 0) {
-        D_0019647C = (iptr)pick_hit->model;
+        pick_hit_model = (iptr)pick_hit->model;
         click_face_texture = pick_hit->plane;
         world_for_each_object((iptr)pick_model_cb);
     } else {
-        D_00196478 = (iptr)pick_hit;
+        pick_hit_flat = (iptr)pick_hit;
         world_for_each_object((iptr)pick_sprite_cb);
     }
     return pick_result->flags & 1;
@@ -111,12 +111,12 @@ int pick_model_cb(struct record *object)
         block = &object->data.block;
         block_model = block->models;
         for (i = 0; block->model_count > i; i++, block_model++) {
-            if ((iptr)&block_model->model == D_0019647C) {
+            if ((iptr)&block_model->model == pick_hit_model) {
                 *(int *)picked_model_index = i;
                 picked_block_model = block_model;
                 pick_result->flags |= 13;
                 pick_result->object = object;
-                pick_result->plane = (i << 8) + arch3d_plane_index(D_0019647C, click_face_texture);
+                pick_result->plane = (i << 8) + arch3d_plane_index(pick_hit_model, click_face_texture);
                 pick_result->block_model_index = i;
                 return 1;
             }
@@ -125,10 +125,10 @@ int pick_model_cb(struct record *object)
     case 56:
         block_model = (struct block_model *)RECORD_DATA(object);
         for (i = 0; object->model_count > i; i++, block_model++) {
-            if ((iptr)&block_model->model == D_0019647C) {
+            if ((iptr)&block_model->model == pick_hit_model) {
                 pick_result->flags |= 5;
                 pick_result->object = object;
-                pick_result->plane = arch3d_plane_index(D_0019647C, click_face_texture);
+                pick_result->plane = arch3d_plane_index(pick_hit_model, click_face_texture);
                 pick_result->model_id = block_model->id;
                 pick_result->variant = block_model->variant;
                 return 1;
@@ -138,7 +138,7 @@ int pick_model_cb(struct record *object)
     case 6:
     case 32:
         model = (iptr)&object->data.instance;
-        if (D_0019647C == model) {
+        if (pick_hit_model == model) {
             pick_result->flags |= 5;
             pick_result->object = object;
             pick_result->plane = arch3d_plane_index(model, click_face_texture);
@@ -187,12 +187,12 @@ void dungeon_choose_textures(void)
     srand(((unsigned)location_object->id) >> 16);
     texture_set = (int)(unsigned char)climate_texture_sets[climate_category()];
     if (texture_set == 1) return;
-    mc_memcpy(D_00179966, str_w, 10, str_engsupp_c, 279, 10);
+    mc_memcpy(dungeon_texture_archives, str_w, 10, str_engsupp_c, 279, 10);
     for (i = 0; i < 5; i++) {
         archive = rand_range(0, 4);
         if (archive == 2) archive += 2;
-        archive += (int)(short)D_00179954[texture_set];
-        D_00179966[i] = archive;
+        archive += (int)(short)dungeon_texture_offsets[texture_set];
+        dungeon_texture_archives[i] = archive;
     }
     srand(saved_seed);
 }

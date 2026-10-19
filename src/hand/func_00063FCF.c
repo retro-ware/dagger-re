@@ -17,14 +17,14 @@ struct Hit {
     char pad[14];
 };
 extern char str_monster_c[];
-extern char D_00187B44[];
+extern char monster_collide_probe[];
 extern unsigned char world_state_flags;
 extern unsigned char misc_state_flags;
 extern struct record *player_object;
 extern int vertical_velocity;
 extern int ceiling_height;
 extern char player_on_ground;
-extern struct vec3 D_00196D54;
+extern struct vec3 monster_move_pos;
 extern int collide_previous_y;
 extern int collide_previous_z;
 extern short collide_flags;
@@ -63,15 +63,15 @@ int func_00063FCF(struct record *m, int dest_x, int dest_z)
     *(unsigned char *)&collide_flags |= 4;
     h = vertical_velocity = sub->fall_velocity;
     world_state_flags |= 128;
-    hit.probe = D_00187B44;
+    hit.probe = monster_collide_probe;
     hit.flags &= ~1;
-    mc_memcpy(&saved, &D_00196D54, 12, str_monster_c, 1293, 4);
-    D_00196D54.x = m->x;
+    mc_memcpy(&saved, &monster_move_pos, 12, str_monster_c, 1293, 4);
+    monster_move_pos.x = m->x;
     collide_previous_y = m->y - vertical_velocity / 256;
     collide_previous_z = m->z;
     collide_move_object(m, 0, &hit, 0);
     player_on_ground = save10;
-    mc_memcpy(&D_00196D54, &saved, 12, str_monster_c, 1300, 4);
+    mc_memcpy(&monster_move_pos, &saved, 12, str_monster_c, 1300, 4);
     if ((int)(short)(collide_flags & 16) != 0)
         vertical_velocity = 1;
     sub->fall_velocity = vertical_velocity;

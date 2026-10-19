@@ -19,9 +19,9 @@ extern char str_tamriel2_img[];
 extern char str_butn01i0_img[];
 extern char str_class_cfg[];
 extern char str_butn02i0_img[];
-extern iptr D_0017B4B0;              /* the title menu's keys ("LSE"): a pointer */
-extern signed char D_0017B4B8[];      /* a byte per race: its message is 2000 + it; picks count from 1 */
-extern char *D_0017CCFA[];
+extern iptr title_menu_keys;              /* the title menu's keys ("LSE"): a pointer */
+extern signed char title_menu_texts[];      /* a byte per race: its message is 2000 + it; picks count from 1 */
+extern char *class_name_list[];
 extern signed char text_buffer[];
 extern signed char scratch_190d16;
 extern char arena2_path[];
@@ -32,11 +32,11 @@ extern struct career *player_class;
 extern int realtime_clock_tick;
 extern char *scratch_buffer;
 extern signed char msgbox_button_keys;
-extern signed char D_00196034;
+extern signed char msgbox_key_2;
 extern signed char msgbox_button_ids;
 extern signed char msgbox_button_2;
-extern unsigned char D_00196271;
-extern signed char D_00196273;
+extern unsigned char popup_answer;
+extern signed char title_menu_active;
 extern signed char mouse_buttons_prev;
 extern int chosen_class;
 extern void career_background_summary(int, int);
@@ -103,7 +103,7 @@ L3A496:;
             goto L3A496;
         }
         game_state_flags &= 254;
-        pick = wait_key_from_list(D_0017B4B0, 3);
+        pick = wait_key_from_list(title_menu_keys, 3);
         if (((int)(signed char)pick) == (-1) || ((int)(signed char)pick) == 2 || (((int)(signed char)pick) == (-2) && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 125, 145, 165, 158) != 0)) {
             game_exit(0);
         }
@@ -118,11 +118,11 @@ L3A496:;
             break;
         }
     }
-    D_00196273 = 1;
+    title_menu_active = 1;
     mc_set_location(97, str_intro_c);
     mc_sprintf((char *)text_buffer, str_copyfile_dat, (iptr)arena2_path);
     unlink((char *)text_buffer);
-    D_00196273 = 0;
+    title_menu_active = 0;
     mc_memset(player_character, 0, REC_OFFSETOF(struct character, career), str_intro_c, 122, 4);
     player_character->pad83 = 1;
     player_character->reflexes = 2;
@@ -134,7 +134,7 @@ L3A496:;
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_intro_c, 139, 4);
     palette_restore();
     do {
-        D_00196271 = 0;
+        popup_answer = 0;
         mc_memset(player_character, 0, REC_OFFSETOF(struct character, career), str_intro_c, 148, 4);
         player_character->pad83 = 1;
         player_character->reflexes = 2;
@@ -145,7 +145,7 @@ L3A496:;
             *(signed char *)((scratch_buffer + ((int)(short)*(short *)&choice))) <<= 2;
         }
         xn_pal_set_all_8bit(scratch_buffer);
-        while (((int)D_00196271) != 1) {
+        while (((int)popup_answer) != 1) {
             disk_read_file(str_map100i0_img, (iptr)scratch_buffer);
             mc_memcpy((void *)screen_buffer, (void *)scratch_buffer, 64000, str_intro_c, 161, 4);
             text_draw_centred_coloured((iptr)str_please_select_your_home_province, 160, 16, 145, 156);
@@ -166,7 +166,7 @@ L3A496:;
                     msgbox_button_ids = 4;
                     msgbox_button_2 = 5;
                     msgbox_button_keys = 21;
-                    D_00196034 = 49;
+                    msgbox_key_2 = 49;
                     disk_read_file(str_map100i0_img, (iptr)scratch_buffer);
                     mc_memcpy((void *)screen_buffer, (void *)scratch_buffer, 64000, str_intro_c, 186, 4);
                     mouse_buttons = (mouse_buttons_prev = 0);
@@ -174,7 +174,7 @@ L3A496:;
                     while (mouse_buttons != 0) xn_mouse_poll_clamped();
                     sound_play_ui(((int)(signed char)pick) + 208);
                     ui_mode_flags |= 128;
-                    msgbox_show_rsc((int)(short)(((unsigned short)(unsigned char)D_0017B4B8[(int)(signed char)pick - 1]) + 2000), 5);
+                    msgbox_show_rsc((int)(short)(((unsigned short)(unsigned char)title_menu_texts[(int)(signed char)pick - 1]) + 2000), 5);
                 }
             }
             player_character->race = pick - 1;
@@ -219,7 +219,7 @@ L3AABE:;
             xn_pal_set_all_8bit(scratch_buffer);
             disk_read_file(str_map100i0_img, (iptr)scratch_buffer);
             mc_memcpy((void *)screen_buffer, (void *)scratch_buffer, 64000, str_intro_c, 251, 4);
-            list_popup_open((iptr)(char *)D_0017CCFA);
+            list_popup_open((iptr)(char *)class_name_list);
             for (;;) {
                 keys_world_actions();
                 xn_mouse_poll_clamped();
@@ -240,7 +240,7 @@ L3AABE:;
                     }
                     disk_read_file(str_map100i0_img, (iptr)scratch_buffer);
                     mc_memcpy((void *)screen_buffer, (void *)scratch_buffer, 64000, str_intro_c, 278, 4);
-                    list_popup_open((iptr)(char *)D_0017CCFA);
+                    list_popup_open((iptr)(char *)class_name_list);
                 }
                 xn_mouse_cursor_drawn &= 254;
                 xn_mouse_cursor_move((int)(short)mouse_x, (int)(short)mouse_y);

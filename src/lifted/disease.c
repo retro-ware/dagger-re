@@ -44,7 +44,7 @@ extern signed char lunar_cycle_a;
 extern signed char lunar_cycle_b;
 extern char pending_quest_file[];
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char game_mode;
 extern signed char in_dungeon_water;
 extern signed char player_ailment_flags;
@@ -878,16 +878,16 @@ void trade_haggle_frame(void)
     }
     text_colour = 146;
     if (trade_haggle_shown == 0) {
-        if ((signed char)D_00196271 == 0) return;
-        if (((int)D_00196271) == 1) {
+        if ((signed char)popup_answer == 0) return;
+        if (((int)popup_answer) == 1) {
             trade_haggle_close((int)trade_haggle_asking);
             return;
         }
-        if (((int)D_00196271) == 2) {
+        if (((int)popup_answer) == 2) {
             trade_haggle_close(0);
             return;
         }
-        if (((int)D_00196271) == 3) {
+        if (((int)popup_answer) == 3) {
             trade_haggle_shown = 1;
             trade_counter_offer();
         }

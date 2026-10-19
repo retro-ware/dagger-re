@@ -22,7 +22,7 @@ extern char str_trav0i03_img[];
 extern char str_fmap_pal_col[];
 extern unsigned char player_environment;
 extern char travel_options[];
-extern iptr D_0018507B;
+extern iptr text_enemies_nearby;
 extern signed char world_running;
 extern int scratch_190cac;
 extern signed char scratch_190ce4[];
@@ -34,7 +34,7 @@ extern struct record *player_object;
 extern struct record *location_object;
 extern struct record *found_object;
 extern int creature_count;
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern char shared_scratch[];
 extern struct character *player_character;
 extern iptr window_image;
@@ -43,12 +43,12 @@ extern char *scratch_buffer;
 extern int location_grid_x;
 extern int location_grid_z;
 extern char found_marker[];
-extern int D_00195F71;
-extern int D_00195F75;
-extern int D_00195F79;
-extern short D_00195F81;
-extern short D_00195F85;
-extern int D_00195F89;
+extern int marker_found_x;
+extern int marker_found_y;
+extern int marker_found_z;
+extern short marker_wanted_n;
+extern short marker_found_image;
+extern int marker_found_id;
 extern unsigned char game_mode_under_popup;
 extern signed char screen_active;
 extern signed char game_mode;
@@ -108,11 +108,11 @@ iptr marker_match_cb(struct record *object)
             if ((flat->image >> 7) == 199) {
                 if ((((int)(unsigned short)(flat->image & 31)) - 2) == marker_kind) {
                     if (*(int *)shared_scratch == 0 && marker_best < 0) {
-                        D_00195F71 = flat->x;
-                        D_00195F79 = flat->z;
-                        D_00195F75 = flat->y;
-                        D_00195F85 = flat->image;
-                        D_00195F89 = object->id;
+                        marker_found_x = flat->x;
+                        marker_found_z = flat->z;
+                        marker_found_y = flat->y;
+                        marker_found_image = flat->image;
+                        marker_found_id = object->id;
                         *(signed char *)found_marker = 34;
                         return 1;
                     }
@@ -128,11 +128,11 @@ iptr marker_match_cb(struct record *object)
             if ((flat->image >> 7) == 199) {
                 if ((((int)(unsigned short)(flat->image & 31)) - 2) == marker_kind) {
                     if (*(int *)shared_scratch == 0 && marker_best < 0) {
-                        D_00195F71 = flat->x;
-                        D_00195F79 = flat->z;
-                        D_00195F75 = flat->y;
-                        D_00195F85 = flat->image;
-                        D_00195F89 = object->id;
+                        marker_found_x = flat->x;
+                        marker_found_z = flat->z;
+                        marker_found_y = flat->y;
+                        marker_found_image = flat->image;
+                        marker_found_id = object->id;
                         *(signed char *)found_marker = 34;
                         return 1;
                     }
@@ -164,8 +164,8 @@ struct record *marker_find_nth(struct record *root, int kind, int n)
     marker_best = -1;
     mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 287, 4);
     object_find_open(root, marker_match_cb);
-    cell = location_cell_at(D_00195F71, D_00195F79);
-    D_00195F81 = n;
+    cell = location_cell_at(marker_found_x, marker_found_z);
+    marker_wanted_n = n;
     if (*(signed char *)found_marker != 0) return (struct record *)found_marker;
     return 0;
 }
@@ -183,7 +183,7 @@ struct record *marker_find_random(struct record *root, int kind)
     n = (*(int *)shared_scratch = rand() % *(int *)shared_scratch);
     marker_best = -1;
     object_foreach_open(root, marker_match_cb);
-    D_00195F81 = n;
+    marker_wanted_n = n;
     return (struct record *)found_marker;
 }
 
@@ -220,11 +220,11 @@ void marker_nearest_cb(struct record *object)
                 if (dist < marker_best) {
                     marker_best = dist;
                     *(signed char *)found_marker = 34;
-                    D_00195F71 = flat->x;
-                    D_00195F79 = flat->z;
-                    D_00195F75 = flat->y;
-                    D_00195F85 = flat->image;
-                    D_00195F89 = object->id;
+                    marker_found_x = flat->x;
+                    marker_found_z = flat->z;
+                    marker_found_y = flat->y;
+                    marker_found_image = flat->image;
+                    marker_found_id = object->id;
                 }
             }
         }
@@ -241,11 +241,11 @@ void marker_nearest_cb(struct record *object)
                 if (dist < marker_best) {
                     marker_best = dist;
                     *(signed char *)found_marker = 34;
-                    D_00195F71 = flat->x;
-                    D_00195F79 = flat->z;
-                    D_00195F75 = flat->y;
-                    D_00195F85 = flat->image;
-                    D_00195F89 = object->id;
+                    marker_found_x = flat->x;
+                    marker_found_z = flat->z;
+                    marker_found_y = flat->y;
+                    marker_found_image = flat->image;
+                    marker_found_id = object->id;
                 }
             }
         }
@@ -279,9 +279,9 @@ int player_to_nearest_marker(struct record *root, int kind)
 
     marker = marker_find_nearest(root, kind);
     if (marker != 0) {
-        player_object->x = D_00195F71;
-        player_object->y = D_00195F75;
-        player_object->z = D_00195F79;
+        player_object->x = marker_found_x;
+        player_object->y = marker_found_y;
+        player_object->z = marker_found_z;
         ui_mode_flags |= 2;
         return 1;
     }
@@ -294,9 +294,9 @@ int player_to_random_marker(struct record *root, int kind)
 
     marker = marker_find_random(root, kind);
     if (marker != 0) {
-        player_object->x = D_00195F71;
-        player_object->y = D_00195F75;
-        player_object->z = D_00195F79;
+        player_object->x = marker_found_x;
+        player_object->y = marker_found_y;
+        player_object->z = marker_found_z;
         ui_mode_flags |= 2;
         return 1;
     }
@@ -327,7 +327,7 @@ int travel_map_open(int mode)
             return 0;
         }
         if (creature_count != 0) {
-            msgbox_show_string(D_0018507B, 1);
+            msgbox_show_string(text_enemies_nearby, 1);
             return 0;
         }
         if (((int)(unsigned short)(*(short *)travel_options & 16)) != 0 && gold_can_afford(travel_trip_cost()) == 0) {
@@ -351,7 +351,7 @@ int travel_map_open(int mode)
         *(iptr *)&travel_border_image_b = disk_read_file(str_travbi05_img, 0);
         *(iptr *)&travel_border_image_c = disk_read_file(str_travci05_img, 0);
         *(iptr *)&travel_border_image_d = disk_read_file(str_travdi05_img, 0);
-        *(iptr *)&D_00195B5C = disk_read_file(str_trav0i03_img, 0);
+        *(iptr *)&screen_image_1 = disk_read_file(str_trav0i03_img, 0);
         disk_read_file(str_fmap_pal_col, (iptr)scratch_buffer);
         xn_pal_set_all_8bit((char *)((iptr)scratch_buffer + 8));
         *(iptr *)&ticks_addr = (iptr)DOS_LOW(0x46C);

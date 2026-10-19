@@ -34,7 +34,7 @@ extern char *scratch_buffer;
 extern struct record *quest_person_source;
 extern int trade_price;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -156,7 +156,7 @@ void tavern_room_offer(void)
 void tavern_room_pay(void)
 {
     tavern_state = 0;
-    if (((int)D_00196271) == 2) return;
+    if (((int)popup_answer) == 2) return;
     if (((unsigned)player_character->gold) < trade_price) {
         msgbox_show_rsc(454, 1);
         return;

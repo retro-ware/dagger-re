@@ -59,14 +59,14 @@ extern char travel_find_text[];
 extern struct record *player_entity;
 extern struct record *player_object;
 extern char cheat_flags[];
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern int sky_loaded_frame;
 extern iptr text_macro_travel_city;
 extern signed char current_region;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -260,7 +260,7 @@ void travel_map_update(void)
     if (travel_message_until != 0 && ((unsigned)*prompt_due_ticks) > travel_message_until) {
         travel_message_until = 0;
         msgbox_yes_no_rsc(31);
-        if (((int)D_00196271) == 1) {
+        if (((int)popup_answer) == 1) {
             travel_open_trip();
         } else {
             cancel_ticks = (int *)DOS_LOW(0x46C);
@@ -326,9 +326,9 @@ void travel_button_exit(int button)
         mc_free((void *)travel_region_index_image, str_travel_c, 382);
         travel_region_index_image = -1751672937;
     }
-    if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free(D_00195B5C, str_travel_c, 383);
-        D_00195B5C = (struct image *)(iptr)-1751672937;
+    if ((iptr)screen_image_1 != 0 && (iptr)screen_image_1 != (-1751672937)) {
+        mc_free(screen_image_1, str_travel_c, 383);
+        screen_image_1 = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)travel_map_border_image != 0 && (iptr)travel_map_border_image != (-1751672937)) {
         mc_free(travel_map_border_image, str_travel_c, 384);
@@ -905,9 +905,9 @@ void travel_draw_buttons(void)
     int width;
 
     if (scratch_190ce4[0] != 0) {
-        xn_draw_image(3, 175, 45, 22, (char *)D_00195B5C);
+        xn_draw_image(3, 175, 45, 22, (char *)screen_image_1);
     } else {
-        xn_draw_image(3, 186, 45, 11, (char *)((iptr)D_00195B5C + 495));
+        xn_draw_image(3, 186, 45, 11, (char *)((iptr)screen_image_1 + 495));
     }
     for (i = 0; i < 4; i++) {
         frame = 1;

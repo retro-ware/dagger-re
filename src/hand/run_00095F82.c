@@ -4,10 +4,10 @@
 struct flags8 { unsigned char b0:2; unsigned char b2:1; };
 extern char text_colour;
 extern char str_inven_c[];       /* __FILE__ */
-extern char *D_001832A4;
-extern unsigned char D_001860DA[];
-extern unsigned char D_00186104[];
-extern short D_00188208[];
+extern char *text_found_gold_fmt;
+extern unsigned char equip_slot_table_1[];
+extern unsigned char equip_slot_table_2[];
+extern short weapon_equip_sounds[];
 extern signed char text_buffer[];
 extern unsigned char ui_dirty_flags;
 extern struct record *wagon_container;
@@ -18,12 +18,12 @@ extern struct character *player_character;
 extern unsigned char game_mode_under_popup;
 extern unsigned char game_mode;
 extern unsigned char inv_right_icon;
-extern int D_001AA454;
+extern int found_gold;
 extern struct record *inv_right_rows[];
-extern struct record *D_001AA558;
+extern struct record *inv_right_drawn;
 extern struct record *inv_selected_item;
 extern iptr inv_left_rows[];
-extern struct record *D_001AA578;
+extern struct record *inv_left_drawn;
 extern struct record *inv_left_container;
 extern short inv_right_count;
 extern short inv_left_item_count;
@@ -57,7 +57,7 @@ void inv_draw_left_list(struct rect *rects)
     mc_memset((char *)inv_left_rows, 0, 20, str_inven_c, 1627, 20);
     if (inv_left_container->type == 2 && inv_left_container != wagon_container) {
         inv_draw_item_cell(inv_left_container, 0, rects);
-        D_001AA578 = inv_left_container;
+        inv_left_drawn = inv_left_container;
     } else if (inv_left_container == wagon_container) {
         inv_draw_container_icon(27, inv_right_icon);
     } else if (game_mode != 4 && game_mode_under_popup != 4 && !((struct flags8 *)&ui_dirty_flags)->b2) {
@@ -79,7 +79,7 @@ void inv_draw_right_list(struct rect *rects)
     mc_memset((char *)inv_right_rows, 0, 20, str_inven_c, 1655, 20);
     if (inv_right_container != inv_right_container_base) {
         inv_draw_item_cell(inv_right_container, 0, rects);
-        D_001AA558 = inv_right_container;
+        inv_right_drawn = inv_right_container;
     }
     object = inv_right_container->children;
     while (object != 0) {
@@ -94,17 +94,17 @@ void func_00095EDB(void)
     int unused1;
     int unused2;
 
-    D_001AA454 = 0;
+    found_gold = 0;
     if (PTR_TABLE_FIND(player_character->equipped, inv_selected_item, 27) != 0)
         return;
     inv_store_item(inv_selected_item);
     inv_equip_item(inv_selected_item);
-    if (D_001AA454 == 0)
+    if (found_gold == 0)
         return;
-    gold_add(D_001AA454);
+    gold_add(found_gold);
     text_colour = 144;
     mc_set_location(1688, str_inven_c);
-    mc_sprintf(((char *)text_buffer), D_001832A4, D_001AA454);
+    mc_sprintf(((char *)text_buffer), text_found_gold_fmt, found_gold);
     msgbox_show_string(((char *)text_buffer), 1);
 }
 
@@ -131,7 +131,7 @@ void inv_equip_item(struct record *object)
         case 0:
             if (game_mode == 4)
                 sound_play(204, player_object, 100);
-            D_001AA454 += item->value;
+            found_gold += item->value;
             object_free_single(object);
             break;
         }
@@ -195,7 +195,7 @@ void inv_equip_item(struct record *object)
         if (item_forbidden_for_class(item) != 0)
             return;
         if (game_mode == 4)
-            sound_play(D_00188208[item->index], player_object, 100);
+            sound_play(weapon_equip_sounds[item->index], player_object, 100);
         if (item_is_two_handed(object) != 0) {
             if (item_is_two_handed(player_character->equipped[EQUIP_RIGHT_HAND]) != 0) {
                 inv_equip_in_slot(object, 19);
@@ -233,9 +233,9 @@ void inv_equip_item(struct record *object)
         if (game_mode == 4)
             sound_play(234, player_object, 100);
         if (item->group == 12)
-            slot_table = D_00186104;
+            slot_table = equip_slot_table_2;
         else
-            slot_table = D_001860DA;
+            slot_table = equip_slot_table_1;
         switch (slot_table[item->index]) {
         case 12:
             inv_equip_in_slot(object, 12);

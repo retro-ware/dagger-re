@@ -22,12 +22,12 @@ extern signed char text_buffer[];
 extern struct building *current_building;
 extern char *scratch_buffer;
 extern signed char msgbox_button_keys;
-extern signed char D_00196034;
+extern signed char msgbox_key_2;
 extern signed char msgbox_hotkey;
 extern signed char msgbox_button_ids;
 extern signed char msgbox_button_2;
 extern signed char msgbox_button_3;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern double trade_haggle_minimum;
 extern double trade_haggle_asking;
 extern double trade_haggle_low;
@@ -62,13 +62,13 @@ void trade_haggle_step(void);
 
 void trade_haggle_show_offer(void)
 {
-    D_00196271 = 0;
+    popup_answer = 0;
     text_colour = 146;
     msgbox_button_ids = 1;
     msgbox_button_2 = 2;
     msgbox_button_3 = 12;
     msgbox_button_keys = 30;
-    D_00196034 = 19;
+    msgbox_key_2 = 19;
     msgbox_hotkey = 46;
     mc_set_location(131, str_trade_c);
     mc_sprintf((char *)text_buffer, str_the_current_amount_in_the_offering_is, (int)trade_haggle_asking);

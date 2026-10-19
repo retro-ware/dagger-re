@@ -16,7 +16,7 @@ extern char scratch_190d64[];
 extern short levelup_attribute_floor[];
 extern signed char player_view_flags;
 extern struct record *player_object;
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern struct character *player_character;
 extern iptr window_image;
 extern struct career *player_class;
@@ -50,7 +50,7 @@ int sheet_open(short opening)
         game_mode = 3;
         window_image = disk_read_file(str_info00i0_img, 0);
         D_00199638 = (struct image *)disk_read_file(str_popu00i0_img, 0);
-        D_00195B5C = (struct image *)disk_read_file(str_cust09i0_img_3, 0);
+        screen_image_1 = (struct image *)disk_read_file(str_cust09i0_img_3, 0);
         screen_active = 1;
         list_popup_x = 160 - (D_00199638->width >> 1);
         list_popup_y = 100 - (D_00199638->height >> 1);

@@ -9,7 +9,7 @@ struct flags {
     unsigned char b4:1;
     unsigned char b5:1;
 };
-extern struct collide_probe D_00187B6E;
+extern struct collide_probe player_collide_probe;
 extern struct collide_probe player_probe_climb;
 extern struct collide_probe player_probe_crouched;
 extern struct collide_probe player_probe_riding;
@@ -31,7 +31,7 @@ int player_try_move_vertical(int dy)
     player_move_request.angle_x = player_object->angle_x;
     player_move_request.yaw = player_object->yaw;
     player_move_request.angle_z = player_object->angle_z;
-    player_move_request.probe = player_motion_flags.b2 ? &player_probe_crouched : &D_00187B6E;
+    player_move_request.probe = player_motion_flags.b2 ? &player_probe_crouched : &player_collide_probe;
     player_move_request.probe = (player_character->flags & 1536) ? &player_probe_riding : player_move_request.probe;
     if (player_motion_flags.b5)
         player_move_request.probe = &player_probe_climb;

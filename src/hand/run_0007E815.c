@@ -6,11 +6,11 @@
 
 extern char str_support_c[];
 extern struct record *location_grid[];         /* 32 x 32 grid of object lists */
-extern struct record *D_00194064[];
+extern struct record *grid_cells_up[];
 extern struct record *cart_overlay_image[];
-extern struct record *D_001940E8[];
-extern struct record *D_00194164[];
-extern struct record *D_00194168[];
+extern struct record *grid_cells[];
+extern struct record *grid_cells_down[];
+extern struct record *grid_cells_down_right[];
 extern struct record *player_object;
 extern struct record *location_object;
 extern int game_minutes;
@@ -161,36 +161,36 @@ void func_0007E815(struct record *object, void (*callback)())
     base_cell = ((cell_z & -2) << 5) + (cell_x & -2);
     if (location_grid[base_cell] != 0)
         grid_visit_func(location_grid[base_cell]->children, callback);
-    if (D_001940E8[base_cell] != 0)
-        grid_visit_func(D_001940E8[base_cell]->children, callback);
-    if (D_00194164[base_cell] != 0)
-        grid_visit_func(D_00194164[base_cell]->children, callback);
-    if (D_00194168[base_cell] != 0)
-        grid_visit_func(D_00194168[base_cell]->children, callback);
+    if (grid_cells[base_cell] != 0)
+        grid_visit_func(grid_cells[base_cell]->children, callback);
+    if (grid_cells_down[base_cell] != 0)
+        grid_visit_func(grid_cells_down[base_cell]->children, callback);
+    if (grid_cells_down_right[base_cell] != 0)
+        grid_visit_func(grid_cells_down_right[base_cell]->children, callback);
     switch (quadrant) {
     case 0:
         if (cell != 0 && cart_overlay_image[cell] != 0)
             grid_visit_func(cart_overlay_image[cell]->children, callback);
-        if (cell > 31 && D_00194064[cell] != 0)
-            grid_visit_func(D_00194064[cell]->children, callback);
+        if (cell > 31 && grid_cells_up[cell] != 0)
+            grid_visit_func(grid_cells_up[cell]->children, callback);
         break;
     case 1:
-        if ((cell & 31) < 31 && D_001940E8[cell] != 0)
-            grid_visit_func(D_001940E8[cell]->children, callback);
-        if (cell > 31 && D_00194064[cell] != 0)
-            grid_visit_func(D_00194064[cell]->children, callback);
+        if ((cell & 31) < 31 && grid_cells[cell] != 0)
+            grid_visit_func(grid_cells[cell]->children, callback);
+        if (cell > 31 && grid_cells_up[cell] != 0)
+            grid_visit_func(grid_cells_up[cell]->children, callback);
         break;
     case 2:
         if ((cell & 31) != 0 && cart_overlay_image[cell] != 0)
             grid_visit_func(cart_overlay_image[cell]->children, callback);
-        if (cell < 992 && D_00194164[cell] != 0)
-            grid_visit_func(D_00194164[cell]->children, callback);
+        if (cell < 992 && grid_cells_down[cell] != 0)
+            grid_visit_func(grid_cells_down[cell]->children, callback);
         break;
     case 3:
-        if ((cell & 31) < 31 && D_001940E8[cell] != 0)
-            grid_visit_func(D_001940E8[cell]->children, callback);
-        if (cell < 992 && D_00194164[cell] != 0)
-            grid_visit_func(D_00194164[cell]->children, callback);
+        if ((cell & 31) < 31 && grid_cells[cell] != 0)
+            grid_visit_func(grid_cells[cell]->children, callback);
+        if (cell < 992 && grid_cells_down[cell] != 0)
+            grid_visit_func(grid_cells_down[cell]->children, callback);
         break;
     }
 }

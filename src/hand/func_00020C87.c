@@ -25,7 +25,7 @@ extern int free_later_count;
 extern short D_00195F34;
 extern unsigned char current_region;
 extern unsigned char game_mode_under_popup;
-extern char D_00196271;
+extern char popup_answer;
 extern char screen_active;
 extern unsigned char game_mode;
 extern char D_0019629C;
@@ -136,7 +136,7 @@ int court_open(int crime)
             court_close();
             return 0;
         }
-        D_00196271 = 0;
+        popup_answer = 0;
         if (court_prison_days == 0)
             msgbox_choice_rsc(8050, 16, 17, 0, 103, 110, 0);
         else if (fine == 0)

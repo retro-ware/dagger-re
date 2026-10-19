@@ -27,8 +27,8 @@ extern short D_00190DEA;
 extern short scratch_190dec;
 extern short D_00190DEE;
 extern unsigned char ui_mode_flags;
-extern void *D_00195B5C;
-extern void *D_00195B60;
+extern void *screen_image_1;
+extern void *screen_image_2;
 extern struct character *player_character;
 extern void *window_image;
 extern struct career *player_class;
@@ -91,13 +91,13 @@ int chargen_name_character(void)
     chargen_roll_attributes();
     chargen_screen = 4;
     window_image = disk_read_file(str_char02i0_img, 0);
-    D_00195B5C = disk_read_file(str_cust09i0_img_2, 0);
+    screen_image_1 = disk_read_file(str_cust09i0_img_2, 0);
     chargen_select_attribute(0);
     chargen_screen_loop(20, 32);
     FREE(window_image, 131);
     chargen_screen = 8;
     window_image = disk_read_file(str_char03i0_img, 0);
-    D_00195B60 = disk_read_file(str_char03i1_img, 0);
+    screen_image_2 = disk_read_file(str_char03i1_img, 0);
     D_00190DEA = scratch_190dec = D_00190DEE = 6;
     for (i = 0; i < 12; i++) {
         scratch_190cee[i] = player_character->skills[player_class->skills[i]].value;
@@ -107,7 +107,7 @@ int chargen_name_character(void)
     chargen_select_skill(8);
     chargen_screen_loop(2, 19);
     FREE(window_image, 142);
-    FREE(D_00195B60, 143);
+    FREE(screen_image_2, 143);
     chargen_screen = 16;
     window_image = disk_read_file(str_char05i0_img, 0);
     chargen_reflex_image = disk_read_file(str_char05i1_img, 0);
@@ -120,7 +120,7 @@ int chargen_name_character(void)
     mc_set_location(155, D_00176F41);
     mc_sprintf(((char *)text_buffer), str_face_i0_cif_2, player_character->flags & 1, player_character->race);
     chargen_face_images = disk_read_file(((char *)text_buffer), 0);
-    D_00195B60 = disk_read_file(str_char03i1_img, 0);
+    screen_image_2 = disk_read_file(str_char03i1_img, 0);
     window_image = disk_read_file(str_char04i0_img, 0);
     chargen_reflex_image = disk_read_file(str_char05i1_img, 0);
     mc_memcpy(player_character->base_attributes, player_character->attributes, 16, D_00176F41, 161, 16);

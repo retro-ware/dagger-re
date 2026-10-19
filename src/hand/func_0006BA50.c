@@ -7,7 +7,7 @@ extern char str_bank_c[];        /* __FILE__ */
 extern char str_at[];
 extern char D_00190B44[];
 extern signed char text_rsc_buffer[];
-extern struct image *D_00195B5C;
+extern struct image *screen_image_1;
 extern struct image *window_image;
 extern int game_minutes;
 extern struct house_for_sale bank_houses_for_sale[];
@@ -46,12 +46,12 @@ void bank_draw(void)
         }
         break;
     case 1:
-        xn_draw_image(D_00195B5C->x, D_00195B5C->y, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
+        xn_draw_image(screen_image_1->x, screen_image_1->y, screen_image_1->width, screen_image_1->height, screen_image_1->pixels);
         bank_draw_house_list();
         bank_draw_preview(bank_houses_for_sale[bank_selected].block->model_count, bank_houses_for_sale[bank_selected].block->models);
         break;
     case 2:
-        xn_draw_image(D_00195B5C->x, D_00195B5C->y, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
+        xn_draw_image(screen_image_1->x, screen_image_1->y, screen_image_1->width, screen_image_1->height, screen_image_1->pixels);
         bank_draw_ship_list();
         bank_draw_preview(1, &bank_ships_for_sale[bank_selected].model);
         break;

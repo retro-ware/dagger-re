@@ -6,7 +6,7 @@ extern char mouse_buttons;
 extern char *screen_buffer;
 extern char str_text_c[];        /* __FILE__ */
 extern char msgbox_kind;
-extern char D_00196271;
+extern char popup_answer;
 extern char screen_active;
 extern char game_mode;
 extern char mouse_buttons_prev;
@@ -31,7 +31,7 @@ void msgbox_show_qrc_text(char *name, unsigned short message_id, short kind)
     mc_strncpy(stub.name, name, 9, str_text_c, 769);
     xn_font_select(4);
     if (kind == 5) {
-        D_00196271 = 0;
+        popup_answer = 0;
         single_page = msgbox_render_quest_text(&stub, message_id, msgbox_image, 4);
     } else
         single_page = msgbox_render_quest_text(&stub, message_id, msgbox_image, 0);

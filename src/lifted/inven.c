@@ -48,7 +48,7 @@ extern int trade_price_scale;
 extern unsigned char player_environment;
 extern struct item_template item_templates[];
 extern char potion_recipes[];
-extern iptr D_001832A4;
+extern iptr text_found_gold_fmt;
 extern iptr text_cannot_use_this;
 extern iptr key_names[];
 extern short spell_last_cast_id;
@@ -110,7 +110,7 @@ extern char saved_player_object[];
 extern char trade_container[];
 extern signed char current_region;
 extern unsigned char game_mode_under_popup;
-extern unsigned char D_00196271;
+extern unsigned char popup_answer;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -141,7 +141,7 @@ extern int inv_left_weapon_index;
 extern int inv_right_weapon_index;
 extern iptr inv_right_weapon;
 extern iptr inv_left_weapon;
-extern int D_001AA454;
+extern int found_gold;
 extern char trade_spell_cost[];
 extern struct record *inv_temp_pile;
 extern char inv_saved_conditions[];
@@ -682,13 +682,13 @@ int inv_take_item(struct record *object)
         *slot = 0;
         return 0;
     }
-    D_001AA454 = 0;
+    found_gold = 0;
     object->id = object_new_id(100);
     if (object->twin != 0) object->twin->id = object->id;
     func_00098F1D(object);
     item = &object->data.item;
     if (item->group == 28 && item->index == 0) {
-        if (object != inv_right_container) D_001AA454 += item->value;
+        if (object != inv_right_container) found_gold += item->value;
         object_free_single(object);
     } else {
         object->caster = 0;
@@ -703,11 +703,11 @@ int inv_take_item(struct record *object)
         object_reparent(inv_left_container, object);
         return 0;
     }
-    if (D_001AA454 != 0) {
-        gold_add(D_001AA454);
+    if (found_gold != 0) {
+        gold_add(found_gold);
         text_colour = 144;
         mc_set_location(1237, str_inven_c);
-        mc_sprintf((char *)text_buffer, (char *)D_001832A4, D_001AA454);
+        mc_sprintf((char *)text_buffer, (char *)text_found_gold_fmt, found_gold);
         msgbox_show_string((iptr)text_buffer, 1);
         sound_play(204, player_object, 100);
         return 0;
@@ -1328,7 +1328,7 @@ int trade_settle_offer(void)
         }
         if (((int)(unsigned char)game_mode) == 8) return -1;
         trade_offer_pending = 0;
-        if (((int)D_00196271) == 2) return -1;
+        if (((int)popup_answer) == 2) return -1;
         skill_add_uses(14, 1);
         return trade_price;
     }

@@ -8,10 +8,10 @@ extern char str_char_c[];
 extern signed char region_name_races[];
 extern signed char current_region;
 extern char npc_record_buffer[];
-extern char D_0019995C[];
-extern signed char D_0019995F;
-extern short D_001999AD[];
-extern short D_00199B43;
+extern char npc_talk_flags[];
+extern signed char npc_talk_region_value;
+extern short npc_talk_seeds[];
+extern short npc_talk_faction;
 
 extern struct faction *faction_find_type_in_region(short, short);
 extern iptr faction_find(short);
@@ -31,22 +31,22 @@ iptr npc_talk_record_build(struct record *npc)
     npc_data = RECORD_DATA(npc);
     mc_memset(npc_record_buffer, 0, REC_OFFSETOF(struct character, career), str_char_c, 226, 4);
     if (npc->type == 53) {
-        *(short *)D_0019995C = ((int)(unsigned short)*(short *)D_0019995C) | ((((int)(unsigned short)(npc->npc_flags & 16384)) != 0) ? 1 : 0);
+        *(short *)npc_talk_flags = ((int)(unsigned short)*(short *)npc_talk_flags) | ((((int)(unsigned short)(npc->npc_flags & 16384)) != 0) ? 1 : 0);
     } else if (flat_cfg != 0 && (flat_cfg->flags & 1) != 0) {
-        *(signed char *)D_0019995C |= 1;
+        *(signed char *)npc_talk_flags |= 1;
     } else if (flat_cfg == 0 && ((int)(unsigned char)(*(signed char *)(npc_data + 2) & 16)) != 0) {
-        *(signed char *)D_0019995C |= 1;
+        *(signed char *)npc_talk_flags |= 1;
     }
-    D_0019995F = region_name_races[(int)(unsigned char)current_region];
+    npc_talk_region_value = region_name_races[(int)(unsigned char)current_region];
     if (npc->type == 8) {
-        D_00199B43 = *(short *)npc_data;
+        npc_talk_faction = *(short *)npc_data;
     } else {
-        D_00199B43 = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15)->id;
+        npc_talk_faction = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15)->id;
     }
-    if (D_00199B43 == 0) {
-        D_00199B43 = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15)->id;
+    if (npc_talk_faction == 0) {
+        npc_talk_faction = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15)->id;
     }
-    faction = (struct faction *)faction_find((int)(short)D_00199B43);
+    faction = (struct faction *)faction_find((int)(short)npc_talk_faction);
     if (faction != 0 && faction->type == 4) {
         mc_strncpy(npc_record_buffer, faction->name, 32, str_char_c, 245);
     } else {
@@ -54,7 +54,7 @@ iptr npc_talk_record_build(struct record *npc)
     }
     srand(npc->id);
     for (i = 1; i < 5; i++) {
-        D_001999AD[i] = rand();
+        npc_talk_seeds[i] = rand();
     }
     srand(saved_seed);
     return (iptr)npc_record_buffer;

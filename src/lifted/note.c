@@ -16,7 +16,7 @@ extern short D_0014292C;
 extern char str_note_c[];
 extern char note_goto_prompt_fmt[];
 extern char note_find_prompt_fmt[];
-extern iptr D_0017D1E6;
+extern iptr text_enter_new_page;
 extern iptr text_enter_text;
 extern char note_colour[];
 extern signed char note_fonts[];
@@ -273,7 +273,7 @@ void note_goto_page_prompt(void)
     text_colour = 146;
     prompt = scratch_buffer + 55000;
     mc_set_location(459, str_note_c);
-    mc_sprintf(prompt, note_goto_prompt_fmt, D_0017D1E6);
+    mc_sprintf(prompt, note_goto_prompt_fmt, text_enter_new_page);
     *(signed char *)((char *)(strlen(prompt) + prompt) + 1) = 0;
     msgbox_show_string(prompt, 2);
     inpstr_begin_number(((int)(short)note_page_index) + 1);

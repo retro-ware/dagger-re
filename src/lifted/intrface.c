@@ -24,7 +24,7 @@ extern short view_width;
 extern short view_height;
 extern short player_speed;
 extern iptr text_climbing_mode;
-extern struct collide_probe D_00187B6E;
+extern struct collide_probe player_collide_probe;
 extern struct collide_probe player_probe_climb;
 extern struct collide_probe player_probe_crouched;
 extern struct move_request player_move_request;   /* the player's move */
@@ -729,7 +729,7 @@ int player_climb_probe(void)
     if (((struct bf8_2_1 *)&player_motion_flags)->f != 0) {
         shape = (iptr)&player_probe_crouched;
     } else {
-        shape = (iptr)&D_00187B6E;
+        shape = (iptr)&player_collide_probe;
     }
     player_move_request.probe = (struct collide_probe *)shape;
     if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) player_move_request.probe = &player_probe_climb;

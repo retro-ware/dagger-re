@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00076F3D */
 #include "records.h"
 
-extern struct collide_probe D_00187B44;
+extern struct collide_probe monster_collide_probe;
 extern int ceiling_height;
 extern unsigned char player_on_ground;
 extern short collide_flags;
@@ -21,7 +21,7 @@ int spawn_point_fits(struct record *object)
     m.angle_x = object->angle_x;
     m.yaw = object->yaw;
     m.angle_z = object->angle_z;
-    m.probe = &D_00187B44;
+    m.probe = &monster_collide_probe;
     collide_move_object(object, 0, &m, 0);
     player_on_ground = saved_on_ground;
     ceiling_height = saved_ceiling;

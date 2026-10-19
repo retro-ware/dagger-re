@@ -8,8 +8,8 @@
 
 extern char str_monster_c[];
 extern signed char anim_mirror_facing[];
-extern int D_00186A14[];
-extern struct collide_probe D_00187B44;
+extern int ai_octant_angles[];
+extern struct collide_probe monster_collide_probe;
 extern signed char undead_daedra_ids[];
 extern struct record *creature_list[];
 extern iptr D_00190704[];
@@ -29,13 +29,13 @@ extern struct record *moving_model;
 extern int ceiling_height;
 extern struct record *floor_object;
 extern int ai_monster_flags;
-extern char D_00196167[];
+extern char monster_header_backup[];
 extern signed char player_on_ground;
-extern char D_00196D54[];
+extern char monster_move_pos[];
 extern int collide_previous_y;
 extern int collide_previous_z;
 extern char collide_flags[];
-extern int D_00199D74;
+extern int anim_changed_this_frame;
 extern struct link links[1024];
 extern int link_count;
 
@@ -77,7 +77,7 @@ void func_000622EB(struct record *monster, struct record *target, int heading, i
     int detour_offset;
 
     monster_char = &monster->data.character;
-    mc_memcpy(D_00196167, monster, RECORD_HEADER_SIZE, str_monster_c, 426, 4);
+    mc_memcpy(monster_header_backup, monster, RECORD_HEADER_SIZE, str_monster_c, 426, 4);
     if (monster_char->detour_steps == 1000) {
         func_0006243B(monster, target, heading);
         if (((int)(short)(*(short *)collide_flags & 10)) == 0) {
@@ -102,7 +102,7 @@ void func_000622EB(struct record *monster, struct record *target, int heading, i
         monster_char->detour_steps = 1000;
         monster_char->detour_side ^= 1;
     }
-    mc_memcpy(monster, D_00196167, RECORD_HEADER_SIZE, str_monster_c, 457, 4);
+    mc_memcpy(monster, monster_header_backup, RECORD_HEADER_SIZE, str_monster_c, 457, 4);
     func_0006243B(monster, target, monster_char->detour_yaw & 2047);
 }
 
@@ -119,7 +119,7 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
     {
         struct move_request move;
         struct {
-            struct vec3 position;       /* +0x00: the saved D_00196D54 */
+            struct vec3 position;       /* +0x00: the saved monster_move_pos */
             char pad0C[24];             /* +0x0C */
             struct character *character; /* +0x24: the monster's */
         } saved_pos;
@@ -154,14 +154,14 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
         *(signed char *)collide_flags |= 4;
         fall_start = (vertical_velocity = saved_pos.character->fall_velocity);
         world_state_flags |= 128;
-        move.probe = &D_00187B44;
+        move.probe = &monster_collide_probe;
         if ((saved_pos.character->flags & 2080) != 0) {
             move.flags |= 1;
         } else {
             move.flags &= 65534;
         }
-        mc_memcpy(&saved_pos.position, D_00196D54, 12, str_monster_c, 512, 4);
-        *(int *)D_00196D54 = monster->x;
+        mc_memcpy(&saved_pos.position, monster_move_pos, 12, str_monster_c, 512, 4);
+        *(int *)monster_move_pos = monster->x;
         collide_previous_y = monster->y - (vertical_velocity / 256);
         collide_previous_z = monster->z;
         if ((move.y - 90) < saved_pos.character->ceiling_y) {
@@ -169,7 +169,7 @@ void func_0006243B(struct record *monster, struct record *target, int heading)
         }
         collide_move_object(monster, 0, &move, 0);
         player_on_ground = saved_on_ground;
-        mc_memcpy(D_00196D54, &saved_pos.position, 12, str_monster_c, 521, 4);
+        mc_memcpy(monster_move_pos, &saved_pos.position, 12, str_monster_c, 521, 4);
         if (saved_pos.character != player_character) {
             saved_pos.character->ceiling_y = ceiling_height;
         }
@@ -214,8 +214,8 @@ int monster_set_action(struct record *monster, int angle, int action)
     }
     anim->anim_facing = *(signed char *)&facing;
     if (anim->anim_request != 255) return 0;
-    if (D_00199D74 != 0) return 0;
-    D_00199D74 = 1;
+    if (anim_changed_this_frame != 0) return 0;
+    anim_changed_this_frame = 1;
     monster->data.character.action = *(signed char *)&action;
     anim->anim_request = *(signed char *)&action;
     return 1;
@@ -481,13 +481,13 @@ L635C5:;
     octant = func_0006379A(monster, target);
     switch (monster_char->nav_direction) {
     case 2:
-        nav_angle = D_00186A14[octant];
+        nav_angle = ai_octant_angles[octant];
         break;
     case 4:
-        nav_angle = (D_00186A14[octant] + 1024) & 2047;
+        nav_angle = (ai_octant_angles[octant] + 1024) & 2047;
         break;
     case 8:
-        nav_angle = (D_00186A14[octant] + 1536) & 2047;
+        nav_angle = (ai_octant_angles[octant] + 1536) & 2047;
     }
     if (((int)(unsigned char)(monster_char->nav_blocked & 1)) == 0) return;
     if (angle_diff <= 256 && func_00063ED8(monster, (target_angle + 256) / 512) != 0) return;
@@ -544,7 +544,7 @@ void monster_apply_gravity(void)
     saved_velocity = vertical_velocity;
     saved_on_ground = (int)(unsigned char)player_on_ground;
     saved_ceiling = ceiling_height;
-    mc_memcpy(&saved_pos, D_00196D54, 12, str_monster_c, 1147, 4);
+    mc_memcpy(&saved_pos, monster_move_pos, 12, str_monster_c, 1147, 4);
     for (i = 0; i < creature_count; i++) {
         monster_char = &creature_list[i]->data.character;
         if (((int)(unsigned short)(monster_char->flags & 2080)) == 0) {
@@ -552,7 +552,7 @@ void monster_apply_gravity(void)
         }
         fall_start = monster_char->fall_velocity;
         vertical_velocity = fall_start;
-        mc_memcpy(D_00196D54, (void *)((iptr)creature_list[i] + 7), 12, str_monster_c, 1159, 4);
+        mc_memcpy(monster_move_pos, (void *)((iptr)creature_list[i] + 7), 12, str_monster_c, 1159, 4);
         move.x = creature_list[i]->x;
         move.y = (int)(iptr)(*(char **)((char *)creature_list[i] + 11) + (vertical_velocity / 256));
         move.z = creature_list[i]->z;
@@ -564,7 +564,7 @@ void monster_apply_gravity(void)
         } else {
             move.flags &= 65534;
         }
-        move.probe = &D_00187B44;
+        move.probe = &monster_collide_probe;
         *(signed char *)collide_flags &= 251;
         collide_move_object(creature_list[i], 0, &move, 0);
         if (((int)(short)(*(short *)collide_flags & 16)) != 0) {
@@ -586,7 +586,7 @@ void monster_apply_gravity(void)
     ceiling_height = saved_ceiling;
     player_on_ground = *(signed char *)&saved_on_ground;
     vertical_velocity = saved_velocity;
-    mc_memcpy(D_00196D54, &saved_pos, 12, str_monster_c, 1201, 4);
+    mc_memcpy(monster_move_pos, &saved_pos, 12, str_monster_c, 1201, 4);
 }
 
 void func_00063DDC(struct record *source)

@@ -69,7 +69,7 @@ extern struct record *itemmaker_item_object;
 extern signed char itemmaker_slot_from_soul[];
 extern char inv_left_scroll[];
 extern iptr inv_left_rows[];
-extern iptr D_001AA578;
+extern iptr inv_left_drawn;
 extern struct record *inv_left_container;
 extern short inv_left_item_count;
 extern short inv_left_count;
@@ -552,7 +552,7 @@ void func_0005852D(int cells)
     mc_memset((char *)inv_left_rows, 0, 20, str_itemmakr_c, 951, 20);
     if (inv_left_container != player_entity) {
         inv_draw_item_cell(inv_left_container, 0, cells);
-        D_001AA578 = (iptr)inv_left_container;
+        inv_left_drawn = (iptr)inv_left_container;
     }
     item = inv_left_container->children;
     while (item != 0) {
