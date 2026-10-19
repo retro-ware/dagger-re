@@ -48,7 +48,7 @@ extern short D_00195F34;
 extern unsigned short text_cursor_y;
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
-extern signed char D_00196035;
+extern signed char msgbox_hotkey;
 extern signed char msgbox_button_ids;
 extern signed char D_00196090;
 extern signed char D_00196091;
@@ -446,7 +446,7 @@ int msgbox_button_at(short x, short y)
         if (D_00196034 != 0 && key_down[(int)(unsigned char)D_00196034] != 0) {
             return 2;
         }
-        if (D_00196035 != 0 && key_down[(int)(unsigned char)D_00196035] != 0) {
+        if (msgbox_hotkey != 0 && key_down[(int)(unsigned char)msgbox_hotkey] != 0) {
             return 3;
         }
         if (mouse_buttons == 0) return 0;

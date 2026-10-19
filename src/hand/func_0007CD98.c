@@ -2,7 +2,7 @@
 extern unsigned char mouse_buttons;
 extern signed char text_buffer[];
 extern unsigned char D_00196272;
-extern unsigned char D_00196275;
+extern unsigned char info_popup_saved_state;
 extern unsigned char mouse_buttons_prev;
 extern char *info_popup_text;
 extern int font_text_width(char *);
@@ -42,7 +42,7 @@ void info_popup_update(void)
         text_draw(((char *)text_buffer), x, y);
     }
     if (D_00196272 == 1 && (mouse_buttons & 1) == 0 && (mouse_buttons_prev & 1) != 0) {
-        D_00196272 = D_00196275;
+        D_00196272 = info_popup_saved_state;
         info_popup_text = 0;
     }
 }

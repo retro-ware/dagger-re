@@ -41,40 +41,40 @@ extern char str_forbidden_armor_type[];
 extern char str_forbidden_shield_type[];
 extern char str_forbidden_material[];
 extern char str_fmt_s_s_7[];
-extern char D_001755E2[];
+extern char career_text_line_end[];
 extern char str_item00i0_img[];
 extern char str_item01i0_img[];
 extern char str_spells_std_3[];
 extern char *skill_names[];
 extern char *classmaker_help_topics[];
 extern char *classmaker_advantage_names[];
-extern iptr D_0018087E[];
-extern iptr D_0018089E[];
-extern iptr D_001808AE[];
-extern iptr D_001808BE[];
-extern iptr D_001808D2[];
-extern iptr D_001808E6[];
-extern iptr D_001808FE[];
+extern iptr career_resistance_target_names[];
+extern iptr career_absorption_condition_names[];
+extern iptr career_rapid_healing_condition_names[];
+extern iptr career_regenerate_condition_names[];
+extern iptr career_enemy_kind_names[];
+extern iptr career_magery_names[];
+extern iptr career_weapon_skill_names[];
 extern char *classmaker_disadvantage_names[];
-extern iptr D_0018096E[];
-extern iptr D_0018097A[];
-extern iptr D_00180986[];
-extern iptr D_00180992[];
-extern iptr D_001809A2[];
-extern iptr D_001809B6[];
+extern iptr career_damage_source_names[];
+extern iptr career_light_magery_texts[];
+extern iptr career_darkness_magery_texts[];
+extern iptr career_armor_type_names[];
+extern iptr career_shield_type_names[];
+extern iptr career_material_names[];
 extern char *classmaker_advantage_costs[];
 extern char *classmaker_disadvantage_costs[];
 extern struct rect classmaker_buttons[];
 extern short classmaker_attribute_up_box;
-extern short D_00185646;
-extern short D_00185648;
-extern short D_0018564A;
-extern iptr D_0018564C;
+extern short classmaker_attribute_up_y0;
+extern short classmaker_attribute_up_x1;
+extern short classmaker_attribute_up_y1;
+extern iptr classmaker_attribute_up_handler;
 extern short classmaker_attribute_down_box;
-extern short D_00185652;
-extern short D_00185654;
-extern short D_00185656;
-extern iptr D_00185658;
+extern short classmaker_attribute_down_y0;
+extern short classmaker_attribute_down_x1;
+extern short classmaker_attribute_down_y1;
+extern iptr classmaker_attribute_down_handler;
 extern struct rect classmaker_reputation_buttons[];
 extern struct rect classmaker_specials_buttons[];
 extern short classmaker_help_texts[];
@@ -88,16 +88,16 @@ extern char scratch_190d66[];
 extern short scratch_190d68;
 extern short classmaker_done;
 extern short chargen_selected_attribute;
-extern short D_00190D72;
-extern short D_00190D74;
+extern short classmaker_unused_190d72;
+extern short classmaker_attribute_points;
 extern char classmaker_screen[];
-extern short D_00190D78;
-extern short D_00190D7C;
+extern short classmaker_state_190d78;
+extern short classmaker_special_level;
 extern signed char classmaker_special_counts[];
-extern signed char D_00190D7F;
+extern signed char classmaker_disadvantage_count;
 extern short classmaker_special_list;
 extern short D_00190D84;
-extern short D_00190D86;
+extern short classmaker_hp_repeat;
 extern char scratch_190de4[];
 extern iptr scratch_190de8;
 extern iptr scratch_190dec;
@@ -105,10 +105,10 @@ extern struct image *scratch_190df0;
 extern iptr scratch_190df4;
 extern iptr scratch_190df8;
 extern iptr scratch_190dfc;
-extern iptr D_00190E00;
-extern iptr D_00190E0C;
-extern iptr D_00190E10;
-extern iptr D_00190EE0;
+extern iptr classmaker_specials_image;
+extern iptr classmaker_picklist;
+extern iptr classmaker_picklist_costs;
+extern iptr itemmaker_spells_file;
 extern char scratch_190ee4[];
 extern signed char D_001940D4;
 extern signed char D_001940D8;
@@ -123,11 +123,11 @@ extern unsigned char D_0019626F;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern iptr D_0019981C;
+extern iptr career_specials_text_end;
 extern signed char classmaker_specials[];
-extern signed char D_00199821[];
-extern signed char D_0019982E[];
-extern signed char D_0019982F[];
+extern signed char classmaker_special_params[];
+extern signed char classmaker_disadvantages[];
+extern signed char classmaker_disadvantage_params[];
 extern struct rect *classmaker_current_buttons;
 
 extern int classmaker_draw(short);
@@ -171,13 +171,13 @@ void classmaker_run(void)
     player_class->hp_per_level = 8;
     player_class->flags = 5120;
     xn_str_fill_u16((unsigned short *)((iptr)player_class + 58), 50, 16);
-    classmaker_special_counts[0] = (D_00190D7F = (D_00190D7C = (D_00190D78 = (classmaker_done = (*(short *)scratch_190d66 = (*(short *)scratch_190d64 = 0))))));
+    classmaker_special_counts[0] = (classmaker_disadvantage_count = (classmaker_special_level = (classmaker_state_190d78 = (classmaker_done = (*(short *)scratch_190d66 = (*(short *)scratch_190d64 = 0))))));
     xn_mouse_cursor_drawn &= 254;
     scratch_190d68 = 115;
     classmaker_select_attribute(0);
     *(short *)classmaker_screen = 0;
     D_00190D84 = 65535;
-    D_00190D86 = 0;
+    classmaker_hp_repeat = 0;
     D_001940D8 |= 1;
     if (*(signed char *)classmaker_file != 0) {
         disk_read_file(classmaker_file, (iptr)player_class);
@@ -191,7 +191,7 @@ void classmaker_run(void)
     scratch_190df0 = (struct image *)disk_read_file(str_cust09i0_img, 0);
     scratch_190de8 = (iptr)mc_malloc(scratch_190df0->width * scratch_190df0->height, str_custom_c, 113);
     scratch_190df8 = disk_read_file(str_cust03i0_img, 0);
-    D_00190E00 = disk_read_file(str_cust01i0_img, 0);
+    classmaker_specials_image = disk_read_file(str_cust01i0_img, 0);
     scratch_190dfc = disk_read_file(str_cust02i0_img, 0);
     bios_ticks = (int *)DOS_LOW(0x46C);
     *(int *)scratch_190be4 = *bios_ticks;
@@ -201,20 +201,20 @@ void classmaker_run(void)
         xn_mouse_poll_clamped();
         xn_mouse_cursor_move((int)(short)mouse_x, (int)(short)mouse_y);
         if (mouse_buttons == 0) {
-            D_00190D86 = 0;
-            D_00190D72 = 16;
-            D_00190D74 = 16;
+            classmaker_hp_repeat = 0;
+            classmaker_unused_190d72 = 16;
+            classmaker_attribute_points = 16;
         } else if (*(short *)classmaker_screen == 0) {
-            if (mouse_x > classmaker_attribute_down_box && mouse_x < D_00185654 && mouse_y > D_00185652 && mouse_y < D_00185656) {
+            if (mouse_x > classmaker_attribute_down_box && mouse_x < classmaker_attribute_down_x1 && mouse_y > classmaker_attribute_down_y0 && mouse_y < classmaker_attribute_down_y1) {
                 sound_play(203, player_object, 100);
-                ((int (*)())(D_00185658))();
+                ((int (*)())(classmaker_attribute_down_handler))();
             }
-            if (mouse_x > classmaker_attribute_up_box && mouse_x < D_00185648 && mouse_y > D_00185646 && mouse_y < D_0018564A) {
+            if (mouse_x > classmaker_attribute_up_box && mouse_x < classmaker_attribute_up_x1 && mouse_y > classmaker_attribute_up_y0 && mouse_y < classmaker_attribute_up_y1) {
                 sound_play(203, player_object, 100);
-                ((int (*)())(D_0018564C))();
+                ((int (*)())(classmaker_attribute_up_handler))();
             }
         }
-        if (D_00190D86 != 0) (D_00190D86)--;
+        if (classmaker_hp_repeat != 0) (classmaker_hp_repeat)--;
         if (*(short *)classmaker_screen == 0) {
             classmaker_current_buttons = classmaker_buttons;
             *(int *)&button_count = 28;
@@ -262,7 +262,7 @@ void classmaker_run(void)
         mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_custom_c, 205, 4);
         bios_ticks_now = (int *)DOS_LOW(0x46C);
         if (*(int *)scratch_190be4 != *bios_ticks_now) {
-            D_00190D74++;
+            classmaker_attribute_points++;
             bios_ticks_set = (int *)DOS_LOW(0x46C);
             *(int *)scratch_190be4 = *bios_ticks_set;
         }
@@ -275,7 +275,7 @@ void classmaker_run(void)
     mc_free((void *)scratch_190df4, str_custom_c, 221);
     mc_free((void *)scratch_190df8, str_custom_c, 222);
     mc_free((void *)scratch_190dfc, str_custom_c, 223);
-    mc_free((void *)D_00190E00, str_custom_c, 224);
+    mc_free((void *)classmaker_specials_image, str_custom_c, 224);
     mc_memset(scratch_190de4, 0, 128 * PTR_SIZE, str_custom_c, 226, 512);
 }
 
@@ -373,16 +373,16 @@ void classmaker_help_button(void)
 
 void classmaker_advantages_button(void)
 {
-    D_00190E0C = (iptr)(char *)classmaker_advantage_names;
-    D_00190E10 = (iptr)classmaker_advantage_costs;
+    classmaker_picklist = (iptr)(char *)classmaker_advantage_names;
+    classmaker_picklist_costs = (iptr)classmaker_advantage_costs;
     *(short *)classmaker_screen = 2;
     classmaker_special_list = 0;
 }
 
 void classmaker_disadvantages_button(void)
 {
-    D_00190E0C = (iptr)(char *)classmaker_disadvantage_names;
-    D_00190E10 = (iptr)classmaker_disadvantage_costs;
+    classmaker_picklist = (iptr)(char *)classmaker_disadvantage_names;
+    classmaker_picklist_costs = (iptr)classmaker_disadvantage_costs;
     *(short *)classmaker_screen = 3;
     classmaker_special_list = 1;
 }
@@ -588,9 +588,9 @@ int classmaker_drop_duplicate_special(int list)
     int param;
 
     special = (int)(unsigned char)classmaker_specials[(list * 14) + (((int)(unsigned char)classmaker_special_counts[list]) * 2)];
-    param = (int)(unsigned char)D_00199821[(list * 14) + (((int)(unsigned char)classmaker_special_counts[list]) * 2)];
+    param = (int)(unsigned char)classmaker_special_params[(list * 14) + (((int)(unsigned char)classmaker_special_counts[list]) * 2)];
     for (i = 0; ((int)(unsigned char)classmaker_special_counts[list]) > i; i++) {
-        if (((int)(unsigned char)classmaker_specials[(list * 14) + (i * 2)]) == special && ((int)(unsigned char)D_00199821[(list * 14) + (i * 2)]) == param) {
+        if (((int)(unsigned char)classmaker_specials[(list * 14) + (i * 2)]) == special && ((int)(unsigned char)classmaker_special_params[(list * 14) + (i * 2)]) == param) {
             (classmaker_special_counts[list])--;
             return 1;
         }
@@ -608,7 +608,7 @@ void classmaker_specials_add(void)
 {
     if (((int)(unsigned char)classmaker_special_counts[(int)(short)classmaker_special_list]) == 7) return;
     *(signed char *)classmaker_screen |= 16;
-    list_popup_open(D_00190E0C);
+    list_popup_open(classmaker_picklist);
     D_001940D4 |= 1;
 }
 
@@ -622,7 +622,7 @@ void classmaker_specials_picked(void)
     } else {
         names = (iptr)(char *)classmaker_disadvantage_names;
     }
-    D_00190E0C = names;
+    classmaker_picklist = names;
     (classmaker_special_counts[(int)(short)classmaker_special_list])++;
 }
 
@@ -638,12 +638,12 @@ int classmaker_update_advancement(void)
     advantage_cost = 0;
     *(int *)&i = 0;
     for (; (short)(short)((int)(unsigned char)classmaker_special_counts[0]) > (short)i; (*(int *)&i)++) {
-        advantage_cost += *(int *)((classmaker_advantage_costs[((int)(unsigned char)classmaker_specials[((int)(short)i) * 2])] + (((int)(unsigned char)D_00199821[((int)(short)i) * 2]) << 2)));
+        advantage_cost += *(int *)((classmaker_advantage_costs[((int)(unsigned char)classmaker_specials[((int)(short)i) * 2])] + (((int)(unsigned char)classmaker_special_params[((int)(short)i) * 2]) << 2)));
     }
     disadvantage_cost = 0;
     *(int *)&i = 0;
-    for (; (short)(short)((int)(unsigned char)D_00190D7F) > (short)i; (*(int *)&i)++) {
-        disadvantage_cost += *(int *)((classmaker_disadvantage_costs[((int)(unsigned char)D_0019982E[((int)(short)i) * 2])] + (((int)(unsigned char)D_0019982F[((int)(short)i) * 2]) << 2)));
+    for (; (short)(short)((int)(unsigned char)classmaker_disadvantage_count) > (short)i; (*(int *)&i)++) {
+        disadvantage_cost += *(int *)((classmaker_disadvantage_costs[((int)(unsigned char)classmaker_disadvantages[((int)(short)i) * 2])] + (((int)(unsigned char)classmaker_disadvantage_params[((int)(short)i) * 2]) << 2)));
     }
     *(iptr *)&hp_cost = (player_class->hp_per_level - 8) * 3277;
     if (player_class->hp_per_level < 8) *(iptr *)&hp_cost <<= 1;
@@ -663,15 +663,15 @@ int classmaker_update_advancement(void)
 
 void classmaker_hp_up(void)
 {
-    if (player_class->hp_per_level == 30 || D_00190D86 != 0) return;
-    D_00190D86 = 20;
+    if (player_class->hp_per_level == 30 || classmaker_hp_repeat != 0) return;
+    classmaker_hp_repeat = 20;
     player_class->hp_per_level++;
 }
 
 void classmaker_hp_down(void)
 {
-    if (player_class->hp_per_level == 4 || D_00190D86 != 0) return;
-    D_00190D86 = 20;
+    if (player_class->hp_per_level == 4 || classmaker_hp_repeat != 0) return;
+    classmaker_hp_repeat = 20;
     player_class->hp_per_level--;
 }
 
@@ -707,10 +707,10 @@ int classmaker_special_conflicts(int list, int special, int param)
     for (list_index = 0; list_index < 2; list_index++) {
         count = (int)(unsigned char)classmaker_special_counts[list_index];
         for (i = 0; i < count; i++) {
-            if (list_index == 0 && ((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) < 2 && ((int)(unsigned char)D_00199821[(list_index * 14) + (i * 2)]) == param) {
+            if (list_index == 0 && ((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) < 2 && ((int)(unsigned char)classmaker_special_params[(list_index * 14) + (i * 2)]) == param) {
                 return 1;
             }
-            if (list_index != 0 && (((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) == 6 || ((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) == 7) && ((int)(unsigned char)D_00199821[(list_index * 14) + (i * 2)]) == param) {
+            if (list_index != 0 && (((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) == 6 || ((int)(unsigned char)classmaker_specials[(list_index * 14) + (i * 2)]) == 7) && ((int)(unsigned char)classmaker_special_params[(list_index * 14) + (i * 2)]) == param) {
                 return 1;
             }
         }
@@ -720,10 +720,10 @@ int classmaker_special_conflicts(int list, int special, int param)
 
 iptr career_specials_text(void)
 {
-    *(signed char *)((char *)(D_0019981C = (iptr)scratch_buffer + 55000)) = 0;
+    *(signed char *)((char *)(career_specials_text_end = (iptr)scratch_buffer + 55000)) = 0;
     career_advantages_text();
     career_disadvantages_text();
-    *(signed char *)((char *)(strlen((char *)D_0019981C) + *(char **)&D_0019981C) + 1) = 0;
+    *(signed char *)((char *)(strlen((char *)career_specials_text_end) + *(char **)&career_specials_text_end) + 1) = 0;
     return (iptr)scratch_buffer + 55000;
 }
 
@@ -733,12 +733,12 @@ void career_advantages_text(void)
 
     for (i = 0; i < 7; i++) {
         if ((player_class->resistance_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_resistance, D_0018087E[i]);
+            career_specials_line((iptr)str_resistance, career_resistance_target_names[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->immunity_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_immunity, D_0018087E[i]);
+            career_specials_line((iptr)str_immunity, career_resistance_target_names[i]);
         }
     }
     if (((int)(unsigned short)(player_class->flags & 1)) != 0) {
@@ -746,36 +746,36 @@ void career_advantages_text(void)
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->spell_absorption_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_spell_absorption, D_0018089E[i]);
+            career_specials_line((iptr)str_spell_absorption, career_absorption_condition_names[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->rapid_healing_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_rapid_healing, D_001808AE[i]);
+            career_specials_line((iptr)str_rapid_healing, career_rapid_healing_condition_names[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->regeneration_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_regenerate, D_001808BE[i]);
+            career_specials_line((iptr)str_regenerate, career_regenerate_condition_names[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->attack_modifier_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_bonus_to_hit, D_001808D2[i]);
+            career_specials_line((iptr)str_bonus_to_hit, career_enemy_kind_names[i]);
         }
     }
     if (((int)(unsigned short)(player_class->flags & 2)) != 0) {
         career_specials_line((iptr)str_atheleticism, 0);
     }
     if (((player_class->flags >> 10) & 7) < 5) {
-        career_specials_line((iptr)str_increased_magery, D_001808E6[((player_class->flags >> 10) & 7)]);
+        career_specials_line((iptr)str_increased_magery, career_magery_names[((player_class->flags >> 10) & 7)]);
     }
     if (((int)(unsigned short)(player_class->flags & 4)) != 0) {
         career_specials_line((iptr)str_adrenaline_rush, 0);
     }
     for (i = 0; i < 6; i++) {
         if ((player_class->expert_weapons & (1 << i)) != 0) {
-            career_specials_line((iptr)str_expertise_in, D_001808FE[i]);
+            career_specials_line((iptr)str_expertise_in, career_weapon_skill_names[i]);
         }
     }
 }
@@ -789,52 +789,52 @@ void career_disadvantages_text(void)
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 4))) != 0) {
-            career_specials_line((iptr)str_damage, D_0018096E[i]);
+            career_specials_line((iptr)str_damage, career_damage_source_names[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->attack_modifier_flags & (1 << (i + 4))) != 0) {
-            career_specials_line((iptr)str_phobia, D_001808D2[i]);
+            career_specials_line((iptr)str_phobia, career_enemy_kind_names[i]);
         }
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 6))) != 0) {
-            career_specials_line((iptr)str_light_powered_magery, D_0018097A[i]);
+            career_specials_line((iptr)str_light_powered_magery, career_light_magery_texts[i]);
         }
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 8))) != 0) {
-            career_specials_line((iptr)str_darkness_powered_magery, D_00180986[i]);
+            career_specials_line((iptr)str_darkness_powered_magery, career_darkness_magery_texts[i]);
         }
     }
     for (i = 0; i < 6; i++) {
         if ((player_class->forbidden_equipment & (1 << i)) != 0) {
-            career_specials_line((iptr)str_forbidden_weaponry, D_001808FE[i]);
+            career_specials_line((iptr)str_forbidden_weaponry, career_weapon_skill_names[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->low_tolerance_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_low_tolerance, D_0018087E[i]);
+            career_specials_line((iptr)str_low_tolerance, career_resistance_target_names[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->critical_weakness_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)str_critical_weakness, D_0018087E[i]);
+            career_specials_line((iptr)str_critical_weakness, career_resistance_target_names[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->forbidden_equipment & (1 << (i + 6))) != 0) {
-            career_specials_line((iptr)str_forbidden_armor_type, D_00180992[i]);
+            career_specials_line((iptr)str_forbidden_armor_type, career_armor_type_names[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->forbidden_equipment & (1 << (i + 9))) != 0) {
-            career_specials_line((iptr)str_forbidden_shield_type, D_001809A2[i]);
+            career_specials_line((iptr)str_forbidden_shield_type, career_shield_type_names[i]);
         }
     }
     for (i = 0; i < 10; i++) {
         if ((player_class->forbidden_materials & (1 << i)) != 0) {
-            career_specials_line((iptr)str_forbidden_material, D_001809B6[i]);
+            career_specials_line((iptr)str_forbidden_material, career_material_names[i]);
         }
     }
 }
@@ -847,8 +847,8 @@ void career_specials_line(iptr label, iptr detail)
     } else {
         mc_strncpy((char *)text_buffer, (char *)label, 160, str_custom_c, 1223);
     }
-    func_000A1054((char *)D_0019981C, (char *)text_buffer, str_custom_c, 1225, 4);
-    func_000A1054((char *)D_0019981C, D_001755E2, str_custom_c, 1226, 4);
+    func_000A1054((char *)career_specials_text_end, (char *)text_buffer, str_custom_c, 1225, 4);
+    func_000A1054((char *)career_specials_text_end, career_text_line_end, str_custom_c, 1226, 4);
 }
 
 int itemmaker_open(int opening)
@@ -863,7 +863,7 @@ int itemmaker_open(int opening)
         game_mode = 10;
         window_image = disk_read_file(str_item00i0_img, 0);
         magic_window_image = disk_read_file(str_item01i0_img, 0);
-        D_00190EE0 = disk_read_file(str_spells_std_3, 0);
+        itemmaker_spells_file = disk_read_file(str_spells_std_3, 0);
         D_00196272 = 1;
         D_001940D8 &= 254;
         itemmaker_select_tab(15);

@@ -1260,7 +1260,7 @@ global,0x00190D70,chargen_selected_attribute,confirmed,"short: attribute row sel
 global,0x00190D76,classmaker_screen,confirmed,"short: 0 main, 1 reputations, 2 advantages, 3 disadvantages; bit 16 while a picklist is open; experiment: 0 -> 1 -> 0 -> 2 -> 18"
 global,0x00190D7E,classmaker_special_counts,confirmed,2 bytes: advantages and disadvantages picked (max 7); experiment: 0 -> 1 -> 2
 global,0x00190D82,classmaker_special_list,strong,"short: 0 advantages, 1 disadvantages (the screen being edited)"
-global,0x00190D86,classmaker_hp_repeat,candidate,short: frames before the HP arrows repeat (20 after each step). Keep: code only (classmaker HP arrows)
+global,0x00190D86,classmaker_hp_repeat,strong,frames before the HP arrows repeat (20 after each step)
 global,0x00190D8C,levelup_attribute_floor,candidate,"copy of character+0x30 taken when the sheet opens; sheet_levelup_adjust won't lower an attribute below it. Keep: code only (sheet_open, sheet_levelup_adjust); a level-up session would settle it"
 global,0x00190DC8,court_prison_days,confirmed,"short: days of prison (3 per lost coin toss, more for an unpaid fine; halved by a guilty plea); %dip in 8055; experiment: 33 -> 16"
 global,0x00190DCA,court_extra_days,strong,"build/names/scratch/audit_tq/exp_final.py save_tlalac_s: = 5 -> %pdg ""5""; crime.c sets it to (fine - gold)/40 + 1"
@@ -1272,8 +1272,8 @@ global,0x00190DF0,scratch_190df0,strong,"shared scratch slot of the 0x190BE4-0x1
 global,0x00190DF4,scratch_190df4,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): faction record for %fae (talk_faction_relation); the classmaker image its 12 skill buttons, reputations and help use (17 functions); was text_macro_fae"
 global,0x00190DF8,scratch_190df8,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): faction record for %fea (talk_faction_relation, macro_fea_player_enemy_npc_ally); classmaker_run and classmaker_draw_reputations image; was text_macro_fea"
 global,0x00190DFC,scratch_190dfc,strong,"shared scratch slot of the 0x190BE4-0x190E1F temporaries block (consistency pass, global_users.py over src): faction record for %fpa (talk_faction_relation, macro_fpa_shared_faction); classmaker_run and classmaker_specials_screen image; was text_macro_fpa"
-global,0x00190E0C,classmaker_picklist,candidate,"the string list the specials picklist shows (names, or a sub-list). Keep: code only (classmaker specials screen)"
-global,0x00190E10,classmaker_picklist_costs,candidate,the cost table matching classmaker_picklist. Keep: code only (classmaker specials screen)
+global,0x00190E0C,classmaker_picklist,strong,"the string list the specials picklist shows (names, or a sub-list)"
+global,0x00190E10,classmaker_picklist_costs,strong,the cost table matching classmaker_picklist
 global,0x00190EAC,text_macro_map_location,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: a record whose +0x10 points at ""Castle Testing"" -> %map ""Castle Testing"" (+0x10 is a pointer to the name)"
 global,0x00190EE4,scratch_190ee4,strong,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): spfx_dispel's spell list and the itemmaker/classmaker lists"
 global,0x00190FE4,text_rsc_buffer,strong,"the text expansion buffer: macro handlers write their result here (71 parse.c uses), talk copies its answers from it, quest and rumor texts; also borrowed as a plain buffer by savevars_read/write, save_game/load_game, town_load, building_name and as monster_alloc_anim_slot's 128-byte slot bitmap (combat agent)"
@@ -1352,7 +1352,7 @@ global,0x00195AEC,shelf_object,confirmed,"the shelf object whose items are in tr
 global,0x00195AF0,tavern_building,confirmed,"pointer to the building entry whose room is rented: tavern_open sets it to current_building (rest.c too); the rent fields are written there (experiment: building+0x02 expiry, +0x0F 2)"
 global,0x00195AF4,found_object,strong,"the result of object walks and searches (objects agent: the searches pass key and result through globals): object_find_type, object_find_item, object_find_quest, object_random_child_of_type, the membership finders (guild_find_membership_by_*), gold_find_credit, inv_match_arrows/inv_take_arrow, automap_find_record, quest_match_person_cb, collide_* callbacks, marker_nearest_cb; was found_record (object = struct record, as found_marker)"
 global,0x00195AFC,list_popup_image,strong,"pick00i0.img, the list popup's window (list_popup_open/_open_strings load it, list_popup_update and list_popup_poll draw it); was picklist_image"
-global,0x00195B00,frame_timer_ms,candidate,"xn_timer_add_25 (CE7B3, dead) adds 25 to it, shaped like a 40 Hz timer callback; frame_timer_init (support.c) copies it to D_001A59D0 and D_001A59C8"
+global,0x00195B00,frame_timer_ms,strong,xn_timer_add_25 adds 25 to it (40 Hz timer callback); func_0007E066 copies it to frame_timer_start and frame_timer_last
 global,0x00195B04,spell_records,confirmed,"pointer to SPELLS.STD in memory: 89-byte spell records, 128 max (name +0x2F, id +0x49); in save_morthag1 89 records (Fenrik's Door Jam, Buoyancy, Frostbite...); exp1b: cast_item_used_spell(82) found Orc Strength by id here"
 global,0x00195B08,effect_tick_minutes,candidate,"minutes (/4) since the last effects_tick; the regeneration and enchantment amounts. Keep: code only (effects_tick, item_enchantment_tick)"
 global,0x00195B0C,trade_haggle_result,strong,"the agreed price of the unused haggling window (0 when rejected or unaffordable), set by trade_haggle_close. New: exp_haggle: ACCEPT -> 282 (the asking price); close with more than the gold -> 0"
@@ -1463,7 +1463,7 @@ global,0x00195DCC,painting_prefix2_text,strong,TEXT.RSC id of painting prefix 2 
 global,0x00195E18,object_heap,strong,"jmem pool for every game object: object_heap_init passes it to mem_pool_init; +4 first block (0x18D2038 = location_object-18 in save_tlalac_s), +12 size 2048000"
 global,0x00195E1C,object_heap_blocks,strong,"object_heap+4: first block of the object heap, walked by mem_check_heap ('Invalid memory header.')"
 global,0x00195E2A,climate_weathers,strong,"SAVEVARS.DAT 0x3B7 and again 0x17A2 (6 bytes, DFU climateWeathers: classic reads both, the second wins); fog code 50C23 indexes it by climate (weather 3 / bit 7)"
-global,0x00195E6C,swift_state,candidate,code reading; SWIFT never enabled
+global,0x00195E6C,swift_info,strong,14 bytes copied from the SWIFT driver's DOS buffer by func_0007EF86
 global,0x00195E7A,mouse_control_mode,confirmed,"0 CURSOR (steering by cursor regions), 1 VIEW (mouse look); options_mouse_cursor_mode / view_mode; 0 in save_tlalac_s"
 global,0x00195E7B,mouse_turn_rate,strong,"bits 0-6 TURN RATE (steer_max_accel = rate*2+4), bit 7 REVERSE VERTICAL"
 global,0x00195E7C,mouse_sensitivity_x,strong,HORIZONTAL sensitivity 1..15 (8 in save_tlalac_s)
@@ -1509,7 +1509,7 @@ global,0x00196270,msgbox_kind,strong,"byte: kind of the message box up: 0 none, 
 global,0x00196271,popup_answer,candidate,yes/no answer: training cancels on 2; travel_map_update starts the trip on 1 after 'Do you wish to travel to %tcn?'
 global,0x00196272,screen_active,candidate,"set to 1 when the sheet, travel map or automap opens and back to 0 (or its old value) when it closes"
 global,0x00196274,game_mode,strong,"which screen has the input: 0 world, 3 sheet, 4 inventory, 5 spellbook, 7 options, 14 logbook, 16 rest, 19 travel map; same from 3 saves (fallstate screens); hand code already calls it MODE"
-global,0x00196275,info_popup_saved_screen_active,candidate,code reading
+global,0x00196275,info_popup_saved_state,strong,"info_popup_open saves the byte of D_00196272 here, info_popup_update restores it"
 global,0x00196276,interaction_mode,strong,"0 grab F2, 1 info F3, 2 steal F1, 3 talk F4; same from 3 saves (fallstate modes)"
 global,0x00196277,player_on_ground,confirmed,"1 standing (save_tlalac_s), 0 after J in exp_steer.py; steering only works on the ground, in water or climbing; levitation sets it"
 global,0x00196278,cfg_fade_colour,strong,config key 'fadecolor' (config_read)
@@ -1520,7 +1520,7 @@ global,0x0019627D,in_dungeon_water,strong,SAVEVARS.DAT 0x3A6 = DFU inDungeonWate
 global,0x0019627E,crime_current,strong,"byte: the crime the guards act on (1-based, DFU order): rest.c sets 8 (vagrancy) for sleeping in town, people.c 5 (murder), click.c 13 (theft); court_trial passes it to court_open; experiment: court_open(4) named it 'Assault'"
 global,0x0019627F,people_witness_flags,strong,build/names/scratch/audit_tq/exp_people.py save_tlalac_s: = the return of people_check_witnesses (1 in town)
 global,0x00196280,is_daytime,confirmed,"byte 1 by day (06:00-18:00), set by time_pass_minutes; vampires/career flag 16 cannot fast travel by day; travel, music, encounters, shops read it; SAVEVARS. audit: build/names/scratch/audit_euw/B/exp_glob.py (save_tlalac_s 09:49, 1): time_pass_minutes to 18:49 made it 0, 12 hours more to 06:49 made it 1; survey.py: matches the hour in all 18 saves (0 at 18:24-00:32, 1 at 06:44-17:23)"
-global,0x00196281,swift_present,candidate,code reading; always 0
+global,0x00196281,swift_present,strong,SWIFT device found; always 0 in practice
 global,0x00196283,fog_colour,strong,"palette index of the fog, set by update_fog with the fog distance: 0 outside at night or in clear weather, 119 fog or heavy weather, 107 under dungeon water, 223 in a dungeon; main copies it to text_shadow_colour every frame; breath_update tests 107 for under water; audit: PAL.RAW colours 0 black, 119 grey (117,117,117), 107 dark blue, 223 near black (12,12,12); build/names/scratch/audit_euw/C/s1_survey.py: 119 in save_morthag1, whose screenshot fades to (117,117,117) in the distance, 223 in 3 dungeon saves, 0 in 2 clear towns, text_shadow_colour equal in all"
 global,0x00196285,climate_is_ocean,strong,"byte set by climate_lookup when the CLIMATE.PAK value is 223 (ocean, then treated as 228); read by travel.c; audit: build/names/scratch/audit_euw/D/exp_misc.py save_gash: climate_at at the player left it 0 (climate 226), at (4096, 4096) in the sea it became 1 (climate 228)"
 global,0x00196288,inv_right_icon,strong,"byte: picture of inve16i0.cif shown for the right container: 2 ground at open, 3 wagon after WAGON (exp)"
@@ -1878,7 +1878,7 @@ global,0x001A51E8,free_later_list,strong,objects queued by object_free_later
 global,0x001A53E8,mode_stack,strong,"pairs {screen_active, game_mode} pushed by mode_push"
 global,0x001A5428,hud_message_text,confirmed,16 x 80 bytes of top messages (hud_message_add; exp1)
 global,0x001A5928,hud_status_text,confirmed,1440-byte status line text (hud_status_set; exp1)
-global,0x001A59D4,arrival_delay,candidate,code reading (location_restore_stored sets 10)
+global,0x001A59D4,arrival_delay,strong,frames before arrival_room_messages runs (location_restore_stored sets 10)
 global,0x001A59E8,info_popup_text,confirmed,text of the info popup (info_popup_open; exp2)
 global,0x001A5A52,mode_stack_depth,strong,short
 global,0x001A5A68,cursor_saved_background,strong,"10x10 background saved under the arrow by cursor_draw_arrow, put back by cursor_restore_background. audit: build/names/scratch/audit_euw/B/exp_glob.py (save_tlalac_s, mouse 150,80): after cursor_draw_arrow its 100 bytes equal screen_buffer's rect from before the arrow (48 pixels changed by the arrow)"
@@ -7229,3 +7229,69 @@ global,0x001965C8,talk_rand_seed,strong,srand seed talk_draw uses so redraws pic
 global,0x001965D0,talk_attitude_cache_2,strong,"cleared with talk_attitude_cache by talk_open, otherwise unused"
 global,0x001965D4,talk_etiquette_counted,strong,talk_roll_attitude adds an Etiquette use while 0; cleared by talk_open
 global,0x001966A4,talk_okay_state,strong,short cleared by talk_open and talk_button_okay
+global,0x001755E2,career_text_line_end,strong,"text record end 0xFD (followed by ""Masque of Clavicus""); career_specials_line appends it after each line"
+global,0x0018087E,career_resistance_target_names,strong,"pointers ""to Paralysis"", ""to Magic"", ""to Poison"", ...: resistance, immunity, low tolerance, critical weakness lines"
+global,0x0018089E,career_absorption_condition_names,strong,"pointers ""in Light"", ""in Darkness"", ""General"": spell absorption line"
+global,0x001808AE,career_rapid_healing_condition_names,strong,"pointers ""in Light"", ""in Darkness"", ""General"": rapid healing line"
+global,0x001808BE,career_regenerate_condition_names,strong,"pointers ""in Lights"", ""in Darkness"", ""while Immersed in Water"", ...: regenerate line"
+global,0x001808D2,career_enemy_kind_names,strong,"pointers ""Undead"", ""Daedra"", ""Humanoid"", ...: bonus to hit and phobia lines"
+global,0x001808E6,career_magery_names,strong,"pointers ""3x Int in Spell Points"", ""2x Int in Spell Points"", ...: indexed by class flags bits 10-12"
+global,0x001808FE,career_weapon_skill_names,strong,"pointers ""Short Blade"", ""Long Blade"", ""Hand-to-Hand"", ...: expertise in and forbidden weaponry lines"
+global,0x0018096E,career_damage_source_names,strong,"pointers ""from Sunlight"", ""from Holy Places"": damage line"
+global,0x0018097A,career_light_magery_texts,strong,"pointers ""Unable to use magic in darkness"", ""Lower magic ability in darkness"""
+global,0x00180986,career_darkness_magery_texts,strong,"pointers ""Unable to use magic in daylight"", ""Lower magic ability in daylight"""
+global,0x00180992,career_armor_type_names,strong,"pointers ""Leather"", ""Chain"", ""Plate"": forbidden armor type line"
+global,0x001809A2,career_shield_type_names,strong,"pointers ""Buckler"", ""Round Shield"", ""Kite Shield"", ...: forbidden shield type line"
+global,0x001809B6,career_material_names,strong,"pointers ""Iron"", ""Steel"", ""Silver"", ...: forbidden material line"
+global,0x00185646,classmaker_attribute_up_y0,strong,y0 of the attribute up-arrow box (x0 is classmaker_attribute_up_box); set by classmaker_select_attribute
+global,0x00185648,classmaker_attribute_up_x1,strong,x1 of the attribute up-arrow box
+global,0x0018564A,classmaker_attribute_up_y1,strong,y1 of the attribute up-arrow box
+global,0x0018564C,classmaker_attribute_up_handler,strong,handler called when the attribute up-arrow box is clicked (classmaker_run)
+global,0x00185652,classmaker_attribute_down_y0,strong,y0 of the attribute down-arrow box
+global,0x00185654,classmaker_attribute_down_x1,strong,x1 of the attribute down-arrow box
+global,0x00185656,classmaker_attribute_down_y1,strong,y1 of the attribute down-arrow box
+global,0x00185658,classmaker_attribute_down_handler,strong,handler called when the attribute down-arrow box is clicked
+global,0x00190D72,classmaker_unused_190d72,strong,"short set to 16 by classmaker_run, read nowhere"
+global,0x00190D74,classmaker_attribute_points,strong,short set to 16 by classmaker_run and counted up by it
+global,0x00190D78,classmaker_state_190d78,strong,short cleared with the other classmaker state by classmaker_run
+global,0x00190D7A,classmaker_special_row,strong,picked row of the specials picklist (-1 none); func_00054B27 stores it into classmaker_specials
+global,0x00190D7C,classmaker_special_level,strong,"0 picking a special, 1 picking its sub-option (func_00054B27)"
+global,0x00190D7F,classmaker_disadvantage_count,strong,number of picked disadvantages; classmaker_update_advancement sums their costs
+global,0x00190E00,classmaker_specials_image,strong,cust01i0.img drawn by classmaker_specials_screen
+global,0x00190EE0,itemmaker_spells_file,strong,SPELLS.STD loaded by itemmaker_open
+global,0x0019981C,career_specials_text_end,strong,write pointer into the specials text (scratch_buffer + 55000) career_specials_line appends to
+global,0x00199821,classmaker_special_params,strong,"param byte of each picked special (classmaker_specials+1, 2 bytes per entry, 14 per list)"
+global,0x0019982E,classmaker_disadvantages,strong,second list of classmaker_specials (14 bytes on): disadvantage ids
+global,0x0019982F,classmaker_disadvantage_params,strong,param byte of each picked disadvantage
+global,0x001343C2,frame_ticks_fraction,strong,short masked to 0-7 by frame_ticks_update
+global,0x00176A27,msgbox_number_prompt_fmt,strong,"""%s : "" plus 0xF8 text end; msgbox_prompt_number formats its prompt with it"
+global,0x0018DE18,player_saved_positions_y,strong,+4 of the 12-byte saved player positions: y (player_position_save / restore)
+global,0x0018DE1C,player_saved_positions_z,strong,+8 of the 12-byte saved player positions: z
+global,0x00190C74,icon_cycle_frame,strong,0-31 frame of the cycling icon animation (icon_cycle_anim_frame)
+global,0x00190C7C,icon_cycle_last_tick,strong,BIOS tick of the last icon frame step (every 38 ticks)
+global,0x00195C3C,hud_status_line,strong,text hud_messages_draw shows centred (hud_status_set points it at hud_status_text)
+global,0x00195CF0,object_filter_id,strong,object_match_filters_cb skips objects whose id differs while non-zero
+global,0x00195F3C,list_popup_height,strong,height of the list popup image
+global,0x00195F3E,list_popup_y,strong,y of the list popup (centred on 100)
+global,0x00195F40,list_popup_x,strong,x of the list popup (centred on 160)
+global,0x00195F42,list_popup_width,strong,width of the list popup image
+global,0x00195F60,object_filter_image,strong,object_match_filters_cb skips objects whose image2 differs while non-zero
+global,0x00196035,msgbox_hotkey,strong,"scan code that also selects the message box button (msgbox_choice_rsc, trade sets 46)"
+global,0x00196284,object_filter_type,strong,object_match_filters_cb skips objects whose type differs while non-zero
+global,0x001A4FEC,spell_cast_queue_targets,strong,+4 of the 8-byte spell cast queue entries: target object
+global,0x001A53E9,mode_stack_game_mode,strong,"mode_stack+1: the game_mode byte of each {screen_active, game_mode} pair (mode_push / mode_pop)"
+global,0x001A5408,frame_times_ms,strong,8 last frame times in ms (capped 100) func_0007F6A4 sums into frame_ticks
+global,0x001A59C8,frame_timer_last,strong,copy of frame_timer_ms made by func_0007E066
+global,0x001A59CC,frame_pit_now,strong,PIT counter read this frame (func_0007F6A4)
+global,0x001A59D0,frame_timer_start,strong,copy of frame_timer_ms made by func_0007E066
+global,0x001A59D8,frame_times_index,strong,next slot in frame_times_ms (0-7)
+global,0x001A59DC,frame_bios_now,strong,BIOS tick read this frame
+global,0x001A59E0,frame_pit_last,strong,PIT counter of the previous frame
+global,0x001A59E4,frame_bios_last,strong,BIOS tick of the previous frame
+global,0x001A5A1E,swift_rm_regs,strong,50-byte DPMI real-mode register block for the SWIFT int 33h call (func_0007EF86)
+global,0x001A5A2E,swift_rm_regs_ebx,strong,swift_rm_regs+0x10: ebx
+global,0x001A5A32,swift_rm_regs_edx,strong,swift_rm_regs+0x14: edx
+global,0x001A5A3A,swift_rm_regs_eax,strong,"swift_rm_regs+0x1C: eax, returned by func_0007EF86"
+global,0x001A5A40,swift_rm_regs_es,strong,"swift_rm_regs+0x22: es, set to swift_dos_segment"
+global,0x001A5A50,swift_dos_segment,strong,real-mode segment of the SWIFT DOS buffer
+global,0x001A5A54,swift_dos_selector_seg,strong,segment of the SWIFT DOS buffer the info is copied from (MK_FP)

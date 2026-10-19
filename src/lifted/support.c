@@ -12,25 +12,25 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char D_0012B508;
 extern int xn_anim_ticks;
-extern short D_001343C2;
+extern short frame_ticks_fraction;
 extern signed char key_down[];
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern iptr big_buffer;
 extern char str_support_c[];
 extern char str_pick00i0_img[];
-extern char D_00176A27[];
+extern char msgbox_number_prompt_fmt[];
 extern char str_you_have_a_room_at_for_hours[];
 extern unsigned char player_environment;
 extern char fire_flat_records[];
 extern char saved_positions[];
-extern char D_0018DE18[];
-extern char D_0018DE1C[];
+extern char player_saved_positions_y[];
+extern char player_saved_positions_z[];
 extern signed char text_buffer[];
 extern signed char key_was_down[];
 extern struct record *creature_list[];
-extern int D_00190C74;
-extern int D_00190C7C;
+extern int icon_cycle_frame;
+extern int icon_cycle_last_tick;
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern signed char D_001940D6;
@@ -50,7 +50,7 @@ extern struct record *location_object;
 extern struct building *tavern_building;
 extern struct record *found_object;
 extern struct image *list_popup_image;
-extern int D_00195B00;
+extern int frame_timer_ms;
 extern int creature_count;
 extern struct record *scratch_object;
 extern char shared_scratch[];
@@ -60,17 +60,17 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
 extern iptr hud_message_ptrs[];
-extern iptr D_00195C3C;
+extern iptr hud_status_line;
 extern char *scratch_buffer;
 extern void (*grid_visit_func)(struct record *, void (*)());
-extern int D_00195CF0;
+extern int object_filter_id;
 extern int spell_cast_queue_count;
 extern int free_later_count;
-extern short D_00195F3C;
-extern short D_00195F3E;
-extern short D_00195F40;
-extern short D_00195F42;
-extern short D_00195F60;
+extern short list_popup_height;
+extern short list_popup_y;
+extern short list_popup_x;
+extern short list_popup_width;
+extern short object_filter_image;
 extern char list_popup_picklist[];
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
@@ -81,10 +81,10 @@ extern unsigned char D_0019626F;
 extern unsigned char D_00196271;
 extern signed char D_00196272;
 extern signed char game_mode;
-extern signed char D_00196275;
-extern signed char D_00196281;
+extern signed char info_popup_saved_state;
+extern signed char swift_present;
 extern signed char D_00196282;
-extern signed char D_00196284;
+extern signed char object_filter_type;
 extern struct record *people_list[];
 extern int people_count;
 extern struct quest *current_quest;
@@ -92,24 +92,24 @@ extern int nearest_fire_distance;
 extern struct record *nearest_fire;
 extern int timer_tick_count;
 extern char spell_cast_queue_list[];
-extern char D_001A4FEC[];
+extern char spell_cast_queue_targets[];
 extern iptr free_later_list[];
 extern signed char mode_stack[];
-extern signed char D_001A53E9[];
-extern int D_001A5408[];
+extern signed char mode_stack_game_mode[];
+extern int frame_times_ms[];
 extern char hud_message_text[];
 extern char hud_status_text[];
-extern int D_001A59C8;
-extern int D_001A59CC;
-extern int D_001A59D0;
-extern int D_001A59D4;
-extern int D_001A59D8;
-extern int D_001A59DC;
-extern int D_001A59E0;
-extern int D_001A59E4;
+extern int frame_timer_last;
+extern int frame_pit_now;
+extern int frame_timer_start;
+extern int arrival_delay;
+extern int frame_times_index;
+extern int frame_bios_now;
+extern int frame_pit_last;
+extern int frame_bios_last;
 extern char *info_popup_text;
 extern short mode_stack_depth;
-extern short D_001A5A54;
+extern short swift_dos_selector_seg;
 
 extern int tavern_room_rented(void);
 extern int monster_despawn_to_marker(struct record *);
@@ -195,7 +195,7 @@ void hud_status_set(char *text)
     mc_strncpy(hud_status_text, text, 1440, str_support_c, 97);
     bios_ticks = (int *)DOS_LOW(0x46C);
     hud_status_expiry = *bios_ticks + 36;
-    D_00195C3C = (iptr)hud_status_text;
+    hud_status_line = (iptr)hud_status_text;
 }
 
 iptr hud_message_add(char *text)
@@ -246,12 +246,12 @@ void hud_messages_draw(void)
             hud_status_expiry = 0;
         }
     }
-    text_draw_centred_coloured(D_00195C3C, 160, (int)(short)*(short *)&y, 145, 156);
+    text_draw_centred_coloured(hud_status_line, 160, (int)(short)*(short *)&y, 145, 156);
 }
 
 void info_popup_open(char *text)
 {
-    D_00196275 = D_00196272;
+    info_popup_saved_state = D_00196272;
     D_00196272 = 2;
     info_popup_text = text;
 }
@@ -300,7 +300,7 @@ int key_pressed_once(unsigned char scancode)
 void mode_push(void)
 {
     mode_stack[((int)(short)mode_stack_depth) * 2] = D_00196272;
-    D_001A53E9[((int)(short)(mode_stack_depth)++) * 2] = game_mode;
+    mode_stack_game_mode[((int)(short)(mode_stack_depth)++) * 2] = game_mode;
     D_0019626F = game_mode;
 }
 
@@ -308,9 +308,9 @@ void mode_pop(void)
 {
     mode_stack_depth--;
     D_00196272 = mode_stack[((int)(short)mode_stack_depth) * 2];
-    game_mode = D_001A53E9[((int)(short)mode_stack_depth) * 2];
+    game_mode = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
     if (mode_stack_depth != 0) {
-        D_0019626F = D_001A53E9[((int)(short)mode_stack_depth) * 2];
+        D_0019626F = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
         return;
     }
     D_0019626F = 255;
@@ -336,11 +336,11 @@ void size_fit(short *width, short *height, slot16 max_width, slot16 max_height)
 void list_popup_open_strings(char *strings)
 {
     if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(str_pick00i0_img, 0);
-    D_00195F40 = 160 - (list_popup_image->width >> 1);
-    D_00195F3E = 100 - (list_popup_image->height >> 1);
-    D_00195F42 = list_popup_image->width;
-    D_00195F3C = list_popup_image->height;
-    picklist_init((iptr)list_popup_picklist, (int)(short)(D_00195F40 + 25), (int)(short)(D_00195F3E + 26), 140, 73, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 11), 8, 9, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 109), 8, 9, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 22), 9, 83, 146, 146, 244, 114, 0);
+    list_popup_x = 160 - (list_popup_image->width >> 1);
+    list_popup_y = 100 - (list_popup_image->height >> 1);
+    list_popup_width = list_popup_image->width;
+    list_popup_height = list_popup_image->height;
+    picklist_init((iptr)list_popup_picklist, (int)(short)(list_popup_x + 25), (int)(short)(list_popup_y + 26), 140, 73, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 11), 8, 9, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 109), 8, 9, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 22), 9, 83, 146, 146, 244, 114, 0);
     while (*strings != 0) {
         picklist_add((iptr)list_popup_picklist, (iptr)strings, 0);
         strings += strlen(strings) + 1;
@@ -351,11 +351,11 @@ void list_popup_open_strings(char *strings)
 void list_popup_open(char **strings)
 {
     if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(str_pick00i0_img, 0);
-    D_00195F40 = 160 - (list_popup_image->width >> 1);
-    D_00195F3E = 100 - (list_popup_image->height >> 1);
-    D_00195F42 = list_popup_image->width;
-    D_00195F3C = list_popup_image->height;
-    picklist_init((iptr)list_popup_picklist, (int)(short)(D_00195F40 + 25), (int)(short)(D_00195F3E + 26), 140, 73, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 11), 8, 9, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 109), 8, 9, (int)(short)(D_00195F40 + 179), (int)(short)(D_00195F3E + 22), 9, 83, 146, 146, 244, 114, 0);
+    list_popup_x = 160 - (list_popup_image->width >> 1);
+    list_popup_y = 100 - (list_popup_image->height >> 1);
+    list_popup_width = list_popup_image->width;
+    list_popup_height = list_popup_image->height;
+    picklist_init((iptr)list_popup_picklist, (int)(short)(list_popup_x + 25), (int)(short)(list_popup_y + 26), 140, 73, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 11), 8, 9, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 109), 8, 9, (int)(short)(list_popup_x + 179), (int)(short)(list_popup_y + 22), 9, 83, 146, 146, 244, 114, 0);
     while (*strings != 0) {
         picklist_add((iptr)list_popup_picklist, (iptr)*strings++, 0);
     }
@@ -383,7 +383,7 @@ int picklist_frame(struct picklist *picklist)
 
 int list_popup_update(void)
 {
-    xn_draw_image((int)(short)D_00195F40, (int)(short)D_00195F3E, (int)(short)D_00195F42, (int)(short)D_00195F3C, list_popup_image->pixels);
+    xn_draw_image((int)(short)list_popup_x, (int)(short)list_popup_y, (int)(short)list_popup_width, (int)(short)list_popup_height, list_popup_image->pixels);
     return picklist_frame((struct picklist *)list_popup_picklist);
 }
 
@@ -411,7 +411,7 @@ void object_free_pending(void)
 void spell_cast_queue(struct record *spell, struct record *target)
 {
     *(iptr *)(spell_cast_queue_list + (spell_cast_queue_count << 3)) = (iptr)spell;
-    *(iptr *)(D_001A4FEC + (spell_cast_queue_count++ << 3)) = (iptr)target;
+    *(iptr *)(spell_cast_queue_targets + (spell_cast_queue_count++ << 3)) = (iptr)target;
 }
 
 void spell_cast_queued_run(void)
@@ -419,7 +419,7 @@ void spell_cast_queued_run(void)
     int i;
 
     for (i = 0; i < spell_cast_queue_count; i++) {
-        cast_spell_on(*(int *)(spell_cast_queue_list + (i << 3)), *(int *)(D_001A4FEC + (i << 3)), 0);
+        cast_spell_on(*(int *)(spell_cast_queue_list + (i << 3)), *(int *)(spell_cast_queue_targets + (i << 3)), 0);
     }
     spell_cast_queue_count = 0;
 }
@@ -564,7 +564,7 @@ void msgbox_prompt_number(int number, char *prompt)
     D_0012B508 = 146;
     text = scratch_buffer + 55000;
     mc_set_location(610, str_support_c);
-    mc_sprintf(text, D_00176A27, prompt);
+    mc_sprintf(text, msgbox_number_prompt_fmt, prompt);
     text[strlen(text) + 1] = 0;
     inpstr_begin_number(number);
     msgbox_show_string(text, 2);
@@ -604,30 +604,30 @@ int objects_within(struct record *object, struct record *other, int distance)
 void func_0007E066(void)
 {
     func_0007F671();
-    D_001A59D0 = D_00195B00;
-    D_001A59C8 = D_00195B00;
+    frame_timer_start = frame_timer_ms;
+    frame_timer_last = frame_timer_ms;
 }
 
 void frame_ticks_update(void)
 {
     if ((frame_ticks = (timer_tick_count * 1828) / 256) > 100) frame_ticks = 100;
     xn_anim_ticks += frame_ticks;
-    D_001343C2 &= 7;
+    frame_ticks_fraction &= 7;
     timer_tick_count = 0;
 }
 
 void player_position_save(int slot)
 {
     *(int *)(saved_positions + (slot * 12)) = player_object->x;
-    *(int *)(D_0018DE18 + (slot * 12)) = player_object->y;
-    *(int *)(D_0018DE1C + (slot * 12)) = player_object->z;
+    *(int *)(player_saved_positions_y + (slot * 12)) = player_object->y;
+    *(int *)(player_saved_positions_z + (slot * 12)) = player_object->z;
 }
 
 void player_position_restore(int slot)
 {
     player_object->x = *(int *)(saved_positions + (slot * 12));
-    player_object->y = *(int *)(D_0018DE18 + (slot * 12));
-    player_object->z = *(int *)(D_0018DE1C + (slot * 12));
+    player_object->y = *(int *)(player_saved_positions_y + (slot * 12));
+    player_object->z = *(int *)(player_saved_positions_z + (slot * 12));
     D_001940D5 |= 2;
 }
 
@@ -726,12 +726,12 @@ int icon_cycle_anim_frame(void)
     int *bios_ticks_2;
 
     bios_ticks = (int *)DOS_LOW(0x46C);
-    if (((unsigned)(*bios_ticks - D_00190C7C)) > 38) {
-        D_00190C74 = (D_00190C74 + 1) % 32;
+    if (((unsigned)(*bios_ticks - icon_cycle_last_tick)) > 38) {
+        icon_cycle_frame = (icon_cycle_frame + 1) % 32;
         bios_ticks_2 = (int *)DOS_LOW(0x46C);
-        D_00190C7C = *bios_ticks_2;
+        icon_cycle_last_tick = *bios_ticks_2;
     }
-    return D_00190C74;
+    return icon_cycle_frame;
 }
 
 void save_thumbnail_capture(void)
@@ -762,7 +762,7 @@ int func_0007EEAF(void)
     int unused_10;
     int unused_11;
 
-    D_00196281 = 0;
+    swift_present = 0;
     return 0;
 }
 
@@ -771,12 +771,12 @@ void func_0007EF20(void)
     union REGS regs;
     struct SREGS sregs;
 
-    if (D_00196281 == 0) return;
+    if (swift_present == 0) return;
     mc_memset(&sregs, 0, 12, str_support_c, 1064, 4);
     regs.w.ax = 257;
-    regs.w.dx = D_001A5A54;
+    regs.w.dx = swift_dos_selector_seg;
     int386x(49, &regs, &regs, &sregs);
-    D_00196281 = 0;
+    swift_present = 0;
 }
 
 void func_0007F093(struct record *object)
@@ -924,9 +924,9 @@ void func_0007F671(void)
 {
     int *bios_ticks;
 
-    D_001A59CC = xn_timer_read_pit();
+    frame_pit_now = xn_timer_read_pit();
     bios_ticks = (int *)DOS_LOW(0x46C);
-    D_001A59DC = *bios_ticks;
+    frame_bios_now = *bios_ticks;
 }
 
 void func_0007F6A4(void)
@@ -935,23 +935,23 @@ void func_0007F6A4(void)
     int i;
     int *bios_ticks;
 
-    D_001A59E0 = D_001A59CC;
-    D_001A59E4 = D_001A59DC;
-    D_001A59CC = xn_timer_read_pit();
+    frame_pit_last = frame_pit_now;
+    frame_bios_last = frame_bios_now;
+    frame_pit_now = xn_timer_read_pit();
     bios_ticks = (int *)DOS_LOW(0x46C);
-    if ((D_001A59DC = *bios_ticks) == D_001A59E4) {
-        pit_elapsed = D_001A59E0 - D_001A59CC;
+    if ((frame_bios_now = *bios_ticks) == frame_bios_last) {
+        pit_elapsed = frame_pit_last - frame_pit_now;
     } else {
-        pit_elapsed = ((65535 - D_001A59CC) + D_001A59E0) + (((D_001A59DC - D_001A59E4) - 1) * 65535);
+        pit_elapsed = ((65535 - frame_pit_now) + frame_pit_last) + (((frame_bios_now - frame_bios_last) - 1) * 65535);
     }
-    if (((unsigned)pit_elapsed) < 10000) pit_elapsed = (int)(iptr)(((char *)(iptr)D_001A59E0) + (65535 - D_001A59CC));
-    D_001A5408[D_001A59D8] = ((unsigned)(((unsigned)(pit_elapsed * 1000)) / 1193180)) >> 1;
-    if (((unsigned)D_001A5408[D_001A59D8]) > 100) {
-        D_001A5408[D_001A59D8] = 100;
+    if (((unsigned)pit_elapsed) < 10000) pit_elapsed = (int)(iptr)(((char *)(iptr)frame_pit_last) + (65535 - frame_pit_now));
+    frame_times_ms[frame_times_index] = ((unsigned)(((unsigned)(pit_elapsed * 1000)) / 1193180)) >> 1;
+    if (((unsigned)frame_times_ms[frame_times_index]) > 100) {
+        frame_times_ms[frame_times_index] = 100;
     }
-    D_001A59D8 = (D_001A59D8 + 1) & 7;
+    frame_times_index = (frame_times_index + 1) & 7;
     for (i = 0; i < 8; i++) {
-        frame_ticks += D_001A5408[i];
+        frame_ticks += frame_times_ms[i];
     }
     frame_ticks >>= 3;
     if (frame_ticks <= 500) return;
@@ -963,9 +963,9 @@ void object_match_filters_cb(struct record *object)
     if (D_00196282 != 0 && (signed char)object->quest_id != D_00196282) {
         return;
     }
-    if (D_00195CF0 != 0 && (int)object->id != D_00195CF0) return;
-    if (D_00195F60 != 0 && (short)object->image2 != D_00195F60) return;
-    if (D_00196284 != 0 && (signed char)object->type != D_00196284) {
+    if (object_filter_id != 0 && (int)object->id != object_filter_id) return;
+    if (object_filter_image != 0 && (short)object->image2 != object_filter_image) return;
+    if (object_filter_type != 0 && (signed char)object->type != object_filter_type) {
         return;
     }
     found_object = object;
@@ -996,7 +996,7 @@ void location_restore_stored(void)
     } else if (ship_container != 0 && player_character->ship_owned != 0 && ((unsigned)(((unsigned)location_object->id) >> 16)) < 1000) {
         object_foreach_skip_player(ship_container->children, func_0007FEB9);
     }
-    D_001A59D4 = 10;
+    arrival_delay = 10;
 }
 
 void location_store_objects(void)
@@ -1139,12 +1139,12 @@ void arrival_room_messages(void)
     struct building *building;
     int unused;
 
-    if (D_001A59D4 > 0) {
-        D_001A59D4--;
+    if (arrival_delay > 0) {
+        arrival_delay--;
         return;
     }
-    if (D_001A59D4 < 0) return;
-    D_001A59D4--;
+    if (arrival_delay < 0) return;
+    arrival_delay--;
     if (((int)player_environment) == 1 && location_contains(player_object->x, player_object->z) != 0) {
         if (current_location->kind != 4 && current_location->kind <= 9) {
             in_town = 1;

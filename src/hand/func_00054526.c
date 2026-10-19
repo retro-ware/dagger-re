@@ -16,8 +16,8 @@ extern short classmaker_special_list;
 extern short D_00190D84;
 extern iptr scratch_190df4;
 extern char *scratch_190dfc;
-extern char *D_00190E00;
-extern char **D_00190E0C;
+extern char *classmaker_specials_image;
+extern char **classmaker_picklist;
 extern struct AB classmaker_specials[][7];
 extern void msgbox_show_rsc(int, int);
 extern void msgbox_update(void);
@@ -55,7 +55,7 @@ void classmaker_specials_screen(void)
         index++;
     xn_mouse_cursor_erase();
     mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, str_custom_c, 675, 4);
-    xn_draw_image(0, 0, *(unsigned short *)(D_00190E00 + 4), *(unsigned short *)(D_00190E00 + 6), D_00190E00 + 12);
+    xn_draw_image(0, 0, *(unsigned short *)(classmaker_specials_image + 4), *(unsigned short *)(classmaker_specials_image + 6), classmaker_specials_image + 12);
     if (index == 2 || index == 3)
         xn_draw_image(0, 0, *(unsigned short *)(scratch_190dfc + 4), *(unsigned short *)(scratch_190dfc + 6), scratch_190dfc + 12);
     if ((int)(short)(classmaker_screen & 16) != 0) {
@@ -70,10 +70,10 @@ void classmaker_specials_screen(void)
         classmaker_specials[classmaker_special_list][index].a = picked;
         classmaker_specials[classmaker_special_list][index].b = 0;
         if ((short)(classmaker_screen & 15) == 2)
-            D_00190E0C = classmaker_advantage_sublists[picked];
+            classmaker_picklist = classmaker_advantage_sublists[picked];
         else
-            D_00190E0C = classmaker_disadvantage_sublists[picked];
-        if (D_00190E0C == 0) {
+            classmaker_picklist = classmaker_disadvantage_sublists[picked];
+        if (classmaker_picklist == 0) {
             if (classmaker_drop_duplicate_special(classmaker_special_list) == 0) {
                 if (classmaker_special_list == 0)
                     classmaker_set_advantage(index, 0);

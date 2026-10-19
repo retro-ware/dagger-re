@@ -23,7 +23,7 @@ extern struct building *current_building;
 extern char *scratch_buffer;
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
-extern signed char D_00196035;
+extern signed char msgbox_hotkey;
 extern signed char msgbox_button_ids;
 extern signed char D_00196090;
 extern signed char D_00196091;
@@ -69,7 +69,7 @@ void trade_haggle_show_offer(void)
     D_00196091 = 12;
     msgbox_button_keys = 30;
     D_00196034 = 19;
-    D_00196035 = 46;
+    msgbox_hotkey = 46;
     mc_set_location(131, str_trade_c);
     mc_sprintf((char *)text_buffer, str_the_current_amount_in_the_offering_is, (int)trade_haggle_asking);
     msgbox_show_string(text_buffer, 5);

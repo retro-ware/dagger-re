@@ -21,7 +21,7 @@ extern struct rect career_answer_boxes[];
 extern signed char D_00179FF8[];
 extern struct rect career_bio_buttons[];
 extern signed char text_buffer[];
-extern int D_00190C74;
+extern int icon_cycle_frame;
 extern char D_00190C78[];
 extern int scratch_190cac;
 extern char scratch_190d64[];
@@ -82,7 +82,7 @@ void career_background_summary(int class_id, int ask)
     text_macro_imperial = rand() % 6;
     scratch_190d68 = (unsigned short)(unsigned char)D_00179FF8[rand_range(0, 9)];
     scratch_190d6a = 1;
-    D_00190C74 = rand();
+    icon_cycle_frame = rand();
     *(int *)D_00190C78 = rand();
     if (class_id == 18) class_id = career_nearest_class();
     mc_set_location(59, str_career_c);

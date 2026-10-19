@@ -39,10 +39,10 @@ extern iptr list_popup_callback;
 extern iptr window_image;
 extern char *scratch_buffer;
 extern short spell_effect_slot;
-extern short D_00195F3C;
-extern short D_00195F3E;
-extern short D_00195F40;
-extern short D_00195F42;
+extern short list_popup_height;
+extern short list_popup_y;
+extern short list_popup_x;
+extern short list_popup_width;
 extern char list_popup_picklist[];
 extern char spellmaker_spell[];
 extern signed char D_00196272;
@@ -447,7 +447,7 @@ int list_popup_poll(void)
 {
     slot16 choice;
 
-    xn_draw_image((int)(short)D_00195F40, (int)(short)D_00195F3E, (int)(short)D_00195F42, (int)(short)D_00195F3C, (char *)((iptr)list_popup_image + 12));
+    xn_draw_image((int)(short)list_popup_x, (int)(short)list_popup_y, (int)(short)list_popup_width, (int)(short)list_popup_height, (char *)((iptr)list_popup_image + 12));
     if (key_down_esc != 0) {
         if (((iptr)spellmaker_pick_subtype_cb) == list_popup_callback) {
             selected_spell->effects[(int)(short)spell_effect_slot].type = 255;

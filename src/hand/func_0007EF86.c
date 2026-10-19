@@ -3,14 +3,14 @@
 #include <i86.h>
 #include "clib.h"
 extern char str_support_c[];
-extern char D_00195E6C[];
-extern char D_001A5A1E[];
-extern int D_001A5A2E;
-extern int D_001A5A32;
-extern int D_001A5A3A;
-extern short D_001A5A40;
-extern short D_001A5A50;
-extern short D_001A5A54;
+extern char swift_info[];
+extern char swift_rm_regs[];
+extern int swift_rm_regs_ebx;
+extern int swift_rm_regs_edx;
+extern int swift_rm_regs_eax;
+extern short swift_rm_regs_es;
+extern short swift_dos_segment;
+extern short swift_dos_selector_seg;
 extern int func_000A2EC5(void __far *, void __far *, unsigned, char *, int, int);
 
 int func_0007EF86(int ax_value, int bx_value)
@@ -20,16 +20,16 @@ int func_0007EF86(int ax_value, int bx_value)
 
     mc_memset(&sregs, 0, 12, str_support_c, 1078, 4);
     mc_memset(&regs, 0, 28, str_support_c, 1079, 4);
-    mc_memset(D_001A5A1E, 0, 50, str_support_c, 1080, 4);
-    D_001A5A3A = ax_value;
-    D_001A5A2E = bx_value;
-    D_001A5A40 = D_001A5A50;
-    D_001A5A32 = 0;
+    mc_memset(swift_rm_regs, 0, 50, str_support_c, 1080, 4);
+    swift_rm_regs_eax = ax_value;
+    swift_rm_regs_ebx = bx_value;
+    swift_rm_regs_es = swift_dos_segment;
+    swift_rm_regs_edx = 0;
     regs.w.ax = 0x300;
     regs.w.bx = 0x33;
-    sregs.es = FP_SEG(D_001A5A1E);
-    regs.x.edi = FP_OFF(D_001A5A1E);
+    sregs.es = FP_SEG(swift_rm_regs);
+    regs.x.edi = FP_OFF(swift_rm_regs);
     int386x(0x31, &regs, &regs, &sregs);
-    func_000A2EC5(D_00195E6C, MK_FP((unsigned short)D_001A5A54, 0), 14, str_support_c, 1094, 4);
-    return D_001A5A3A;
+    func_000A2EC5(swift_info, MK_FP((unsigned short)swift_dos_selector_seg, 0), 14, str_support_c, 1094, 4);
+    return swift_rm_regs_eax;
 }

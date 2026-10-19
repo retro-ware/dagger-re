@@ -4,10 +4,10 @@
 #include "structs.h"
 
 extern struct rect classmaker_buttons[];
-extern short D_00185646;
-extern short D_0018564A;
-extern short D_00185652;
-extern short D_00185656;
+extern short classmaker_attribute_up_y0;
+extern short classmaker_attribute_up_y1;
+extern short classmaker_attribute_down_y0;
+extern short classmaker_attribute_down_y1;
 extern short scratch_190d6a;
 extern short chargen_selected_attribute;
 
@@ -15,8 +15,8 @@ extern short chargen_selected_attribute;
 void classmaker_select_attribute(slot16 attribute)
 {
     chargen_selected_attribute = *(int *)&attribute;
-    D_00185646 = (scratch_190d6a = classmaker_buttons[((int)(short)attribute) + 18].y0 + 1);
-    D_0018564A = scratch_190d6a + 6;
-    D_00185652 = scratch_190d6a + 13;
-    D_00185656 = scratch_190d6a + 19;
+    classmaker_attribute_up_y0 = (scratch_190d6a = classmaker_buttons[((int)(short)attribute) + 18].y0 + 1);
+    classmaker_attribute_up_y1 = scratch_190d6a + 6;
+    classmaker_attribute_down_y0 = scratch_190d6a + 13;
+    classmaker_attribute_down_y1 = scratch_190d6a + 19;
 }

@@ -4,7 +4,7 @@ extern unsigned char D_0012B508;
 extern unsigned char D_001940D4;
 extern unsigned char msgbox_button_keys;
 extern unsigned char D_00196034;
-extern unsigned char D_00196035;
+extern unsigned char msgbox_hotkey;
 extern unsigned char msgbox_button_ids;
 extern unsigned char D_00196090;
 extern unsigned char D_00196091;
@@ -21,7 +21,7 @@ void msgbox_choice_rsc(short text_id, short button_1, short button_2, short butt
     D_0012B508 = 146;
     msgbox_button_keys = key_1;
     D_00196034 = key_2;
-    D_00196035 = key_3;
+    msgbox_hotkey = key_3;
     msgbox_button_ids = button_1;
     D_00196090 = button_2;
     D_00196091 = button_3;
