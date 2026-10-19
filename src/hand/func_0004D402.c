@@ -12,9 +12,9 @@ extern short D_00142928;
 extern short D_0014292C;
 extern char str_note_c[];
 extern struct rect note_buttons[];
-extern char D_001851F0[];
+extern char note_colour_marker_image[];
 extern char note_colour[];
-extern signed char D_00185201[];
+extern signed char note_fonts[];
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
 extern signed char ui_mode_flags;
@@ -23,7 +23,7 @@ extern iptr window_image;
 extern unsigned short text_cursor_y;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern struct rect D_001997B0;      /* the selection box */
+extern struct rect notebook_selection_box;      /* the selection box */
 extern iptr note_rci;
 extern union note_entry *note_selected;
 extern char note_font[];
@@ -32,7 +32,7 @@ extern short note_cursor_y;
 extern short note_page_index;
 extern short note_cursor_x;
 extern signed char note_tool;
-extern signed char D_001997EB;
+extern signed char note_colour_pick;
 extern signed char note_action;
 extern int note_open_notebook(short);
 extern int note_close(void);
@@ -66,14 +66,14 @@ void note_update(void)
     xn_font_select(4);
     xn_draw_image(182, 176, 44, 9, (*(char **)&note_rci + (((int)(unsigned char)note_tool) * 396)));
     xn_draw_image(226, 176, 44, 9, (*(char **)&note_rci + ((((int)(short)*(short *)note_font) * 396) + 1584)));
-    xn_draw_image_transparent((((int)(unsigned char)D_001997EB) << 3) + 53, 185, 5, 3, D_001851F0);
+    xn_draw_image_transparent((((int)(unsigned char)note_colour_pick) << 3) + 53, 185, 5, 3, note_colour_marker_image);
     text_colour = 145;
     text_draw_centred_coloured((iptr)itoa((((int)(short)note_page_index) + 1), (char *)text_buffer, 10), 303, 4, 145, 141);
     note_find();
     note_draw_page();
     if (((int)(unsigned char)note_action) == 1) {
         text_colour = *(signed char *)note_colour;
-        xn_font_select((int)(short)((unsigned short)(unsigned char)D_00185201[(int)(short)*(short *)note_font]));
+        xn_font_select((int)(short)((unsigned short)(unsigned char)note_fonts[(int)(short)*(short *)note_font]));
         if (inpstr_update() != 0) {
             if (text_rsc_buffer[0] != 0 && ((int)(short)(*(short *)note_text_flags & 32)) == 0) {
                 note_add_text(text_rsc_buffer);
@@ -100,24 +100,24 @@ void note_update(void)
         xn_draw_line_to((int)(short)mouse_x, (int)(short)mouse_y);
     } else if (((int)(unsigned char)note_action) == 3) {
         if (((int)(unsigned char)(mouse_buttons & 1)) != 0) {
-            D_00142928 = D_001997B0.x0;
-            D_0014292C = D_001997B0.y0;
-            xn_draw_line_to((int)(short)mouse_x, (int)(short)D_001997B0.y0);
+            D_00142928 = notebook_selection_box.x0;
+            D_0014292C = notebook_selection_box.y0;
+            xn_draw_line_to((int)(short)mouse_x, (int)(short)notebook_selection_box.y0);
             xn_draw_line_to((int)(short)mouse_x, (int)(short)mouse_y);
-            xn_draw_line_to((int)(short)D_001997B0.x0, (int)(short)mouse_y);
-            xn_draw_line_to((int)(short)D_001997B0.x0, (int)(short)D_001997B0.y0);
+            xn_draw_line_to((int)(short)notebook_selection_box.x0, (int)(short)mouse_y);
+            xn_draw_line_to((int)(short)notebook_selection_box.x0, (int)(short)notebook_selection_box.y0);
         } else {
-            D_001997B0.x1 = mouse_x;
-            D_001997B0.y1 = mouse_y;
-            if (D_001997B0.x0 > D_001997B0.x1) {
-                D_001997B0.x0 ^= D_001997B0.x1;
-                D_001997B0.x1 ^= D_001997B0.x0;
-                D_001997B0.x0 ^= D_001997B0.x1;
+            notebook_selection_box.x1 = mouse_x;
+            notebook_selection_box.y1 = mouse_y;
+            if (notebook_selection_box.x0 > notebook_selection_box.x1) {
+                notebook_selection_box.x0 ^= notebook_selection_box.x1;
+                notebook_selection_box.x1 ^= notebook_selection_box.x0;
+                notebook_selection_box.x0 ^= notebook_selection_box.x1;
             }
-            if (D_001997B0.y0 > D_001997B0.y1) {
-                D_001997B0.y0 ^= D_001997B0.y1;
-                D_001997B0.y1 ^= D_001997B0.y0;
-                D_001997B0.y0 ^= D_001997B0.y1;
+            if (notebook_selection_box.y0 > notebook_selection_box.y1) {
+                notebook_selection_box.y0 ^= notebook_selection_box.y1;
+                notebook_selection_box.y1 ^= notebook_selection_box.y0;
+                notebook_selection_box.y0 ^= notebook_selection_box.y1;
             }
             note_delete_in_box();
             note_action = 0;

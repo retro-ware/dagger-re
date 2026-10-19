@@ -25,7 +25,7 @@ extern char str_no_response[];
 extern char str_empty[];
 extern char str_previous_list[];
 extern char str_any[];
-extern signed char D_00178630[];
+extern signed char char_class_table[];
 extern unsigned char player_environment;
 extern char talk_faction_greetings[];
 extern char str_g_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w[];
@@ -769,7 +769,7 @@ void func_00016907(signed char *src, signed char *dest)
     length = 0;
     in_word = 0;
     while (*src != 0) {
-        if (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*src + 1)] & 192)) != 0) {
+        if (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*src + 1)] & 192)) != 0) {
             text_buffer[length++] = *src;
             in_word = 1;
         } else {

@@ -7,7 +7,7 @@ extern char str_fmt_d_2[];
 extern char str_qrc[];
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
-extern char D_00190FEC;
+extern char qrc_quest_text_flag;
 extern int text_rsc_file;
 extern struct quest *current_quest;
 extern char *text_rsc_load(short, unsigned short, short);
@@ -29,7 +29,7 @@ char *text_qrc_load_for_quest(struct quest *quest, short message_id, short unuse
     } else {
         mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, str_text_c, 547, 2048);
     }
-    D_00190FEC = 0;
+    qrc_quest_text_flag = 0;
     mc_set_location(550, str_text_c);
     mc_sprintf(((char *)text_buffer), str_qrc, ((char *)text_rsc_buffer));
     if ((text_rsc_file = disk_open_data(((char *)text_buffer))) > 0) {

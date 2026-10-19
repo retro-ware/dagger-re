@@ -11,8 +11,8 @@ extern char str_faction_c[];
 extern char str_invalid_alliance_count[];
 extern char str_invalid_enemy_count[];
 extern char str_rumor_dat[];
-extern char D_001704C5[];
-extern signed char D_00178630[];
+extern char rumor_local_fmt[];
+extern signed char char_class_table[];
 extern signed char person_flat_images[];
 extern struct record *player_entity;
 extern char shared_scratch[];
@@ -20,13 +20,13 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
 extern char *scratch_buffer;
-extern iptr D_001966BC[16];
+extern iptr faction_parse_parents[16];
 extern int rumor_file;
-extern int D_00196708;
+extern int rumor_added_count;
 extern int faction_count;
 extern struct faction *found_faction;
 extern struct faction *factions;
-extern signed char D_00196732;
+extern signed char faction_flat_index;
 extern struct membership *guild_membership;
 
 extern struct faction *faction_find(short);
@@ -86,7 +86,7 @@ void faction_free(void)
     /* faction_add_record's last record at each depth still points into the array just
        freed, and the next load links its first record through it: a write into freed memory,
        which DOS's heap took and the host's does not (its checks trap) */
-    mc_memset(D_001966BC, 0, 16 * PTR_SIZE, str_faction_c, 1082, 4);
+    mc_memset(faction_parse_parents, 0, 16 * PTR_SIZE, str_faction_c, 1082, 4);
 #endif
 }
 
@@ -95,8 +95,8 @@ void faction_add_record(struct faction *parsed, int depth, struct faction *added
     int seed;
     int parent_depth;
 
-    D_00196732 = 0;
-    mc_memset((void *)(((iptr)(char *)D_001966BC) + ((depth << PTR_SHIFT) + PTR_SIZE)), 0, (int)(iptr)&*(signed char *)((char *)(iptr)((16 - depth) << PTR_SHIFT) - PTR_SIZE), str_faction_c, 1091, 4);
+    faction_flat_index = 0;
+    mc_memset((void *)(((iptr)(char *)faction_parse_parents) + ((depth << PTR_SHIFT) + PTR_SIZE)), 0, (int)(iptr)&*(signed char *)((char *)(iptr)((16 - depth) << PTR_SHIFT) - PTR_SIZE), str_faction_c, 1091, 4);
     seed = rand();
     seed <<= 16;
     seed |= rand();
@@ -107,16 +107,16 @@ void faction_add_record(struct faction *parsed, int depth, struct faction *added
         added->parent = 0;
     } else {
         parent_depth = depth - 1;
-        while (D_001966BC[parent_depth] == 0) parent_depth--;
-        added->parent = (struct faction *)(D_001966BC[parent_depth]);
-        if (D_001966BC[depth] == 0) {
-            *(iptr *)((char *)D_001966BC[parent_depth] + REC_OFFSETOF(struct faction, child)) = (iptr)added;
+        while (faction_parse_parents[parent_depth] == 0) parent_depth--;
+        added->parent = (struct faction *)(faction_parse_parents[parent_depth]);
+        if (faction_parse_parents[depth] == 0) {
+            *(iptr *)((char *)faction_parse_parents[parent_depth] + REC_OFFSETOF(struct faction, child)) = (iptr)added;
         }
     }
-    if (D_001966BC[depth] != 0) {
-        *(iptr *)((char *)D_001966BC[depth] + REC_OFFSETOF(struct faction, next)) = (iptr)added;
+    if (faction_parse_parents[depth] != 0) {
+        *(iptr *)((char *)faction_parse_parents[depth] + REC_OFFSETOF(struct faction, next)) = (iptr)added;
     }
-    D_001966BC[depth] = (iptr)added;
+    faction_parse_parents[depth] = (iptr)added;
 }
 
 void faction_parse_type(struct faction *faction, signed char **cursor, int *ally_count, int *enemy_count)
@@ -125,7 +125,7 @@ void faction_parse_type(struct faction *faction, signed char **cursor, int *ally
 
     text = *cursor;
     faction->type = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -150,7 +150,7 @@ void faction_parse_rep(struct faction *faction, signed char **cursor, int *ally_
 
     text = *cursor;
     faction->reputation = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -161,7 +161,7 @@ void faction_parse_summon(struct faction *faction, signed char **cursor, int *al
     signed char *text;
 
     text = *cursor;
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -174,7 +174,7 @@ void faction_parse_region(struct faction *faction, signed char **cursor, int *al
     text = *cursor;
     faction->region = atoi(text);
     if (faction->region != 255) faction->region--;
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -186,7 +186,7 @@ void faction_parse_power(struct faction *faction, signed char **cursor, int *all
 
     text = *cursor;
     faction->power = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -198,7 +198,7 @@ void faction_parse_flags(struct faction *faction, signed char **cursor, int *all
 
     text = *cursor;
     faction->flags |= atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -211,7 +211,7 @@ void faction_parse_ally(struct faction *faction, signed char **cursor, int *ally
     if ((iptr)ally_count == 4) fatal_error(str_invalid_alliance_count);
     text = *cursor;
     faction->allies[(*ally_count)++] = (struct faction *)(iptr)atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -224,7 +224,7 @@ void faction_parse_enemy(struct faction *faction, signed char **cursor, int *all
     if ((iptr)enemy_count == 4) fatal_error(str_invalid_enemy_count);
     text = *cursor;
     faction->enemies[(*enemy_count)++] = (struct faction *)(iptr)atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -236,7 +236,7 @@ void faction_parse_ruler(struct faction *faction, signed char **cursor, int *all
 
     text = *cursor;
     faction->ruler = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -271,20 +271,20 @@ void faction_parse_flat(struct faction *faction, signed char **cursor, int *ally
     text = *cursor;
     archive = atoi(text);
     archive_value = archive;
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     while (((int)(unsigned char)*text) <= 32) text++;
-    faction->flats[(int)(unsigned char)D_00196732] = (archive << 7) | atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    faction->flats[(int)(unsigned char)faction_flat_index] = (archive << 7) | atoi(text);
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
     if (archive_value == (-1)) {
-        faction->flats[(int)(unsigned char)D_00196732] = ((unsigned short)(unsigned char)person_flat_images[rand_range(0, 9)]) + 23296;
+        faction->flats[(int)(unsigned char)faction_flat_index] = ((unsigned short)(unsigned char)person_flat_images[rand_range(0, 9)]) + 23296;
     }
-    if (D_00196732 == 0) faction->flats[1] = faction->flats[0];
-    D_00196732 ^= 1;
+    if (faction_flat_index == 0) faction->flats[1] = faction->flats[0];
+    faction_flat_index ^= 1;
 }
 
 void faction_parse_race(struct faction *faction, signed char **cursor, int *ally_count, int *enemy_count)
@@ -293,7 +293,7 @@ void faction_parse_race(struct faction *faction, signed char **cursor, int *ally
 
     text = *cursor;
     faction->race = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -305,7 +305,7 @@ void faction_parse_sgroup(struct faction *faction, signed char **cursor, int *al
 
     text = *cursor;
     faction->social_group = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -317,7 +317,7 @@ void faction_parse_ggroup(struct faction *faction, signed char **cursor, int *al
 
     text = *cursor;
     faction->guild_group = atoi(text);
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -328,7 +328,7 @@ void faction_parse_minf(struct faction *faction, signed char **cursor, int *ally
     signed char *text;
 
     text = *cursor;
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -339,7 +339,7 @@ void faction_parse_maxf(struct faction *faction, signed char **cursor, int *ally
     signed char *text;
 
     text = *cursor;
-    while (((int)(unsigned char)(D_00178630[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
+    while (((int)(unsigned char)(char_class_table[(int)(unsigned char)(*text + 1)] & 32)) != 0 || ((int)(unsigned char)*text) == 45 || ((int)(unsigned char)*text) == 43) {
         text++;
     }
     *cursor = text;
@@ -549,7 +549,7 @@ int faction_make_peace(struct faction *faction, int slot)
 
 void rumor_file_open(void)
 {
-    D_00196708 = 0;
+    rumor_added_count = 0;
     if ((rumor_file = disk_open_rw(str_rumor_dat)) < 0) {
         rumor_file = disk_create(str_rumor_dat);
     }
@@ -571,7 +571,7 @@ iptr rumor_collect_local(void)
 
     out = (char *)(big_buffer + 60000);
     mc_set_location(1642, str_faction_c);
-    mc_sprintf(out, D_001704C5, (iptr)current_location);
+    mc_sprintf(out, rumor_local_fmt, (iptr)current_location);
     out += strlen(out);
     *out = 0;
     out[1] = 0;

@@ -8,10 +8,10 @@ extern unsigned char scratch_190d17;
 extern signed char text_rsc_buffer[];
 extern int shared_scratch;
 extern int game_minutes;
-extern unsigned char D_00196269;
+extern unsigned char previous_region;
 extern unsigned char D_001962A5;
 extern int rumor_file;
-extern int D_00196708;
+extern int rumor_added_count;
 extern struct faction *macro_faction2;
 extern struct faction *found_faction;
 extern int faction_player_related(struct faction *);
@@ -37,15 +37,15 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
     macro_faction2 = faction2;
     scratch_190d16 = kind;
     scratch_190d17 = region;
-    D_00196708++;
+    rumor_added_count++;
     if (region != 0)
-        D_00196269 = region;
+        previous_region = region;
     else if (faction1 != 0 && faction1->region != 255)
-        D_00196269 = faction1->region;
+        previous_region = faction1->region;
     else if (faction2 != 0 && faction2->region != 255)
-        D_00196269 = faction2->region;
+        previous_region = faction2->region;
     else
-        D_00196269 = rand_range(0, 61);
+        previous_region = rand_range(0, 61);
     parse_rsc_text(text_id, 0, 0);
     if (faction1 != 0)
         rumor.faction1 = faction1->id;

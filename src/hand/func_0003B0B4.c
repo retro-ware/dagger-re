@@ -15,8 +15,8 @@ extern char *scratch_buffer;
 extern unsigned char msgbox_button_keys;
 extern unsigned char D_00196034;
 extern unsigned char msgbox_button_ids;
-extern unsigned char D_00196090;
-extern unsigned char D_00196091;
+extern unsigned char msgbox_button_2;
+extern unsigned char msgbox_button_3;
 extern unsigned char D_00196271;
 extern void msgbox_show_rsc(int, int);
 extern void msgbox_update(void);
@@ -36,8 +36,8 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
     msgbox_button_keys = key1;
     D_00196034 = key2;
     msgbox_button_ids = button1;
-    D_00196090 = button2;
-    D_00196091 = 0;
+    msgbox_button_2 = button2;
+    msgbox_button_3 = 0;
     if (image != 0) {
         disk_read_file(image, scratch_buffer);
         mc_memcpy(screen_buffer, scratch_buffer, 64000, str_intro_c, 399, 4);

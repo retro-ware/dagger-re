@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000845F1 */
 #include "records.h"
 
-extern char D_00187D30[];
+extern char region_building_factions[];
 extern struct record *location_object;
 extern struct location *current_location;
 extern struct settings *game_settings;
@@ -45,7 +45,7 @@ struct record *rmb_make_flat(struct record *parent, short image, short faction_i
         if ((flat_cfg->flags & 2) && (game_settings->view_flags & 4))
             object->image = 0;
         if (faction_id == 0)
-            faction_id = *(short *)(D_00187D30 + (unsigned char)current_region * 2);
+            faction_id = *(short *)(region_building_factions + (unsigned char)current_region * 2);
         object->data.person.faction_id = faction_id;
     }
     return object;

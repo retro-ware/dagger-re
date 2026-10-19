@@ -2,15 +2,15 @@
 #include "records.h"
 
 extern char str_object_count_exceeded[];
-extern unsigned char D_0017A834[];
+extern unsigned char rdb_lock_levels[];
 extern struct record *location_object;
-extern char D_001962A1;
+extern char dungeon_block_special;
 extern struct rdb_object_id rdb_object_ids[];
 extern char *rdb_data;
 extern struct rdb_flat *rdb_flat_resource;
 extern struct rdb_light *rdb_light_resource;
-extern int D_001995F8;
-extern int D_001995FC;
+extern int rdb_light_level;
+extern int rdb_water_level;
 extern struct rdb_file *rdb_loaded_file;
 extern struct dungeon_block *rdb_dungeon_block;
 extern struct rdb_model *rdb_model_resource;
@@ -57,7 +57,7 @@ void rdb_create_objects(struct record *quarter, struct rdb_object *rdb_object, i
             xn_model_set_angles(rdb_model_resource->x_rotation, rdb_model_resource->y_rotation, rdb_model_resource->z_rotation, (int *)object->data.instance.angles);
             if (object->image2 == 550) {
                 object->type = 32;
-                object->lock_level = D_0017A834[rdb_model_resource->trigger_flag_starting_lock >> 4];
+                object->lock_level = rdb_lock_levels[rdb_model_resource->trigger_flag_starting_lock >> 4];
             }
             break;
         case 2:
@@ -86,10 +86,10 @@ void rdb_create_objects(struct record *quarter, struct rdb_object *rdb_object, i
                     break;
                 case 8:
                     if (rdb_flat_resource->flags != 0)
-                        D_001995F8 = rdb_flat_resource->flags;
+                        rdb_light_level = rdb_flat_resource->flags;
                     if (rdb_flat_resource->sound_index != 0)
-                        D_001995FC = -(rdb_flat_resource->sound_index << 3);
-                    D_001962A1 = rdb_flat_resource->magnitude;
+                        rdb_water_level = -(rdb_flat_resource->sound_index << 3);
+                    dungeon_block_special = rdb_flat_resource->magnitude;
                     if (rdb_dungeon_block->is_starting == 0) {
                         object = 0;
                         break;

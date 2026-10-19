@@ -13,15 +13,15 @@ extern char str_fmt_s_ld_ld_ld[];
 extern char str_flag[];
 extern char str_player[];
 extern char str_quest[];
-extern char D_0017A134[];
+extern char quest_debug_kinds[];
 extern signed char text_buffer[];
 extern signed char quest_global_states[];
 extern struct record *player_object;
 extern int game_minutes;
 extern signed char game_mode;
 extern iptr quest_debug_object;
-extern unsigned char D_00196DC0;
-extern char D_00196DC1[];
+extern unsigned char quest_debug_kind_index;
+extern char quest_debug_kind[];
 extern iptr quest_debug_data;
 extern signed char cheat_mode;
 extern void quest_debug_next(void);
@@ -57,8 +57,8 @@ void quest_debug_overlay(void)
     if (*((char *)&cheat_mode) == 0) return;
     if ((unsigned char)game_mode == 4) return;
     if (key_pressed_once(39)) {
-        D_00196DC0 = (D_00196DC0 + 1) % 6;
-        *D_00196DC1 = D_0017A134[D_00196DC0];
+        quest_debug_kind_index = (quest_debug_kind_index + 1) % 6;
+        *quest_debug_kind = quest_debug_kinds[quest_debug_kind_index];
     }
     if (key_pressed_once(40)) quest_debug_next();
     if (key_pressed_once(67)) {
@@ -76,7 +76,7 @@ void quest_debug_overlay(void)
     if (CUR->text_offset) {
         text_var = (struct qbn_text_var *)(CUR->text_offset + (char *)CUR);
         while (text_var->name[0] != 0) {
-            if (text_var->section == *D_00196DC1) {
+            if (text_var->section == *quest_debug_kind) {
                 COLOR = 145;
                 object = 0;
                 switch (text_var->section) {

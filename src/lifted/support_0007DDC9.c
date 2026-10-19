@@ -6,8 +6,8 @@ extern signed char text_colour;
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
 extern signed char msgbox_button_ids;
-extern signed char D_00196090;
-extern signed char D_00196091;
+extern signed char msgbox_button_2;
+extern signed char msgbox_button_3;
 extern unsigned char D_00196271;
 
 extern void msgbox_show_rsc(int, int);
@@ -16,8 +16,8 @@ void msgbox_yes_no_rsc(int text_id)
 {
     D_00196271 = 0;
     msgbox_button_ids = 4;
-    D_00196090 = 5;
-    D_00196091 = 0;
+    msgbox_button_2 = 5;
+    msgbox_button_3 = 0;
     msgbox_button_keys = 21;
     D_00196034 = 49;
     text_colour = 146;

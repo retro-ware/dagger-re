@@ -28,7 +28,7 @@ extern struct settings *game_settings;
 extern iptr haze_table_0;
 extern signed char climate_weathers[];
 extern signed char current_region;
-extern signed char D_001962A1;
+extern signed char dungeon_block_special;
 extern struct cfa_header *moon0_image;
 extern struct cfa_header *moon1_image;
 extern int sun_light;
@@ -92,7 +92,7 @@ void sky_update(void)
             xn_light_ambient = cell->light_level << 8;
         }
         dungeon_water_level = cell->water_level;
-        D_001962A1 = cell->block_special;
+        dungeon_block_special = cell->block_special;
         return;
     }
     if (((int)player_environment) == 1) {

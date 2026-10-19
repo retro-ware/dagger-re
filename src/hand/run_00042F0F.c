@@ -45,7 +45,7 @@ extern struct character *player_character;
 extern int spell_cast_busy;
 extern unsigned char mouse_control_mode;
 extern unsigned char view_cursor_active;
-extern short D_00195F2E;
+extern short msgbox_delay;
 extern short saved_mouse_y;
 extern short saved_mouse_x;
 extern short spell_ready_cost;
@@ -153,7 +153,7 @@ void keys_world_actions(void)
             weapon_active_hand ^= 1;
             mc_set_location(96, str_keys_c);
             mc_sprintf(((char *)text_buffer), text_weapon_hand_fmt, weapon_active_hand ? text_hand_left : text_hand_right);
-            D_00195F2E = 20;
+            msgbox_delay = 20;
             text_colour = 146;
             hud_message_add(((char *)text_buffer));
         }

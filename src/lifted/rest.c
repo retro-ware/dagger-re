@@ -14,7 +14,7 @@ extern char str_anim0004_vid[];
 extern unsigned char player_environment;
 extern iptr text_no_room_rented;
 extern signed char world_running;
-extern int D_0018DDE4;
+extern int career_fatigue_flag;
 extern signed char player_view_flags;
 extern signed char player_motion_flags;
 extern int last_skill_check_minutes;
@@ -114,7 +114,7 @@ void fatigue_update(void)
     if (((int)(unsigned char)game_mode) == 16 || ((int)(unsigned char)game_mode) == 19) {
         return;
     }
-    if (D_0018DDE4 != 0 && ((struct bf8_0_2 *)&frame_counter)->f == 0) return;
+    if (career_fatigue_flag != 0 && ((struct bf8_0_2 *)&frame_counter)->f == 0) return;
     delta = -11;
     if (in_dungeon_water != 0 && player_character->race != 7) {
         if (rand_range(1, 100) > player_character->skills[17].value) delta = -44;

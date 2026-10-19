@@ -5,15 +5,15 @@
 #pragma pack(1)
 struct stat15 { unsigned short f:15; };
 #pragma pack()
-extern int D_000C5404;
+extern int xn_model_angle_bits;
 extern int xn_anim_ticks;
 extern struct monster_template monster_table[];
 extern short frame_counter;
 extern unsigned char current_climate;
 extern int daylight;
 extern char cfg_show_markers;
-extern struct model_instance D_001A945E;
-extern unsigned char D_001A949C;
+extern struct model_instance model_instance_scratch;
+extern unsigned char model_variant_offset;
 extern char model_cache_flush_count;
 extern void spell_area_effect(struct record *);
 extern void weapon_missile_orient(struct record *);
@@ -53,7 +53,7 @@ int object_draw_cb(struct record *object)
         return 0;
     if (object->type != 9)
         object->draw_handle = 0;
-    D_000C5404 = 0;
+    xn_model_angle_bits = 0;
     switch (object->type) {
     case 18:
         object->angle_x = frame_counter;
@@ -108,8 +108,8 @@ int object_draw_cb(struct record *object)
         break;
     case 2:
         if (object->image2 == 998 && object->image == 0) {
-            instance = &D_001A945E;
-            instance->model = (char *)model_get(object->image2, object->image, (current_climate << 2) + D_001A949C);
+            instance = &model_instance_scratch;
+            instance->model = (char *)model_get(object->image2, object->image, (current_climate << 2) + model_variant_offset);
             if (instance->model != 0) {
                 instance->x = object->x;
                 instance->y = object->y;
@@ -181,7 +181,7 @@ int object_draw_cb(struct record *object)
         model = block->models;
         flat = block->flats;
         for (n = 0; block->model_count > n; n++, model++) {
-            model->model = (char *)model_get(model->id, model->variant, (current_climate << 2) + D_001A949C);
+            model->model = (char *)model_get(model->id, model->variant, (current_climate << 2) + model_variant_offset);
             if (model->model != 0)
                 xn_model_submit(&model->model, 0);
         }
@@ -204,7 +204,7 @@ int object_draw_cb(struct record *object)
         if (object->image2 == 0)
             break;
         instance = &object->data.instance;
-        instance->model = (char *)model_get(object->image2, object->image, (current_climate << 2) + D_001A949C);
+        instance->model = (char *)model_get(object->image2, object->image, (current_climate << 2) + model_variant_offset);
         if (instance->model != 0) {
             instance->x = object->x;
             instance->y = object->y;
@@ -220,7 +220,7 @@ int object_draw_cb(struct record *object)
                 xn_model_set_angles_yaw_offset(instance->angles, object->wait_state);
             } else {
                 if (object->image2 == 610 && object->image == 32)
-                    D_000C5404 = 3;
+                    xn_model_angle_bits = 3;
                 xn_model_compose_angles(instance->angles, object->angle_x, object->yaw + object->wait_state, object->angle_z);
             }
             xn_model_submit(instance, 0);
@@ -230,7 +230,7 @@ int object_draw_cb(struct record *object)
         model = (struct block_model *)&object->data;
         flat = (struct block_flat *)(model + object->model_count);
         for (n = 0; object->model_count > n; n++, model++) {
-            model->model = (char *)model_get(model->id, model->variant, (current_climate << 2) + D_001A949C);
+            model->model = (char *)model_get(model->id, model->variant, (current_climate << 2) + model_variant_offset);
             if (model->model != 0)
                 xn_model_submit(&model->model, 0);
         }

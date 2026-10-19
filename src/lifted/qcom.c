@@ -10,13 +10,13 @@ extern signed char mouse_buttons;
 extern char str_qcom_c[];
 extern char str_s_qbn[];
 extern char str_anim_vid[];
-extern char D_001708ED[];
-extern short D_0017A120[];
+extern char str_empty_4[];
+extern short quest_reputation_factions[];
 extern signed char region_name_races[];
 extern signed char text_buffer[];
 extern char fatal_error_text[];
 extern signed char quest_global_states[];
-extern iptr D_00195984[4];            /* quest_passed_items: op 75's items for the next quest */
+extern iptr quest_passed_items[4];            /* quest_passed_items: op 75's items for the next quest */
 extern struct record *nonworld_root;
 extern struct record *quest_root;
 extern struct record *player_entity;
@@ -31,7 +31,7 @@ extern iptr qbn_opcode_arg_counts;
 extern signed char current_region;
 extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
-extern signed char D_00196298;
+extern signed char quest_time_passed;
 extern signed char night_sky_loaded;
 extern iptr quest_debug_object;
 extern struct quest *current_quest;
@@ -595,7 +595,7 @@ void quest_run_opcodes(struct quest *quest)
                         quest->text_file = (short)op->args[3].value;
                         break;
                     }
-                    if (i != 9 && faction_find(D_0017A120[i])->reputation >= op->args[2].value) {
+                    if (i != 9 && faction_find(quest_reputation_factions[i])->reputation >= op->args[2].value) {
                         text_delta++;
                     }
                     quest->text_file += (short)op->args[3].value;
@@ -642,10 +642,10 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 75:
                 if (quest_arg_state(op, 0) != 0) {
-                    D_00195984[0] = (iptr)op->args[1].record;
-                    D_00195984[1] = (iptr)op->args[2].record;
-                    D_00195984[2] = (iptr)op->args[3].record;
-                    D_00195984[3] = (iptr)op->args[4].record;
+                    quest_passed_items[0] = (iptr)op->args[1].record;
+                    quest_passed_items[1] = (iptr)op->args[2].record;
+                    quest_passed_items[2] = (iptr)op->args[3].record;
+                    quest_passed_items[3] = (iptr)op->args[4].record;
                 }
                 break;
             case 76:
@@ -663,8 +663,8 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 79:
                 if (quest_arg_state(op, 0) == 0) {
-                    if (D_00196298 != 0) {
-                        D_00196298 = 0;
+                    if (quest_time_passed != 0) {
+                        quest_time_passed = 0;
                         faction = faction_find((short)op->args[1].value);
                         if (faction->reputation >= op->args[2].value) {
                             quest_set_arg_state(quest, op, 0, 1);
@@ -723,7 +723,7 @@ void quest_run_opcodes(struct quest *quest)
                 }
             }
         }
-        D_00195984[0] = (D_00195984[1] = (D_00195984[2] = (D_00195984[3] = 0)));
+        quest_passed_items[0] = (quest_passed_items[1] = (quest_passed_items[2] = (quest_passed_items[3] = 0)));
         if (ended == 0) quest_timers_update(quest);
         if (quest_reward_container == 0 || quest_reward_container->children == 0 || ((int)(unsigned char)game_mode) == 4) {
             return;
@@ -902,7 +902,7 @@ void quest_relink_after_load(struct quest *quest)
     for (i = 0; quest->section_counts[4] > i; i++, qbn_place++) {
         if (qbn_place->object != 0) {
             qbn_place->object = (struct record *)object_find_by_id(nonworld_root, (iptr)qbn_place->object);
-            if (qbn_place->object == 0) fatal_error(D_001708ED);
+            if (qbn_place->object == 0) fatal_error(str_empty_4);
         }
     }
     qbn_item = (struct qbn_item *)((iptr)quest + quest->section_offsets[0]);

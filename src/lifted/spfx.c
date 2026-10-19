@@ -25,7 +25,7 @@ extern iptr text_feel_somewhat_bad;
 extern iptr text_spell_failed;
 extern signed char undead_daedra_ids[];
 extern char spell_resist_flags[];
-extern int D_0018DDD8;
+extern int career_resist_bonus;
 extern char saved_positions[];
 extern int spfx_popup_hold;
 extern struct record *creature_list[];
@@ -793,7 +793,7 @@ int spfx_resist_roll(int element, int element_bit, struct character *target, str
         if ((target_class->resistance_flags & element_bit) != 0) chance += chance >> 1;
     }
     chance += modifier;
-    chance += D_0018DDD8;
+    chance += career_resist_bonus;
     if (element == 1 && target->race == 2) chance += 30;
     if (element == 4 && target->race == 0) chance += 30;
     if (chance < 5) {

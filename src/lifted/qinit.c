@@ -9,7 +9,7 @@ extern char str_qinit_c[];
 extern char quest_object_serial[];
 extern short *item_group_templates[];
 extern signed char ui_mode_flags;
-extern iptr D_00195984[4];
+extern iptr quest_passed_items[4];
 extern struct record *nonworld_root;
 extern struct record *quest_root;
 extern struct record *camera_object;
@@ -194,7 +194,7 @@ int quest_init_resources(struct quest *quest)
     qbn_item = (struct qbn_item *)((char *)quest + quest->section_offsets[0]);
     for (i = 0; quest->section_counts[0] > i; i++, qbn_item++) {
         if ((qbn_item->flags & 2) == 0 && qbn_item->group == 100) {
-            mc_memcpy(qbn_item, (void *)D_00195984[qbn_item->index], REC_SIZEOF(struct qbn_item), str_qinit_c, 660, 4);
+            mc_memcpy(qbn_item, (void *)quest_passed_items[qbn_item->index], REC_SIZEOF(struct qbn_item), str_qinit_c, 660, 4);
         } else {
             qbn_item->object = 0;
             if (quest_init_item(qbn_item) == 0) return 0;

@@ -9,12 +9,12 @@ extern unsigned char str_nwlsbm[];
 extern signed char text_buffer[];
 extern struct record *location_object;
 extern char *scratch_buffer;
-extern unsigned char D_001962A1;
+extern unsigned char dungeon_block_special;
 extern int blocks_bsa;
-extern struct record *D_001995D4[2][2];
+extern struct record *block_quarters[2][2];
 extern char *rdb_data;
-extern int D_001995F8;
-extern int D_001995FC;
+extern int rdb_light_level;
+extern int rdb_water_level;
 extern struct rdb_file *rdb_loaded_file;
 extern struct dungeon_block *rdb_dungeon_block;
 extern int rdb_object_id_count;
@@ -41,17 +41,17 @@ void dungeon_load_rdb_block(struct dungeon_block *block)
     mc_sprintf(((char *)text_buffer), str_rdb, str_nwlsbm[block->index], block->number);
     record = archive_find_record(blocks_bsa, ((char *)text_buffer), 13);
     archive_read_record(blocks_bsa, record, rdb_data);
-    D_001995F8 = 16;
-    D_001995FC = 10000;
-    D_001962A1 = 0;
+    rdb_light_level = 16;
+    rdb_water_level = 10000;
+    dungeon_block_special = 0;
     rdb_object_id_count = 0;
     rdb_loaded_file = (struct rdb_file *)rdb_data;
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
-            D_001995D4[j][i] = object_create_in_block(location_object, 47, 0, 0, i * rdb_loaded_file->width + j);
-            D_001995D4[j][i]->image = block->number;
-            D_001995D4[j][i]->x = location_object->x + (j << 10) + (block->x << 11);
-            D_001995D4[j][i]->z = location_object->z + (i << 10) + (block->z << 11);
+            block_quarters[j][i] = object_create_in_block(location_object, 47, 0, 0, i * rdb_loaded_file->width + j);
+            block_quarters[j][i]->image = block->number;
+            block_quarters[j][i]->x = location_object->x + (j << 10) + (block->x << 11);
+            block_quarters[j][i]->z = location_object->z + (i << 10) + (block->z << 11);
         }
     }
     list_offsets = (int *)(rdb_loaded_file->object_root_offset + rdb_data);
@@ -61,7 +61,7 @@ void dungeon_load_rdb_block(struct dungeon_block *block)
                 continue;
             xn_tex_cache_begin_frame();
             object_list = (struct rdb_object *)(list_offsets[i * rdb_loaded_file->width + j] + rdb_data);
-            rdb_create_objects(D_001995D4[j][i], object_list, i * rdb_loaded_file->width + j);
+            rdb_create_objects(block_quarters[j][i], object_list, i * rdb_loaded_file->width + j);
         }
     }
     for (i = 0; i < 2; i++) {
@@ -69,17 +69,17 @@ void dungeon_load_rdb_block(struct dungeon_block *block)
             if (list_offsets[i * rdb_loaded_file->width + j] <= 0)
                 continue;
             object_list = (struct rdb_object *)(list_offsets[i * rdb_loaded_file->width + j] + rdb_data);
-            rdb_link_actions(D_001995D4[j][i], object_list, i * rdb_loaded_file->width + j);
-            D_001995D4[j][i]->light_level = D_001995F8;
-            D_001995D4[j][i]->water_level = D_001995FC;
-            D_001995D4[j][i]->pad13 = D_001962A1;
+            rdb_link_actions(block_quarters[j][i], object_list, i * rdb_loaded_file->width + j);
+            block_quarters[j][i]->light_level = rdb_light_level;
+            block_quarters[j][i]->water_level = rdb_water_level;
+            block_quarters[j][i]->pad13 = dungeon_block_special;
         }
     }
-    rdi_object = object_create_in_block(D_001995D4[0][0], 60, 512, 0, 0);
+    rdi_object = object_create_in_block(block_quarters[0][0], 60, 512, 0, 0);
     mc_set_location(107, str_fs2df_c);
     mc_sprintf(((char *)text_buffer), str_rdi, str_nwlsbm[block->index], block->number);
     record = archive_find_record(blocks_bsa, ((char *)text_buffer), 13);
     archive_read_record(blocks_bsa, record, RECORD_DATA(rdi_object));
-    rdi_object->x = D_001995D4[0][0]->x;
-    rdi_object->z = D_001995D4[0][0]->z;
+    rdi_object->x = block_quarters[0][0]->x;
+    rdi_object->z = block_quarters[0][0]->z;
 }

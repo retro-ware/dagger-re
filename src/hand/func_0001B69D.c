@@ -8,12 +8,12 @@ extern char str_faction_txt[];
 extern char str_error_reading_faction_file[];
 extern char str_faction_c[];
 extern char str_invalid_command_in_line[];
-extern unsigned char D_00178630[];
+extern unsigned char char_class_table[];
 extern struct cmd faction_keywords[];
 extern signed char text_buffer[];
 extern int faction_count;
 extern struct faction *factions;
-extern unsigned char D_00196732;
+extern unsigned char faction_flat_index;
 extern void faction_link_relations(struct faction *);
 extern void faction_add_record(struct faction *, int, struct faction *);
 extern void fatal_error(char *);
@@ -43,7 +43,7 @@ void faction_load_file(void)
     ally_count = 0;
     indent = 0;
     prev = 0;
-    D_00196732 = 0;
+    faction_flat_index = 0;
     file = disk_open_data(str_faction_txt);
     if (file < 1)
         fatal_error(str_error_reading_faction_file);
@@ -89,7 +89,7 @@ void faction_load_file(void)
             have_record = 1;
             text++;
             parsed.id = atoi(text);
-            while (D_00178630[(unsigned char)(*text + 1)] & 32)
+            while (char_class_table[(unsigned char)(*text + 1)] & 32)
                 text++;
             break;
         case ';':

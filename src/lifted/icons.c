@@ -39,7 +39,7 @@ extern signed char mouse_buttons_prev;
 extern signed char player_ailment_flags;
 extern iptr magic_items_saved_screen;
 extern signed char hud_pressed_button;
-extern signed char D_00199D71;
+extern signed char player_under_spell;
 extern short steer_key_region;
 extern struct picklist shared_picklist;
 extern struct record *inv_selected_item;
@@ -277,7 +277,7 @@ int hud_update(void)
 int hud_portrait_overlay_index(void)
 {
     if (player_character->health < (player_character->max_health / 10)) return 2;
-    if (D_00199D71 != 0) return 0;
+    if (player_under_spell != 0) return 0;
     if (((int)(unsigned char)(player_ailment_flags & 1)) != 0) return 3;
     if (((int)(unsigned char)(player_ailment_flags & 2)) != 0) return 1;
     return -1;

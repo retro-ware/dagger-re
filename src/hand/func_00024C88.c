@@ -7,12 +7,12 @@ extern char str_career_c[];        /* __FILE__ */
 extern char str_class_cfg_2[];
 extern char str_n[];
 extern char str_n_2[];
-extern unsigned char D_00178630[];   /* _IsTable */
+extern unsigned char char_class_table[];   /* _IsTable */
 extern int bio_modifiers;
-extern int D_0018DDD8;
-extern int D_0018DDDC;
-extern int D_0018DDE0;
-extern int D_0018DDE4;
+extern int career_resist_bonus;
+extern int career_to_hit_penalty;
+extern int career_poison_resist;
+extern int career_fatigue_flag;
 extern struct region regions[];
 extern signed char text_buffer[];
 extern int scratch_190be4[];
@@ -67,13 +67,13 @@ unsigned char *career_answer_effect(unsigned char *text)
     else if (*(unsigned short *)text == 0x4452)
         bio_modifiers += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x524D)
-        D_0018DDD8 += atoi(career_skip_word(text));
+        career_resist_bonus += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x4854)
-        D_0018DDDC += atoi(career_skip_word(text));
+        career_to_hit_penalty += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x5052)
-        D_0018DDE0 += atoi(career_skip_word(text));
+        career_poison_resist += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x5446)
-        D_0018DDE4 += atoi(career_skip_word(text));
+        career_fatigue_flag += atoi(career_skip_word(text));
     else if (*(unsigned short *)text == 0x4541 || *(unsigned short *)text == 0x4641 || *(unsigned short *)text == 0x4F41) {
         kind = text[1];
         person = (struct character *)(big_buffer + 70000);
@@ -125,12 +125,12 @@ unsigned char *career_answer_effect(unsigned char *text)
         scratch_190be4[scratch_190cac + 12] = atoi(text + 1);
     else if (*text == '?')
         scratch_190be4[scratch_190cac + 24] = atoi(text + 1);
-    else if (D_00178630[(unsigned char)(*text + 1)] & 0x20) {
+    else if (char_class_table[(unsigned char)(*text + 1)] & 0x20) {
         number = atoi(text);
         if (number >= 35)
             number = 0;
         player_character->skills[number].value += atoi(career_skip_word(text));
-    } else if (*text == 'r' && D_00178630[(unsigned char)(text[1] + 1)] & 0x20) {
+    } else if (*text == 'r' && char_class_table[(unsigned char)(text[1] + 1)] & 0x20) {
         number = atoi(text + 1);
         player_character->reputation[number] += atoi(career_skip_word(text));
     }

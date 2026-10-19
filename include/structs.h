@@ -58,7 +58,7 @@ struct vec3 {
 };                                  /* +0x0C */
 RECORD_SIZE(vec3, 12);
 
-/* a step on the ground by heading quadrant (D_0017B657[4], indexed by yaw >> 9: the pedestrians'
+/* a step on the ground by heading quadrant (pedestrian_step_table[4], indexed by yaw >> 9: the pedestrians'
  * look-ahead, pedestrian_can_stand_at) */
 struct xz_step {
     short dx;                       /* +0x00 */

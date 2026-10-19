@@ -45,7 +45,7 @@ extern signed char game_mode;
 extern signed char crime_current;
 extern signed char is_daytime;
 extern signed char player_ailment_flags;
-extern signed char D_00196298;
+extern signed char quest_time_passed;
 extern signed char D_001962A4;
 extern signed char D_001962A5;
 extern signed char quests_suspended;
@@ -257,7 +257,7 @@ void time_pass_minutes(int minutes)
         frame_checkpoint = 2029;
         if (D_001962A4 == 0) disease_special_infection_tick();
         spfx_expire_created_items();
-        D_00196298 = 1;
+        quest_time_passed = 1;
         frame_checkpoint = 2030;
     }
 }

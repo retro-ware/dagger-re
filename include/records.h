@@ -657,7 +657,7 @@ struct logbook {
 };                                  /* +0xBC0 */
 RECORD_SIZE(logbook, 3008);
 
-/* the data of a 3D object (types 6 models, 32 doors; also D_001A945E for arrows in flight):
+/* the data of a 3D object (types 6 models, 32 doors; also model_instance_scratch for arrows in flight):
  * XnGine's model instance, which object_draw_cb fills and xn_model_submit draws. It is the
  * engine's struct xn_model_handle (58 bytes, 70 natively), field for field; the objects'
  * data is 4 bytes more (MODEL_INSTANCE_DATA_SIZE) */

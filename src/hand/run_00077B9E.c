@@ -27,7 +27,7 @@ extern unsigned short building_music_seed;
 extern char in_knightly_order_hall;
 extern unsigned char current_region;
 extern char is_daytime;
-extern char D_001962A1;
+extern char dungeon_block_special;
 extern char music_uses_fm;
 extern char **music_court;
 extern char **music_guild;
@@ -134,7 +134,7 @@ void music_choose_song(void)
         return;
     seed = rand();
     if (player_environment == 3) {
-        if (D_001962A1) {
+        if (dungeon_block_special) {
             music_play(music_general[10]);
         } else {
             p = music_dungeon_song();

@@ -3,7 +3,7 @@ extern char str_text_c[];
 extern char str_qrc[];
 extern signed char text_buffer[];
 extern char qrc_name[];
-extern char D_001910EC[];
+extern char qrc_loaded_name[];
 extern int text_rsc_file;
 extern char *text_rsc_load(short, unsigned short, short);
 extern int disk_open_data(char *);
@@ -17,7 +17,7 @@ char *text_qrc_load(char *name, short message_id, short unused, short width)
 
     saved_file = text_rsc_file;
     mc_memcpy(qrc_name, name, 8, str_text_c, 568, 2048);
-    *D_001910EC = 0;
+    *qrc_loaded_name = 0;
     mc_set_location(570, str_text_c);
     mc_sprintf(((char *)text_buffer), str_qrc, qrc_name);
     if ((text_rsc_file = disk_open_data(((char *)text_buffer))) > 0) {

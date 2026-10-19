@@ -11,9 +11,9 @@ extern short xn_cam_centre_x;
 extern short xn_cam_centre_y;
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_00153408;
-extern int D_0015340D;
-extern short D_00153411;
+extern signed char xn_helmet_active;
+extern int xn_helmet_pitch;
+extern short xn_helmet_yaw;
 extern char str_runspell_c[];
 extern char str_you_already_have_a_spell_loaded[];
 extern char str_you_have_no_spellbook[];
@@ -24,14 +24,14 @@ extern char str_spell_was_resisted[];
 extern short cast_anim_state;
 extern signed char spell_effect_school[];
 extern char spell_effect_settings[];
-extern iptr D_0018509B;
+extern iptr text_save_vs_spell;
 extern short spell_last_cast_id;
 extern char spell_missile_textures[];
 extern char spell_cast_sounds[];
 extern char spell_impact_sounds[];
 extern signed char magic_school_skills[];
 extern signed char spell_element_class_bits[];
-extern short D_00185CEC[];
+extern short spell_hud_icon_x[];
 extern struct record *creature_list[];
 extern int view_look_pitch;
 extern int view_look_yaw;
@@ -56,9 +56,9 @@ extern short spell_effect_slot;
 extern short spell_ready_cost;
 extern signed char cast_strike_spell;
 extern signed char cast_strike_creature_spell;
-extern struct spell *D_00199D64;
-extern int D_00199D6C;
-extern signed char D_00199D71;
+extern struct spell *spell_scratch;
+extern int spell_hud_icon_count;
+extern signed char player_under_spell;
 
 extern int collide_line_of_sight(struct record *, struct record *);
 extern int collide_creature_within(struct record *, iptr, int);
@@ -166,7 +166,7 @@ void cast_spell_on(struct record *spell, struct record *target, int no_save)
     if (no_save == 0) {
         percent = spell_resist_check(spell, &target);
         if (percent == 0) {
-            hud_message_add(D_0018509B);
+            hud_message_add(text_save_vs_spell);
             return;
         }
     } else {
@@ -421,9 +421,9 @@ void cast_fire_missile(struct record *missile)
         step.light->z = missile->z;
         step.light->angle_x = 0;
         step.light->yaw = 0;
-        if (D_00153408 != 0) {
-            missile->angle_x = ((camera_object->angle_x + ((((((int)(short)mouse_y) + 6) - ((int)(short)xn_cam_centre_y)) * 307) >> 8)) + D_0015340D) & 2047;
-            missile->yaw = (((((mouse_x + 6) - xn_cam_centre_x) * 2) + camera_object->yaw) + D_00153411) & 2047;
+        if (xn_helmet_active != 0) {
+            missile->angle_x = ((camera_object->angle_x + ((((((int)(short)mouse_y) + 6) - ((int)(short)xn_cam_centre_y)) * 307) >> 8)) + xn_helmet_pitch) & 2047;
+            missile->yaw = (((((mouse_x + 6) - xn_cam_centre_x) * 2) + camera_object->yaw) + xn_helmet_yaw) & 2047;
         } else {
             missile->angle_x = ((((((((int)(short)mouse_y) + 6) - ((int)(short)xn_cam_centre_y)) * 150) / 100) + camera_object->angle_x) + view_look_pitch) & 2047;
             missile->yaw = ((camera_object->yaw + ((((((int)(short)mouse_x) + 6) - ((int)(short)xn_cam_centre_x)) * 160) / 100)) + view_look_yaw) & 2047;
@@ -608,8 +608,8 @@ int spell_player_has_spell(unsigned char spell_id)
 void func_0005CA28(struct record *object)
 {
     if (object->type != 9) return;
-    if ((signed char)D_00199D64->id != (signed char)object->data.spell.id) return;
-    mc_strncpy((char *)((iptr)D_00199D64 + 47), object->data.spell.name, 25, str_runspell_c, 958);
+    if ((signed char)spell_scratch->id != (signed char)object->data.spell.id) return;
+    mc_strncpy((char *)((iptr)spell_scratch + 47), object->data.spell.name, 25, str_runspell_c, 958);
 }
 
 void spell_lookup_name(struct spell *spell)
@@ -623,7 +623,7 @@ void spell_lookup_name(struct spell *spell)
     }
     if (i >= 128) {
         spellbook = object_find_item(player_entity->children, 27, 0);
-        D_00199D64 = spell;
+        spell_scratch = spell;
         object_foreach(spellbook->children, func_0005CA28);
         return;
     }
@@ -646,10 +646,10 @@ void spell_hud_draw_icons(void)
     int columns;
     unsigned char *bios_ticks;
 
-    D_00199D6C = 0;
+    spell_hud_icon_count = 0;
     if (player_entity->children == 0) return;
     object = player_entity->children;
-    D_00199D71 = 1;
+    player_under_spell = 1;
     while (object != 0) {
         if (object->type == 9) {
             if ((iptr)object->caster != (iptr)player_entity) {
@@ -658,7 +658,7 @@ void spell_hud_draw_icons(void)
                 tmp = 0;
             }
             cast_by_other = tmp;
-            if (cast_by_other != 0) D_00199D71 = 1;
+            if (cast_by_other != 0) player_under_spell = 1;
             spell = &object->data.spell;
             expiring = 1;
             for (i = 0; i < 3; i++) {
@@ -672,9 +672,9 @@ void spell_hud_draw_icons(void)
             } else {
                 columns = 12;
             }
-            x = (int)(unsigned short)D_00185CEC[(D_00199D6C % columns)];
+            x = (int)(unsigned short)spell_hud_icon_x[(spell_hud_icon_count % columns)];
             if (((int)(unsigned short)(game_settings->view_flags & 1)) != 0) x += 35;
-            y = ((D_00199D6C / 12) * 24) + 16;
+            y = ((spell_hud_icon_count / 12) * 24) + 16;
             bios_ticks = (unsigned char *)DOS_LOW(0x46C);
             if ((expiring != 0 && ((struct bf8_3_1 *)bios_ticks)->f != 0) || expiring == 0) {
                 if (cast_by_other != 0) {
@@ -697,11 +697,11 @@ void spell_hud_draw_icons(void)
                 }
                 xn_draw_spell_icon(x, y, icon);
             }
-            D_00199D6C++;
+            spell_hud_icon_count++;
         }
         object = object->next;
     }
-    if (D_00199D6C != 0) return;
+    if (spell_hud_icon_count != 0) return;
     for (i = 0; i < 8; i++) {
         if (player_character->attributes[i] > player_character->base_attributes[i]) {
             player_character->attributes[i] = player_character->base_attributes[i];

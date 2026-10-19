@@ -26,8 +26,8 @@ extern char str_scrl00i0_gfx[];
 extern char str_scrl01i0_gfx[];
 extern char str_class_cfg_3[];
 extern unsigned char class_answer_kinds[][3];
-extern unsigned char D_00185284[];
-extern unsigned char D_0018528E[];
+extern unsigned char class_answer_shades[];
+extern unsigned char class_answer_palette_index[];
 extern unsigned char class_result_ids[];
 extern signed char text_buffer[];
 extern short scratch_190d68;
@@ -94,9 +94,9 @@ int class_questions_run(void)
                 sel = class_answer_kinds[scratch_190d68 - 1][sel];
                 if (class_answer_counts[sel] < 10)
                     class_answer_counts[sel]++;
-                rgb[2] = D_00185284[class_answer_counts[sel]] << 2;
+                rgb[2] = class_answer_shades[class_answer_counts[sel]] << 2;
                 class_question_answer_anim(sel);
-                xn_pal_set_range_8bit(rgb, D_0018528E[sel], 1);
+                xn_pal_set_range_8bit(rgb, class_answer_palette_index[sel], 1);
                 done = 1;
             }
             mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_question_c, 122, 4);

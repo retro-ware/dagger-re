@@ -6,7 +6,7 @@
 #include "clib.h"
 #include "doslow.h"
 
-extern int D_000C5404;
+extern int xn_model_angle_bits;
 extern int xn_sin_table[];
 extern int xn_cos_table[];
 extern int cfg_helmet;
@@ -14,7 +14,7 @@ extern char str_args_c[];
 extern char str_r[];
 extern char str_fmt_s_s_10[];
 extern char str_path[];
-extern char D_00176A9C[];
+extern char str_backslash[];
 extern char str_pathcd[];
 extern char str_controls[];
 extern char str_fadecolor[];
@@ -53,9 +53,9 @@ extern int mem_check_level;
 extern char scratch_190be4[];
 extern int scratch_190be8;
 extern int scratch_190bec;
-extern signed char D_001917E3[];
+extern signed char arena2_path_last[];
 extern char arena2_path[];
-extern signed char D_00191833[];
+extern signed char arena2_cd_path_last[];
 extern char arena2_cd_path[];
 extern char cfg_last_path[];
 extern signed char player_motion_flags;
@@ -71,7 +71,7 @@ extern int spell_cast_queue_count;
 extern int free_later_count;
 extern int cfg_magic_repair;
 extern signed char climate_weathers[];
-extern signed char D_001961AE;
+extern signed char world_extra_object;
 extern signed char cfg_user;
 extern signed char cfg_fade_colour;
 extern signed char current_climate;
@@ -97,7 +97,7 @@ extern signed char cheat_mode;
 extern signed char cfg_gender;
 extern signed char cfg_flags;
 extern signed char cfg_region;
-extern signed char D_001A949C;
+extern signed char model_variant_offset;
 extern signed char model_cache_flush_count;
 extern int object_heap_size;
 
@@ -143,15 +143,15 @@ void config_read(char *path)
             while (fprintf_2((void *)file, str_fmt_s_s_10, (iptr)key, (iptr)value) != (-1)) {
                 if (stricmp(key, str_path) == 0) {
                     mc_strncpy(arena2_path, value, 80, str_args_c, 70);
-                    if (((int)(unsigned char)D_001917E3[strlen(arena2_path)]) != 92) {
-                        func_000A1054(arena2_path, D_00176A9C, str_args_c, 72, 80);
+                    if (((int)(unsigned char)arena2_path_last[strlen(arena2_path)]) != 92) {
+                        func_000A1054(arena2_path, str_backslash, str_args_c, 72, 80);
                     }
                     mc_strncpy(cfg_last_path, value, 80, str_args_c, 73);
                     cfg_flags |= 1;
                 } else if (stricmp(key, str_pathcd) == 0) {
                     mc_strncpy(arena2_cd_path, value, 80, str_args_c, 78);
-                    if (((int)(unsigned char)D_00191833[strlen(arena2_cd_path)]) != 92) {
-                        func_000A1054(arena2_cd_path, D_00176A9C, str_args_c, 80, 80);
+                    if (((int)(unsigned char)arena2_cd_path_last[strlen(arena2_cd_path)]) != 92) {
+                        func_000A1054(arena2_cd_path, str_backslash, str_args_c, 80, 80);
                     }
                     mc_strncpy(cfg_last_path, value, 80, str_args_c, 81);
                     cfg_flags |= 1;
@@ -248,11 +248,11 @@ void world_draw_objects(void)
     struct record *children;
     uslot16 flags;
 
-    D_001A949C = climate_weathers[climate_category()];
+    model_variant_offset = climate_weathers[climate_category()];
     model_cache_flush_count = 0;
     free_later_count = 0;
     spell_cast_queue_count = 0;
-    if (D_001961AE != 0) object_draw_cb((struct record *)&D_001961AE);
+    if (world_extra_object != 0) object_draw_cb((struct record *)&world_extra_object);
     if (((int)player_environment) < 3) {
         if (((struct bf8_0_1 *)&player_motion_flags)->f == 0) {
             if ((player_character->conditions & 0x10) != 0) {
@@ -349,7 +349,7 @@ int automap_draw_object_cb(struct record *object)
     if (abs(object->y - scratch_190be8) > 700) return 0;
     if (xn_math_approx_dist2d(object->x, object->z, *(int *)scratch_190be4, scratch_190bec) > 2048) return 0;
     object->draw_handle = 0;
-    D_000C5404 = 0;
+    xn_model_angle_bits = 0;
     switch (object->type) {
     case 34:
         if (cfg_show_markers == 0) break;
@@ -362,14 +362,14 @@ int automap_draw_object_cb(struct record *object)
         flats = block->flats;
         for (i = 0; block->model_count > i; i++, model++) {
             if (abs(model->y - scratch_190be8) > 100) continue;
-            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)D_001A949C));
+            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)model_variant_offset));
             if (model->model != 0) xn_model_submit(&model->model, 0);
         }
     case 6:
     case 32:
         if (object->image2 == 0) break;
         instance = &object->data.instance;
-        instance->model = (char *)model_get(object->image2, object->image, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)D_001A949C));
+        instance->model = (char *)model_get(object->image2, object->image, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)model_variant_offset));
         if (instance->model != 0) {
             instance->x = object->x;
             instance->y = object->y;
@@ -383,7 +383,7 @@ int automap_draw_object_cb(struct record *object)
             } else if (object->link_flag != 255) {
                 xn_model_set_angles_yaw_offset(instance->angles, object->wait_state);
             } else {
-                if (object->image2 == 610 && object->image == 32) D_000C5404 = 3;
+                if (object->image2 == 610 && object->image == 32) xn_model_angle_bits = 3;
                 xn_model_compose_angles(instance->angles, object->angle_x, object->yaw + object->wait_state, object->angle_z);
             }
             xn_model_submit(instance, 0);
@@ -393,7 +393,7 @@ int automap_draw_object_cb(struct record *object)
         model = (struct block_model *)RECORD_DATA(object);
         for (i = 0; object->model_count > i; i++, model++) {
             if (abs(model->y - scratch_190be8) > 100) continue;
-            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)D_001A949C));
+            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)model_variant_offset));
             if (model->model != 0) xn_model_submit(&model->model, 0);
         }
     }

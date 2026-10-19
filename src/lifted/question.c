@@ -25,12 +25,12 @@ extern char *scratch_buffer;
 extern signed char mouse_buttons_prev;
 extern signed char class_question_answer_row[];
 extern char class_questions_asked[];
-extern signed char D_00199816;
-extern signed char D_00199817;
-extern signed char D_00199818;
+extern signed char class_answer_mark_1;
+extern signed char class_answer_mark_2;
+extern signed char class_answer_mark_3;
 extern signed char class_answer_counts;
-extern signed char D_0019981A;
-extern signed char D_0019981B;
+extern signed char class_answer_counts_b;
+extern signed char class_answer_counts_c;
 
 extern char *text_rsc_load(short, unsigned short, short);
 extern int pflc_play(iptr, iptr);
@@ -128,13 +128,13 @@ int class_question_get_answer(void)
     if (key_down_b != 0) return 2;
     if (key_down_c != 0) return 3;
     if (((int)(unsigned char)(mouse_buttons & 1)) != 0 && mouse_buttons_prev != mouse_buttons) {
-        if (class_question_answer_span((int)(short)((int)(unsigned char)D_00199816), (int)(short)((int)(unsigned char)D_00199817), &top, &bottom) != 0) {
+        if (class_question_answer_span((int)(short)((int)(unsigned char)class_answer_mark_1), (int)(short)((int)(unsigned char)class_answer_mark_2), &top, &bottom) != 0) {
             if (mouse_y > top && mouse_y < bottom) return 1;
         }
-        if (class_question_answer_span((int)(short)((int)(unsigned char)D_00199817), (int)(short)((int)(unsigned char)D_00199818), &top, &bottom) != 0) {
+        if (class_question_answer_span((int)(short)((int)(unsigned char)class_answer_mark_2), (int)(short)((int)(unsigned char)class_answer_mark_3), &top, &bottom) != 0) {
             if (mouse_y > top && mouse_y < bottom) return 2;
         }
-        if (class_question_answer_span((int)(short)((int)(unsigned char)D_00199818), (int)(short)(*(short *)scratch_190d66 + 48), &top, &bottom) != 0) {
+        if (class_question_answer_span((int)(short)((int)(unsigned char)class_answer_mark_3), (int)(short)(*(short *)scratch_190d66 + 48), &top, &bottom) != 0) {
             if (mouse_y > top && mouse_y < bottom) return 3;
         }
     }
@@ -169,7 +169,7 @@ int class_question_pick_class(void)
 
     disk_read_file(str_classes_dat, (iptr)scratch_buffer);
     *(iptr *)&entry = (iptr)scratch_buffer + 18;
-    answers = ((((int)(unsigned char)D_0019981B) << 16) | (((int)(unsigned char)D_0019981A) << 8)) | ((int)(unsigned char)class_answer_counts);
+    answers = ((((int)(unsigned char)class_answer_counts_c) << 16) | (((int)(unsigned char)class_answer_counts_b) << 8)) | ((int)(unsigned char)class_answer_counts);
     *(int *)&i = 0;
     for (; ((int)(short)i) < 48; (*(int *)&i)++) {
         if ((*(int *)(*(char **)&entry) & 16777215) == answers) return ((int)(short)i) >> 2;

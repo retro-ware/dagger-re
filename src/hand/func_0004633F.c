@@ -7,7 +7,7 @@
 struct macro { char name[5]; char *(*fn)(void); };   /* 9 bytes */
 extern char str_parse_c[];        /* __FILE__ */
 extern char str_invalid_parse_command[];
-extern unsigned char D_00178630[];   /* _IsTable */
+extern unsigned char char_class_table[];   /* _IsTable */
 extern struct macro macro_table[];     /* the 255 macros, by first letter (the data: tools/port_data.py) */
 extern struct macro *macro_letter_tables[];
 extern short macro_letter_counts[];
@@ -78,7 +78,7 @@ void parse_expand(unsigned char *src, char *out)
         } else {
             if (ch == '%') {
                 letter = *src;
-                if (D_00178630[(unsigned char)(letter + 1)] & 0xe0) {
+                if (char_class_table[(unsigned char)(letter + 1)] & 0xe0) {
                     letter += -97;
                     if (letter < 0)
                         letter = *src - 23;

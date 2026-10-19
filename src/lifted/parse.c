@@ -21,7 +21,7 @@ extern char str_lower[];
 extern char str_higher[];
 extern char str_unchanged[];
 extern char str_fmt_d_d_3[];
-extern signed char D_00178630[];
+extern signed char char_class_table[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
 extern iptr weight_fractions[];
@@ -143,7 +143,7 @@ extern short text_macro_n_text;
 extern signed char text_macro_imperial;
 extern signed char local_province;
 extern signed char current_region;
-extern signed char D_00196269;
+extern signed char previous_region;
 extern signed char sheet_selected_attribute;
 extern signed char text_macro_gender;
 extern signed char inv_weight_container_only;
@@ -1465,7 +1465,7 @@ iptr parse_faction_ruler_title(struct faction *faction)
 
 iptr macro_reg_previous_region(void)
 {
-    return (iptr)region_names[((int)(unsigned char)D_00196269)];
+    return (iptr)region_names[((int)(unsigned char)previous_region)];
 }
 
 iptr macro_rn_ruler_name(void)
@@ -1745,7 +1745,7 @@ int parse_read_number(signed char *text)
         src = text;
         dst = (signed char *)digits;
         length = 0;
-        while (*src != 0 && ((int)(unsigned char)(D_00178630[(int)(unsigned char)(*src + 1)] & 32)) != 0) {
+        while (*src != 0 && ((int)(unsigned char)(char_class_table[(int)(unsigned char)(*src + 1)] & 32)) != 0) {
             *dst = *src;
             length++;
             src++;

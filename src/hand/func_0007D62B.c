@@ -6,8 +6,8 @@ extern unsigned char msgbox_button_keys;
 extern unsigned char D_00196034;
 extern unsigned char msgbox_hotkey;
 extern unsigned char msgbox_button_ids;
-extern unsigned char D_00196090;
-extern unsigned char D_00196091;
+extern unsigned char msgbox_button_2;
+extern unsigned char msgbox_button_3;
 extern char D_00196271;
 extern void msgbox_show_rsc(int, int);
 extern void xn_mouse_poll_clamped(void);
@@ -23,7 +23,7 @@ void msgbox_choice_rsc(short text_id, short button_1, short button_2, short butt
     D_00196034 = key_2;
     msgbox_hotkey = key_3;
     msgbox_button_ids = button_1;
-    D_00196090 = button_2;
-    D_00196091 = button_3;
+    msgbox_button_2 = button_2;
+    msgbox_button_3 = button_3;
     msgbox_show_rsc(text_id, 5);
 }

@@ -22,7 +22,7 @@ extern short poison_days_min[];
 extern short poison_days_max[];
 extern signed char lycanthrope_attributes[];
 extern char bio_modifiers[];
-extern int D_0018DDE0;
+extern int career_poison_resist;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
 extern signed char trade_haggle_shown;
@@ -126,7 +126,7 @@ void poison_apply(struct record *target, int poison_id, int no_resist)
     target_char = &target->data.character;
     target_class = &target_char->career;
     if (target_char == player_character && (player_class->immunity_flags & 4) != 0) return;
-    if (no_resist == 0) if (spfx_resist_roll(2, 4, target_char, target_class, 4, D_0018DDE0) == 100) return;
+    if (no_resist == 0) if (spfx_resist_roll(2, 4, target_char, target_class, 4, career_poison_resist) == 100) return;
     if (target_char->level == 1) return;
     poison = object_create_child(target, 0, 47);
     poison->type = 11;

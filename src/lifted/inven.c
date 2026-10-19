@@ -105,7 +105,7 @@ extern int free_later_count;
 extern int player_death_timer;
 extern struct record *inv_opened_container;
 extern int cfg_magic_repair;
-extern short D_00195F2E;
+extern short msgbox_delay;
 extern char saved_player_object[];
 extern char trade_container[];
 extern signed char current_region;
@@ -903,7 +903,7 @@ void inv_use_item(void)
         return;
     }
     if (used != 0 || object->quest_id != 0) return;
-    D_00195F2E = 30;
+    msgbox_delay = 30;
     text_colour = 146;
     msgbox_show_string(text_cannot_use_this, 1);
 }

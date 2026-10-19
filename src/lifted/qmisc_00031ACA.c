@@ -7,7 +7,7 @@
 extern signed char text_colour;
 extern signed char ui_mode_flags;
 extern signed char misc_state_flags;
-extern short D_00195F2E;
+extern short msgbox_delay;
 
 extern void msgbox_show_quest_text(struct quest *, short, int);
 extern void msgbox_show_rsc(int, int);
@@ -17,7 +17,7 @@ void quest_show_message(struct quest *quest, int message)
 {
     text_colour = 144;
     ui_mode_flags &= 254;
-    D_00195F2E = 0;
+    msgbox_delay = 0;
     if (((int)(short)message) == (-1)) return;
     if ((((int)(short)message) & 32768) != 0) {
         msgbox_show_rsc((int)(short)((short)*(int *)&message & 32767), 1);

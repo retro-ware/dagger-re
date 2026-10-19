@@ -15,9 +15,9 @@ extern unsigned char game_mode_under_popup;
 extern signed char screen_active;
 extern signed char game_mode;
 extern struct rdb_object_id rdb_object_ids[];
-extern struct link *D_001995E4;
+extern struct link *rdb_chain_link;
 extern char *rdb_data;
-extern struct link *D_001995EC;
+extern struct link *rdb_current_link;
 extern struct rdb_flat *rdb_flat_resource;
 extern struct rdb_light *rdb_light_resource;
 extern struct rdb_action *rdb_action_resource;
@@ -140,51 +140,51 @@ void rdb_build_action_chain(int resource_type)
 
 void action_record_add(struct rdb_model *model, struct rdb_action *model_action, struct rdb_flat *flat, unsigned char action)
 {
-    D_001995EC = (D_001995E4 = &links[link_count++]);
-    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), str_fs2df_c, 447, 4);
-    D_001995EC->object_id = rdb_link_object_id;
+    rdb_current_link = (rdb_chain_link = &links[link_count++]);
+    mc_memset(rdb_current_link, 0, REC_SIZEOF(struct link), str_fs2df_c, 447, 4);
+    rdb_current_link->object_id = rdb_link_object_id;
     if (model_action != 0) {
-        D_001995EC->trigger = model->trigger_flag_starting_lock;
-        D_001995EC->param = model->sound_index;
-        D_001995EC->axis = model_action->axis;
-        D_001995EC->duration = model_action->duration;
-        D_001995EC->magnitude = model_action->magnitude;
-        D_001995EC->action = model_action->action;
+        rdb_current_link->trigger = model->trigger_flag_starting_lock;
+        rdb_current_link->param = model->sound_index;
+        rdb_current_link->axis = model_action->axis;
+        rdb_current_link->duration = model_action->duration;
+        rdb_current_link->magnitude = model_action->magnitude;
+        rdb_current_link->action = model_action->action;
     } else if (flat != 0) {
-        D_001995EC->trigger = flat->flags;
-        D_001995EC->param = flat->sound_index;
-        D_001995EC->axis = flat->magnitude;
-        D_001995EC->action = action;
+        rdb_current_link->trigger = flat->flags;
+        rdb_current_link->param = flat->sound_index;
+        rdb_current_link->axis = flat->magnitude;
+        rdb_current_link->action = action;
     } else {
-        D_001995EC->action = action;
+        rdb_current_link->action = action;
     }
-    if (D_001995EC->action > 1 && D_001995EC->action < 8) action_axis_to_translation(D_001995EC);
-    D_001995EC->chain_count = 0;
+    if (rdb_current_link->action > 1 && rdb_current_link->action < 8) action_axis_to_translation(rdb_current_link);
+    rdb_current_link->chain_count = 0;
 }
 
 void action_record_add_chained(struct rdb_model *model, struct rdb_action *model_action, struct rdb_flat *flat, unsigned char action)
 {
-    D_001995E4->chain_count++;
-    D_001995EC = &links[link_count++];
-    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), str_fs2df_c, 490, 4);
-    D_001995EC->object_id = rdb_link_object_id;
+    rdb_chain_link->chain_count++;
+    rdb_current_link = &links[link_count++];
+    mc_memset(rdb_current_link, 0, REC_SIZEOF(struct link), str_fs2df_c, 490, 4);
+    rdb_current_link->object_id = rdb_link_object_id;
     if (model_action != 0) {
-        D_001995EC->trigger = model->trigger_flag_starting_lock;
-        D_001995EC->param = model->sound_index;
-        D_001995EC->axis = model_action->axis;
-        D_001995EC->duration = model_action->duration;
-        D_001995EC->magnitude = model_action->magnitude;
-        D_001995EC->action = model_action->action;
+        rdb_current_link->trigger = model->trigger_flag_starting_lock;
+        rdb_current_link->param = model->sound_index;
+        rdb_current_link->axis = model_action->axis;
+        rdb_current_link->duration = model_action->duration;
+        rdb_current_link->magnitude = model_action->magnitude;
+        rdb_current_link->action = model_action->action;
     } else if (flat != 0) {
-        D_001995EC->trigger = flat->flags;
-        D_001995EC->param = flat->sound_index;
-        D_001995EC->axis = flat->magnitude;
-        D_001995EC->action = action;
+        rdb_current_link->trigger = flat->flags;
+        rdb_current_link->param = flat->sound_index;
+        rdb_current_link->axis = flat->magnitude;
+        rdb_current_link->action = action;
     } else {
-        D_001995EC->action = action;
+        rdb_current_link->action = action;
     }
-    if (D_001995EC->action <= 1 || D_001995EC->action >= 8) return;
-    action_axis_to_translation(D_001995EC);
+    if (rdb_current_link->action <= 1 || rdb_current_link->action >= 8) return;
+    action_axis_to_translation(rdb_current_link);
 }
 
 void action_axis_to_translation(struct link *link)

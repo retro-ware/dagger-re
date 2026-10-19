@@ -31,7 +31,7 @@ extern char monster_category[];
 extern iptr text_backstab;
 extern signed char body_part_armor_slots[];
 extern char weapon_proficiency_bits[];
-extern int D_0018DDDC;
+extern int career_to_hit_penalty;
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern char D_00190B44[];
@@ -434,7 +434,7 @@ int damage_roll_to_hit(struct character *attacker, struct character *target, int
         if (((int)(unsigned short)(career->flags & 4)) != 0) chance += -5;
     }
     if (attacker == player_character) chance += (int)(short)swing_to_hit;
-    if (target == player_character) chance -= D_0018DDDC;
+    if (target == player_character) chance -= career_to_hit_penalty;
     chance += material_bonus;
     chance += (attacker->attributes[ATTR_AGI] - target->attributes[ATTR_AGI]) / 10;
     chance += (attacker->attributes[ATTR_LUC] - target->attributes[ATTR_LUC]) / 10;

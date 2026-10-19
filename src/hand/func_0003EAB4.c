@@ -8,7 +8,7 @@ extern char str_qrc[];
 extern short msgbox_wrap_width;
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
-extern char D_00190FEC;
+extern char qrc_quest_text_flag;
 extern int text_rsc_file;
 extern iptr msgbox_next_page;
 extern struct quest *current_quest;
@@ -32,7 +32,7 @@ int msgbox_render_quest_text(struct quest *quest, short message_id, char **image
     } else {
         mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, str_text_c, 659, 2048);
     }
-    D_00190FEC = 0;
+    qrc_quest_text_flag = 0;
     mc_set_location(662, str_text_c);
     mc_sprintf(((char *)text_buffer), str_qrc, ((char *)text_rsc_buffer));
     if ((text_rsc_file = disk_open_data(((char *)text_buffer))) > 0) {

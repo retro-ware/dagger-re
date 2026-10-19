@@ -24,9 +24,9 @@ extern char str_mpop_rci[];
 extern unsigned char player_environment;
 extern int guards_timer;
 extern signed char anim_mirror_facing[];
-extern short D_0017B64F[];
-extern struct xz_step D_0017B657[];
-extern signed char D_0017B6CD;
+extern short pedestrian_yaws[];
+extern struct xz_step pedestrian_step_table[];
+extern signed char guard_team;
 extern struct record *creature_list[];
 extern signed char game_state_flags;
 extern signed char ui_mode_flags;
@@ -43,15 +43,15 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int realtime_clock_tick;
 extern signed char climate_weathers[];
-extern short D_00195F2E;
+extern short msgbox_delay;
 extern short D_00195F34;
 extern unsigned short text_cursor_y;
 extern signed char msgbox_button_keys;
 extern signed char D_00196034;
 extern signed char msgbox_hotkey;
 extern signed char msgbox_button_ids;
-extern signed char D_00196090;
-extern signed char D_00196091;
+extern signed char msgbox_button_2;
+extern signed char msgbox_button_3;
 extern signed char current_region;
 extern signed char msgbox_kind;
 extern unsigned char D_00196271;
@@ -324,9 +324,9 @@ void msgbox_update(void)
         xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), 100 - (((int)(short)msgbox_h) >> 1), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
     }
     if (((int)(unsigned char)msgbox_kind) == 1) {
-        if (D_00195F2E != 0) {
-            D_00195F2E--;
-            if (D_00195F2E == 0) goto L3F47F;
+        if (msgbox_delay != 0) {
+            msgbox_delay--;
+            if (msgbox_delay == 0) goto L3F47F;
         }
         if (((struct bf8_0_1 *)&ui_mode_flags)->f != 0 && ((int)(unsigned char)(mouse_buttons & 3)) == 0) {
         } else if (key_pressed_once(28) == 0) {
@@ -399,23 +399,23 @@ void msgbox_draw_buttons(short y)
     } else {
         text_cursor_y = y;
     }
-    if (D_00196090 == 0) {
+    if (msgbox_button_2 == 0) {
         xn_draw_image(144, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_ids) - 1) << 9)));
         return;
     }
-    if (D_00196091 == 0) {
+    if (msgbox_button_3 == 0) {
         xn_draw_image(112, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_ids) - 1) << 9)));
-        xn_draw_image(176, y, 32, 16, (buttons_rci + ((((int)(unsigned char)D_00196090) - 1) << 9)));
+        xn_draw_image(176, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_2) - 1) << 9)));
         return;
     }
     xn_draw_image(96, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_ids) - 1) << 9)));
-    xn_draw_image(144, y, 32, 16, (buttons_rci + ((((int)(unsigned char)D_00196090) - 1) << 9)));
-    xn_draw_image(192, y, 32, 16, (buttons_rci + ((((int)(unsigned char)D_00196091) - 1) << 9)));
+    xn_draw_image(144, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_2) - 1) << 9)));
+    xn_draw_image(192, y, 32, 16, (buttons_rci + ((((int)(unsigned char)msgbox_button_3) - 1) << 9)));
 }
 
 int msgbox_button_at(short x, short y)
 {
-    if (D_00196090 == 0) {
+    if (msgbox_button_2 == 0) {
         if (msgbox_button_keys != 0 && key_down[(int)(unsigned char)msgbox_button_keys] != 0) {
             return 1;
         }
@@ -424,7 +424,7 @@ int msgbox_button_at(short x, short y)
         if (mouse_buttons != 0 && x > 144 && y > text_cursor_y && x < 176 && y < text_cursor_y + 16) {
             return 1;
         }
-    } else if (D_00196091 == 0) {
+    } else if (msgbox_button_3 == 0) {
         if (msgbox_button_keys != 0 && key_down[(int)(unsigned char)msgbox_button_keys] != 0) {
             return 1;
         }
@@ -534,7 +534,7 @@ int pedestrian_walk(struct record *pedestrian, int player_distance)
         tile_dz = abs((pedestrian->z & 63) - 32);
         if (tile_dx < 8 && tile_dz < 8) {
             if ((rand() & 255) != 0) {
-                can_stand = pedestrian_can_stand_at((int)(pedestrian->x + (D_0017B657[pedestrian->yaw >> 9].dx)), (D_0017B657[pedestrian->yaw >> 9].dz) + pedestrian->z);
+                can_stand = pedestrian_can_stand_at((int)(pedestrian->x + (pedestrian_step_table[pedestrian->yaw >> 9].dx)), (pedestrian_step_table[pedestrian->yaw >> 9].dz) + pedestrian->z);
             } else {
                 can_stand = 0;
             }
@@ -543,11 +543,11 @@ int pedestrian_walk(struct record *pedestrian, int player_distance)
         }
         turn_count = 0;
         facing = pedestrian->yaw;
-        if (can_stand == 0) pedestrian->yaw = D_0017B64F[(rand() % 4)];
+        if (can_stand == 0) pedestrian->yaw = pedestrian_yaws[(rand() % 4)];
         while (can_stand == 0) {
             pedestrian->yaw = (pedestrian->yaw + 512) % 2048;
             xn_math_yaw_offset_xz(pedestrian->yaw, (frame_ticks * 19200) / 1000, &dx, &dz);
-            can_stand = pedestrian_can_stand_at((D_0017B657[pedestrian->yaw >> 9].dx) + pedestrian->x, (D_0017B657[pedestrian->yaw >> 9].dz) + pedestrian->z);
+            can_stand = pedestrian_can_stand_at((pedestrian_step_table[pedestrian->yaw >> 9].dx) + pedestrian->x, (pedestrian_step_table[pedestrian->yaw >> 9].dz) + pedestrian->z);
             if (turn_count++ > 8) {
                 pedestrian->yaw = facing;
                 return 0;
@@ -802,7 +802,7 @@ void guard_spawn(struct record *pedestrian)
     guard->flags |= 1;
     guard->id = object_new_id(((unsigned)location_object->id) >> 16);
     monster_init(guard, 146);
-    guard->data.character.team = D_0017B6CD;
+    guard->data.character.team = guard_team;
     if (pedestrian != 0) {
         guard->x = pedestrian->x;
         guard->y = pedestrian->y;

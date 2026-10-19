@@ -13,7 +13,7 @@ extern struct region regions[];
 extern struct record *player_object;
 extern struct region *current_region_data;
 extern signed char current_region;
-extern signed char D_00196269;
+extern signed char previous_region;
 extern signed char current_climate;
 extern signed char climate_is_ocean;
 extern iptr politic_pak;
@@ -42,7 +42,7 @@ void region_enter(unsigned char old_region, unsigned char region)
 {
     current_region = region;
     current_region_data = &regions[(unsigned char)current_region];
-    D_00196269 = current_region;
+    previous_region = current_region;
     region_unload();
     maploads_enter_region((int)(unsigned char)region);
 }

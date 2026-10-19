@@ -96,7 +96,7 @@ extern signed char in_dungeon_water;
 extern signed char crime_current;
 extern signed char monster_summon_anywhere;
 extern signed char player_swimming;
-extern signed char D_001962A1;
+extern signed char dungeon_block_special;
 extern signed char inv_wagon_reached;
 extern int daylight;
 extern signed char music_uses_fm;
@@ -1227,7 +1227,7 @@ void container_items_to_player(struct record *object)
 
 void ambient_dungeon_sounds(void)
 {
-    if (((int)player_environment) != 3 || D_001962A1 != 0) {
+    if (((int)player_environment) != 3 || dungeon_block_special != 0) {
         return;
     }
     if (rand() >= 20) return;

@@ -8,7 +8,7 @@ extern int str_j[];
 extern struct region regions[];
 extern int shared_scratch;
 extern char current_region;
-extern char D_00196269;
+extern char previous_region;
 extern char D_001962A5;
 extern int faction_count;
 extern struct faction *factions;
@@ -345,5 +345,5 @@ void faction_politics_update(int mode)
     rumor_add_faction(0, 0, 100, 0, 1455);
     rumor_add_faction(0, 0, 100, 0, 1456);
     rumor_file_close();
-    D_00196269 = current_region;
+    previous_region = current_region;
 }

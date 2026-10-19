@@ -12,15 +12,15 @@ extern char str_error_reading_from_disk_2[];
 extern char str_unable_to_add_bnode[];
 extern char str_invalid_tree_data[];
 extern unsigned char player_environment;
-extern short D_00187CB4[];
-extern char D_00187D30[];
+extern short region_person_factions[];
+extern char region_building_factions[];
 extern signed char loot_pile_images[];
-extern char D_00187DC0[];
-extern char D_00187DE8[];
-extern char D_00187EC8[];
+extern char building_loot_pile_images[];
+extern char clutter_flat_tables[];
+extern char dungeon_clutter_flats[];
 extern signed char text_buffer[];
 extern char scratch_190de4[];
-extern char D_001910AC[];
+extern char sound_record_name[];
 extern char frame_counter[];
 extern int view_look_yaw;
 extern struct building *current_building;
@@ -46,12 +46,12 @@ extern struct sound_cache_entry sound_cache[];
 extern int model_heap_free;
 extern struct model_node *model_cache_root;
 extern int sound_cache_bytes;
-extern int D_001A9438;
+extern int rmb_last_object_id;
 extern int sound_last_id;
 extern int arch3d_bsa;
 extern int dagger_snd;
 extern char model_heap[];
-extern signed char D_001A949C;
+extern signed char model_variant_offset;
 extern signed char model_cache_flush_count;
 
 extern int archive_find_record(int, char *, int);
@@ -126,7 +126,7 @@ struct record *rmb_add_subrecord(struct record *parent)
     object->yaw = *(short *)rmb_origin_yaw;
     object->pad13 = 32768;
     object->id = location_object->id + ((int)(unsigned short)(current_location->object_counter)++);
-    D_001A9438 = object->id;
+    rmb_last_object_id = object->id;
     block = &object->data.block;
     PORT_COPY_BLOCK(block, rmb_record_ptr, size, D_00176C20, 803);
     block->models = (struct block_model *)((iptr)block + REC_SIZEOF(struct block));
@@ -141,7 +141,7 @@ struct record *rmb_add_subrecord(struct record *parent)
         model->z += rmb_origin_z;
         model->model = 0;
         if (model->y > 0 && model->id > 10) {
-            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)D_001A949C));
+            model->model = (char *)model_get(model->id, model->variant, (((int)(unsigned char)current_climate) << 2) + ((int)(unsigned char)model_variant_offset));
             model->y = (-model->y) - (xn_model_max_y(model->model) >> 8);
         }
         model->y += rmb_origin_y;
@@ -185,7 +185,7 @@ void rmb_set_building_factions(struct record *object)
     building = &current_location->buildings[object->image];
     if (building->type != 16) {
         if (building->faction_id == 0) {
-            building->faction_id = *(short *)(D_00187D30 + (((int)(unsigned char)current_region) * 2));
+            building->faction_id = *(short *)(region_building_factions + (((int)(unsigned char)current_region) * 2));
         }
         return;
     }
@@ -194,8 +194,8 @@ void rmb_set_building_factions(struct record *object)
     while (object != 0) {
         if (object->type == 8) {
             person = &object->data.person;
-            if (person->faction_id == *(short *)(D_00187D30 + (((int)(unsigned char)current_region) * 2))) {
-                person->faction_id = D_00187CB4[((int)(unsigned char)current_region)];
+            if (person->faction_id == *(short *)(region_building_factions + (((int)(unsigned char)current_region) * 2))) {
+                person->faction_id = region_person_factions[((int)(unsigned char)current_region)];
             }
             if (person->faction_id == 852 && ((int)(unsigned char)(location_is_port & 16)) == 0) {
                 person->faction_id = 242;
@@ -491,7 +491,7 @@ void marker_make_loot_pile(struct record *marker, struct building *building)
     if (floor_y != 100000) marker->y = floor_y;
     if (((int)player_environment) != 3) {
         marker->type = 33;
-        marker->image = *(short *)(D_00187DC0 + (building->type * 2));
+        marker->image = *(short *)(building_loot_pile_images + (building->type * 2));
     } else {
         marker->type = 33;
         marker->image = ((unsigned short)(unsigned char)loot_pile_images[rand() % 20]) + 27648;
@@ -517,7 +517,7 @@ iptr sound_cache_load(int id)
     }
     slot = 0;
     while (sound_cache[slot].data != 0) slot++;
-    record = archive_find_record(dagger_snd, D_001910AC, id);
+    record = archive_find_record(dagger_snd, sound_record_name, id);
     size = archive_record_size(dagger_snd, record);
     sound_cache[slot].last_frame = *(int *)frame_counter;
     sound_cache[slot].id = id;
@@ -647,8 +647,8 @@ void model_unlink_objects(iptr model)
 
 int flat_random_clutter(int environment, int building_type)
 {
-    if (environment == 3) return flat_table_pick((iptr)D_00187EC8);
-    return flat_table_pick(((iptr)D_00187DE8) + (rand_range(0, 7) * 28));
+    if (environment == 3) return flat_table_pick((iptr)dungeon_clutter_flats);
+    return flat_table_pick(((iptr)clutter_flat_tables) + (rand_range(0, 7) * 28));
 }
 
 void player_light_draw(void)

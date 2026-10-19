@@ -121,7 +121,7 @@ global,0x000C4500,xn_noise_values_copy,strong,The second copy of the noise value
 global,0x000C4904,xn_noise_fade_table,strong,int[512]: the smoothstep table indexed -256..255 whose centre is xn_noise_fade 0xC4D04 (C526E)
 global,0x000C4D04,xn_noise_fade,strong,Centre of a 512-dword smoothstep table indexed -256..255 (C524A); xn_rand_noise_2d interpolates with it.
 global,0x000C5400,xn_snow_turn_shift,strong,"sideways snow shift this frame: steer_turn_left/right and steer_forward_left/right set +-8, steer_slide_* +-4, player_mouse_look +-8; C9A89 adds it (<<6) to every flake and clears it"
-global,0x000C5404,xn_model_angle_or_bits,candidate,ORed into the three base angles by C7F14; object_draw_cb sets 3 for model 610 image 32 and 0 otherwise (automap_draw_object_cb the same)
+global,0x000C5404,xn_model_angle_bits,strong,ORed into the base angles
 global,0x000C5408,xn_model_base_matrix,strong,3x3 rotation (36 bytes) C7F14 builds from the instance base angles (137000)
 global,0x000C542C,xn_model_object_matrix,strong,3x3 rotation C7F14 builds from the object's angle_x/yaw/angle_z
 global,0x000C5450,xn_model_combined_matrix,strong,product of the two (137804) that C7F14 turns back into draw angles (C2173)
@@ -630,10 +630,10 @@ global,0x00153000,xn_draw_line_dx,strong,x1 - x0 of the line being clipped (1532
 global,0x00153004,xn_draw_line_dy,strong,y1 - y0 of the line being clipped (1532D4)
 global,0x00153400,xn_helmet_port,candidate,serial port number given to 153500 (the game passes 1) and read by the drivers
 global,0x00153404,cfg_helmet,strong,config key 'helmet'; init_game_data switches an XnGine mode (153500) by it
-global,0x00153408,xn_helmet_active,candidate,1 after the driver opened; cast_fire_missile adds the helmet angles only when set
+global,0x00153408,xn_helmet_active,strong,cast_fire_missile adds the helmet angles only when set
 global,0x00153409,xn_helmet_smoothing,strong,number of samples averaged (<= 7); init_game_data sets 4
-global,0x0015340D,xn_helmet_pitch,candidate,smoothed angle added to the missile's angle_x by cast_fire_missile
-global,0x00153411,xn_helmet_yaw,candidate,smoothed angle added to the missile's yaw by cast_fire_missile (the one with the wrap fix)
+global,0x0015340D,xn_helmet_pitch,strong,cast_fire_missile
+global,0x00153411,xn_helmet_yaw,strong,cast_fire_missile
 global,0x00153415,xn_helmet_roll,candidate,third smoothed angle from 15356C
 global,0x00153419,xn_helmet_drv_open,strong,open routine of the three serial head-tracker drivers 160E00 161000 161400 indexed by the driver offset
 global,0x00153425,xn_helmet_drv_close,candidate,close routines 160E44 161084 1614D0
@@ -997,8 +997,8 @@ global,0x0017B506,sheet_buttons,confirmed,"23 x {x0,y0,x1,y1,handler} hit boxes 
 global,0x0017B61C,font_names,strong,"5 pointers: NORMAL, SCRIPT, GOTHIC, SMALL, MENU; after sheet_buttons' 23 entries; no reader"
 global,0x0017B630,msgbox_border_sizes,strong,"build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: {22,22},{17,17},{3,2},{1,5} = the tile sizes msgbox_set_border_style copies for styles 0-3"
 global,0x0017B634,anim_mirror_facing,strong,"3 bytes 3,2,1: facing 5,6,7 -> 3,2,1 for the mirrored sprite views (monster_set_action sets monster+0x2D2 bit 7), read as anim_mirror_facing[facing - 5] (the code's base is 0x17B62F, 5 bytes before: the top byte of font_names[4]); the bytes are msgbox_border_sizes[4..6] too. New: Daggerfall Unity EnemyBasics' MobileAnimation tables draw orientations 5,6,7 with records 3,2,1 and FlipLeftRight, the same mapping; was at 0x17B62F"
-global,0x0017B657,pedestrian_step_table,candidate,"{short dx, dz}[4] direction steps the pedestrians walk by (phase 3 struct pass; quests_text report)"
-global,0x0017B6CD,guard_team,candidate,value 1 in save_tlalac_s; no guard spawned in the test to compare its team
+global,0x0017B657,pedestrian_step_table,strong,"{dx, dz}[4] pedestrian walk steps"
+global,0x0017B6CD,guard_team,strong,guard_spawn
 global,0x0017B6D0,spellbook_buttons,strong,"9 x {x0,y0,x1,y1,handler}: name, icon, 3 effect boxes, DELETE, UP, DOWN, EXIT; SORT (between UP and DOWN on the picture) has no entry"
 global,0x0017B73C,binding_names,strong,"21 pointers: the names of bindings 200..220: JOY 1, JOY 2, M 1, M 2, J LEFT, J RIGHT, J UP, J DOWN, M UP, M DOWN, M LEFT, M RIGHT, M 3, 3D UP, 3D DOWN, 3D LEFT, 3D RIGHT, 3D XR, 3D YR, 3D ZR, 3D CTRL; options_controls_draw draws binding_names[b - 200] for a binding of 200 or more (key_names below). The code's base is 0x17B41C (it - 800, inside spellmaker_setting_buttons: Watcom folds the - 200); audit: build/names/scratch/audit_euw/D/survey.py read 200..215 at base + 4*b; was binding_names_base (0x17B41C)"
 global,0x0017B790,options_buttons,confirmed,"10 x {x0,y0,x1,y1,handler}: SAVE GAME, LOAD GAME, EXIT GAME, SOUND, MUSIC, DETAIL bars, FULL SCREEN, HEAD BOBBING, CONTROLS, CONTINUE; screenshot options2.png and exp_options.py clicks"
@@ -1121,7 +1121,7 @@ global,0x00185C34,magic_school_skills,strong,"first 6 bytes: skill ids 25 Altera
 global,0x00185C3A,spell_element_class_bits,strong,"5 bytes by element: the class tolerance bit (fire 8, frost 16, poison 4, shock 32, magic 2) passed to spfx_resist_roll"
 global,0x00185C3F,spell_concealment_effects,strong,"3 x {int effect, int conditions mask} (not byte + u32): 13 Invisibility 0x4, 24 Shadow 0x2000, 23 Chameleon 0x1000; spell_break_concealment clears them. New: the masks are Daggerfall Unity CharacterRecord magicEffects1 x4 'invisible', magicEffects2 x20 'shade' and x10 'chameleon'"
 global,0x00185C58,hud_buttons,confirmed,"11 x {x0,y0,x1,y1,handler}: portrait, spellbook, interaction mode, inventory, weapon, use magic item, transport, map, rest, OPTIONS, status; matches the HUD picture, exp_hud*.py clicks"
-global,0x00185CEC,spell_hud_icon_x,candidate,"12 shorts: x of the HUD spell icons (16, 40, ... 280). Keep: 12 shorts 16, 40, ... 280; code only. A HUD screenshot with several active spells would settle it"
+global,0x00185CEC,spell_hud_icon_x,strong,"12 shorts 16, 40, ... 280"
 global,0x00185F88,item_group_templates,strong,"per item group, a -1-ended list of template indices (group 11 has none: item_make maps it to the Map). New: exp_equip: item_make through it gave (3,2) Staff, (3,0) Dagger, (14,3) Diamond, (2,0) Cuirass..., the templates of the same names in item_templates"
 global,0x00186A14,ai_octant_angles,candidate,"8 angles (512, 0, 1024, 512, 1536, 1024, 0, 1536) by ai_octant_toward result; ai_move_toward_target's detour headings. Keep: 8 int angles by ai_octant_toward result (512, 0, 1024, 512, 1536, 1024, 0, 1536); code only"
 global,0x00186A34,link_axis_override_keys,candidate,"6 model ids (image2*100 + image): 61032, 74073, 54000, 54001, 0, 0, looked up by link_model_axis_override; audit keep: a static table read only there, and no link on these models was seen; a rotate link (action 8) on one of these models in a dungeon would settle what they are"
@@ -1298,7 +1298,7 @@ global,0x0019572C,text_macro_fcn,strong,%fcn text (parse.c 47815): name of the n
 global,0x0019574C,enchant_reference_character,strong,a character record whose 35 skills enchant_spell_cost sets to 50 before costing a spell. Keep: code only (enchant_spell_cost)
 global,0x0019597C,right_hand_ready_delay,strong,ready time left of a changed right-hand weapon
 global,0x00195980,left_hand_ready_delay,confirmed,"accumulates the ready time of a changed left-hand weapon (equipped[21], inv_track_hand_weapons); player_frame_update counts it down by frame_ticks; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: set to 1, player_frame_update brought it to 0 and called hud_message_add with 'Left hand equipped.' (0x17008C); at 0 no message"
-global,0x00195984,quest_passed_items,candidate,code reading (opcode 75)
+global,0x00195984,quest_passed_items,strong,opcode 75
 global,0x00195998,last_skill_check_minutes,strong,"game_minutes of the last skill check after a trip or rest: travel_begin_trip and rest_close run raise_skills again after 360 minutes; init 523530; audit: savevars_read reads it at SAVEVARS.DAT 0x179A, which is DFU SaveVars.lastSkillCheckTimeOffset (0x179A, 'LastSkillCheckTime'); build/names/scratch/audit_euw/C/s1_survey.py: game_minutes minus it is 109-799 in 6 saves"
 global,0x0019599C,loan_collectors_next,confirmed,"game_minutes when loan_collectors_update next checks overdue loans (+1400-1700); town_load resets it; SAVEVARS. audit: build/names/scratch/audit_euw/B/exp_glob.py (save_tlalac_s): set to 0, loan_collectors_update made it game_minutes +1477, +1566, +1514; called again before it was due it stayed; in the 18 saves it is 1071-1642 minutes ahead of game_minutes"
 global,0x001959A0,bank_ship_price,confirmed,"price paid for the ship (saved, loadsave.c); bank_sell_ship offers 85%; experiment: 200000 -> sold for 170000; 100000 after buying the small ship"
@@ -1500,7 +1500,7 @@ global,0x0019621B,link_caster,strong,static spell caster of link action 9
 global,0x00196263,in_knightly_order_hall,confirmed,"byte, saved at SAVEVARS.DAT 0x1795: click_world_face sets it when the player clicks a building's door (archive 74, even a locked one) to 1 if the building's faction is one of the 21 knightly orders in D_00187644 (FACTION.TXT: 83 The Knights of the Circle ... 410 The Knights of the Flame ... 412 The Host of the True Horn), else 0; leaving clears it; music_choose_song plays 17.hmi in such a temple; audit: 0 in all 18 saves; build/names/scratch/audit_euw/A/knight.py: save_morthag1, clicking the Knights of the Flame hall's door made it 1 and inside it stayed 1 (current_building faction 410); build/names/scratch/audit_euw/A/knight2.py: preset to 1, entering the bank (faction 510) made it 0. Old name savevars_1795"
 global,0x00196266,text_macro_imperial,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: 0-3 -> %imp Pelagius, Cephorus, Uriel, Cassynder"
 global,0x00196268,current_region,strong,"byte region index of the player: the world view paints pixels 128+this red (the highlighted region in cheat_morthag1, value 21 Anticlere), I'M AT and travel_mark_player use it, closing the map reloads it"
-global,0x00196269,previous_region,candidate,"copied from current_region at the end of faction_politics_update. Keep: code only (faction_politics_update, region_enter)"
+global,0x00196269,previous_region,strong,faction_politics_update
 global,0x0019626A,weapon_active_hand,strong,"0 right, 1 left: indexes right_hand + hand*8 (character+0x1BB/+0x1C3), weapon_hand_* arrays and the strike slot 19+2*hand"
 global,0x0019626B,cfg_user,strong,config key 'user'
 global,0x0019626C,sheet_selected_attribute,strong,attribute index 0..7 set by sheet_select_attribute; level-up changes this one
@@ -1531,7 +1531,7 @@ global,0x00196291,cast_strike_spell,strong,damage_weapon_strike_effects
 global,0x00196295,text_missing_ok,confirmed,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: text_rsc_load(31999) -> ""Bad DAGTEXT number requested : 31999."" with 0, 0 with 1"
 global,0x0019629A,cast_ignore_silence,strong,"potion_drink, cast_player_spell"
 global,0x0019629B,night_sky_loaded,strong,"set by sky_load_night, cleared by the day sky and on loads; audit: build/names/scratch/audit_euw/D/survey.py, 18 saves: 1 in the three outdoor night saves (dorian 18:55, keophex 22:47, kralvamp 18:24), 0 outdoors by day and in every dungeon"
-global,0x001962A1,dungeon_block_special,candidate,the dungeon block's special flag (consistency pass notes)
+global,0x001962A1,dungeon_block_special,strong,the dungeon block's special flag
 global,0x001962A6,cfg_artifact,strong,config key 'artifact'
 global,0x001962A9,quests_suspended,strong,build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: set: quests_run_all left current_quest 0; clear: it ran the quests
 global,0x001962AA,exiting,strong,set by game_exit and fatal_error; fatal_error returns at once while it is set (no error during shutdown)
@@ -1603,10 +1603,10 @@ global,0x001966B8,talk_key_index,strong,which of the two 65-byte key texts the l
 global,0x001966B9,talk_prostitute_offer,strong,set by talk_start for faction 512 (The Prostitutes) and opposite gender; talk_prostitute_update runs the offer (TEXT 7200-7203)
 global,0x001966BA,talk_refused,strong,"set when talk_faction_greeting rolls badly: popup greeting, only GOODBYE works"
 global,0x001966BB,talk_logbook_ready,strong,set when an answer can be copied to the logbook
-global,0x001966BC,faction_parse_parents,candidate,last record at each tab depth (16) while faction_add_record builds the tree. Keep: code only (faction_add_record)
-global,0x001966FC,bio_person_counts,candidate,"per kind (enemy, friend) the biography persons made, at most 8 (bio_person_add). Keep: code only (bio_person_add)"
+global,0x001966BC,faction_parse_parents,strong,faction_add_record
+global,0x001966FC,bio_person_counts,strong,bio_person_add
 global,0x00196704,rumor_file,strong,"rumor.dat file handle (rumor_file_open/close, rumor_add_faction/quest)"
-global,0x00196708,rumor_added_count,candidate,"rumours appended since rumor_file_open. Keep: code only (rumor_file_open, rumor_add_faction)"
+global,0x00196708,rumor_added_count,strong,"rumor_file_open, rumor_add_faction"
 global,0x00196710,faction_count,strong,number of faction records
 global,0x0019671C,found_faction,strong,"result/default slot of faction searches; also %fl1, %ol1"
 global,0x0019672C,factions,strong,"faction records (92 bytes) as one array and tree root; faction_find walks it, faction_politics_update indexes it up to faction_count"
@@ -1655,9 +1655,9 @@ global,0x00196D4C,xn_collide_probe,strong,the struct collide_probe being tested
 global,0x00196D50,xn_slide_planes,strong,planes the mover slides along after a collision
 global,0x00196D60,collide_height,strong,"y (downwards) the vertical collision probes found: collide_vertical_cb keeps a surface here; the collision steps snap the object onto it (the floor) within 30, start it at the terrain height outside and y+1000 indoors; collide_floor_height returns it; audit: equal to the player's y (standing on the floor) in 17 of the 18 saves (build/names/scratch/audit_euw/A/peek.py); build/names/scratch/audit_euw/A/ceiling.py: levitating in save_blades with no floor in reach it was y+1000; build/names/scratch/audit_euw/A/dungeon.py: collide_floor_height(@player) = -550 = the player's y"
 global,0x00196D64,collide_flags,strong,"result bits of a collision move: 1 floor, 2 wall/model, 4 slide, 8 creature, 16 nothing near"
-global,0x00196D68,career_bio_line,candidate,first line number shown. Keep: code only (biography paging)
+global,0x00196D68,career_bio_line,strong,biography paging
 global,0x00196D6C,career_bio_text,strong,bio.dat loaded by career_show_biography
-global,0x00196D70,career_bio_end,candidate,end of the biography text. Keep: code only (biography paging)
+global,0x00196D70,career_bio_end,strong,biography paging
 global,0x00196D74,career_bio_lines,strong,line count from career_bio_count_lines
 global,0x00196D78,career_bio_page,strong,current page start in the biography text
 global,0x00196D7C,reputation_baseline,strong,"5 shorts: the social-group reputations %r1..%r5 compare with character+0x91.. (""Lower""/""Higher""/""Unchanged""); experiment: 0 against 25 gave ""Higher"""
@@ -1675,8 +1675,8 @@ global,0x00196DB0,automap_selected_object,strong,automap map click
 global,0x00196DB4,automap_notes,strong,pointer to the notes in automap_record (+0x47): entries u16 object id + string. New: exp_misc: automap_add_note/find_note/delete_note all worked through it
 global,0x00196DB8,automap_top_down,confirmed,"1 top-down plan, 0 perspective: automap_button_view_mode flipped it 1 -> 0 and the picture changed"
 global,0x00196DBC,quest_debug_object,strong,quest object shown by quest_debug_overlay (quest_debug_next)
-global,0x00196DC0,quest_debug_kind_index,candidate,code reading (debug overlay key 39)
-global,0x00196DC1,quest_debug_kind,candidate,code reading
+global,0x00196DC0,quest_debug_kind_index,strong,quest_debug_overlay
+global,0x00196DC1,quest_debug_kind,strong,quest_debug_overlay
 global,0x001970C4,monsters_woken,strong,set once by monster_wake_all so the location's sleepers are woken only once; dungeon_load clears it. New: exp_mord: 0 -> 1 after monster_wake_all; a second call then did nothing
 global,0x001970DC,quest_init_retry,strong,quest init retry
 global,0x001970DD,quest_init_local,strong,quest init local
@@ -1691,12 +1691,12 @@ global,0x001985A8,moon1_direction,strong,"x/y/z of moon 1 on its 3500-minute orb
 global,0x001985B4,moon0_direction,strong,"x/y/z of moon 0 on its 2500-minute orbit (sky_update_moons); audit: build/names/scratch/audit_euw/D/exp_misc.py save_gash: equal to sky_orbit_direction(1000, minutes % 2500, 2500) = (-7941, 2015, 1000); z is 1000 in every save"
 global,0x001985C8,sun_direction,strong,"x/y/z of the sun (sky_sun_direction); sky_apply_sunlight uses it; audit: build/names/scratch/audit_euw/D/exp_misc.py save_gash (12:30): (1152, -8110, 0) = sky_sun_direction 390 minutes after 06:00; survey.py: 0 in dungeon saves, y near -8100 (up) at midday, +8111 at 22:47"
 global,0x001985D4,rdb_object_ids,strong,"struct rdb_object_id[512]: RDB object file offset -> record id (rdb_create_objects, rdb_object_id_by_offset)"
-global,0x001995D4,block_quarters,candidate,"the dungeon block quarters, a 2x2 array (consistency pass and struct notes)"
+global,0x001995D4,block_quarters,strong,2x2 dungeon block quarters
 global,0x001995E8,rdb_data,strong,"char *: the RDB file being loaded (scratch_buffer, dungeon_load_rdb_block); every RDB offset is added to it"
 global,0x001995F0,rdb_flat_resource,strong,struct rdb_flat *: the current flat resource
 global,0x001995F4,rdb_light_resource,strong,struct rdb_light *: the current light resource
-global,0x001995F8,rdb_light_level,candidate,"dungeon_load_rdb_block sets 16, editor marker 199.10 overrides it; stored into each quarter's light_level (+0x17)"
-global,0x001995FC,rdb_water_level,candidate,"10000 (none) by default, -(flat sound_index << 3) from marker 199.10; stored into each quarter's water_level (+0x19)"
+global,0x001995F8,rdb_light_level,strong,dungeon_load_rdb_block
+global,0x001995FC,rdb_water_level,strong,dungeon_load_rdb_block
 global,0x00199600,rdb_action_resource,strong,struct rdb_action *: the current model's action (rdb_build_action_chain)
 global,0x00199604,rdb_loaded_file,strong,"struct rdb_file *: the same buffer as rdb_data, read as the header (width, object_root_offset, model_references)"
 global,0x00199608,rdb_dungeon_block,strong,struct dungeon_block *: the block dungeon_load_rdb_block is loading (rdb_create_objects reads x/z and is_starting)
@@ -1751,7 +1751,7 @@ global,0x001997A4,quest_prompt_quest,strong,quest of the yes/no question in prog
 global,0x001997AA,quest_find_id,candidate,"read only by the callback 2FDB0; never written in the C (0 after quest_find_by_id, build/names/scratch/audit_tq/exp_globals.py save_tlalac_s). Keep: read only by the dead callback quest_find_by_id_cb and never written; nothing to settle"
 global,0x001997AC,quest_event_code,strong,"short: event being dispatched (1 item to npc, 2 kill, 3 item found, 5 item dropped, 21 foe hurt, 28 npc clicked, 71 pay, 73 spell, 78 faction); quest_dispatch_event runs the opcodes equal to it"
 global,0x001997AE,quest_test_started,strong,func_0004CD80
-global,0x001997B0,notebook_selection_box,candidate,struct rect of the notebook's selected entry (phase 3 struct pass)
+global,0x001997B0,notebook_selection_box,strong,struct rect of the selection
 global,0x001997B5,class_question_answer_row,strong,"indexed by the answer letter ('a'..'c' at +0x61..): the text row of that answer (class_question_show); audit: the caller class_question_show (strong) writes it per answer letter; class_question_get_answer reads the rows back as D_00199816/17/18 (answers a, b, c) for class_question_answer_span; a biased base: 0x1997B5 + 'a' = 0x199816, the 3-byte array proper, just before class_answer_counts (0x199819)"
 global,0x001997BC,note_file_size,strong,build/names/scratch/audit_tq/exp_note.py save_dorian: 14560 (4 pages); 18200 after note_next_page appended a page
 global,0x001997C0,note_rci,strong,"build/names/scratch/audit_tq/exp_note.py save_dorian: loaded by note_open_notebook(1), not by (100); the TEXT/NORMAL buttons are drawn from it"
@@ -1790,10 +1790,10 @@ global,0x00199D5A,book_file,strong,short: the open book's file handle (< 1: no b
 global,0x00199D5C,book_page,confirmed,short: page shown (exp2: 0 -> 1 after book_next_page)
 global,0x00199D5E,book_image_count,candidate,code reading; no book images exist
 global,0x00199D60,book_page_count,confirmed,short: pages in the book (exp2: 3)
-global,0x00199D64,spell_scratch,candidate,a spell record pointer used by the magic code (GLOBAL_TYPES spell; consistency pass notes)
+global,0x00199D64,spell_scratch,strong,spell record pointer for spell_lookup_name
 global,0x00199D68,magic_items_saved_screen,strong,64000-byte copy of the screen under the USE MAGIC ITEM list
 global,0x00199D70,hud_pressed_button,strong,"index of the HUD button pressed, 255 none: the handler runs on release over the same button"
-global,0x00199D71,player_under_spell,candidate,set by spell_hud_draw_icons when a spell on the player was cast by someone else; hud_portrait_overlay_index frame 0. Keep: code only (spell_hud_draw_icons)
+global,0x00199D71,player_under_spell,strong,spell_hud_draw_icons
 global,0x00199D74,anim_changed_this_frame,candidate,"ai_creature_think clears it, monster_set_action sets it: one animation change per creature per frame. Keep: code only (ai_creature_think, monster_set_action)"
 global,0x00199D78,links,strong,1024 x 39-byte link records ('Exceeded maximum number of links.' in links_resolve); saved and loaded by links_save / links_load
 global,0x001A3978,active_links,strong,"pointers to the first record of each running link chain (links_trigger adds, links_update removes); saved as indices"
@@ -7726,3 +7726,53 @@ global,0x0017A144,quest_symbol_name_kinds,strong,quest_symbol_text
 global,0x0018506F,text_backstab,strong,"""Successful backstab!"""
 global,0x0019628D,guards_alerted,strong,damage_apply
 global,0x00196292,cast_strike_creature_spell,strong,cast_creature_spell
+global,0x0017B64F,pedestrian_yaws,strong,four yaws picked when a pedestrian cannot stand
+global,0x00190FEC,qrc_quest_text_flag,strong,"cleared by text_qrc_load_for_quest, msgbox_render_quest_text"
+global,0x001910EC,qrc_loaded_name,strong,cleared by text_qrc_load
+global,0x00195F2E,msgbox_delay,strong,ticks before msgbox_update accepts input
+global,0x00196090,msgbox_button_2,strong,second message box button
+global,0x00196091,msgbox_button_3,strong,third message box button
+global,0x00174FF5,note_goto_prompt_fmt,strong,"""%s : "" prompt format"
+global,0x00175010,note_find_prompt_fmt,strong,"""%s : "" prompt format"
+global,0x0017D1F2,text_enter_text,strong,"""Enter text"""
+global,0x001851F0,note_colour_marker_image,strong,5x3 marker image under the picked colour
+global,0x00185201,note_fonts,strong,font per note entry
+global,0x001997CC,note_keep_cursor,strong,write cursor while notes are compacted
+global,0x001997EB,note_colour_pick,strong,note_pick_colour
+global,0x00187CB4,region_person_factions,strong,rmb_set_building_factions
+global,0x00187D30,region_building_factions,strong,"rmb_set_building_factions, rmb_make_flat"
+global,0x00187DC0,building_loot_pile_images,strong,marker_make_loot_pile
+global,0x00187DE8,clutter_flat_tables,strong,flat_random_clutter
+global,0x00187EC8,dungeon_clutter_flats,strong,flat_random_clutter environment 3
+global,0x001910AC,sound_record_name,strong,sound_cache_load
+global,0x001A9438,rmb_last_object_id,strong,rmb_add_subrecord
+global,0x0018509B,text_save_vs_spell,strong,"""Save versus spell made."""
+global,0x00199D6C,spell_hud_icon_count,strong,spell_hud_draw_icons
+global,0x001704C5,rumor_local_fmt,strong,rumor_collect_local format
+global,0x00178630,char_class_table,strong,ctype-style class bits per char + 1
+global,0x00196732,faction_flat_index,strong,faction_parse_flat
+global,0x00179FF8,career_background_ids,strong,career_background_summary
+global,0x0018DDD8,career_resist_bonus,strong,career answer added in spfx_resist_roll
+global,0x0018DDDC,career_to_hit_penalty,strong,career answer subtracted in damage_roll_to_hit
+global,0x0018DDE0,career_poison_resist,strong,career answer used in poison_apply
+global,0x0018DDE4,career_fatigue_flag,strong,career answer used in fatigue_update
+global,0x001708ED,str_empty_4,strong,empty string
+global,0x0017A120,quest_reputation_factions,strong,quest_run_opcodes
+global,0x0017A134,quest_debug_kinds,strong,quest_debug_overlay
+global,0x00196298,quest_time_passed,strong,time_pass_minutes
+global,0x0017A834,rdb_lock_levels,strong,rdb_create_objects
+global,0x001995E4,rdb_chain_link,strong,action_record_add_chained
+global,0x001995EC,rdb_current_link,strong,action_record_add
+global,0x00185284,class_answer_shades,strong,class_questions_run palette
+global,0x0018528E,class_answer_palette_index,strong,class_questions_run palette
+global,0x00199816,class_answer_mark_1,strong,class_question_get_answer
+global,0x00199817,class_answer_mark_2,strong,class_question_get_answer
+global,0x00199818,class_answer_mark_3,strong,class_question_get_answer
+global,0x0019981A,class_answer_counts_b,strong,class_question_pick_class
+global,0x0019981B,class_answer_counts_c,strong,class_question_pick_class
+global,0x00176A9C,str_backslash,strong,"""\\"""
+global,0x001917E3,arena2_path_last,strong,arena2_path - 1
+global,0x00191833,arena2_cd_path_last,strong,arena2_cd_path - 1
+global,0x001961AE,world_extra_object,strong,world_draw_objects
+global,0x001A945E,model_instance_scratch,strong,object_draw_cb
+global,0x001A949C,model_variant_offset,strong,object_draw_cb
