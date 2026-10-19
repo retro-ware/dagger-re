@@ -4,7 +4,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176A10[];
+extern char str_support_c[];
 extern struct record *location_grid[];         /* 32 x 32 grid of object lists */
 extern struct record *D_00194064[];
 extern struct record *cart_overlay_image[];
@@ -98,7 +98,7 @@ void dungeon_grid_build(void)
     block = location_object->children;
     min_x = 10000;
     min_z = 10000;
-    mc_memset(location_grid, 0, 4096, D_00176A10, 849, 4096);
+    mc_memset(location_grid, 0, 4096, str_support_c, 849, 4096);
     while (block != 0) {
         if (block->type == 47) {
             if ((block->x - location_object->x) < min_x) min_x = block->x - location_object->x;
@@ -136,7 +136,7 @@ void town_grid_build(void)
     block = location_object->children;
     min_x = 10000;
     min_z = 10000;
-    mc_memset(location_grid, 0, 4096, D_00176A10, 880, 4096);
+    mc_memset(location_grid, 0, 4096, str_support_c, 880, 4096);
     block = location_object->children;
     while (block != 0) {
         if (block->type == 38) {

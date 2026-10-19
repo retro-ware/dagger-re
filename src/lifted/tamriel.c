@@ -8,7 +8,7 @@
 
 extern struct region regions[];
 extern signed char D_0012B508;
-extern char D_001711AC[];
+extern char str_tamriel_c[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
 extern signed char D_0017C5B9[];
@@ -114,7 +114,7 @@ iptr calendar_format_date(int minutes, iptr buffer)
     slot16 day;
 
     *(int *)&day = ((unsigned)(((unsigned)(((unsigned)minutes) % 518400)) / 1440)) % 30;
-    mc_set_location(79, D_001711AC);
+    mc_set_location(79, str_tamriel_c);
     mc_sprintf((char *)buffer, (char *)D_001830E2, ((int)(short)day) + 1, ordinal_suffixes[((((int)(short)day) > 3) ? 3 : (int)(short)day)], month_names[(((unsigned)(((unsigned)minutes) % 518400)) / 43200)]);
     return buffer;
 }

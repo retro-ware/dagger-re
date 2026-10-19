@@ -2,10 +2,10 @@
 #include <dos.h>
 #include "clib.h"
 extern char *D_00147954;
-extern char D_00176884[];
-extern char D_001768DF[];
-extern char D_0017696F[];
-extern char D_00176977[];
+extern char str_loadsave_c[];
+extern char str_fmt_s_s_4[];
+extern char str_atf[];
+extern char str_amf[];
 extern char arena2_path[];
 extern unsigned func_000A13DA(char *, unsigned, struct find_t *);
 extern unsigned func_000A13F7(struct find_t *);
@@ -16,21 +16,21 @@ void automap_delete_files(void)
     struct find_t ff;
     unsigned rc;
 
-    mc_set_location(835, D_00176884);
-    mc_sprintf(D_00147954, D_0017696F, arena2_path);
+    mc_set_location(835, str_loadsave_c);
+    mc_sprintf(D_00147954, str_atf, arena2_path);
     rc = func_000A13DA(D_00147954, 0, &ff);
     while (rc == 0) {
-        mc_set_location(839, D_00176884);
-        mc_sprintf(D_00147954, D_001768DF, arena2_path, ff.name);
+        mc_set_location(839, str_loadsave_c);
+        mc_sprintf(D_00147954, str_fmt_s_s_4, arena2_path, ff.name);
         unlink(D_00147954);
         rc = func_000A13F7(&ff);
     }
-    mc_set_location(844, D_00176884);
-    mc_sprintf(D_00147954, D_00176977, arena2_path);
+    mc_set_location(844, str_loadsave_c);
+    mc_sprintf(D_00147954, str_amf, arena2_path);
     rc = func_000A13DA(D_00147954, 0, &ff);
     while (rc == 0) {
-        mc_set_location(848, D_00176884);
-        mc_sprintf(D_00147954, D_001768DF, arena2_path, ff.name);
+        mc_set_location(848, str_loadsave_c);
+        mc_sprintf(D_00147954, str_fmt_s_s_4, arena2_path, ff.name);
         unlink(D_00147954);
         rc = func_000A13F7(&ff);
     }

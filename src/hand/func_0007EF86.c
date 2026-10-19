@@ -2,7 +2,7 @@
 #include "ptrint.h"
 #include <i86.h>
 #include "clib.h"
-extern char D_00176A10[];
+extern char str_support_c[];
 extern char D_00195E6C[];
 extern char D_001A5A1E[];
 extern int D_001A5A2E;
@@ -18,9 +18,9 @@ int func_0007EF86(int ax_value, int bx_value)
     union REGS regs;
     struct SREGS sregs;
 
-    mc_memset(&sregs, 0, 12, D_00176A10, 1078, 4);
-    mc_memset(&regs, 0, 28, D_00176A10, 1079, 4);
-    mc_memset(D_001A5A1E, 0, 50, D_00176A10, 1080, 4);
+    mc_memset(&sregs, 0, 12, str_support_c, 1078, 4);
+    mc_memset(&regs, 0, 28, str_support_c, 1079, 4);
+    mc_memset(D_001A5A1E, 0, 50, str_support_c, 1080, 4);
     D_001A5A3A = ax_value;
     D_001A5A2E = bx_value;
     D_001A5A40 = D_001A5A50;
@@ -30,6 +30,6 @@ int func_0007EF86(int ax_value, int bx_value)
     sregs.es = FP_SEG(D_001A5A1E);
     regs.x.edi = FP_OFF(D_001A5A1E);
     int386x(0x31, &regs, &regs, &sregs);
-    func_000A2EC5(D_00195E6C, MK_FP((unsigned short)D_001A5A54, 0), 14, D_00176A10, 1094, 4);
+    func_000A2EC5(D_00195E6C, MK_FP((unsigned short)D_001A5A54, 0), 14, str_support_c, 1094, 4);
     return D_001A5A3A;
 }

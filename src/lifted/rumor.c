@@ -5,7 +5,7 @@
  * tables from the start of the file, so moving functions can change the code. */
 
 extern signed char D_0012B508;
-extern char D_001702CC[];
+extern char str_rumor_c[];
 extern iptr marquee_owned_text;
 extern char region_event_flag_groups[];
 extern signed char region_event_durations[];
@@ -30,7 +30,7 @@ void marquee_update(void)
     D_0012B508 = 146;
     count = (320 - marquee_x) / 4;
     if (count > 80) count = 80;
-    mc_memcpy(text_buffer, (void *)marquee_text, count, D_001702CC, 35, 160);
+    mc_memcpy(text_buffer, (void *)marquee_text, count, str_rumor_c, 35, 160);
     text_buffer[count] = 0;
     text_draw((iptr)text_buffer, marquee_x, 140);
     marquee_x -= 2;
@@ -46,7 +46,7 @@ void marquee_update(void)
 void marquee_stop(void)
 {
     if (marquee_owned_text != 0 && marquee_owned_text != (-1751672937)) {
-        mc_free((void *)marquee_owned_text, D_001702CC, 62);
+        mc_free((void *)marquee_owned_text, str_rumor_c, 62);
         marquee_owned_text = -1751672937;
     }
     marquee_owned_text = 0;

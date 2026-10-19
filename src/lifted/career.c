@@ -11,11 +11,11 @@ extern short mouse_y;
 extern iptr screen_buffer;
 extern iptr D_00147954;
 extern signed char xn_mouse_cursor_drawn;
-extern char D_00170738[];
-extern char D_00170741[];
-extern char D_00170750[];
-extern char D_0017075D[];
-extern char D_0017077B[];
+extern char str_career_c[];
+extern char str_biog_t0_txt[];
+extern char str_biog00i0_img[];
+extern char str_bio_dat[];
+extern char str_lgbk00i0_img[];
 extern unsigned char D_00178630[];   /* _IsTable */
 extern struct rect career_answer_boxes[];
 extern signed char D_00179FF8[];
@@ -78,22 +78,22 @@ void career_background_summary(int class_id, int ask)
     iptr start;
 
     career_bio_ask = *(signed char *)&ask;
-    mc_memcpy(&reputation_baseline, (signed char *)&player_character->reputation[0], 10, D_00170738, 48, 10);
+    mc_memcpy(&reputation_baseline, (signed char *)&player_character->reputation[0], 10, str_career_c, 48, 10);
     text_macro_imperial = rand() % 6;
     scratch_190d68 = (unsigned short)(unsigned char)D_00179FF8[rand_range(0, 9)];
     scratch_190d6a = 1;
     D_00190C74 = rand();
     *(int *)D_00190C78 = rand();
     if (class_id == 18) class_id = career_nearest_class();
-    mc_set_location(59, D_00170738);
-    mc_sprintf((char *)text_buffer, D_00170741, class_id);
-    mc_memset(scratch_buffer, 0, 64000, D_00170738, 60, 4);
+    mc_set_location(59, str_career_c);
+    mc_sprintf((char *)text_buffer, str_biog_t0_txt, class_id);
+    mc_memset(scratch_buffer, 0, 64000, str_career_c, 60, 4);
     disk_read_file(text_buffer, (iptr)scratch_buffer + 1);
     *scratch_buffer = 10;
-    if (ask != 0) disk_read_file(D_00170750, D_00147954);
+    if (ask != 0) disk_read_file(str_biog00i0_img, D_00147954);
     for (question = 0; question < 12; question++) {
         if (ask != 0) {
-            mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, D_00170738, 69, 4);
+            mc_memcpy((void *)screen_buffer, (void *)D_00147954, 64000, str_career_c, 69, 4);
             xn_mouse_cursor_drawn &= 254;
         }
         career_find_question(question + 1);
@@ -115,9 +115,9 @@ void career_background_summary(int class_id, int ask)
         }
         cursor++;
     }
-    disk_write_arena2_file(D_0017075D, start, (int)((iptr)cursor - start) + 1);
+    disk_write_arena2_file(str_bio_dat, start, (int)((iptr)cursor - start) + 1);
     if (start != 0 && start != (-1751672937)) {
-        mc_free((void *)start, D_00170738, 94);
+        mc_free((void *)start, str_career_c, 94);
         start = -1751672937;
     }
     msgbox_show_rsc(35, 1);
@@ -268,8 +268,8 @@ void career_show_biography(void)
     int done;
 
     done = 0;
-    window_image = disk_read_file(D_0017077B, 0);
-    career_bio_page = (career_bio_text = disk_read_file(D_0017075D, 0));
+    window_image = disk_read_file(str_lgbk00i0_img, 0);
+    career_bio_page = (career_bio_text = disk_read_file(str_bio_dat, 0));
     sound_play(237, player_object, 100);
     D_00196D70 = (iptr)(*(char **)&career_bio_text + *(int *)disk_last_file_size);
     career_bio_lines = career_bio_count_lines();
@@ -289,11 +289,11 @@ void career_show_biography(void)
         }
     }
     if (career_bio_text != 0 && career_bio_text != (-1751672937)) {
-        mc_free((void *)career_bio_text, D_00170738, 506);
+        mc_free((void *)career_bio_text, str_career_c, 506);
         career_bio_text = -1751672937;
     }
     if (window_image == 0 || window_image == (-1751672937)) return;
-    mc_free((void *)window_image, D_00170738, 507);
+    mc_free((void *)window_image, str_career_c, 507);
     window_image = -1751672937;
 }
 
@@ -304,7 +304,7 @@ void career_bio_draw(void)
 
     row = 0;
     line = career_bio_page;
-    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_00170738, 515, 4);
+    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_career_c, 515, 4);
     while (((uptr)line) < (uptr)D_00196D70 && row < 21) {
         text_draw_coloured(line, 10, (int)(short)((row * 7) + 25), 145, 156);
         line += strlen((char *)line) + 1;

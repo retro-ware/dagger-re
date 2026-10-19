@@ -5,10 +5,10 @@
 extern char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern char D_00170EE8[];
-extern char D_00170F2D[];
-extern char D_00170F3A[];
-extern char D_00170F47[];
+extern char str_options_c[];
+extern char str_cnfg01i0_img[];
+extern char str_cnfg02i0_img[];
+extern char str_cnfg03i0_img[];
 extern struct rect options_mouse_buttons[];
 extern struct record *player_object;
 extern iptr D_00195B5C;
@@ -31,9 +31,9 @@ int options_mouse_screen(void)
     iptr background;
 
     done = 0;
-    background = disk_read_file(D_00170F2D, 0);
-    D_00195B5C = disk_read_file(D_00170F3A, 0);
-    D_00195B60 = disk_read_file(D_00170F47, 0);
+    background = disk_read_file(str_cnfg01i0_img, 0);
+    D_00195B5C = disk_read_file(str_cnfg02i0_img, 0);
+    D_00195B60 = disk_read_file(str_cnfg03i0_img, 0);
     xn_mouse_get_sensitivity(&mouse_sensitivity_x, &mouse_sensitivity_y);
     mouse_sensitivity_x /= 6;
     mouse_sensitivity_y /= 6;
@@ -53,15 +53,15 @@ int options_mouse_screen(void)
         xn_gfx_present_inclusive(0);
     }
     if (D_00195B60 != 0 && D_00195B60 != (-1751672937)) {
-        mc_free((void *)D_00195B60, D_00170EE8, 468);
+        mc_free((void *)D_00195B60, str_options_c, 468);
         D_00195B60 = -1751672937;
     }
     if (D_00195B5C != 0 && D_00195B5C != (-1751672937)) {
-        mc_free((void *)D_00195B5C, D_00170EE8, 469);
+        mc_free((void *)D_00195B5C, str_options_c, 469);
         D_00195B5C = -1751672937;
     }
     if (background != 0 && background != (-1751672937)) {
-        mc_free((void *)background, D_00170EE8, 470);
+        mc_free((void *)background, str_options_c, 470);
         background = -1751672937;
     }
     return 0;

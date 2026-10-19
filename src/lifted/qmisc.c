@@ -5,11 +5,11 @@
 #include "clib.h"
 #include "portio.h"
 
-extern char D_00170A08[];
-extern char D_00170A11[];
-extern char D_00170A1A[];
-extern char D_00170A22[];
-extern char D_00170A4F[];
+extern char str_l0a01l00[];
+extern char str_o0a0al00[];
+extern char str_qmisc_c[];
+extern char str_error_could_not_retrieve_quest_item[];
+extern char str_bad_faction_at[];
 extern unsigned char player_environment;
 extern signed char item_group_tab[];
 extern signed char text_buffer[];
@@ -90,11 +90,11 @@ void qaction_op04_give_reward(struct quest *quest, struct qbn_op *op)
     int i;
     int j;
 
-    if (strnicmp(quest->name, D_00170A08, 8) == 0) {
+    if (strnicmp(quest->name, str_l0a01l00, 8) == 0) {
         guild_join_dark_brotherhood();
         return;
     }
-    if (strnicmp(quest->name, D_00170A11, 8) == 0) {
+    if (strnicmp(quest->name, str_o0a0al00, 8) == 0) {
         guild_join_thieves_guild();
         return;
     }
@@ -123,8 +123,8 @@ void qaction_op04_give_reward(struct quest *quest, struct qbn_op *op)
                 item->y = player_object->y;
                 item->z = player_object->z;
             } else {
-                mc_set_location(332, D_00170A1A);
-                mc_sprintf((char *)text_buffer, D_00170A22, (iptr)quest->name, qbn_item->symbol);
+                mc_set_location(332, str_qmisc_c);
+                mc_sprintf((char *)text_buffer, str_error_could_not_retrieve_quest_item, (iptr)quest->name, qbn_item->symbol);
                 hud_message_add(text_buffer);
             }
         }
@@ -342,7 +342,7 @@ void qaction_op69_cast_spell_on_foe(struct quest *quest, struct qbn_op *op)
     spell_object->type = 9;
     spell_object->caster = player_entity;
     spell_object->id = object_new_id(((unsigned)location_object->id) >> 16);
-    mc_memcpy(&spell_object->data.spell, &spell_records[spell_index], 89, D_00170A1A, 679, 4);
+    mc_memcpy(&spell_object->data.spell, &spell_records[spell_index], 89, str_qmisc_c, 679, 4);
     object_foreach(location_object, quest_cast_spell_on_foe_cb);
     object_delete(spell_object);
 }
@@ -374,7 +374,7 @@ struct record *func_000310E1(struct record *object, struct record *target)
         twin->x = target->x;
         twin->y = target->y;
         twin->z = target->z;
-        mc_memcpy(&twin->data, &object->data, data_size, D_00170A1A, 734, 4);
+        mc_memcpy(&twin->data, &object->data, data_size, str_qmisc_c, 734, 4);
         twin->type = object->type;
         twin->flags = object->flags;
         twin->image = object->image;
@@ -391,7 +391,7 @@ struct record *func_000310E1(struct record *object, struct record *target)
             child_twin->x = target->x;
             child_twin->y = target->y;
             child_twin->z = target->z;
-            mc_memcpy(&child_twin->data, &object->data, 107, D_00170A1A, 754, 4);
+            mc_memcpy(&child_twin->data, &object->data, 107, str_qmisc_c, 754, 4);
             child_twin->type = object->type;
             child_twin->flags = object->flags;
             child_twin->image = object->image;
@@ -441,8 +441,8 @@ struct record *func_000310E1(struct record *object, struct record *target)
             person->faction_id = object->data.building.faction_id;
         }
         if (person->faction_id == 0) {
-            mc_set_location(819, D_00170A1A);
-            func_000A148C(D_00170A4F, 819);
+            mc_set_location(819, str_qmisc_c);
+            func_000A148C(str_bad_faction_at, 819);
             person->faction_id = 510;
         }
         if (object->image != 0) {

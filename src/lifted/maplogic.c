@@ -10,14 +10,14 @@ extern char *xn_world_flat_layer;
 extern char *xn_world_tile_layer;
 extern int dungeon_water_level;
 extern int xn_light_ambient;
-extern char D_00176C94[];
-extern char D_00176C9F[];
-extern char D_00176CAA[];
-extern char D_00176CC0[];
-extern char D_00176CDD[];
-extern char D_00176CFE[];
-extern char D_00176D20[];
-extern char D_00176D3E[];
+extern char str_maplogic_c[];
+extern char str_blocks_bsa_2[];
+extern char str_invalid_start_marker[];
+extern char str_haze_000_2[];
+extern char str_this_house_has_nothing_of_value_2[];
+extern char str_this_house_has_nothing_of_value_3[];
+extern char str_dispel_magic_was_a_success[];
+extern char str_dispel_magic_failed[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
 extern iptr D_0018461C;
@@ -161,7 +161,7 @@ void region_unload(void)
     automap_save();
     location_unload(location_object->image);
     if ((iptr)region_locations != 0 && (iptr)region_locations != (-1751672937)) {
-        mc_free(region_locations, D_00176C94, 64);
+        mc_free(region_locations, str_maplogic_c, 64);
         region_locations = (struct map_location *)(iptr)-1751672937;
     }
     region_locations = 0;
@@ -174,24 +174,24 @@ void location_free(struct loaded_location *location)
     if (location->data != 0) {
         if (location->data->buildings != 0) {
             if (location->data->buildings != 0 && (iptr)location->data->buildings != (-1751672937)) {
-                mc_free(location->data->buildings, D_00176C94, 83);
+                mc_free(location->data->buildings, str_maplogic_c, 83);
                 location->data->buildings = (struct building *)(iptr)-1751672937;
             }
         }
     }
     if (location->object != 0) {
         if (location->object != 0 && (iptr)location->object != (-1751672937)) {
-            mc_free(location->object, D_00176C94, 86);
+            mc_free(location->object, str_maplogic_c, 86);
             location->object = (struct record *)(iptr)-1751672937;
         }
     }
     if (location->doors != 0) {
         if (location->doors != 0 && (iptr)location->doors != (-1751672937)) {
-            mc_free(location->doors, D_00176C94, 89);
+            mc_free(location->doors, str_maplogic_c, 89);
             location->doors = (struct location_door *)(iptr)-1751672937;
         }
     }
-    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), D_00176C94, 91, 4);
+    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), str_maplogic_c, 91, 4);
 }
 
 struct map_location *region_find_location(int map_id)
@@ -262,7 +262,7 @@ void dungeon_load(int dungeon_index)
     if (location_object->image == 65535) object_delete_block((iptr)location_object->children, location_object->id);
     if (world_loading == 0) {
         player_object->parent_id = player_object->parent->id;
-        mc_memcpy(saved_player_object, player_object, RECORD_LINKS_OFFSET, D_00176C94, 235, 4);
+        mc_memcpy(saved_player_object, player_object, RECORD_LINKS_OFFSET, str_maplogic_c, 235, 4);
     }
     location_id = location_object->id;
     location_unload(location_object->image);
@@ -271,9 +271,9 @@ void dungeon_load(int dungeon_index)
     } else {
         location_load_dungeon(&loaded_location, dungeon_index);
     }
-    mc_memcpy(location_object, loaded_location.object, RECORD_LINKS_OFFSET, D_00176C94, 247, 4);
-    mc_memcpy(current_location, loaded_location.data, REC_SIZEOF(struct location), D_00176C94, 248, 4);
-    blocks_bsa = archive_open(D_00176C9F, 0, 0);
+    mc_memcpy(location_object, loaded_location.object, RECORD_LINKS_OFFSET, str_maplogic_c, 247, 4);
+    mc_memcpy(current_location, loaded_location.data, REC_SIZEOF(struct location), str_maplogic_c, 248, 4);
+    blocks_bsa = archive_open(str_blocks_bsa_2, 0, 0);
     if ((((unsigned)location_object->id) >> 16) == 50015) D_001967A1 = 254;
     for (i = 0; ((int)(unsigned char)dungeon_block_count) > i; i++) {
         dungeon_load_rdb_block(&dungeon_blocks[i]);
@@ -292,14 +292,14 @@ void dungeon_load(int dungeon_index)
     player_object->y = location_object->y;
     player_object->z = location_object->z;
     i = player_to_nearest_marker(location_object->children, 8);
-    if (i == 0) fatal_error(D_00176CAA);
+    if (i == 0) fatal_error(str_invalid_start_marker);
     func_00028EAA();
     automap_mark_seen(found_object);
     position_history_reset();
     dungeon_roll_monster_tables();
     monsters_woken = 0;
-    disk_read_file(D_00176CC0, D_00195CF4);
-    mc_memset((void *)scratch_buffer, 0, 93, D_00176C94, 290, 4);
+    disk_read_file(str_haze_000_2, D_00195CF4);
+    mc_memset((void *)scratch_buffer, 0, 93, str_maplogic_c, 290, 4);
     xn_pal_set_range_8bit(scratch_buffer, 1, 31);
     if (world_loading == 0) func_0004C759();
     automap_restore_seen();
@@ -378,7 +378,7 @@ void building_load_interior(struct building *building)
     interior_stock_shelves(interior->children, building);
     if (interior == 0) return;
     if (player_to_nearest_marker(interior->children, 6) == 0) {
-        hud_message_add((iptr)D_00176CDD);
+        hud_message_add((iptr)str_this_house_has_nothing_of_value_2);
         return;
     }
     object_reparent(interior, player_object);
@@ -389,7 +389,7 @@ void building_load_interior(struct building *building)
 void building_enter(struct building *building)
 {
     if (building == 0) {
-        hud_message_add((iptr)D_00176CFE);
+        hud_message_add((iptr)str_this_house_has_nothing_of_value_3);
         return;
     }
     D_00195F5E = rand();
@@ -449,7 +449,7 @@ void location_pick_random_town(struct loaded_location *location)
 
     map_location = region_locations;
     town_count = 0;
-    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), D_00176C94, 991, 4);
+    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), str_maplogic_c, 991, 4);
     for (i = 0; i < region_location_count; i++, map_location++) {
         switch ((map_location->x_type_flags << 2) >> 27) {
         case 0:
@@ -486,7 +486,7 @@ void location_pick_random_undiscovered(struct loaded_location *location)
 
     map_location = region_locations;
     count = 0;
-    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), D_00176C94, 1108, 4);
+    mc_memset(location, 0, REC_SIZEOF(struct loaded_location), str_maplogic_c, 1108, 4);
     for (i = 0; i < region_location_count; i++, map_location++) {
         if ((map_location->x_type_flags & 0x40000000) == 0 && (map_location->x_type_flags & 0x80000000) == 0) {
             count++;
@@ -574,8 +574,8 @@ void location_flatten_terrain(signed char *heights, signed char *flats)
     if (((unsigned)level) > 127) level = 127;
     cursor = heights;
     while (cursor < end) {
-        mc_memset(cursor, (int)(unsigned char)*(signed char *)&level, width, D_00176C94, 1250, 4);
-        mc_memset(flats, 0, width, D_00176C94, 1251, 4);
+        mc_memset(cursor, (int)(unsigned char)*(signed char *)&level, width, str_maplogic_c, 1250, 4);
+        mc_memset(flats, 0, width, str_maplogic_c, 1251, 4);
         cursor += 256;
         flats += 256;
     }
@@ -802,8 +802,8 @@ void spfx_dispel_magic_cb(int row)
     }
     if (spell->caster == player_entity || rand_range(1, 100) <= chance) {
         spell_end(spell);
-        hud_message_add((iptr)D_00176D20);
+        hud_message_add((iptr)str_dispel_magic_was_a_success);
         return;
     }
-    hud_message_add((iptr)D_00176D3E);
+    hud_message_add((iptr)str_dispel_magic_failed);
 }

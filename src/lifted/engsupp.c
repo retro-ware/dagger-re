@@ -5,10 +5,10 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern char D_001702D4[];
+extern char str_engsupp_c[];
 extern unsigned char player_environment;
 extern short D_00179954[];
-extern char D_0017995C[];
+extern char str_w[];
 extern short D_00179966[];
 extern signed char climate_texture_sets[];
 extern signed char scratch_190ce4[];
@@ -51,7 +51,7 @@ int engine_pick_object(int x, int y, struct pick_result *result)
 
     view_bottom = ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 199 : hud_bar_image->y);
     if (y > view_bottom) return 0;
-    mc_memset(result, 0, sizeof(*result), D_001702D4, 38, 4);
+    mc_memset(result, 0, sizeof(*result), str_engsupp_c, 38, 4);
     pick_result = result;
 #ifdef DAGGER_PORT
     /* nothing under the cursor (0): DOS read the zero page there */
@@ -187,7 +187,7 @@ void dungeon_choose_textures(void)
     srand(((unsigned)location_object->id) >> 16);
     texture_set = (int)(unsigned char)climate_texture_sets[climate_category()];
     if (texture_set == 1) return;
-    mc_memcpy(D_00179966, D_0017995C, 10, D_001702D4, 279, 10);
+    mc_memcpy(D_00179966, str_w, 10, str_engsupp_c, 279, 10);
     for (i = 0; i < 5; i++) {
         archive = rand_range(0, 4);
         if (archive == 2) archive += 2;

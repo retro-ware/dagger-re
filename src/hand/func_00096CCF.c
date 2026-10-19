@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_0017704C[];
+extern char str_inven_c[];
 extern struct record *location_object;
 extern struct spell *spell_records;
 extern int D_00195B44;
@@ -35,7 +35,7 @@ void item_apply_equip_effects(struct record *object, int slot)
             spell_object = object_create_child(location_object, 0, 89);
             spell_object->type = 9;
             spell_object->flags = 3;
-            mc_memcpy(&spell_object->data.spell, &spell_records[j], 89, D_0017704C, 2092, 4);
+            mc_memcpy(&spell_object->data.spell, &spell_records[j], 89, str_inven_c, 2092, 4);
             spell = &spell_object->data.spell;
             spell->icon = *(signed char *)&slot + 200;
             for (j = 0; j < 3; j++) {

@@ -14,12 +14,12 @@ extern iptr screen_buffer;
 extern iptr D_00147954;
 extern int xn_sin_table[];
 extern int xn_cos_table[];
-extern char D_00170A6C[];
-extern char D_00170A79[];
+extern char str_moon00i0_cfa[];
+extern char str_moon01i0_cfa[];
 extern char D_00170A86[];
-extern char D_00170A8C[];
-extern char D_00170A98[];
-extern char D_00170AA5[];
+extern char str_sky_dat[];
+extern char str_nightsky_col[];
+extern char str_nite_i0_img[];
 extern signed char month_seasons[];
 extern signed char D_0017A294[];
 extern signed char D_0017A295[];
@@ -86,8 +86,8 @@ void sky_init(void)
 
     night_sky_loaded = 0;
     sky_loaded_frame = 10000;
-    moon0_image = (struct cfa_header *)disk_read_file(D_00170A6C, 0);
-    moon1_image = (struct cfa_header *)disk_read_file(D_00170A79, 0);
+    moon0_image = (struct cfa_header *)disk_read_file(str_moon00i0_cfa, 0);
+    moon1_image = (struct cfa_header *)disk_read_file(str_moon01i0_cfa, 0);
     sky_image_a = (iptr)mc_malloc(112640, D_00170A86, 93);
     sky_image_b = (iptr)mc_malloc(112640, D_00170A86, 94);
     D_00196286 = 13;
@@ -239,7 +239,7 @@ void sky_load_day(int minutes)
     if (frame == sky_loaded_frame) return;
     sky_loaded_frame = frame;
     mc_set_location(558, D_00170A86);
-    mc_sprintf((char *)text_buffer, D_00170A8C, frame >> 5);
+    mc_sprintf((char *)text_buffer, str_sky_dat, frame >> 5);
     fd = disk_open_data(text_buffer);
     frame &= 31;
     lseek(fd, (int)(iptr)&*(signed char *)((char *)(iptr)(frame * 776) + 11), 0);
@@ -335,11 +335,11 @@ void sky_stub(int unused)
 
 void sky_load_night(void)
 {
-    disk_read_file(D_00170A98, (iptr)scratch_buffer);
+    disk_read_file(str_nightsky_col, (iptr)scratch_buffer);
     xn_pal_set_range_8bit((char *)((iptr)scratch_buffer + 11), 1, 31);
     mc_memcpy((void *)((iptr)xn_pal_current + 3), (scratch_buffer + 11), 93, D_00170A86, 671, 4);
     mc_set_location(673, D_00170A86);
-    mc_sprintf((char *)text_buffer, D_00170AA5, (int)(unsigned char)D_0017A3E5[climate_category()]);
+    mc_sprintf((char *)text_buffer, str_nite_i0_img, (int)(unsigned char)D_0017A3E5[climate_category()]);
     disk_read_file(text_buffer, sky_image_a);
     sky_add_stars((unsigned char *)sky_image_a);
     night_sky_loaded = 1;

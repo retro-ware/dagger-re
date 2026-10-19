@@ -10,12 +10,12 @@ extern unsigned char D_0012B508;
 extern short font_height;
 extern char *screen_buffer;
 extern char D_00176F41[];       /* __FILE__ */
-extern char D_00176FC3[];
-extern char D_00176FC8[];
-extern char D_00176FCD[];
-extern char D_00176FD2[];
-extern char D_00176FD7[];
-extern char D_00176FDC[];
+extern char str_am[];
+extern char str_nc[];
+extern char str_pt[];
+extern char str_ad[];
+extern char str_hd[];
+extern char str_ea[];
 extern char *skill_names[];
 extern struct rect chargen_buttons[];
 extern signed char text_buffer[];
@@ -118,17 +118,17 @@ void chargen_draw_attributes(void)
     character_reset_magicka(player_character, player_class);
     if (chargen_screen == 255)
         return;
-    parse_expand(D_00176FC3, D_00190B44);
+    parse_expand(str_am, D_00190B44);
     text_draw_coloured(D_00190B44, 83, 22, 145, 141);
-    parse_expand(D_00176FC8, D_00190B44);
+    parse_expand(str_nc, D_00190B44);
     text_draw_coloured(D_00190B44, 103, 32, 145, 141);
-    parse_expand(D_00176FCD, D_00190B44);
+    parse_expand(str_pt, D_00190B44);
     text_draw_coloured(D_00190B44, 112, 49, 145, 141);
-    parse_expand(D_00176FD2, D_00190B44);
+    parse_expand(str_ad, D_00190B44);
     text_draw_coloured(D_00190B44, 121, 71, 145, 141);
-    parse_expand(D_00176FD7, D_00190B44);
+    parse_expand(str_hd, D_00190B44);
     text_draw_coloured(D_00190B44, 97, 93, 145, 141);
-    parse_expand(D_00176FDC, D_00190B44);
+    parse_expand(str_ea, D_00190B44);
     text_draw_coloured(D_00190B44, 101, 110, 145, 141);
     text_draw_coloured(D_00190B44, 122, 120, 145, 141);
 }

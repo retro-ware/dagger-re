@@ -2,10 +2,10 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_001703C9[];
-extern char D_001703D6[];
-extern char D_001703E3[];
-extern char D_001703F0[];
+extern char str_talk01i0_img[];
+extern char str_talk02i0_img[];
+extern char str_talk03i0_img[];
+extern char str_talk_c[];
 extern char D_00187CA8;
 extern char D_00190D0F;
 extern char D_00190D10;
@@ -85,10 +85,10 @@ int talk_open(struct record *npc)
         talk_npc_object = npc;
         xn_font_select(4);
         game_mode = 12;
-        window_image = disk_read_file(D_001703C9, 0);
-        D_001965E4 = disk_read_file(D_001703D6, 0);
-        D_001965F8 = disk_read_file(D_001703E3, 0);
-        talk_saved_screen = mc_malloc(64000, D_001703F0, 225);
+        window_image = disk_read_file(str_talk01i0_img, 0);
+        D_001965E4 = disk_read_file(str_talk02i0_img, 0);
+        D_001965F8 = disk_read_file(str_talk03i0_img, 0);
+        talk_saved_screen = mc_malloc(64000, str_talk_c, 225);
         D_00196272 = 1;
         D_001966BB = 0;
         talk_tone = 1;

@@ -4,7 +4,7 @@
 #include "clib.h"
 
 extern char D_00174F47[];        /* __FILE__ */
-extern char D_00174F69[];
+extern char str_qbn_2[];
 extern signed char text_buffer[];
 extern char arena2_path[];
 extern char arena2_cd_path[];
@@ -27,7 +27,7 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
     entry = scratch_buffer;
     file_count = 0;
     mc_set_location(323, D_00174F47);
-    mc_sprintf(((char *)text_buffer), D_00174F69, arena2_cd_path);
+    mc_sprintf(((char *)text_buffer), str_qbn_2, arena2_cd_path);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     while (status == 0) {
         if (find_data.name[0] != group_char && find_data.name[0] != group_char2)
@@ -42,7 +42,7 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
         status = func_000A13F7(&find_data);
     }
     mc_set_location(338, D_00174F47);
-    mc_sprintf(((char *)text_buffer), D_00174F69, arena2_path);
+    mc_sprintf(((char *)text_buffer), str_qbn_2, arena2_path);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     while (status == 0) {
         if (find_data.name[0] != group_char && find_data.name[0] != group_char2)

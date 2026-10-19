@@ -3,10 +3,10 @@
 #include "structs.h"
 #include "clib.h"
 extern iptr screen_buffer;
-extern char D_0017704C[];
-extern char D_001770B0[];
-extern char D_001770B3[];
-extern char D_001770B8[];
+extern char str_inven_c[];
+extern char str_fmt_d[];
+extern char str_done[];
+extern char str_days[];
 extern signed char text_buffer[];
 extern struct record *scratch_current_object;
 extern struct record *inv_right_container;
@@ -51,17 +51,17 @@ int inv_draw_item_cell(char *object, short cell, struct rect *rects)
     if (object == (char *)inv_selected_item && MODE != 10 && MODE2 != 10) {
         for (y = rects[cell].y0; y <= rects[cell].y1; y++)
             mc_memcpy(SCREEN + y * 320 + rects[cell].x0, (char *)(iptr)BUFS[0] + y * 320 + rects[cell].x0,
-                          rects[cell].x1 - rects[cell].x0 + 1, D_0017704C, 681, 4);
+                          rects[cell].x1 - rects[cell].x0 + 1, str_inven_c, 681, 4);
     }
     if (*(unsigned char *)object == 54) {
         for (y = rects[cell].y0; y <= rects[cell].y1; y++)
             mc_memcpy(SCREEN + y * 320 + rects[cell].x0, (char *)(iptr)BUFS[1] + y * 320 + rects[cell].x0,
-                          rects[cell].x1 - rects[cell].x0 + 1, D_0017704C, 687, 4);
+                          rects[cell].x1 - rects[cell].x0 + 1, str_inven_c, 687, 4);
     }
     if (object[38] != 0) {
         for (y = rects[cell].y0; y <= rects[cell].y1; y++)
             mc_memcpy(SCREEN + y * 320 + rects[cell].x0, (char *)(iptr)BUFS[2] + y * 320 + rects[cell].x0,
-                          rects[cell].x1 - rects[cell].x0 + 1, D_0017704C, 693, 4);
+                          rects[cell].x1 - rects[cell].x0 + 1, str_inven_c, 693, 4);
     }
     if (object != (char *)inv_left_container && object != (char *)inv_right_container && *(short *)(item + 67) != -1
         && MODE != 10 && MODE2 != 10)
@@ -82,19 +82,19 @@ int inv_draw_item_cell(char *object, short cell, struct rect *rects)
     *(short *)(item + 50) -= image_bump;
     *(char **)&color_remap = (char *)color_remap_tables;
     if (U16(item, 32) == 3 && U16(item, 34) == 18) {
-        mc_set_location(723, D_0017704C);
-        mc_sprintf(((char *)text_buffer), D_001770B0, *(unsigned char *)(item + 49));
+        mc_set_location(723, str_inven_c);
+        mc_sprintf(((char *)text_buffer), str_fmt_d, *(unsigned char *)(item + 49));
         text_draw_coloured(((char *)text_buffer), rects[cell].x0 + 3, rects[cell].y0 + 2, 145, 156);
     }
     if (trade_mode == 3 && *(unsigned char *)object == 54) {
         if ((unsigned)game_minutes >= *(unsigned *)(object + 43)) {
             *(short *)(item + 44) = *(short *)(item + 46);
-            mc_strncpy(((char *)text_buffer), D_001770B3, 160, D_0017704C, 732);
+            mc_strncpy(((char *)text_buffer), str_done, 160, str_inven_c, 732);
         } else {
             days = (*(unsigned *)(object + 43) - (unsigned)game_minutes) / 1440;
             if (days == 0) days++;
-            mc_set_location(738, D_0017704C);
-            mc_sprintf(((char *)text_buffer), D_001770B8, days);
+            mc_set_location(738, str_inven_c);
+            mc_sprintf(((char *)text_buffer), str_days, days);
         }
         text_draw_coloured(((char *)text_buffer), rects[cell].x0 + 3, rects[cell].y0 + 2, 145, 156);
     }

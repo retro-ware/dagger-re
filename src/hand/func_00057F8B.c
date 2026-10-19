@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00057F8B */
 #include "records.h"
 #include "clib.h"
-extern char D_00175710[];
+extern char str_no_room_in_item[];
 extern char D_00185716[];
 extern char D_00185717[];
 extern char D_00185718[];
@@ -83,7 +83,7 @@ void itemmaker_add_soul_powers(int soul)
     if (count > 5)
         count = 5;
     if (itemmaker_free_slot_count() < count) {
-        msgbox_show_string(D_00175710, 1);
+        msgbox_show_string(str_no_room_in_item, 1);
         return;
     }
     for (i = 0; i < count; i++) {

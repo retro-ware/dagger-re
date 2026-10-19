@@ -1,6 +1,6 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000383CC */
 extern unsigned char mouse_buttons;
-extern char D_00170B13[];
+extern char str_spells_c[];
 extern unsigned char spell_effect_target_class[];
 extern char *spell_effect_names[];
 extern unsigned char D_001940D5;
@@ -40,7 +40,7 @@ int spellmaker_add_effect(void)
         if (!((spell_effect_target_class[i] == 2 || mode == 2) || spell_effect_target_class[i] == mode))
             continue;
         list[cnt++] = i;
-        mc_strncpy(str, spell_effect_names[i], 4, D_00170B13, 1108);
+        mc_strncpy(str, spell_effect_names[i], 4, str_spells_c, 1108);
         str = strlen(str) + str + 1;
     }
     *str = 0;

@@ -3,8 +3,8 @@
 #include <dos.h>
 #include "clib.h"
 extern char D_00174F47[];        /* __FILE__ */
-extern char D_00174F50[];
-extern char D_00174F57[];
+extern char str_qbn[];
+extern char str_fmt_s_s_3[];
 extern signed char text_buffer[];
 extern char arena2_path[];
 extern char arena2_cd_path[];
@@ -19,11 +19,11 @@ void quests_start_initial(void)
     int status;
 
     mc_set_location(142, D_00174F47);
-    mc_sprintf(((char *)text_buffer), D_00174F57, arena2_path, D_00174F50);
+    mc_sprintf(((char *)text_buffer), str_fmt_s_s_3, arena2_path, str_qbn);
     status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     if (status != 0) {
         mc_set_location(146, D_00174F47);
-        mc_sprintf(((char *)text_buffer), D_00174F57, arena2_cd_path, D_00174F50);
+        mc_sprintf(((char *)text_buffer), str_fmt_s_s_3, arena2_cd_path, str_qbn);
         status = func_000A13DA(((char *)text_buffer), 0, &find_data);
     }
     while (status == 0) {

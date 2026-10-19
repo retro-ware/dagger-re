@@ -5,8 +5,8 @@
 struct shop { unsigned char mul; char pad1; short base; short min; short max; };
 struct res { int f0; int f4; };
 extern char *screen_buffer;
-extern char D_001706D4[];
-extern char D_001706E1[];       /* __FILE__ */
+extern char str_cort01i0_img[];
+extern char str_crime_c[];       /* __FILE__ */
 extern unsigned char player_environment;
 extern int crime_reputation_loss[];
 extern struct shop crime_fine_table[];
@@ -105,8 +105,8 @@ int court_open(int crime)
         }
         game_mode = 21;
         D_00196272 = 1;
-        window_image = disk_read_file(D_001706D4, 0);
-        mc_memcpy(screen_buffer, window_image, 64000, D_001706E1, 114, 4);
+        window_image = disk_read_file(str_cort01i0_img, 0);
+        mc_memcpy(screen_buffer, window_image, 64000, str_crime_c, 114, 4);
         xn_gfx_present_inclusive(1);
         scratch_190cac = fine;
         D_00187CA8 = 0;

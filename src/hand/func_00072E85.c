@@ -3,7 +3,7 @@
 #include "bitfield.h"
 
 extern int xn_anim_ticks;
-extern char D_00176184[];
+extern char str_you_have_no_arrows[];
 extern short cast_anim_state;
 extern char D_001875B7[];
 extern signed char D_001940D6;
@@ -56,7 +56,7 @@ void weapon_player_update(void)
     if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
     if (((iptr)D_001875B7) == *(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)]) {
         if (inv_take_arrow(0) == 0) {
-            hud_status_set(D_00176184);
+            hud_status_set(str_you_have_no_arrows);
             D_001940D6 &= 191;
             return;
         }

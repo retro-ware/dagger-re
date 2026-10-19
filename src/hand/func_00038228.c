@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170B13[];
+extern char str_spells_c[];
 extern struct spell *selected_spell;
 extern char spell_effect_settings[];
 extern char spell_effect_costs[];
@@ -35,7 +35,7 @@ void spellmaker_pick_effect_cb(short effect_type)
             (selected_spell->target)++;
     }
     if ((iptr)spell_effect_subtype_names[effect_type][0] == 0) {
-        mc_memcpy(spell_effect_cost_current, spell_effect_costs + (*(unsigned char *)(spell_effect_cost_index + effect_type * 12) << 3), 8, D_00170B13, 1058, 8);
+        mc_memcpy(spell_effect_cost_current, spell_effect_costs + (*(unsigned char *)(spell_effect_cost_index + effect_type * 12) << 3), 8, str_spells_c, 1058, 8);
         D_00199628 = 0;
         *(char *)spellmaker_settings_kind = *(char *)(spell_effect_settings + effect_type * 12);
     } else {
@@ -46,7 +46,7 @@ void spellmaker_pick_effect_cb(short effect_type)
         j = 0;
         while ((iptr)spell_effect_subtype_names[effect_type][j] != 0) {
             *(scratch_buffer + j + 32000) = j;
-            mc_strncpy(s, spell_effect_subtype_names[effect_type][j++], 4, D_00170B13, 1071);
+            mc_strncpy(s, spell_effect_subtype_names[effect_type][j++], 4, str_spells_c, 1071);
             s = s + strlen(s) + 1;
         }
         *s = 0;

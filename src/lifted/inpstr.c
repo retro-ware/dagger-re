@@ -10,7 +10,7 @@ extern signed char key_down_left;
 extern signed char key_down_right;
 extern signed char key_down_end;
 extern short xn_gfx_clip_right;
-extern char D_00176E2C[];
+extern char str_inpstr_c[];
 extern char D_00190B44[];
 extern iptr inpstr_text;
 extern short text_cursor_x;
@@ -46,7 +46,7 @@ void inpstr_begin_number(int number)
     input_digits_only = 1;
     itoa(number, inpstr_number_text, 10);
     inpstr_text = (iptr)inpstr_number_text;
-    mc_strncpy(D_00190B44, (char *)inpstr_text, 160, D_00176E2C, 110);
+    mc_strncpy(D_00190B44, (char *)inpstr_text, 160, str_inpstr_c, 110);
     inpstr_cursor = strlen(inpstr_number_text);
     inpstr_max_length = 8;
     D_001A9AB1 = xn_font_current;
@@ -77,13 +77,13 @@ int inpstr_handle_key(unsigned char key)
         break;
     case 8:
         if (inpstr_cursor != 0) {
-            mc_memcpy((void *)((iptr)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) - 1), (*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), D_00176E2C, 217, 4);
+            mc_memcpy((void *)((iptr)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) - 1), (*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), str_inpstr_c, 217, 4);
             inpstr_cursor--;
         }
         break;
     case 127:
         if (((unsigned)((int)(short)inpstr_cursor)) < strlen((char *)inpstr_text)) {
-            mc_memcpy((*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), &*(signed char *)((char *)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) + 1), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), D_00176E2C, 226, 4);
+            mc_memcpy((*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), &*(signed char *)((char *)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) + 1), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), str_inpstr_c, 226, 4);
         }
         break;
     default:
@@ -94,7 +94,7 @@ int inpstr_handle_key(unsigned char key)
                     *(signed char *)((*(char **)&inpstr_text + ((int)(short)(inpstr_cursor)++))) = key;
                     *(signed char *)((*(char **)&inpstr_text + ((int)(short)inpstr_cursor))) = 0;
                 } else {
-                    mc_memmove((void *)((iptr)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) + 1), (*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), D_00176E2C, 245, 4);
+                    mc_memmove((void *)((iptr)(*(char **)&inpstr_text + ((int)(short)inpstr_cursor)) + 1), (*(char **)&inpstr_text + ((int)(short)inpstr_cursor)), (int)(iptr)&*(signed char *)((char *)(iptr)(strlen((char *)inpstr_text) - ((int)(short)inpstr_cursor)) + 1), str_inpstr_c, 245, 4);
                     *(signed char *)((*(char **)&inpstr_text + ((int)(short)(inpstr_cursor)++))) = key;
                 }
             }

@@ -1,8 +1,8 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0003D412 */
 #include "structs.h"
 #include "clib.h"
-extern char D_00170D55[];
-extern char D_00170D5C[];
+extern char str_text_c[];
+extern char str_bad_dagtext_number_requested[];
 extern struct text_rsc_entry *scratch_buffer;
 extern int text_rsc_file;
 extern char text_missing_ok;
@@ -32,16 +32,16 @@ char *text_rsc_load(short id, unsigned short flags, short width)
             text_missing_ok = 0;
             return 0;
         }
-        text = mc_malloc(1024, D_00170D55, 65);
-        mc_set_location(66, D_00170D55);
-        mc_sprintf(text, D_00170D5C, id);
+        text = mc_malloc(1024, str_text_c, 65);
+        mc_set_location(66, str_text_c);
+        mc_sprintf(text, str_bad_dagtext_number_requested, id);
         return text;
     }
     size = scratch_buffer[i + 1].offset - scratch_buffer[i].offset;
     lseek(text_rsc_file, scratch_buffer[i].offset, 0);
-    text = mc_malloc(size + 16, D_00170D55, 73);
-    wrap_buf = mc_malloc(size < 4096 ? 8192 : size * 2, D_00170D55, 74);
-    expand_buf = mc_malloc(size < 4096 ? 8192 : size * 2, D_00170D55, 75);
+    text = mc_malloc(size + 16, str_text_c, 73);
+    wrap_buf = mc_malloc(size < 4096 ? 8192 : size * 2, str_text_c, 74);
+    expand_buf = mc_malloc(size < 4096 ? 8192 : size * 2, str_text_c, 75);
     read(text_rsc_file, text, size + 8);
     j = 0;
     i = 1;

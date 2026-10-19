@@ -5,18 +5,18 @@
 #define FREED ((void *)(iptr)-1751672937)
 #define FREE(p, line) if ((p) != 0 && (p) != FREED) { mc_free((p), D_00176F41, (line)); (p) = FREED; }
 extern unsigned char D_0012B508;
-extern char D_00176F28[];
-extern char D_00176F34[];
+extern char str_tamriel_img[];
+extern char str_char00i0_img[];
 extern char D_00176F41[];       /* __FILE__ */
-extern char D_00176F4C[];
-extern char D_00176F5B[];
-extern char D_00176F68[];
-extern char D_00176F75[];
-extern char D_00176F82[];
-extern char D_00176F8F[];
-extern char D_00176F9C[];
-extern char D_00176FA9[];
-extern char D_00176FB6[];
+extern char str_face_i0_cif_2[];
+extern char str_char01i0_img[];
+extern char str_char02i0_img[];
+extern char str_cust09i0_img_2[];
+extern char str_char03i0_img[];
+extern char str_char03i1_img[];
+extern char str_char05i0_img[];
+extern char str_char05i1_img[];
+extern char str_char04i0_img[];
 extern unsigned char chargen_career_skill_bonus[];
 extern signed char text_buffer[];
 extern int scratch_190be8;
@@ -65,7 +65,7 @@ int chargen_name_character(void)
         scratch_190cee[i] = player_character->skills[player_class->skills[i]].value += chargen_career_skill_bonus[i];
     }
     player_character->level = 1;
-    disk_read_file(D_00176F28, scratch_buffer);
+    disk_read_file(str_tamriel_img, scratch_buffer);
     D_00190DEA = scratch_190dec = D_00190DEE = scratch_190d64 = chargen_selected_attribute = 0;
     scratch_190be8 = 0;
     player_character->name[0] = 0;
@@ -76,28 +76,28 @@ int chargen_name_character(void)
     }
     while (player_character->name[0] == 0) {
         chargen_screen = 1;
-        window_image = disk_read_file(D_00176F34, 0);
+        window_image = disk_read_file(str_char00i0_img, 0);
         classmaker_input_text(player_character, 31, chargen_draw);
         FREE(window_image, 114);
     }
     mc_set_location(117, D_00176F41);
-    mc_sprintf(((char *)text_buffer), D_00176F4C, player_character->flags & 1, player_character->race);
+    mc_sprintf(((char *)text_buffer), str_face_i0_cif_2, player_character->flags & 1, player_character->race);
     chargen_face_images = disk_read_file(((char *)text_buffer), 0);
     chargen_screen = 2;
-    window_image = disk_read_file(D_00176F5B, 0);
+    window_image = disk_read_file(str_char01i0_img, 0);
     chargen_screen_loop(33, 34);
     FREE(window_image, 122);
     FREE(chargen_face_images, 123);
     chargen_roll_attributes();
     chargen_screen = 4;
-    window_image = disk_read_file(D_00176F68, 0);
-    D_00195B5C = disk_read_file(D_00176F75, 0);
+    window_image = disk_read_file(str_char02i0_img, 0);
+    D_00195B5C = disk_read_file(str_cust09i0_img_2, 0);
     chargen_select_attribute(0);
     chargen_screen_loop(20, 32);
     FREE(window_image, 131);
     chargen_screen = 8;
-    window_image = disk_read_file(D_00176F82, 0);
-    D_00195B60 = disk_read_file(D_00176F8F, 0);
+    window_image = disk_read_file(str_char03i0_img, 0);
+    D_00195B60 = disk_read_file(str_char03i1_img, 0);
     D_00190DEA = scratch_190dec = D_00190DEE = 6;
     for (i = 0; i < 12; i++) {
         scratch_190cee[i] = player_character->skills[player_class->skills[i]].value;
@@ -109,8 +109,8 @@ int chargen_name_character(void)
     FREE(window_image, 142);
     FREE(D_00195B60, 143);
     chargen_screen = 16;
-    window_image = disk_read_file(D_00176F9C, 0);
-    chargen_reflex_image = disk_read_file(D_00176FA9, 0);
+    window_image = disk_read_file(str_char05i0_img, 0);
+    chargen_reflex_image = disk_read_file(str_char05i1_img, 0);
     chargen_screen_loop(35, 39);
     FREE(window_image, 149);
     FREE(chargen_reflex_image, 150);
@@ -118,11 +118,11 @@ int chargen_name_character(void)
     msgbox_update();
     chargen_screen = 255;
     mc_set_location(155, D_00176F41);
-    mc_sprintf(((char *)text_buffer), D_00176F4C, player_character->flags & 1, player_character->race);
+    mc_sprintf(((char *)text_buffer), str_face_i0_cif_2, player_character->flags & 1, player_character->race);
     chargen_face_images = disk_read_file(((char *)text_buffer), 0);
-    D_00195B60 = disk_read_file(D_00176F8F, 0);
-    window_image = disk_read_file(D_00176FB6, 0);
-    chargen_reflex_image = disk_read_file(D_00176FA9, 0);
+    D_00195B60 = disk_read_file(str_char03i1_img, 0);
+    window_image = disk_read_file(str_char04i0_img, 0);
+    chargen_reflex_image = disk_read_file(str_char05i1_img, 0);
     mc_memcpy(player_character->base_attributes, player_character->attributes, 16, D_00176F41, 161, 16);
     player_character->level_skill_sum_start = level_skill_sum();
     if (chargen_screen_loop(0, 39)) {

@@ -4,7 +4,7 @@
 #include "records.h"
 
 extern signed char mouse_buttons;
-extern char D_0017055C[];
+extern char str_tvrn00i0_img[];
 extern signed char tavern_state;
 extern struct building *current_building;
 extern struct building *tavern_building;
@@ -26,7 +26,7 @@ int tavern_open(short opening)
     if (opening != 0) {
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         tavern_state = 0;
-        tavern_menu_image = disk_read_file(D_0017055C, 0);
+        tavern_menu_image = disk_read_file(str_tvrn00i0_img, 0);
         game_mode = 20;
         D_00196272 = 1;
         *(iptr *)&tavern_building = (iptr)current_building;

@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00175C86[];
+extern char str_logbook_c[];
 extern struct record *logbook_object;
 extern struct location *current_location;
 extern int game_minutes;
@@ -26,7 +26,7 @@ void logbook_add_entry(unsigned char quest_id, int message_id, int index)
             quest = quest_find_by_id(logbook->quest_ids[i]);
             if (quest == 0) {
                 logbook->quest_ids[i] = 0;
-                mc_memset(logbook->message_ids[i], 0, 20, D_00175C86, 301, 20);
+                mc_memset(logbook->message_ids[i], 0, 20, str_logbook_c, 301, 20);
             }
         }
         if (logbook->quest_ids[i] == 0 && slot == -1) {
@@ -40,11 +40,11 @@ void logbook_add_entry(unsigned char quest_id, int message_id, int index)
         }
     }
     if (fresh)
-        mc_memset(logbook->message_ids[slot], 0, 20, D_00175C86, 319, 20);
+        mc_memset(logbook->message_ids[slot], 0, 20, str_logbook_c, 319, 20);
     logbook->quest_ids[slot] = quest_id;
     if (index > 9)
         index %= 10;
     logbook->message_ids[slot][index] = message_id;
     logbook->message_times[slot][index] = game_minutes;
-    mc_strncpy(logbook->places[slot], current_location->name, 32, D_00175C86, 325);
+    mc_strncpy(logbook->places[slot], current_location->name, 32, str_logbook_c, 325);
 }

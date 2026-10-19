@@ -14,8 +14,8 @@ extern signed char text_shadow_colour;
 extern signed char D_0012B508;
 extern short font_height;
 extern signed char key_down_esc;
-extern char D_00170C40[];
-extern char D_00170C67[];
+extern char str_info00i0_img[];
+extern char str_sheet_c[];
 extern char D_00170C79[];
 extern char D_00170CA7[];
 extern char D_00170CB1[];
@@ -24,7 +24,7 @@ extern char D_00170CDB[];
 extern char D_00170CEC[];
 extern char D_00170CFD[];
 extern char D_00170D0F[];
-extern char D_00170D4C[];
+extern char str_text_rsc[];
 extern short msgbox_wrap_width;
 extern short skill_advance_multipliers[];
 extern struct rect sheet_buttons[23];
@@ -144,15 +144,15 @@ int sheet_close(void)
     D_001940D9 &= 251;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00170C67, 128);
+        mc_free((void *)window_image, str_sheet_c, 128);
         window_image = -1751672937;
     }
     if ((iptr)D_00199638 != 0 && (iptr)D_00199638 != (-1751672937)) {
-        mc_free(D_00199638, D_00170C67, 129);
+        mc_free(D_00199638, str_sheet_c, 129);
         D_00199638 = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free(D_00195B5C, D_00170C67, 130);
+        mc_free(D_00195B5C, str_sheet_c, 130);
         D_00195B5C = (struct image *)(iptr)-1751672937;
     }
     D_00196272 = 0;
@@ -188,7 +188,7 @@ void sheet_rename(void)
     char *text;
 
     text = scratch_buffer + 55000;
-    mc_set_location(232, D_00170C67);
+    mc_set_location(232, str_sheet_c);
     mc_sprintf(text, D_00170C79, D_0017D1EA);
     *(strlen(text) + text + 1) = 0;
     inpstr_begin_text(player_character->name, 23);
@@ -211,9 +211,9 @@ void sheet_affiliation_line(struct record *object)
     if (object->type != 10) return;
     membership = &object->data.membership;
     faction = faction_find(membership->faction);
-    mc_set_location(255, D_00170C67);
+    mc_set_location(255, str_sheet_c);
     mc_sprintf((char *)text_buffer, D_00170CA7, faction->name, *(iptr *)((faction_rank_names[((int)(unsigned char)(membership->kind & 31))] + (membership->rank << PTR_SHIFT))));
-    func_000A1054((char *)D_0019963C, (char *)text_buffer, D_00170C67, 256, 4);
+    func_000A1054((char *)D_0019963C, (char *)text_buffer, str_sheet_c, 256, 4);
     text_cursor_x++;
 }
 
@@ -221,7 +221,7 @@ void sheet_show_affiliations(void)
 {
     text_cursor_x = 0;
     D_0019963C = (iptr)scratch_buffer + 55000;
-    mc_set_location(264, D_00170C67);
+    mc_set_location(264, str_sheet_c);
     mc_sprintf((char *)D_0019963C, D_00170CB1, D_00182682);
     object_foreach(player_entity->children, sheet_affiliation_line);
     if (text_cursor_x == 0) {
@@ -263,7 +263,7 @@ void sheet_format_skill(iptr text, short skill, int raised)
         int colour;
 
         if (((int)(short)skill) == 30) sheet_hth_damage_line = 1;
-        mc_set_location(349, D_00170C67);
+        mc_set_location(349, str_sheet_c);
         mc_sprintf((char *)text_buffer, D_00170CDB, (iptr)skill_names[((int)(short)skill)], player_character->skills[(int)(short)skill].value, attribute_abbrevs[((int)(unsigned char)skill_governing_attributes[(int)(short)skill])]);
         if (raised != 0) {
             colour = 96;
@@ -271,7 +271,7 @@ void sheet_format_skill(iptr text, short skill, int raised)
             colour = 145;
         }
         D_001903A5 = *(signed char *)&colour;
-        func_000A1054((char *)text, (char *)text_buffer, D_00170C67, 351, 4);
+        func_000A1054((char *)text, (char *)text_buffer, str_sheet_c, 351, 4);
     }
 }
 
@@ -294,7 +294,7 @@ void sheet_show_misc_skills(void)
             *(int *)&raised = skill_raised_recently((int)(short)*(short *)&skill);
             if (((int)(short)(count & 1)) != 0) {
                 if (((int)(short)*(short *)&skill) == 30) sheet_hth_damage_line = 1;
-                mc_set_location(372, D_00170C67);
+                mc_set_location(372, str_sheet_c);
                 mc_sprintf((char *)text_buffer, D_00170CEC, (iptr)skill_names[((int)(short)*(short *)&skill)], player_character->skills[(int)(short)*(short *)&skill].value, attribute_abbrevs[((int)(unsigned char)skill_governing_attributes[(int)(short)*(short *)&skill])]);
                 if ((short)raised != 0) {
                     left_colour = 96;
@@ -302,10 +302,10 @@ void sheet_show_misc_skills(void)
                     left_colour = 145;
                 }
                 D_001903A5 = *(signed char *)&left_colour;
-                func_000A1054(text, (char *)text_buffer, D_00170C67, 374, 4);
+                func_000A1054(text, (char *)text_buffer, str_sheet_c, 374, 4);
             } else {
                 if (((int)(short)*(short *)&skill) == 30) sheet_hth_damage_line = 1;
-                mc_set_location(379, D_00170C67);
+                mc_set_location(379, str_sheet_c);
                 mc_sprintf((char *)text_buffer, D_00170CFD, (iptr)skill_names[((int)(short)*(short *)&skill)], player_character->skills[(int)(short)*(short *)&skill].value, attribute_abbrevs[((int)(unsigned char)skill_governing_attributes[(int)(short)*(short *)&skill])]);
                 if ((short)raised != 0) {
                     right_colour = 96;
@@ -313,16 +313,16 @@ void sheet_show_misc_skills(void)
                     right_colour = 145;
                 }
                 D_001903A5 = *(signed char *)&right_colour;
-                func_000A1054(text, (char *)text_buffer, D_00170C67, 381, 4);
+                func_000A1054(text, (char *)text_buffer, str_sheet_c, 381, 4);
             }
             count++;
         }
     }
     if (sheet_hth_damage_line != 0) {
-        mc_set_location(389, D_00170C67);
+        mc_set_location(389, str_sheet_c);
         mc_sprintf((char *)text_buffer, D_00170CC0, (player_character->skills[30].value / 10) + 1, (player_character->skills[30].value / 5) + 1);
         D_001903A5 = 96;
-        func_000A1054(text, (char *)text_buffer, D_00170C67, 391, 4);
+        func_000A1054(text, (char *)text_buffer, str_sheet_c, 391, 4);
     }
     if (((int)(short)(count & 1)) != 0) {
         *(strlen(text) + text - 2) = 0;
@@ -351,11 +351,11 @@ void sheet_button_history(void)
     if (*text != 0) msgbox_show_string((iptr)text, 1);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00170C67, 428);
+        mc_free((void *)window_image, str_sheet_c, 428);
         window_image = -1751672937;
     }
     career_show_biography();
-    window_image = disk_read_file(D_00170C40, 0);
+    window_image = disk_read_file(str_info00i0_img, 0);
 }
 
 void sheet_button_log(void)
@@ -410,12 +410,12 @@ iptr health_status_text(void)
     *text = *(signed char *)&i;
     for (; ((int)(short)i) < *(int *)D_00195B84; i++) {
         line = text_rsc_load((int)(short)((unsigned short)(unsigned char)*(signed char *)((char *)(((int)(short)i) + scratch_buffer) + 60000)), 0, 310);
-        func_000A1054(text, (char *)line, D_00170C67, 525, 4);
+        func_000A1054(text, (char *)line, str_sheet_c, 525, 4);
         if (line != 0 && line != (-1751672937)) {
-            mc_free((void *)line, D_00170C67, 526);
+            mc_free((void *)line, str_sheet_c, 526);
             line = -1751672937;
         }
-        func_000A1054(text, D_00170D0F, D_00170C67, 527, 4);
+        func_000A1054(text, D_00170D0F, str_sheet_c, 527, 4);
     }
     *(strlen(text) + text + 1) = 0;
     return (iptr)text;
@@ -490,7 +490,7 @@ void training_update(void)
         row = 0;
         dest = scratch_buffer;
         while (skills[row] != 255) {
-            mc_strncpy(dest, skill_names[skills[row]], 4, D_00170C67, 615);
+            mc_strncpy(dest, skill_names[skills[row]], 4, str_sheet_c, 615);
             dest += strlen(dest) + 1;
             row++;
         }
@@ -546,7 +546,7 @@ void raise_skills(void)
             value = player_character->skills[skill].value;
             if (value >= 95 && mastered != 0) continue;
             if (player_character->skills[skill].value < 100) {
-                mc_set_location(674, D_00170C67);
+                mc_set_location(674, str_sheet_c);
                 mc_sprintf((char *)text_buffer, (char *)D_00185073, (iptr)skill_names[skill]);
                 hud_message_add(text_buffer);
                 player_character->skills[skill].value++;
@@ -624,7 +624,7 @@ int text_rsc_open(void)
 {
     int ok;
 
-    text_rsc_main_file = (*(int *)text_rsc_file = disk_open_data(D_00170D4C));
+    text_rsc_main_file = (*(int *)text_rsc_file = disk_open_data(str_text_rsc));
     if (*(int *)text_rsc_file > 0) {
         ok = 1;
     } else {

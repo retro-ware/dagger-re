@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170C67[];
+extern char str_sheet_c[];
 extern char D_00170CC0[];
 extern short msgbox_wrap_width;
 extern signed char text_buffer[];
@@ -40,10 +40,10 @@ void sheet_show_career_skills(short first, short all_six)
         sheet_format_skill(text, player_class->skills[first + 5], skill_raised_recently(player_class->skills[first + 5]));
     }
     if (sheet_hth_damage_line) {
-        mc_set_location(327, D_00170C67);
+        mc_set_location(327, str_sheet_c);
         mc_sprintf(((char *)text_buffer), D_00170CC0, player_character->skills[30].value / 10 + 1, player_character->skills[30].value / 5 + 1);
         D_001903A5 = 96;
-        func_000A1054(text, ((char *)text_buffer), D_00170C67, 329, 4);
+        func_000A1054(text, ((char *)text_buffer), str_sheet_c, 329, 4);
     }
     text[strlen(text) - 1] = 0;
     xn_draw_fullscreen_overlay_shaded(window_image);

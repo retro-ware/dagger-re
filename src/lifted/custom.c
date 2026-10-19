@@ -11,40 +11,40 @@ extern short mouse_y;
 extern signed char D_0012B508;
 extern iptr screen_buffer;
 extern signed char xn_mouse_cursor_drawn;
-extern char D_00175420[];
-extern char D_00175429[];
-extern char D_00175436[];
-extern char D_00175443[];
-extern char D_00175450[];
-extern char D_0017545D[];
-extern char D_0017546A[];
-extern char D_00175477[];
-extern char D_00175482[];
-extern char D_0017548B[];
-extern char D_00175499[];
-extern char D_001754AA[];
-extern char D_001754B8[];
-extern char D_001754C3[];
-extern char D_001754D0[];
-extern char D_001754DD[];
-extern char D_001754EE[];
-extern char D_001754FE[];
-extern char D_0017550B[];
-extern char D_00175530[];
-extern char D_00175537[];
-extern char D_0017553E[];
-extern char D_00175553[];
-extern char D_0017556B[];
-extern char D_0017557E[];
-extern char D_0017558C[];
-extern char D_0017559E[];
-extern char D_001755B3[];
-extern char D_001755C9[];
-extern char D_001755DC[];
+extern char str_custom_c[];
+extern char str_cust00i0_img[];
+extern char str_cust08i0_img[];
+extern char str_cust09i0_img[];
+extern char str_cust03i0_img[];
+extern char str_cust01i0_img[];
+extern char str_cust02i0_img[];
+extern char str_resistance[];
+extern char str_immunity[];
+extern char str_acute_hearing[];
+extern char str_spell_absorption[];
+extern char str_rapid_healing[];
+extern char str_regenerate[];
+extern char str_bonus_to_hit[];
+extern char str_atheleticism[];
+extern char str_increased_magery[];
+extern char str_adrenaline_rush[];
+extern char str_expertise_in[];
+extern char str_inability_to_regenerate_spell_points[];
+extern char str_damage[];
+extern char str_phobia[];
+extern char str_light_powered_magery[];
+extern char str_darkness_powered_magery[];
+extern char str_forbidden_weaponry[];
+extern char str_low_tolerance[];
+extern char str_critical_weakness[];
+extern char str_forbidden_armor_type[];
+extern char str_forbidden_shield_type[];
+extern char str_forbidden_material[];
+extern char str_fmt_s_s_7[];
 extern char D_001755E2[];
-extern char D_0017567E[];
-extern char D_0017568B[];
-extern char D_00175698[];
+extern char str_item00i0_img[];
+extern char str_item01i0_img[];
+extern char str_spells_std_3[];
 extern char *skill_names[];
 extern char *classmaker_help_topics[];
 extern char *classmaker_advantage_names[];
@@ -167,7 +167,7 @@ void classmaker_run(void)
     slot16 button_count;
     slot16 button;
 
-    mc_memset((void *)((iptr)player_class + 16), -1, 12, D_00175420, 88, 12);
+    mc_memset((void *)((iptr)player_class + 16), -1, 12, str_custom_c, 88, 12);
     player_class->hp_per_level = 8;
     player_class->flags = 5120;
     xn_str_fill_u16((unsigned short *)((iptr)player_class + 58), 50, 16);
@@ -182,17 +182,17 @@ void classmaker_run(void)
     if (*(signed char *)classmaker_file != 0) {
         disk_read_file(classmaker_file, (iptr)player_class);
     }
-    disk_read_file(D_00175429, screen_buffer);
-    scratch_190df4 = (iptr)mc_malloc(64000, D_00175420, 105);
-    mc_memcpy((void *)scratch_190df4, (void *)screen_buffer, 64000, D_00175420, 106, 4);
-    scratch_190dec = disk_read_file(D_00175436, 0);
-    *(iptr *)scratch_190de4 = (iptr)mc_malloc(5520, D_00175420, 109);
+    disk_read_file(str_cust00i0_img, screen_buffer);
+    scratch_190df4 = (iptr)mc_malloc(64000, str_custom_c, 105);
+    mc_memcpy((void *)scratch_190df4, (void *)screen_buffer, 64000, str_custom_c, 106, 4);
+    scratch_190dec = disk_read_file(str_cust08i0_img, 0);
+    *(iptr *)scratch_190de4 = (iptr)mc_malloc(5520, str_custom_c, 109);
     xn_draw_get_rect(219, 46, 40, 138, (char *)*(iptr *)scratch_190de4, 0);
-    scratch_190df0 = (struct image *)disk_read_file(D_00175443, 0);
-    scratch_190de8 = (iptr)mc_malloc(scratch_190df0->width * scratch_190df0->height, D_00175420, 113);
-    scratch_190df8 = disk_read_file(D_00175450, 0);
-    D_00190E00 = disk_read_file(D_0017545D, 0);
-    scratch_190dfc = disk_read_file(D_0017546A, 0);
+    scratch_190df0 = (struct image *)disk_read_file(str_cust09i0_img, 0);
+    scratch_190de8 = (iptr)mc_malloc(scratch_190df0->width * scratch_190df0->height, str_custom_c, 113);
+    scratch_190df8 = disk_read_file(str_cust03i0_img, 0);
+    D_00190E00 = disk_read_file(str_cust01i0_img, 0);
+    scratch_190dfc = disk_read_file(str_cust02i0_img, 0);
     bios_ticks = (int *)DOS_LOW(0x46C);
     *(int *)scratch_190be4 = *bios_ticks;
     while (classmaker_done == 0) {
@@ -259,7 +259,7 @@ void classmaker_run(void)
             classmaker_specials_screen();
         }
         classmaker_update_advancement();
-        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, D_00175420, 205, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_custom_c, 205, 4);
         bios_ticks_now = (int *)DOS_LOW(0x46C);
         if (*(int *)scratch_190be4 != *bios_ticks_now) {
             D_00190D74++;
@@ -268,15 +268,15 @@ void classmaker_run(void)
         }
     }
     D_001940D8 &= 254;
-    mc_free((void *)*(iptr *)scratch_190de4, D_00175420, 217);
-    mc_free((void *)scratch_190dec, D_00175420, 218);
-    mc_free((void *)scratch_190de8, D_00175420, 219);
-    mc_free(scratch_190df0, D_00175420, 220);
-    mc_free((void *)scratch_190df4, D_00175420, 221);
-    mc_free((void *)scratch_190df8, D_00175420, 222);
-    mc_free((void *)scratch_190dfc, D_00175420, 223);
-    mc_free((void *)D_00190E00, D_00175420, 224);
-    mc_memset(scratch_190de4, 0, 128 * PTR_SIZE, D_00175420, 226, 512);
+    mc_free((void *)*(iptr *)scratch_190de4, str_custom_c, 217);
+    mc_free((void *)scratch_190dec, str_custom_c, 218);
+    mc_free((void *)scratch_190de8, str_custom_c, 219);
+    mc_free(scratch_190df0, str_custom_c, 220);
+    mc_free((void *)scratch_190df4, str_custom_c, 221);
+    mc_free((void *)scratch_190df8, str_custom_c, 222);
+    mc_free((void *)scratch_190dfc, str_custom_c, 223);
+    mc_free((void *)D_00190E00, str_custom_c, 224);
+    mc_memset(scratch_190de4, 0, 128 * PTR_SIZE, str_custom_c, 226, 512);
 }
 
 void classmaker_exit_button(void)
@@ -484,7 +484,7 @@ int classmaker_pick_from_list(iptr names, iptr background)
     for (;;) {
         keys_world_actions();
         xn_mouse_poll_clamped();
-        mc_memcpy((void *)screen_buffer, (void *)background, 64000, D_00175420, 558, 4);
+        mc_memcpy((void *)screen_buffer, (void *)background, 64000, str_custom_c, 558, 4);
         i = list_popup_update();
         if (((int)(short)i) > (-1)) {
             while (mouse_buttons != 0) xn_mouse_poll_clamped();
@@ -495,7 +495,7 @@ int classmaker_pick_from_list(iptr names, iptr background)
         }
         xn_mouse_cursor_drawn &= 254;
         xn_mouse_cursor_move((int)(short)mouse_x, (int)(short)mouse_y);
-        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, D_00175420, 568, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_custom_c, 568, 4);
     }
 }
 
@@ -577,7 +577,7 @@ int classmaker_picklist_wait(void)
             return 0;
         }
         xn_mouse_cursor_move((int)(short)mouse_x, (int)(short)mouse_y);
-        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, D_00175420, 655, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_custom_c, 655, 4);
     }
 }
 
@@ -733,49 +733,49 @@ void career_advantages_text(void)
 
     for (i = 0; i < 7; i++) {
         if ((player_class->resistance_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_00175477, D_0018087E[i]);
+            career_specials_line((iptr)str_resistance, D_0018087E[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->immunity_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_00175482, D_0018087E[i]);
+            career_specials_line((iptr)str_immunity, D_0018087E[i]);
         }
     }
     if (((int)(unsigned short)(player_class->flags & 1)) != 0) {
-        career_specials_line((iptr)D_0017548B, 0);
+        career_specials_line((iptr)str_acute_hearing, 0);
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->spell_absorption_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_00175499, D_0018089E[i]);
+            career_specials_line((iptr)str_spell_absorption, D_0018089E[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->rapid_healing_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_001754AA, D_001808AE[i]);
+            career_specials_line((iptr)str_rapid_healing, D_001808AE[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->regeneration_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_001754B8, D_001808BE[i]);
+            career_specials_line((iptr)str_regenerate, D_001808BE[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->attack_modifier_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_001754C3, D_001808D2[i]);
+            career_specials_line((iptr)str_bonus_to_hit, D_001808D2[i]);
         }
     }
     if (((int)(unsigned short)(player_class->flags & 2)) != 0) {
-        career_specials_line((iptr)D_001754D0, 0);
+        career_specials_line((iptr)str_atheleticism, 0);
     }
     if (((player_class->flags >> 10) & 7) < 5) {
-        career_specials_line((iptr)D_001754DD, D_001808E6[((player_class->flags >> 10) & 7)]);
+        career_specials_line((iptr)str_increased_magery, D_001808E6[((player_class->flags >> 10) & 7)]);
     }
     if (((int)(unsigned short)(player_class->flags & 4)) != 0) {
-        career_specials_line((iptr)D_001754EE, 0);
+        career_specials_line((iptr)str_adrenaline_rush, 0);
     }
     for (i = 0; i < 6; i++) {
         if ((player_class->expert_weapons & (1 << i)) != 0) {
-            career_specials_line((iptr)D_001754FE, D_001808FE[i]);
+            career_specials_line((iptr)str_expertise_in, D_001808FE[i]);
         }
     }
 }
@@ -785,56 +785,56 @@ void career_disadvantages_text(void)
     int i;
 
     if (((int)(unsigned short)(player_class->flags & 8)) != 0) {
-        career_specials_line((iptr)D_0017550B, 0);
+        career_specials_line((iptr)str_inability_to_regenerate_spell_points, 0);
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 4))) != 0) {
-            career_specials_line((iptr)D_00175530, D_0018096E[i]);
+            career_specials_line((iptr)str_damage, D_0018096E[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->attack_modifier_flags & (1 << (i + 4))) != 0) {
-            career_specials_line((iptr)D_00175537, D_001808D2[i]);
+            career_specials_line((iptr)str_phobia, D_001808D2[i]);
         }
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 6))) != 0) {
-            career_specials_line((iptr)D_0017553E, D_0018097A[i]);
+            career_specials_line((iptr)str_light_powered_magery, D_0018097A[i]);
         }
     }
     for (i = 0; i < 2; i++) {
         if ((player_class->flags & (1 << (i + 8))) != 0) {
-            career_specials_line((iptr)D_00175553, D_00180986[i]);
+            career_specials_line((iptr)str_darkness_powered_magery, D_00180986[i]);
         }
     }
     for (i = 0; i < 6; i++) {
         if ((player_class->forbidden_equipment & (1 << i)) != 0) {
-            career_specials_line((iptr)D_0017556B, D_001808FE[i]);
+            career_specials_line((iptr)str_forbidden_weaponry, D_001808FE[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->low_tolerance_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_0017557E, D_0018087E[i]);
+            career_specials_line((iptr)str_low_tolerance, D_0018087E[i]);
         }
     }
     for (i = 0; i < 7; i++) {
         if ((player_class->critical_weakness_flags & (1 << i)) != 0) {
-            career_specials_line((iptr)D_0017558C, D_0018087E[i]);
+            career_specials_line((iptr)str_critical_weakness, D_0018087E[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         if ((player_class->forbidden_equipment & (1 << (i + 6))) != 0) {
-            career_specials_line((iptr)D_0017559E, D_00180992[i]);
+            career_specials_line((iptr)str_forbidden_armor_type, D_00180992[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if ((player_class->forbidden_equipment & (1 << (i + 9))) != 0) {
-            career_specials_line((iptr)D_001755B3, D_001809A2[i]);
+            career_specials_line((iptr)str_forbidden_shield_type, D_001809A2[i]);
         }
     }
     for (i = 0; i < 10; i++) {
         if ((player_class->forbidden_materials & (1 << i)) != 0) {
-            career_specials_line((iptr)D_001755C9, D_001809B6[i]);
+            career_specials_line((iptr)str_forbidden_material, D_001809B6[i]);
         }
     }
 }
@@ -842,13 +842,13 @@ void career_disadvantages_text(void)
 void career_specials_line(iptr label, iptr detail)
 {
     if (detail != 0) {
-        mc_set_location(1221, D_00175420);
-        mc_sprintf((char *)text_buffer, D_001755DC, label, detail);
+        mc_set_location(1221, str_custom_c);
+        mc_sprintf((char *)text_buffer, str_fmt_s_s_7, label, detail);
     } else {
-        mc_strncpy((char *)text_buffer, (char *)label, 160, D_00175420, 1223);
+        mc_strncpy((char *)text_buffer, (char *)label, 160, str_custom_c, 1223);
     }
-    func_000A1054((char *)D_0019981C, (char *)text_buffer, D_00175420, 1225, 4);
-    func_000A1054((char *)D_0019981C, D_001755E2, D_00175420, 1226, 4);
+    func_000A1054((char *)D_0019981C, (char *)text_buffer, str_custom_c, 1225, 4);
+    func_000A1054((char *)D_0019981C, D_001755E2, str_custom_c, 1226, 4);
 }
 
 int itemmaker_open(int opening)
@@ -861,9 +861,9 @@ int itemmaker_open(int opening)
         D_00187CA8 = 0;
         D_001940D8 |= 4;
         game_mode = 10;
-        window_image = disk_read_file(D_0017567E, 0);
-        magic_window_image = disk_read_file(D_0017568B, 0);
-        D_00190EE0 = disk_read_file(D_00175698, 0);
+        window_image = disk_read_file(str_item00i0_img, 0);
+        magic_window_image = disk_read_file(str_item01i0_img, 0);
+        D_00190EE0 = disk_read_file(str_spells_std_3, 0);
         D_00196272 = 1;
         D_001940D8 &= 254;
         itemmaker_select_tab(15);

@@ -7,7 +7,7 @@ extern signed char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
 extern signed char key_down_esc;
-extern char D_00176E94[];
+extern char str_potions_c[];
 extern struct rect potionmaker_buttons[];
 extern char D_00187FE2[];
 extern char D_00187FE4[];
@@ -68,7 +68,7 @@ void potionmaker_update(void)
     text_draw_coloured((iptr)itoa(player_character->gold, (char *)text_buffer, 10), 235, 185, 145, 156);
     xn_font_select(3);
     *(int *)potion_ingredient_count = 0;
-    mc_memset((char *)potion_ingredients, 0, 2048, D_00176E94, 182, 2048);
+    mc_memset((char *)potion_ingredients, 0, 2048, str_potions_c, 182, 2048);
     object_foreach(player_entity->children, potionmaker_ingredient_cb);
     for (COUNT = i = 0; i < 8; i++) {
         if ((iptr)potion_cauldron[i] != 0) {

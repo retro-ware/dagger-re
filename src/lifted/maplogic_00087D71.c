@@ -4,7 +4,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176C94[];
+extern char str_maplogic_c[];
 extern int region_location_count;
 extern struct map_location *region_locations;
 
@@ -21,7 +21,7 @@ void location_pick_random_with_service(struct loaded_location *location, int kin
 
     map_location = region_locations;
     count = 0;
-    mc_memset(location, 0, sizeof(*location), D_00176C94, 952, 4);
+    mc_memset(location, 0, sizeof(*location), str_maplogic_c, 952, 4);
     for (i = 0; i < region_location_count; i++, map_location++) {
         count += location_has_service((iptr)&map_location->services, kind, sub_kind);
     }

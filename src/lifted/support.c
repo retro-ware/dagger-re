@@ -17,10 +17,10 @@ extern signed char key_down[];
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern iptr D_00147954;
-extern char D_00176A10[];
-extern char D_00176A1A[];
+extern char str_support_c[];
+extern char str_pick00i0_img[];
 extern char D_00176A27[];
-extern char D_00176A42[];
+extern char str_you_have_a_room_at_for_hours[];
 extern unsigned char player_environment;
 extern char fire_flat_records[];
 extern char saved_positions[];
@@ -192,7 +192,7 @@ void hud_status_set(char *text)
 {
     int *bios_ticks;
 
-    mc_strncpy(hud_status_text, text, 1440, D_00176A10, 97);
+    mc_strncpy(hud_status_text, text, 1440, str_support_c, 97);
     bios_ticks = (int *)DOS_LOW(0x46C);
     hud_status_expiry = *bios_ticks + 36;
     D_00195C3C = (iptr)hud_status_text;
@@ -216,7 +216,7 @@ iptr hud_message_add(char *text)
         }
     }
     if (free_slot < 0) return 0;
-    mc_strncpy(message_text, text, 4, D_00176A10, 117);
+    mc_strncpy(message_text, text, 4, str_support_c, 117);
     *(iptr *)&bios_ticks_addr = (iptr)DOS_LOW(0x46C);
     hud_message_expiry[free_slot] = *(int *)(*(char **)&bios_ticks_addr) + 36;
     hud_message_ptrs[free_slot] = (iptr)message_text;
@@ -280,7 +280,7 @@ int wait_key_from_list(signed char *keys, short key_count)
                 }
             }
         }
-        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, D_00176A10, 234, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_support_c, 234, 4);
     }
     return -2;
 }
@@ -335,7 +335,7 @@ void size_fit(short *width, short *height, slot16 max_width, slot16 max_height)
 
 void list_popup_open_strings(char *strings)
 {
-    if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(D_00176A1A, 0);
+    if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(str_pick00i0_img, 0);
     D_00195F40 = 160 - (list_popup_image->width >> 1);
     D_00195F3E = 100 - (list_popup_image->height >> 1);
     D_00195F42 = list_popup_image->width;
@@ -350,7 +350,7 @@ void list_popup_open_strings(char *strings)
 
 void list_popup_open(char **strings)
 {
-    if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(D_00176A1A, 0);
+    if ((iptr)list_popup_image == 0) list_popup_image = (struct image *)disk_read_file(str_pick00i0_img, 0);
     D_00195F40 = 160 - (list_popup_image->width >> 1);
     D_00195F3E = 100 - (list_popup_image->height >> 1);
     D_00195F42 = list_popup_image->width;
@@ -563,7 +563,7 @@ void msgbox_prompt_number(int number, char *prompt)
 
     D_0012B508 = 146;
     text = scratch_buffer + 55000;
-    mc_set_location(610, D_00176A10);
+    mc_set_location(610, str_support_c);
     mc_sprintf(text, D_00176A27, prompt);
     text[strlen(text) + 1] = 0;
     inpstr_begin_number(number);
@@ -772,7 +772,7 @@ void func_0007EF20(void)
     struct SREGS sregs;
 
     if (D_00196281 == 0) return;
-    mc_memset(&sregs, 0, 12, D_00176A10, 1064, 4);
+    mc_memset(&sregs, 0, 12, str_support_c, 1064, 4);
     regs.w.ax = 257;
     regs.w.dx = D_001A5A54;
     int386x(49, &regs, &regs, &sregs);
@@ -985,7 +985,7 @@ void location_restore_stored(void)
             if (stored->type == 64 && ((unsigned)stored->building_id) < game_minutes) {
                 object_delete(stored);
             } else if (stored->type == 64 && object_find_by_id(location_object, stored->building_id) != 0) {
-                mc_memcpy(&current_location->buildings[stored->image], RECORD_DATA(stored), 26, D_00176A10, 1350, 4);
+                mc_memcpy(&current_location->buildings[stored->image], RECORD_DATA(stored), 26, str_support_c, 1350, 4);
             }
             stored = next_stored;
         }
@@ -1018,7 +1018,7 @@ void location_store_objects(void)
                 stored_room->type = 64;
                 stored_room->image = building_index;
                 stored_room->building_id = building->id;
-                mc_memcpy(RECORD_DATA(stored_room), building, 26, D_00176A10, 1392, 4);
+                mc_memcpy(RECORD_DATA(stored_room), building, 26, str_support_c, 1392, 4);
             }
         }
     }
@@ -1162,8 +1162,8 @@ L800F0:;
         if (building->type == 15) {
             tavern_building = building;
             if (tavern_room_rented() != 0) {
-                mc_set_location(1570, D_00176A10);
-                mc_sprintf((char *)text_buffer, D_00176A42, building_name(building), (((unsigned)(building->rent_expires - game_minutes)) / 60) + 1);
+                mc_set_location(1570, str_support_c);
+                mc_sprintf((char *)text_buffer, str_you_have_a_room_at_for_hours, building_name(building), (((unsigned)(building->rent_expires - game_minutes)) / 60) + 1);
                 hud_message_add(text_buffer);
             }
         }

@@ -2,11 +2,11 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00174FAC[];
-extern char D_00174FB3[];
-extern char D_00174FC0[];
-extern char D_00174FDF[];
-extern char D_00174FEC[];
+extern char str_note_c[];
+extern char str_notebook_tde[];
+extern char str_unable_to_create_new_notebook[];
+extern char str_mask02i0_img[];
+extern char str_note_rci[];
 extern unsigned char D_001940D5;
 extern struct record *player_object;
 extern iptr window_image;
@@ -39,24 +39,24 @@ int note_open_notebook(short mode)
         D_001940D5 |= 8;
         note_search_text = 0;
         note_search_from = 0;
-        note_page = mc_malloc(3640, D_00174FAC, 67);
-        note_page_backup = mc_malloc(3640, D_00174FAC, 68);
-        if ((note_file = disk_open_rw(D_00174FB3)) < 1) {
-            mc_memset(scratch_buffer, 0, 3640, D_00174FAC, 72, 4);
-            if ((note_file = disk_create(D_00174FB3)) < 1)
-                fatal_error(D_00174FC0);
+        note_page = mc_malloc(3640, str_note_c, 67);
+        note_page_backup = mc_malloc(3640, str_note_c, 68);
+        if ((note_file = disk_open_rw(str_notebook_tde)) < 1) {
+            mc_memset(scratch_buffer, 0, 3640, str_note_c, 72, 4);
+            if ((note_file = disk_create(str_notebook_tde)) < 1)
+                fatal_error(str_unable_to_create_new_notebook);
             write(note_file, scratch_buffer, 3640);
             lseek(note_file, 0, 0);
         }
         read(note_file, note_page, 3640);
-        mc_memcpy(note_page_backup, note_page, 3640, D_00174FAC, 79, 4);
+        mc_memcpy(note_page_backup, note_page, 3640, str_note_c, 79, 4);
         note_tool = 0;
         note_page_index = note_tool;
         note_file_size = filelength(note_file);
         if (note_silent == 0) {
             game_mode = 9;
-            window_image = disk_read_file(D_00174FDF, 0);
-            note_rci = disk_read_file(D_00174FEC, 0);
+            window_image = disk_read_file(str_mask02i0_img, 0);
+            note_rci = disk_read_file(str_note_rci, 0);
             D_00196272 = 1;
             sound_play(237, player_object, 100);
         }

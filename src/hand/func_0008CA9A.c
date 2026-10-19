@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176E38[];
+extern char str_picklist_c[];
 extern void picklist_save_background(struct picklist *);
 
 void picklist_init(struct picklist *list, short list_x, short list_y, short list_w, short list_h, short up_x, short up_y, short up_w, short up_h, short down_x, short down_y, short down_w, short down_h, short bar_x, short bar_y, short bar_w, short bar_h, unsigned char colour_normal, unsigned char colour_flagged, unsigned char colour_selected, unsigned char colour_thumb, unsigned char framed)
@@ -33,9 +33,9 @@ void picklist_init(struct picklist *list, short list_x, short list_y, short list
     list->selected = 0;
     list->thumb_height = list->bar_rect.h - 1;
     list->visible_rows = 0;
-    list->entries = (struct picklist_entry *)mc_malloc(35200, D_00176E38, 40);
+    list->entries = (struct picklist_entry *)mc_malloc(35200, str_picklist_c, 40);
     if (list->framed == 0) return;
-    list->list_background = mc_malloc(list->list_rect.w * list->list_rect.h, D_00176E38, 44);
-    list->bar_background = mc_malloc(list->bar_rect.w * list->bar_rect.h, D_00176E38, 45);
+    list->list_background = mc_malloc(list->list_rect.w * list->list_rect.h, str_picklist_c, 44);
+    list->bar_background = mc_malloc(list->bar_rect.w * list->bar_rect.h, str_picklist_c, 45);
     picklist_save_background(list);
 }

@@ -22,7 +22,7 @@ struct info {
     char pad88[40];
 };
 #pragma pack()
-extern char D_00175404[];
+extern char str_pflc_c[];
 extern int disk_open_data(char *);
 
 int flc_open(char *name, struct flc_player *anim)
@@ -42,13 +42,13 @@ int flc_open(char *name, struct flc_player *anim)
     anim->loop_offset = header.frame2_offset;
     if (anim->chunk == 0) {
         anim->flags |= 1;
-        anim->chunk = mc_malloc(anim->width * anim->height, D_00175404, 225);
+        anim->chunk = mc_malloc(anim->width * anim->height, str_pflc_c, 225);
     }
     if (anim->palette == 0) {
         anim->flags |= 2;
-        anim->palette = mc_malloc(2050, D_00175404, 231);
+        anim->palette = mc_malloc(2050, str_pflc_c, 231);
     }
-    mc_memset(anim->palette, 0, 2050, D_00175404, 233, 4);
+    mc_memset(anim->palette, 0, 2050, str_pflc_c, 233, 4);
     read(anim->handle, &chunk, 10);
     if ((unsigned short)chunk.x == 0xF100) {
         read(anim->handle, &chunk, 8);
@@ -61,7 +61,7 @@ int flc_open(char *name, struct flc_player *anim)
     anim->frames_left = 1;
     if (anim->image == 0) {
         anim->flags |= 64;
-        anim->image = mc_malloc(anim->width * anim->height, D_00175404, 255);
+        anim->image = mc_malloc(anim->width * anim->height, str_pflc_c, 255);
     }
     return 1;
 }

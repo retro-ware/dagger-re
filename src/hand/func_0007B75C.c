@@ -7,7 +7,7 @@ extern short D_00142928;
 extern short D_0014292C;
 extern iptr screen_buffer;
 extern iptr D_00147954;
-extern char D_00176884[];
+extern char str_loadsave_c[];
 extern struct rect saveload_buttons[];
 extern struct image *D_00195B5C;
 extern iptr window_image;
@@ -20,7 +20,7 @@ void saveload_draw(int saving, int used_slots, int slot)
 {
     int i;
 
-    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_00176884, 977, 4);
+    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_loadsave_c, 977, 4);
     if (saving == 0) goto L7B7D9;
     xn_draw_image(D_00195B5C->x, D_00195B5C->y, D_00195B5C->width, D_00195B5C->height, D_00195B5C->pixels);
 L7B7D9:;

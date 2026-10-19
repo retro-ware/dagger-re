@@ -6,9 +6,9 @@
 #include "clib.h"
 
 
-extern char D_00170150[];
-extern char D_0017015A[];
-extern char D_00170172[];
+extern char str_archive_c[];
+extern char str_file_not_found_in[];
+extern char str_code_not_found_in[];
 extern iptr lock_text_fail;
 extern iptr lock_text_open;
 extern struct record *player_object;
@@ -46,7 +46,7 @@ int archive_open(char *name, iptr directory, int writable)
         *(int *)&handle = disk_open_data(name);
     }
     if (*(int *)&handle < 1) return *(int *)&handle;
-    mc_strncpy((char *)(((iptr)archive_names) + (*(int *)&handle * 13)), name, 13, D_00170150, 32);
+    mc_strncpy((char *)(((iptr)archive_names) + (*(int *)&handle * 13)), name, 13, str_archive_c, 32);
     read(*(int *)&handle, &record_count, 2);
     read(*(int *)&handle, &type, 2);
     if (((int)(short)type) == 256) {
@@ -54,7 +54,7 @@ int archive_open(char *name, iptr directory, int writable)
     } else {
         *(int *)&dir_size = ((int)(short)record_count) << 3;
     }
-    if (directory == 0) directory = (iptr)mc_malloc(*(int *)&dir_size, D_00170150, 42);
+    if (directory == 0) directory = (iptr)mc_malloc(*(int *)&dir_size, str_archive_c, 42);
     *(short *)(archive_record_counts + (*(int *)&handle * 2)) = *(int *)&record_count;
     archive_directories[*(int *)&handle] = directory;
     *(short *)(archive_types + (*(int *)&handle * 2)) = *(int *)&type;
@@ -68,7 +68,7 @@ void archive_close(int handle)
     if (handle == 0) return;
     *(short *)(archive_record_counts + (handle * 2)) = 0;
     if (archive_directories[handle] != 0 && archive_directories[handle] != (-1751672937)) {
-        mc_free((void *)archive_directories[handle], D_00170150, 67);
+        mc_free((void *)archive_directories[handle], str_archive_c, 67);
         archive_directories[handle] = -1751672937;
     }
     archive_directories[handle] = 0;
@@ -94,11 +94,11 @@ int archive_find_record(int handle, char *name, int key)
         }
     }
     if (((int)(short)*(short *)(archive_types + (handle * 2))) == 256) {
-        mc_set_location(105, D_00170150);
-        mc_sprintf(scratch_buffer, D_0017015A, name, ((iptr)archive_names) + (handle * 13));
+        mc_set_location(105, str_archive_c);
+        mc_sprintf(scratch_buffer, str_file_not_found_in, name, ((iptr)archive_names) + (handle * 13));
     } else {
-        mc_set_location(107, D_00170150);
-        mc_sprintf(scratch_buffer, D_00170172, key, ((iptr)archive_names) + (handle * 13));
+        mc_set_location(107, str_archive_c);
+        mc_sprintf(scratch_buffer, str_code_not_found_in, key, ((iptr)archive_names) + (handle * 13));
     }
     fatal_error((iptr)scratch_buffer);
     return 0;
@@ -163,7 +163,7 @@ iptr archive_read_record(int handle, int record, iptr buffer)
         }
         size = entry->size;
     }
-    if (buffer == 0) buffer = (iptr)mc_malloc(size, D_00170150, 205);
+    if (buffer == 0) buffer = (iptr)mc_malloc(size, str_archive_c, 205);
     lseek(handle, offset, 0);
     read(handle, (void *)buffer, size);
     return buffer;

@@ -7,8 +7,8 @@
 
 extern int dungeon_water_level;
 extern struct monster_template monster_table[];
-extern char D_00170710[];
-extern char D_0017071B[];
+extern char str_colstuff_c[];
+extern char str_exceeded_maximum_collisions[];
 extern unsigned char player_environment;
 extern struct record *creature_list[];
 extern char scratch_190be4[];
@@ -103,8 +103,8 @@ int collide_move_missile(struct record *object, int *position, int *angles)
     *(int *)D_00196B10 = object->x;
     D_00196B14 = object->y;
     D_00196B18 = object->z;
-    mc_memcpy(D_00196B28, position, 12, D_00170710, 61, 4);
-    if (angles != 0) mc_memcpy(&D_00196B34, angles, 12, D_00170710, 63, 4);
+    mc_memcpy(D_00196B28, position, 12, str_colstuff_c, 61, 4);
+    if (angles != 0) mc_memcpy(&D_00196B34, angles, 12, str_colstuff_c, 63, 4);
     collide_for_each_nearby(object, (iptr)collide_segment_model_cb);
     if (((int)(short)(*(short *)collide_flags & 10)) == 0) {
         object_set_position(object, *(int *)D_00196B28, D_00196B2C, D_00196B30, D_00196B34, D_00196B38, D_00196B3C);
@@ -354,7 +354,7 @@ int collide_step_player(struct record *object, int unused_arg, struct move_reque
     } else {
         collide_height = object->y + 1000;
     }
-    mc_memcpy(D_00196B28, request, 12, D_00170710, 474, 4);
+    mc_memcpy(D_00196B28, request, 12, str_colstuff_c, 474, 4);
     if (((int)(short)(*(short *)collide_flags & 4)) != 0 && memcmp(request, &object->x, 12) == 0) {
         *(signed char *)collide_flags &= 251;
     }
@@ -499,7 +499,7 @@ void collide_gather_cb(struct record *object)
             if (*model != 0) {
                 if ((*(iptr *)&D_00196D48 = xn_collide_spheres_model(model, D_00196D4C, 2)) == 0 && (iptr)D_00196D48 != (-1)) {
                     collide_candidates[collide_candidate_count++] = object;
-                    if (collide_candidate_count > 128) fatal_error(D_0017071B);
+                    if (collide_candidate_count > 128) fatal_error(str_exceeded_maximum_collisions);
                 }
             }
         }
@@ -511,7 +511,7 @@ void collide_gather_cb(struct record *object)
             if (*model != 0) {
                 if ((*(iptr *)&D_00196D48 = xn_collide_spheres_model(model, D_00196D4C, 2)) == 0 && (iptr)D_00196D48 != (-1)) {
                     collide_candidates[collide_candidate_count++] = object;
-                    if (collide_candidate_count > 128) fatal_error(D_0017071B);
+                    if (collide_candidate_count > 128) fatal_error(str_exceeded_maximum_collisions);
                 }
             }
         }
@@ -526,7 +526,7 @@ void collide_gather_cb(struct record *object)
         }
         collide_candidates[collide_candidate_count++] = object;
         if (collide_candidate_count <= 128) return;
-        fatal_error(D_0017071B);
+        fatal_error(str_exceeded_maximum_collisions);
     default:;
     }
 }
@@ -591,8 +591,8 @@ int collide_line_of_sight_cb(struct record *object)
 int collide_line_of_sight(struct record *from, struct record *to)
 {
     scratch_190ce4[0] = 0;
-    mc_memcpy(D_00196B10, &from->x, 12, D_00170710, 923, 4);
-    mc_memcpy(D_00196B1C, &to->x, 12, D_00170710, 924, 4);
+    mc_memcpy(D_00196B10, &from->x, 12, str_colstuff_c, 923, 4);
+    mc_memcpy(D_00196B1C, &to->x, 12, str_colstuff_c, 924, 4);
     D_00196B14 -= 40;
     D_00196B20 -= 40;
     grid_visit_func = (iptr)object_find_open;
@@ -678,7 +678,7 @@ int func_00023FA5(struct record *object, int unused_arg, struct move_request *re
     } else {
         collide_height = object->y + 1000;
     }
-    mc_memcpy(D_00196B28, request, 12, D_00170710, 1021, 4);
+    mc_memcpy(D_00196B28, request, 12, str_colstuff_c, 1021, 4);
     if (((int)(short)(*(short *)collide_flags & 4)) != 0 && memcmp(request, &object->x, 12) == 0) {
         *(signed char *)collide_flags &= 251;
     }
@@ -773,8 +773,8 @@ int func_00023FA5(struct record *object, int unused_arg, struct move_request *re
 
 int collide_floor_height(struct record *object)
 {
-    mc_memcpy(D_00196B10, &object->x, 12, D_00170710, 1143, 4);
-    mc_memcpy(D_00196B1C, &object->x, 12, D_00170710, 1144, 4);
+    mc_memcpy(D_00196B10, &object->x, 12, str_colstuff_c, 1143, 4);
+    mc_memcpy(D_00196B1C, &object->x, 12, str_colstuff_c, 1144, 4);
     D_00196B14 -= 20;
     D_00196B20 += 40;
     collide_height = 100000;

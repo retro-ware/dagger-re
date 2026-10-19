@@ -7,14 +7,14 @@ extern int xn_cam_x;
 extern int xn_cam_y;
 extern int xn_cam_z;
 extern unsigned char mouse_buttons;
-extern char D_00176884[];
-extern char D_001768DF[];
-extern char D_00176909[];
-extern char D_00176915[];
-extern char D_0017691F[];
-extern char D_00176927[];
-extern char D_0017694A[];
-extern char D_00176964[];
+extern char str_loadsave_c[];
+extern char str_fmt_s_s_4[];
+extern char str_save[];
+extern char str_rumor_dat_2[];
+extern char str_bio_dat_2[];
+extern char str_savetree_dat[];
+extern char str_invalid_save_game_format[];
+extern char str_dagger_grd[];
 extern short D_001788D3[];
 extern unsigned char player_environment;
 extern unsigned short spell_last_cast_id;
@@ -99,10 +99,10 @@ int load_game(char *name)
     int l24;
     char buf[1024];
 
-    mc_set_location(637, D_00176884);
-    mc_sprintf(buf, D_00176909, name);
-    mc_set_location(638, D_00176884);
-    mc_sprintf(((char *)text_rsc_buffer), D_001768DF, buf, D_00176927);
+    mc_set_location(637, str_loadsave_c);
+    mc_sprintf(buf, str_save, name);
+    mc_set_location(638, str_loadsave_c);
+    mc_sprintf(((char *)text_rsc_buffer), str_fmt_s_s_4, buf, str_savetree_dat);
     fd = open(((char *)text_rsc_buffer), 512);
     if (fd < 0)
         return 0;
@@ -111,24 +111,24 @@ int load_game(char *name)
     mem_check_now(1002);
     location_unload(location_object->image);
     if (save_version < 293 || save_version > 294)
-        fatal_error(D_0017694A);
-    mc_memset((char *)inventory_containers, 0, REC_SIZEOF(inventory_containers), D_00176884, 655, REC_SIZEOF(inventory_containers));
+        fatal_error(str_invalid_save_game_format);
+    mc_memset((char *)inventory_containers, 0, REC_SIZEOF(inventory_containers), str_loadsave_c, 655, REC_SIZEOF(inventory_containers));
     object_unlink(player_object);
     object_free_children(player_object);
     object_free_children(location_object);
     object_free_children(nonworld_root);
     object_reparent(location_object, player_object);
     player_entity = 0;
-    disk_copy_file(D_00176915, buf, arena2_path);
-    disk_copy_file(D_0017691F, buf, arena2_path);
+    disk_copy_file(str_rumor_dat_2, buf, arena2_path);
+    disk_copy_file(str_bio_dat_2, buf, arena2_path);
     disk_copy_file(cfg_mapsave_file, buf, arena2_path);
     load_copy_automap_files(buf);
     savevars_read(name);
     load_reset_state();
     l24 = current_region;
     current_region = 255;
-    mc_set_location(677, D_00176884);
-    mc_sprintf(((char *)text_rsc_buffer), D_001768DF, buf, D_00176927);
+    mc_set_location(677, str_loadsave_c);
+    mc_sprintf(((char *)text_rsc_buffer), str_fmt_s_s_4, buf, str_savetree_dat);
     save_file_handle = open(((char *)text_rsc_buffer), 512);
     read(save_file_handle, &save_version, 4);
     read(save_file_handle, &vec, 12);
@@ -142,8 +142,8 @@ int load_game(char *name)
         xn_cam_y = vec.y;
         xn_cam_z = vec.z;
         xn_world_reload();
-        mc_memset(terrain_cell_dirty, 0, 16, D_00176884, 696, 16);
-        mc_memset(terrain_cell_ids, 0, 16, D_00176884, 697, 16);
+        mc_memset(terrain_cell_dirty, 0, 16, str_loadsave_c, 696, 16);
+        mc_memset(terrain_cell_ids, 0, 16, str_loadsave_c, 697, 16);
     }
     object_free_single(player_object);
     sz = current_location->building_count * 26;
@@ -185,7 +185,7 @@ int load_game(char *name)
     spell_last_cast_id = 65535;
     screen_shake = 0;
     view_cursor_active = 0;
-    if (disk_file_exists(D_00176964) != 0) {
+    if (disk_file_exists(str_dagger_grd) != 0) {
         game_settings->view_flags |= 4;
         D_00195DA0 = 434;
     } else {

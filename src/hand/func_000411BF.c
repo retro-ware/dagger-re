@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170DC9[];
+extern char str_tfac00i0_rci[];
 extern unsigned char D_0017B667[];
 extern short D_0017B66D[];
 extern short D_0017B69D[];
@@ -32,7 +32,7 @@ void npc_load_face(struct record *npc, char *face)
     } else {
         offset = (D_0017B69D[((iptr)found_sprite - (iptr)D_0017B66D) / 2] + rand() % 24) << 12;
     }
-    file = disk_open_data(D_00170DC9);
+    file = disk_open_data(str_tfac00i0_rci);
     lseek(file, offset, 0);
     read(file, face, 4096);
     close(file);

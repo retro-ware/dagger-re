@@ -3,8 +3,8 @@
 #include "clib.h"
 #include "portio.h"
 
-extern char D_00176884[];        /* __FILE__ */
-extern char D_0017688F[];
+extern char str_loadsave_c[];        /* __FILE__ */
+extern char str_invalid_map_object_size[];
 extern char *scratch_buffer;
 extern int save_file_handle;
 extern void fatal_error(char *);
@@ -21,12 +21,12 @@ int savetree_write_record(struct record *object)
     buf = (struct record *)scratch_buffer;
     len = RECORD_BLOCK_SIZE(object);        /* the heap block's size */
     if (len == 0) {
-        mc_set_location(84, D_00176884);
-        mc_sprintf(scratch_buffer, D_0017688F);
+        mc_set_location(84, str_loadsave_c);
+        mc_sprintf(scratch_buffer, str_invalid_map_object_size);
         fatal_error(scratch_buffer);
     }
     PORT_SAVETREE_LEN(save_file_handle, &len);
-    mc_memcpy(buf, object, len, D_00176884, 90, 4);
+    mc_memcpy(buf, object, len, str_loadsave_c, 90, 4);
     if (buf->twin != 0) {
         if (buf->quest_id != 0)
             buf->twin = (struct record *)(uptr)buf->twin->id;

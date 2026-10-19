@@ -5,10 +5,10 @@
 #include "clib.h"
 
 extern signed char key_down_enter;
-extern char D_00175AD4[];
-extern char D_00175ADB[];
-extern char D_00175C2D[];
-extern char D_00175C79[];
+extern char str_jmem_c[];
+extern char str_insufficent_memory_to_service_request[];
+extern char str_daggerfall_has_detected_the_error_press[];
+extern char str_lgbk00i0_img_2[];
 extern signed char D_00187CA8;
 extern int mem_check_level;
 extern int frame_checkpoint;
@@ -36,10 +36,10 @@ void mem_pool_init(struct mem_pool *pool, int size)
 {
     struct mem_block *block;
 
-    mc_memset(pool, 0, 4, D_00175AD4, 60, 4);
-    pool->first = (struct mem_block *)mc_malloc(size, D_00175AD4, 62);
+    mc_memset(pool, 0, 4, str_jmem_c, 60, 4);
+    pool->first = (struct mem_block *)mc_malloc(size, str_jmem_c, 62);
     block = pool->first;
-    if (block == 0) fatal_error(D_00175ADB);
+    if (block == 0) fatal_error(str_insufficent_memory_to_service_request);
     pool->size = size;
     block->size = size - MEM_BLOCK_HEADER_SIZE;
     block->prev = 0;
@@ -50,7 +50,7 @@ void mem_pool_init(struct mem_pool *pool, int size)
 void mem_pool_free(struct mem_pool *pool)
 {
     if (pool->first == 0 || (iptr)pool->first == (-1751672937)) return;
-    mc_free(pool->first, D_00175AD4, 84);
+    mc_free(pool->first, str_jmem_c, 84);
     pool->first = (struct mem_block *)(iptr)-1751672937;
 }
 
@@ -102,8 +102,8 @@ int mem_block_size(char *data)
 void crash_screen(void)
 {
     xn_gfx_restore_mode();
-    func_0009DA1C(394, D_00175AD4);
-    printf(D_00175C2D, frame_checkpoint);
+    func_0009DA1C(394, str_jmem_c);
+    printf(str_daggerfall_has_detected_the_error_press, frame_checkpoint);
     while (key_down_enter == 0);
     sound_shutdown_music();
     func_000A2D9E();
@@ -124,7 +124,7 @@ int logbook_open(int force)
     if (force != 0 || (game_mode == 0 && key_action_held(24) != 0)) {
         game_mode = 14;
         D_00196272 = 1;
-        window_image = disk_read_file(D_00175C79, 0);
+        window_image = disk_read_file(str_lgbk00i0_img_2, 0);
         *(int *)logbook_show_notes = (logbook_first_entry = 0);
         D_00187CA8 = 0;
         logbook_build_entries();

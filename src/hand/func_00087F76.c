@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00087F76 */
 #include "records.h"
 #include "clib.h"
-extern char D_00176C94[];       /* __FILE__ */
+extern char str_maplogic_c[];       /* __FILE__ */
 extern int D_00187EE4[];
 extern struct record *location_object;
 extern int region_dungeon_type_counts[];
@@ -25,7 +25,7 @@ void quest_pick_location(struct loaded_location *location, unsigned kind, int su
 
     saved = region_locations;
     done = 0;
-    mc_memset(location, 0, sizeof(*location), D_00176C94, 1045, 4);
+    mc_memset(location, 0, sizeof(*location), str_maplogic_c, 1045, 4);
     if (mode == 0) {
         location_load_exterior(location, location_object->image);
         return;

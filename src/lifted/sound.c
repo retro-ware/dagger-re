@@ -4,7 +4,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00175ACC[];
+extern char str_sound_c[];
 extern unsigned char player_environment;
 extern int D_00186DEC;
 extern iptr D_0018DC34;
@@ -52,7 +52,7 @@ void sound_channel_set_source(struct record *object, int channel)
 {
     sound_channels[channel].source = object;
     if (object == 0) return;
-    mc_memcpy(sound_channels[channel].position, &object->x, 12, D_00175ACC, 95, 4);
+    mc_memcpy(sound_channels[channel].position, &object->x, 12, str_sound_c, 95, 4);
 }
 
 void sound_volume_pan(int *listener, int *source, int *volume, int *pan, struct record *object)
@@ -63,7 +63,7 @@ void sound_volume_pan(int *listener, int *source, int *volume, int *pan, struct 
     int offset;
     int saved_distance;
 
-    mc_memcpy(listener, source, 12, D_00175ACC, 148, 4);
+    mc_memcpy(listener, source, 12, str_sound_c, 148, 4);
     listener = &player_object->x;
     distance = xn_math_approx_hypot(listener[1] - source[1], xn_math_approx_dist2d(listener[0], listener[2], source[0], source[2]));
     saved_distance = distance;
@@ -118,7 +118,7 @@ int func_00069281(iptr sample, int length)
     if (channel == 3) return -1;
     volume = 32767;
     pan = 32768;
-    mc_memset(&sound_channels[channel].sample, 0, sizeof(sound_channels[channel].sample), D_00175ACC, 291, 4);
+    mc_memset(&sound_channels[channel].sample, 0, sizeof(sound_channels[channel].sample), str_sound_c, 291, 4);
     sound_channels[channel].priority = 127;
     sound_channels[channel].sample.data = (char *)sample;
     sound_channels[channel].sample.length = length;
@@ -159,7 +159,7 @@ int sound_play_sample_flat(iptr sample, int length)
         }
     }
     if (channel == 3) return -1;
-    mc_memset(&sound_channels[channel].sample, 0, sizeof(sound_channels[channel].sample), D_00175ACC, 336, 4);
+    mc_memset(&sound_channels[channel].sample, 0, sizeof(sound_channels[channel].sample), str_sound_c, 336, 4);
     sound_channels[channel].priority = 90;
     sound_channels[channel].sample.data = (char *)sample;
     sound_channels[channel].sample.length = length;
@@ -192,7 +192,7 @@ void music_play(char *name)
     if (sound_enabled == 0) return;
     if (stricmp(music_current, name) == 0) return;
     music_stop();
-    mc_strncpy(music_current, name, 13, D_00175ACC, 374);
+    mc_strncpy(music_current, name, 13, str_sound_c, 374);
     D_001A3F30 = sos_load_song(music_current);
     if (D_0018DC34 != 0) {
         dpmi_lock_region(D_0018DC34, func_000A277F((void *)D_0018DC34));
@@ -207,7 +207,7 @@ void music_stop(void)
     func_000A0517(D_001A3F30);
     dpmi_unlock_region(D_0018DC34, func_000A277F((void *)D_0018DC34));
     if (D_001A3F48 != 0 && D_001A3F48 != (-1751672937)) {
-        mc_free((void *)D_001A3F48, D_00175ACC, 393);
+        mc_free((void *)D_001A3F48, str_sound_c, 393);
         D_001A3F48 = -1751672937;
     }
     D_0018DC34 = 0;

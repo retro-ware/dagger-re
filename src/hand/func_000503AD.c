@@ -1,6 +1,6 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000503AD */
 #include "structs.h"
-extern char D_0017531A[];
+extern char str_flats_cfg[];
 extern signed char text_buffer[];
 extern struct flat_cfg flats_cfg[];
 extern iptr scratch_buffer;
@@ -15,7 +15,7 @@ void flats_cfg_load(void)
     int a;
     int b;
 
-    fh = disk_read_file(D_0017531A, scratch_buffer);
+    fh = disk_read_file(str_flats_cfg, scratch_buffer);
     flats_cfg_count = 0;
     for (;;) {
         a = cfg_read_number(&fh);

@@ -4,7 +4,7 @@
 #include "clib.h"
 #pragma pack(1)
 extern char *screen_buffer;
-extern char D_0017704C[];
+extern char str_inven_c[];
 extern struct rect inv_mode_buttons[][7];   /* 5 trade modes */
 extern struct rect inv_buttons[];
 extern signed char text_buffer[];
@@ -57,17 +57,17 @@ void inventory_draw(void)
     int shown_total;
     int unused3;
 
-    mc_memcpy(screen_buffer, inventory_images, 64000, D_0017704C, 553, 4);
+    mc_memcpy(screen_buffer, inventory_images, 64000, str_inven_c, 553, 4);
     if (trade_mode != 0)
         xn_draw_image(D_001AA434->x, D_001AA434->y, D_001AA434->width, D_001AA434->height, D_001AA434->pixels);
     rect = &inv_mode_buttons[trade_mode][inventory_action];
     if (trade_mode == 0) {
         for (y = rect->y0; rect->y1 >= y; y++)
-            mc_memcpy(rect->x0 + (screen_buffer + y * 320), D_001AA420 + y * 320 + rect->x0, rect->x1 - rect->x0 + 1, D_0017704C, 566, 4);
+            mc_memcpy(rect->x0 + (screen_buffer + y * 320), D_001AA420 + y * 320 + rect->x0, rect->x1 - rect->x0 + 1, str_inven_c, 566, 4);
     } else {
         src = D_001AA438->pixels;
         for (y = rect->y0; rect->y1 >= y; y++)
-            mc_memcpy(rect->x0 + (screen_buffer + y * 320), (rect->x0 - (unsigned short)(short)D_001AA438->x) + (src + D_001AA438->width * (y - D_001AA438->y)), rect->x1 - rect->x0 + 1, D_0017704C, 574, 4);
+            mc_memcpy(rect->x0 + (screen_buffer + y * 320), (rect->x0 - (unsigned short)(short)D_001AA438->x) + (src + D_001AA438->width * (y - D_001AA438->y)), rect->x1 - rect->x0 + 1, str_inven_c, 574, 4);
     }
     inv_blit_rect_from_image(inv_tab + 41, D_001AA420);
     paperdoll_draw(-147, 0);

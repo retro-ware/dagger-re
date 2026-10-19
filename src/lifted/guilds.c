@@ -12,10 +12,10 @@ extern short mouse_y;
 extern signed char D_0012B508;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
-extern char D_00175EAA[];
-extern char D_0017606F[];
-extern char D_0017607C[];
-extern char D_001760A4[];
+extern char str_guilds_c[];
+extern char str_spbk01i0_img[];
+extern char str_mask04i0_img[];
+extern char str_rest00i0_img[];
 extern int trade_price_scale;
 extern struct spell *selected_spell;
 extern char *spell_effect_names[];
@@ -144,18 +144,18 @@ void guild_buy_potions(void)
 
 void guild_buy_spells(void)
 {
-    guild_saved_screen = (iptr)mc_malloc(64000, D_00175EAA, 871);
-    mc_memcpy((void *)guild_saved_screen, (void *)screen_buffer, 64000, D_00175EAA, 873, 4);
+    guild_saved_screen = (iptr)mc_malloc(64000, str_guilds_c, 871);
+    mc_memcpy((void *)guild_saved_screen, (void *)screen_buffer, 64000, str_guilds_c, 873, 4);
     spellshop_open();
     while (((int)(unsigned char)game_mode) == 5) {
-        mc_memcpy((void *)screen_buffer, (void *)guild_saved_screen, 64000, D_00175EAA, 879, 4);
+        mc_memcpy((void *)screen_buffer, (void *)guild_saved_screen, 64000, str_guilds_c, 879, 4);
         keys_world_actions();
         spellshop_update();
         player_movement_update();
         xn_gfx_present_inclusive(1);
     }
     if (guild_saved_screen == 0 || guild_saved_screen == (-1751672937)) return;
-    mc_free((void *)guild_saved_screen, D_00175EAA, 886);
+    mc_free((void *)guild_saved_screen, str_guilds_c, 886);
     guild_saved_screen = -1751672937;
 }
 
@@ -187,8 +187,8 @@ void spellshop_open(void)
     game_mode = 5;
     D_001940D8 &= 254;
     D_001940D8 |= 2;
-    window_image = disk_read_file(D_0017606F, 0);
-    magic_window_image = disk_read_file(D_0017607C, 0);
+    window_image = disk_read_file(str_spbk01i0_img, 0);
+    magic_window_image = disk_read_file(str_mask04i0_img, 0);
     D_00196272 = 1;
     if (spellshop_build_list() != 0) return;
     spellshop_close();
@@ -201,11 +201,11 @@ int spellshop_close(void)
     D_001940D8 &= 253;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00175EAA, 963);
+        mc_free((void *)window_image, str_guilds_c, 963);
         window_image = -1751672937;
     }
     if (magic_window_image != 0 && magic_window_image != (-1751672937)) {
-        mc_free((void *)magic_window_image, D_00175EAA, 964);
+        mc_free((void *)magic_window_image, str_guilds_c, 964);
         magic_window_image = -1751672937;
     }
     D_00196272 = 0;
@@ -232,7 +232,7 @@ void spellshop_buy(void)
     object = object_create_child(object, 0, 89);
     object->type = 9;
     object->id = object_new_id(100);
-    mc_memcpy(&object->data.spell, selected_spell, 89, D_00175EAA, 992, 4);
+    mc_memcpy(&object->data.spell, selected_spell, 89, str_guilds_c, 992, 4);
 }
 
 void spellshop_draw_spell(struct spell *spell)
@@ -391,11 +391,11 @@ int guild_menu(struct image *image, int is_member, iptr label)
     int button;
 
     choice = -1;
-    guild_saved_screen = (iptr)mc_malloc(64000, D_00175EAA, 1581);
-    mc_memcpy((void *)guild_saved_screen, (void *)screen_buffer, 64000, D_00175EAA, 1582, 4);
+    guild_saved_screen = (iptr)mc_malloc(64000, str_guilds_c, 1581);
+    mc_memcpy((void *)guild_saved_screen, (void *)screen_buffer, 64000, str_guilds_c, 1582, 4);
     D_00196272 = 1;
     while (choice == (-1)) {
-        mc_memcpy((void *)screen_buffer, (void *)guild_saved_screen, 64000, D_00175EAA, 1587, 4);
+        mc_memcpy((void *)screen_buffer, (void *)guild_saved_screen, 64000, str_guilds_c, 1587, 4);
         xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
         text_draw_centred_coloured(label, 159, 71, 145, 141);
         keys_world_actions();
@@ -419,7 +419,7 @@ int guild_menu(struct image *image, int is_member, iptr label)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     D_00196272 = 0;
     if (guild_saved_screen != 0 && guild_saved_screen != (-1751672937)) {
-        mc_free((void *)guild_saved_screen, D_00175EAA, 1617);
+        mc_free((void *)guild_saved_screen, str_guilds_c, 1617);
         guild_saved_screen = -1751672937;
     }
     return choice;
@@ -507,7 +507,7 @@ void guild_heal(void)
     disease_remove_skill_bonuses();
     object_foreach_post(location_object, guild_heal_cleanup);
     player_character->conditions = 0;
-    mc_memcpy(player_character->attributes, player_character->base_attributes, 16, D_00175EAA, 1708, 16);
+    mc_memcpy(player_character->attributes, player_character->base_attributes, 16, str_guilds_c, 1708, 16);
     disease_restore_skill_bonuses();
 }
 
@@ -538,7 +538,7 @@ void rest_open(void)
         msgbox_show_rsc(355, 1);
         return;
     }
-    *(iptr *)&rest_image = disk_read_file(D_001760A4, 0);
+    *(iptr *)&rest_image = disk_read_file(str_rest00i0_img, 0);
     game_mode = 16;
     D_00196272 = 1;
     D_00190D1A = 0;

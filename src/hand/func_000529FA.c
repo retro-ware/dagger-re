@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000529FA */
 #include "structs.h"
 #include "clib.h"
-extern char D_00175404[];        /* __FILE__ */
+extern char str_pflc_c[];        /* __FILE__ */
 
 void flc_decode_lc(unsigned char *chunk, struct flc_player *anim)
 {
@@ -26,11 +26,11 @@ void flc_decode_lc(unsigned char *chunk, struct flc_player *anim)
                 cnt = *chunk;
                 chunk++;
                 if (cnt < 0) {
-                    mc_memset(anim->image + anim->width * y + col, *chunk, -cnt, D_00175404, 492, 4);
+                    mc_memset(anim->image + anim->width * y + col, *chunk, -cnt, str_pflc_c, 492, 4);
                     col -= cnt;
                     chunk++;
                 } else if (cnt > 0) {
-                    mc_memcpy(anim->image + anim->width * y + col, chunk, cnt, D_00175404, 498, 4);
+                    mc_memcpy(anim->image + anim->width * y + col, chunk, cnt, str_pflc_c, 498, 4);
                     col += cnt;
                     chunk += cnt;
                 }

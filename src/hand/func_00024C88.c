@@ -3,10 +3,10 @@
 #include "clib.h"
 
 extern char *D_00147954;
-extern char D_00170738[];        /* __FILE__ */
-extern char D_00170765[];
-extern char D_00170773[];
-extern char D_00170777[];
+extern char str_career_c[];        /* __FILE__ */
+extern char str_class_cfg_2[];
+extern char str_n[];
+extern char str_n_2[];
 extern unsigned char D_00178630[];   /* _IsTable */
 extern int bio_modifiers;
 extern int D_0018DDD8;
@@ -78,8 +78,8 @@ unsigned char *career_answer_effect(unsigned char *text)
         kind = text[1];
         person = (struct character *)(D_00147954 + 70000);
         person_class = D_00147954 + 75000;
-        mc_memset(person, 0, REC_OFFSETOF(struct character, career), D_00170738, 279, 4);
-        mc_memset(person_class, 0, 74, D_00170738, 280, 4);
+        mc_memset(person, 0, REC_OFFSETOF(struct character, career), str_career_c, 279, 4);
+        mc_memset(person_class, 0, 74, str_career_c, 280, 4);
         text = career_skip_word(text);
         if (*text == 'F')
             person->flags |= 1;
@@ -92,14 +92,14 @@ unsigned char *career_answer_effect(unsigned char *text)
         person->career_id = number;    /* the person's class: CLASS%02d.CFG */
         text = career_skip_word(text);
         person->level = atoi(text);
-        mc_set_location(292, D_00170738);
-        mc_sprintf(((char *)text_buffer), D_00170765, number);
+        mc_set_location(292, str_career_c);
+        mc_sprintf(((char *)text_buffer), str_class_cfg_2, number);
         disk_read_file(((char *)text_buffer), person_class);
         if (kind == 'E') {
-            parse_expand(D_00170773, person);
+            parse_expand(str_n, person);
             bio_person_add(person, person_class, 0);
         } else {
-            parse_expand(D_00170777, person);
+            parse_expand(str_n_2, person);
             bio_person_add(person, person_class, 1);
         }
     } else if (*(unsigned short *)text == 0x5449) {

@@ -6,7 +6,7 @@
 
 extern signed char mouse_buttons;
 extern iptr screen_buffer;
-extern char D_00170D55[];
+extern char str_text_c[];
 extern short msgbox_wrap_width;
 extern signed char msgbox_kind;
 extern unsigned char D_00196271;
@@ -32,14 +32,14 @@ void msgbox_show_string(char *text, short kind)
     char *expand_buf;
 
     if (msgbox_kind != 0) return;
-    msgbox_saved_screen = mc_malloc(64000, D_00170D55, 697);
-    mc_memcpy(msgbox_saved_screen, (void *)screen_buffer, 64000, D_00170D55, 698, 4);
+    msgbox_saved_screen = mc_malloc(64000, str_text_c, 697);
+    mc_memcpy(msgbox_saved_screen, (void *)screen_buffer, 64000, str_text_c, 698, 4);
     xn_font_select(4);
     length = strlen(text);
-    copy = mc_malloc(length + 16, D_00170D55, 702);
-    wrap_buf = mc_malloc(((length < 4096) ? 8192 : length * 2), D_00170D55, 703);
-    expand_buf = mc_malloc(((length < 4096) ? 8192 : length * 2), D_00170D55, 704);
-    mc_strncpy(copy, text, 4, D_00170D55, 705);
+    copy = mc_malloc(length + 16, str_text_c, 702);
+    wrap_buf = mc_malloc(((length < 4096) ? 8192 : length * 2), str_text_c, 703);
+    expand_buf = mc_malloc(((length < 4096) ? 8192 : length * 2), str_text_c, 704);
+    mc_strncpy(copy, text, 4, str_text_c, 705);
     if (kind == 5) {
         flags = 4;
         D_00196271 = 0;
@@ -49,7 +49,7 @@ void msgbox_show_string(char *text, short kind)
     copy = text_expand_wrap((int)(unsigned short)(flags | 32770), (int)(short)msgbox_wrap_width, copy, wrap_buf, expand_buf);
     msgbox_render(copy, (iptr)msgbox_image);
     if (copy != 0 && copy != (char *)(iptr)-1751672937) {
-        mc_free(copy, D_00170D55, 717);
+        mc_free(copy, str_text_c, 717);
         copy = (char *)(iptr)-1751672937;
     }
     msgbox_kind = kind;

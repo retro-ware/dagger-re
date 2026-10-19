@@ -4,8 +4,8 @@
 #include "portio.h"
 struct bits { unsigned char lo:4; unsigned char b4:1; unsigned char b5:2; };
 extern char D_001704CC[];
-extern char D_00170530[];
-extern char D_00179E10[];
+extern char str_fmt_s_2[];
+extern char str_alms[];
 extern char rmb_name_templates[][13];   /* 'TVRN????.RMB'... */
 extern signed char text_buffer[];
 extern char D_001968BA;
@@ -32,7 +32,7 @@ void town_block_load_rmb(int block_index)
         rmb_name_templates[template][4] = D_001968BA;
     else
         rmb_name_templates[template][4] = 'A';
-    rmb_name_templates[template][5] = D_00179E10[location_block_letters[block_index].b5];
+    rmb_name_templates[template][5] = str_alms[location_block_letters[block_index].b5];
     itoa(location_block_numbers[block_index], digits, 10);
     if (template == 13 || template == 14) {
         rmb_name_templates[template][6] = location_block_letters[block_index].lo + 'A';
@@ -46,7 +46,7 @@ void town_block_load_rmb(int block_index)
     }
     if (cfg_debug == 0) {
         mc_set_location(476, D_001704CC);
-        mc_sprintf(((char *)text_buffer), D_00170530, rmb_name_templates[template]);
+        mc_sprintf(((char *)text_buffer), str_fmt_s_2, rmb_name_templates[template]);
     } else {
         mc_strncpy(((char *)text_buffer), cfg_block_str, 160, D_001704CC, 478);
     }

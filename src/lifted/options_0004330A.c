@@ -6,8 +6,8 @@
 
 extern signed char key_down_esc;
 extern iptr screen_buffer;
-extern char D_00170EDB[];
-extern char D_00170EE8[];
+extern char str_optn00i0_img[];
+extern char str_options_c[];
 extern signed char D_00187CA8;
 extern signed char D_00196272;
 extern signed char game_mode;
@@ -28,10 +28,10 @@ int options_open(short force)
         save_thumbnail_capture();
         D_00187CA8 = 0;
         game_mode = 7;
-        options_image = disk_read_file(D_00170EDB, 0);
+        options_image = disk_read_file(str_optn00i0_img, 0);
         D_00196272 = 1;
-        options_saved_screen = (iptr)mc_malloc(64000, D_00170EE8, 120);
-        mc_memcpy((void *)options_saved_screen, (void *)screen_buffer, 64000, D_00170EE8, 121, 4);
+        options_saved_screen = (iptr)mc_malloc(64000, str_options_c, 120);
+        mc_memcpy((void *)options_saved_screen, (void *)screen_buffer, 64000, str_options_c, 121, 4);
         logbook_prune_quests();
     }
     if (((int)(unsigned char)game_mode) == 7) {

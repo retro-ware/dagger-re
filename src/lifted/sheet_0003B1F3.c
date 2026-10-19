@@ -6,10 +6,10 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern char D_00170C40[];
-extern char D_00170C4D[];
-extern char D_00170C5A[];
-extern char D_00170C67[];
+extern char str_info00i0_img[];
+extern char str_popu00i0_img[];
+extern char str_cust09i0_img_3[];
+extern char str_sheet_c[];
 extern signed char D_00187CA8;
 extern char scratch_190be4[];
 extern char scratch_190d64[];
@@ -48,9 +48,9 @@ int sheet_open(short opening)
     }
     if (opening != 0 || (game_mode == 0 && key_action_held(36) != 0 && player_death_timer == 0)) {
         game_mode = 3;
-        window_image = disk_read_file(D_00170C40, 0);
-        D_00199638 = (struct image *)disk_read_file(D_00170C4D, 0);
-        D_00195B5C = (struct image *)disk_read_file(D_00170C5A, 0);
+        window_image = disk_read_file(str_info00i0_img, 0);
+        D_00199638 = (struct image *)disk_read_file(str_popu00i0_img, 0);
+        D_00195B5C = (struct image *)disk_read_file(str_cust09i0_img_3, 0);
         D_00196272 = 1;
         D_00195F40 = 160 - (D_00199638->width >> 1);
         D_00195F3E = 100 - (D_00199638->height >> 1);
@@ -70,7 +70,7 @@ int sheet_open(short opening)
             *(short *)scratch_190d64 = rand_range(4, 6);
         }
         *(int *)scratch_190be4 = 0;
-        mc_memcpy(D_00190D8C, (signed char *)&player_character->base_attributes[0], 16, D_00170C67, 97, 4);
+        mc_memcpy(D_00190D8C, (signed char *)&player_character->base_attributes[0], 16, str_sheet_c, 97, 4);
         sheet_place_spinner(13);
         D_0019626C = 0;
         D_00187CA8 = 0;

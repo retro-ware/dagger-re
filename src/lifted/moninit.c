@@ -6,7 +6,7 @@
 #include "portio.h"
 
 extern struct monster_template monster_table[];
-extern char D_00176844[];
+extern char str_moninit_c[];
 extern char monster_spells_imp[];
 extern char monster_spells_ghost[];
 extern char monster_spells_orc_shaman[];
@@ -53,7 +53,7 @@ void monster_reload_anims(void)
     for (slot = 0; slot < 128; slot++) {
         if (D_00190704[slot] != 0) {
             if (D_00190704[slot] != 0 && D_00190704[slot] != (-1751672937)) {
-                mc_free((void *)D_00190704[slot], D_00176844, 211);
+                mc_free((void *)D_00190704[slot], str_moninit_c, 211);
                 D_00190704[slot] = -1751672937;
             }
         }
@@ -188,7 +188,7 @@ void monster_give_spells(struct record *monster, char *spell_ids)
         spell->type = 9;
         spell->flags = 1;
         spell->id = object_new_id(((unsigned)monster->id) >> 16);
-        mc_memcpy(&spell->data.spell, &spell_records[spell_index], 89, D_00176844, 370, 4);
+        mc_memcpy(&spell->data.spell, &spell_records[spell_index], 89, str_moninit_c, 370, 4);
         i++;
     }
 }
@@ -198,7 +198,7 @@ void monster_give_equipment(struct record *monster, struct character *monster_ch
     int poison_chance;
     int i;
 
-    mc_memset(monster_char->equipped, 0, 108, D_00176844, 400, 108);
+    mc_memset(monster_char->equipped, 0, 108, str_moninit_c, 400, 108);
     switch ((unsigned)tier) {
     case 0:
         monster_char->equipped[19] = monster_make_item(monster, 3, 5, 7, -1, 100);

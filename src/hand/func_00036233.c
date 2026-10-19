@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00036233 */
 #include "records.h"
 
-extern char D_00170AD2[];
+extern char str_object_count_exceeded[];
 extern unsigned char D_0017A834[];
 extern struct record *location_object;
 extern char D_001962A1;
@@ -115,7 +115,7 @@ void rdb_create_objects(struct record *quarter, struct rdb_object *rdb_object, i
             rdb_object_ids[rdb_object_id_count].offset = offset;
             rdb_object_ids[rdb_object_id_count].id = object->id;
             if (rdb_object_id_count++ > 512)
-                fatal_error(D_00170AD2);
+                fatal_error(str_object_count_exceeded);
             object->x = location_object->x + rdb_object->x + (rdb_dungeon_block->x << 11);
             object->y = location_object->y + rdb_object->y;
             object->z = location_object->z + rdb_object->z + (rdb_dungeon_block->z << 11);

@@ -3,8 +3,8 @@
  * tables from the start of the file, so moving functions can change the code. */
 #include "records.h"
 
-extern char D_0017629C[];
-extern char D_001762B5[];
+extern char str_it_is_too_heavy_for_you[];
+extern char str_you_are_carrying_too_much_to_lift_this[];
 extern struct record *player_entity;
 
 extern int object_weight(struct record *);
@@ -30,11 +30,11 @@ void pick_up_item(struct record *object)
     carried_weight = object_weight(player_entity);
     capacity = carry_capacity() << 2;
     if (weight > capacity) {
-        hud_message_add(D_0017629C);
+        hud_message_add(str_it_is_too_heavy_for_you);
         return;
     }
     if ((weight + carried_weight) > capacity) {
-        hud_message_add(D_001762B5);
+        hud_message_add(str_you_are_carrying_too_much_to_lift_this);
         return;
     }
     quest_raise_event(3, object, 0);

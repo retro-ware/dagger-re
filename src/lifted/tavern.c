@@ -7,13 +7,13 @@
 extern signed char mouse_buttons;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
-extern char D_00170569[];
-extern char D_00170572[];
-extern char D_0017059D[];
-extern char D_001705BE[];
-extern char D_001705D4[];
-extern char D_001705E0[];
-extern char D_001705EC[];
+extern char str_tavern_c[];
+extern char str_the_room_is_free_for_a_knight_such_as[];
+extern char str_room_is_free_due_to_heart_s_day[];
+extern char str_you_are_not_hungry[];
+extern char str_politic_pak[];
+extern char str_climate_pak[];
+extern char str_regflat_bin[];
 extern char *tavern_food_names[];
 extern signed char tavern_food_prices[];
 extern char scratch_190be4[];
@@ -88,7 +88,7 @@ void tavern_close(void)
     while (key_down_esc != 0);
     game_mode = 0;
     if (tavern_menu_image != 0 && tavern_menu_image != (-1751672937)) {
-        mc_free((void *)tavern_menu_image, D_00170569, 117);
+        mc_free((void *)tavern_menu_image, str_tavern_c, 117);
         tavern_menu_image = -1751672937;
     }
     D_00196272 = 0;
@@ -129,7 +129,7 @@ void tavern_room_offer(void)
         price = ((int)(short)*(short *)scratch_190d64) * 7;
     }
     if (guild_is_local_knight() != 0) {
-        msgbox_show_string(D_00170572, 1);
+        msgbox_show_string(str_the_room_is_free_for_a_knight_such_as, 1);
         tavern_state = 0;
         if (tavern_room_rented() != 0) {
             tavern_extend_room(((int)(short)*(short *)scratch_190d64) * 1440);
@@ -139,7 +139,7 @@ void tavern_room_offer(void)
         return;
     }
     if (price == 0) {
-        msgbox_show_string(D_0017059D, 1);
+        msgbox_show_string(str_room_is_free_due_to_heart_s_day, 1);
         tavern_state = 0;
         if (tavern_room_rented() != 0) {
             tavern_extend_room(((int)(short)*(short *)scratch_190d64) * 1440);
@@ -172,7 +172,7 @@ void tavern_room_pay(void)
 void tavern_food_button(void)
 {
     if (((unsigned)(game_minutes - player_character->last_meal_time)) < 240) {
-        msgbox_show_string(D_001705BE, 1);
+        msgbox_show_string(str_you_are_not_hungry, 1);
         return;
     }
     list_popup_open((iptr)(char *)tavern_food_names);
@@ -263,12 +263,12 @@ void func_0001F6E2(struct record *object)
     if (func_0001FBF5(object) == 0) return;
     stored = object_create_child(nonworld_root, 0, 107);
     stored->type = 58;
-    mc_memcpy(&stored->x, &object->x, 12, D_00170569, 317, 4);
+    mc_memcpy(&stored->x, &object->x, 12, str_tavern_c, 317, 4);
     stored->image = object->image;
     stored->id = object->id;
     stored->parent_id = object->parent->id;
     stored->repair_due = *(int *)scratch_190be4;
-    mc_memcpy(RECORD_DATA(stored), RECORD_DATA(object), 107, D_00170569, 322, 4);
+    mc_memcpy(RECORD_DATA(stored), RECORD_DATA(object), 107, str_tavern_c, 322, 4);
 }
 
 void func_0001F7B3(struct record *stored)
@@ -282,8 +282,8 @@ void func_0001F7B3(struct record *stored)
     object->type = 2;
     object->image = stored->image;
     object->id = stored->id;
-    mc_memcpy(&object->x, &stored->x, 12, D_00170569, 347, 4);
-    mc_memcpy(RECORD_DATA(object), RECORD_DATA(stored), 107, D_00170569, 348, 4);
+    mc_memcpy(&object->x, &stored->x, 12, str_tavern_c, 347, 4);
+    mc_memcpy(RECORD_DATA(object), RECORD_DATA(stored), 107, str_tavern_c, 348, 4);
     object_delete(stored);
 }
 
@@ -302,7 +302,7 @@ void func_0001F89F(void)
         stored->type = 57;
         stored->owner = *(short *)D_00195B84;
         stored->id = location_object->id;
-        mc_memcpy(RECORD_DATA(stored), D_00196ABC, *(int *)D_00195B84 * 26, D_00170569, 369, 4);
+        mc_memcpy(RECORD_DATA(stored), D_00196ABC, *(int *)D_00195B84 * 26, str_tavern_c, 369, 4);
     }
     object_foreach(location_object, func_0001F6E2);
 }
@@ -319,7 +319,7 @@ void func_0001F958(void)
     for (i = 0; i < *(int *)D_00195B84; i++) {
         for (j = 0; current_location->building_count > j; j++) {
             if (current_location->buildings[j].id == D_00196ABC[i].id) {
-                mc_memcpy(&current_location->buildings[j], &D_00196ABC[i], 26, D_00170569, 388, 4);
+                mc_memcpy(&current_location->buildings[j], &D_00196ABC[i], 26, str_tavern_c, 388, 4);
                 break;
             }
         }
@@ -344,7 +344,7 @@ void func_0001FAB2(void)
     found_object = 0;
     object_find(nonworld_root, func_0001FA3A);
     if (found_object == 0) return;
-    mc_memcpy(&D_00196ABC[*(int *)D_00195B84], RECORD_DATA(found_object), found_object->owner * 26, D_00170569, 417, 4);
+    mc_memcpy(&D_00196ABC[*(int *)D_00195B84], RECORD_DATA(found_object), found_object->owner * 26, str_tavern_c, 417, 4);
     *(int *)D_00195B84 += found_object->owner;
 }
 
@@ -354,7 +354,7 @@ void func_0001FB3F(void)
 
     for (i = 0; current_location->building_count > i; i++) {
         if ((current_location->buildings[i].flags & 3) != 0 && ((unsigned)current_location->buildings[i].flags) > game_minutes) {
-            mc_memcpy(&D_00196ABC[(*(int *)D_00195B84)++], &current_location->buildings[i], 26, D_00170569, 428, 4);
+            mc_memcpy(&D_00196ABC[(*(int *)D_00195B84)++], &current_location->buildings[i], 26, str_tavern_c, 428, 4);
         }
     }
 }
@@ -407,7 +407,7 @@ void func_0001FE4D(void)
 
 void region_load_tables(void)
 {
-    politic_pak = disk_read_file(D_001705D4, 0);
-    climate_pak = disk_read_file(D_001705E0, 0);
-    disk_read_file(D_001705EC, (iptr)region_flats);
+    politic_pak = disk_read_file(str_politic_pak, 0);
+    climate_pak = disk_read_file(str_climate_pak, 0);
+    disk_read_file(str_regflat_bin, (iptr)region_flats);
 }

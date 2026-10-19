@@ -2,10 +2,10 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170AB4[];       /* __FILE__ */
-extern char D_00170ABC[];
-extern char D_00170AC7[];
-extern unsigned char D_0017A844[];
+extern char str_fs2df_c[];       /* __FILE__ */
+extern char str_rdb[];
+extern char str_rdi[];
+extern unsigned char str_nwlsbm[];
 extern signed char text_buffer[];
 extern struct record *location_object;
 extern char *scratch_buffer;
@@ -37,8 +37,8 @@ void dungeon_load_rdb_block(struct dungeon_block *block)
 
     rdb_dungeon_block = block;
     rdb_data = scratch_buffer;
-    mc_set_location(59, D_00170AB4);
-    mc_sprintf(((char *)text_buffer), D_00170ABC, D_0017A844[block->index], block->number);
+    mc_set_location(59, str_fs2df_c);
+    mc_sprintf(((char *)text_buffer), str_rdb, str_nwlsbm[block->index], block->number);
     record = archive_find_record(blocks_bsa, ((char *)text_buffer), 13);
     archive_read_record(blocks_bsa, record, rdb_data);
     D_001995F8 = 16;
@@ -76,8 +76,8 @@ void dungeon_load_rdb_block(struct dungeon_block *block)
         }
     }
     rdi_object = object_create_in_block(D_001995D4[0][0], 60, 512, 0, 0);
-    mc_set_location(107, D_00170AB4);
-    mc_sprintf(((char *)text_buffer), D_00170AC7, D_0017A844[block->index], block->number);
+    mc_set_location(107, str_fs2df_c);
+    mc_sprintf(((char *)text_buffer), str_rdi, str_nwlsbm[block->index], block->number);
     record = archive_find_record(blocks_bsa, ((char *)text_buffer), 13);
     archive_read_record(blocks_bsa, record, RECORD_DATA(rdi_object));
     rdi_object->x = D_001995D4[0][0]->x;

@@ -4,10 +4,10 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170AB4[];
-extern char D_00170AEC[];
-extern char D_00170AF9[];
-extern char D_00170B06[];
+extern char str_fs2df_c[];
+extern char str_info01i0_img[];
+extern char str_mask01i0_img[];
+extern char str_mask05i0_img[];
 extern signed char D_001940D8;
 extern iptr magic_window_image;
 extern iptr window_image;
@@ -141,7 +141,7 @@ void rdb_build_action_chain(int resource_type)
 void action_record_add(struct rdb_model *model, struct rdb_action *model_action, struct rdb_flat *flat, unsigned char action)
 {
     D_001995EC = (D_001995E4 = &links[link_count++]);
-    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), D_00170AB4, 447, 4);
+    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), str_fs2df_c, 447, 4);
     D_001995EC->object_id = rdb_link_object_id;
     if (model_action != 0) {
         D_001995EC->trigger = model->trigger_flag_starting_lock;
@@ -166,7 +166,7 @@ void action_record_add_chained(struct rdb_model *model, struct rdb_action *model
 {
     D_001995E4->chain_count++;
     D_001995EC = &links[link_count++];
-    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), D_00170AB4, 490, 4);
+    mc_memset(D_001995EC, 0, REC_SIZEOF(struct link), str_fs2df_c, 490, 4);
     D_001995EC->object_id = rdb_link_object_id;
     if (model_action != 0) {
         D_001995EC->trigger = model->trigger_flag_starting_lock;
@@ -200,9 +200,9 @@ int spellmaker_open(int opening)
     if (((int)D_0019626F) == 2) return 1;
     if (opening != 0) {
         game_mode = 2;
-        window_image = disk_read_file(D_00170AEC, 0);
-        magic_window_image = disk_read_file(D_00170AF9, 0);
-        spellmaker_settings_image = disk_read_file(D_00170B06, 0);
+        window_image = disk_read_file(str_info01i0_img, 0);
+        magic_window_image = disk_read_file(str_mask01i0_img, 0);
+        spellmaker_settings_image = disk_read_file(str_mask05i0_img, 0);
         D_00196272 = 1;
         D_001940D8 |= 1;
         spellmaker_new();

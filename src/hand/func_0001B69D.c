@@ -4,10 +4,10 @@
 
 struct cmd { unsigned short hash; void (*fn)(struct faction *, char **, int *, int *); };
 extern char *D_00147954;
-extern char D_0017043C[];
-extern char D_00170448[];
-extern char D_00170464[];
-extern char D_0017046E[];
+extern char str_faction_txt[];
+extern char str_error_reading_faction_file[];
+extern char str_faction_c[];
+extern char str_invalid_command_in_line[];
 extern unsigned char D_00178630[];
 extern struct cmd faction_keywords[];
 extern signed char text_buffer[];
@@ -44,9 +44,9 @@ void faction_load_file(void)
     indent = 0;
     prev = 0;
     D_00196732 = 0;
-    file = disk_open_data(D_0017043C);
+    file = disk_open_data(str_faction_txt);
     if (file < 1)
-        fatal_error(D_00170448);
+        fatal_error(str_error_reading_faction_file);
     len = read(file, D_00147954, 90000);
     close(file);
     for (faction_count = i = 0; i < len; i++)
@@ -54,13 +54,13 @@ void faction_load_file(void)
             faction_count++;
     if (factions != 0) {
         if (factions != 0 && factions != (struct faction *)(iptr)-1751672937) {
-            mc_free(factions, D_00170464, 973);
+            mc_free(factions, str_faction_c, 973);
             factions = (struct faction *)(iptr)-1751672937;
         }
     }
-    dest = factions = mc_malloc(faction_count * REC_SIZEOF(struct faction), D_00170464, 975);
-    mc_memset(dest, 0, faction_count * REC_SIZEOF(struct faction), D_00170464, 976, 4);
-    mc_memset(&parsed, 0, sizeof(parsed), D_00170464, 977, 4);
+    dest = factions = mc_malloc(faction_count * REC_SIZEOF(struct faction), str_faction_c, 975);
+    mc_memset(dest, 0, faction_count * REC_SIZEOF(struct faction), str_faction_c, 976, 4);
+    mc_memset(&parsed, 0, sizeof(parsed), str_faction_c, 977, 4);
     text = D_00147954;
     text[len] = 0;
     while (*text != 0) {
@@ -83,7 +83,7 @@ void faction_load_file(void)
                 faction_add_record(&parsed, prev, dest++);
                 prev = indent;
                 indent = 0;
-                mc_memset(&parsed, 0, sizeof(parsed), D_00170464, 1012, 4);
+                mc_memset(&parsed, 0, sizeof(parsed), str_faction_c, 1012, 4);
                 ally_count = enemy_count = 0;
             }
             have_record = 1;
@@ -114,8 +114,8 @@ void faction_load_file(void)
                 break;
             }
             if (!found) {
-                mc_set_location(1049, D_00170464);
-                mc_sprintf(((char *)text_buffer), D_0017046E, line);
+                mc_set_location(1049, str_faction_c);
+                mc_sprintf(((char *)text_buffer), str_invalid_command_in_line, line);
                 fatal_error(((char *)text_buffer));
             }
             break;

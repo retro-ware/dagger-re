@@ -13,7 +13,7 @@ extern signed char D_0012B508;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
-extern char D_00174FAC[];
+extern char str_note_c[];
 extern char D_00174FF5[];
 extern char D_00175010[];
 extern iptr D_0017D1E6;
@@ -88,20 +88,20 @@ int note_close(void)
 {
     note_save_page();
     if ((iptr)note_page != 0 && (iptr)note_page != (-1751672937)) {
-        mc_free(note_page, D_00174FAC, 206);
+        mc_free(note_page, str_note_c, 206);
         note_page = (union note_entry *)(iptr)-1751672937;
     }
     if (note_rci != 0 && note_rci != (-1751672937)) {
-        mc_free((void *)note_rci, D_00174FAC, 207);
+        mc_free((void *)note_rci, str_note_c, 207);
         note_rci = -1751672937;
     }
     if (note_page_backup != 0 && note_page_backup != (-1751672937)) {
-        mc_free((void *)note_page_backup, D_00174FAC, 208);
+        mc_free((void *)note_page_backup, str_note_c, 208);
         note_page_backup = -1751672937;
     }
     if (note_silent == 0) {
         if (window_image != 0 && window_image != (-1751672937)) {
-            mc_free((void *)window_image, D_00174FAC, 212);
+            mc_free((void *)window_image, str_note_c, 212);
             window_image = -1751672937;
         }
         game_mode = 0;
@@ -141,7 +141,7 @@ void note_click_page(void)
             text_cursor_x = (note_cursor_x = mouse_x);
             text_cursor_y = (note_cursor_y = mouse_y);
             note_action = 1;
-            mc_memset(text_rsc_buffer, 0, 81, D_00174FAC, 270, 2048);
+            mc_memset(text_rsc_buffer, 0, 81, str_note_c, 270, 2048);
             xn_font_select((int)(short)((unsigned short)(unsigned char)D_00185201[(int)(short)*(short *)note_font]));
             inpstr_begin_text((char *)text_rsc_buffer, 79);
         }
@@ -222,7 +222,7 @@ void note_add_text(char *text)
         msgbox_show_rsc(1700, 1);
         return;
     }
-    mc_memcpy((void *)note_page_backup, note_page, 3640, D_00174FAC, 361, 4);
+    mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 361, 4);
     D_001940D5 |= 16;
     entry = (char *)note_page;
     while (*(signed char *)entry != 0) {
@@ -238,7 +238,7 @@ void note_add_text(char *text)
     *(signed char *)(entry + 7) = *(signed char *)note_colour;
     *(signed char *)(entry + 5) = *(signed char *)note_font;
     *(signed char *)(entry + 6) = *(signed char *)note_text_flags;
-    mc_strncpy(entry + 11, text, 4, D_00174FAC, 381);
+    mc_strncpy(entry + 11, text, 4, str_note_c, 381);
     note_selected = (union note_entry *)entry;
     entry += 91;
     *(signed char *)entry = 0;
@@ -263,7 +263,7 @@ void note_load_page(void)
 {
     lseek((int)(short)note_file, ((int)(short)note_page_index) * 3640, 0);
     read((int)(short)note_file, note_page, 3640);
-    mc_memcpy((void *)note_page_backup, note_page, 3640, D_00174FAC, 450, 4);
+    mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 450, 4);
 }
 
 void note_goto_page_prompt(void)
@@ -272,7 +272,7 @@ void note_goto_page_prompt(void)
 
     D_0012B508 = 146;
     prompt = scratch_buffer + 55000;
-    mc_set_location(459, D_00174FAC);
+    mc_set_location(459, str_note_c);
     mc_sprintf(prompt, D_00174FF5, D_0017D1E6);
     *(signed char *)((char *)(strlen(prompt) + prompt) + 1) = 0;
     msgbox_show_string(prompt, 2);
@@ -320,7 +320,7 @@ void note_next_page(void)
     }
     if (note_page->kind == 0) return;
     lseek((int)(short)note_file, 0, 2);
-    mc_memset(note_page, 0, 3640, D_00174FAC, 507, 4);
+    mc_memset(note_page, 0, 3640, str_note_c, 507, 4);
     write((int)(short)note_file, note_page, 3640);
     note_file_size = filelength((int)(short)note_file);
     note_page_index++;
@@ -353,11 +353,11 @@ void note_find_prompt(void)
     xn_font_select(4);
     note_search_text = (iptr)scratch_buffer + 56000;
     prompt = scratch_buffer + 55000;
-    mc_set_location(540, D_00174FAC);
+    mc_set_location(540, str_note_c);
     mc_sprintf(prompt, D_00175010, D_0017D1F2);
     *(signed char *)((char *)(strlen(prompt) + prompt) + 1) = 0;
     msgbox_show_string(prompt, 2);
-    mc_memset((void *)note_search_text, 0, 24, D_00174FAC, 543, 4);
+    mc_memset((void *)note_search_text, 0, 24, str_note_c, 543, 4);
     inpstr_begin_text((char *)note_search_text, 23);
     *(signed char *)note_text_flags |= 128;
     note_selected = note_page;
@@ -420,18 +420,18 @@ void note_find_next(void)
 
 void note_undo(void)
 {
-    mc_memcpy(note_page, (void *)note_page_backup, 3640, D_00174FAC, 611, 4);
+    mc_memcpy(note_page, (void *)note_page_backup, 3640, str_note_c, 611, 4);
 }
 
 void note_clear_page(void)
 {
-    mc_memcpy((void *)note_page_backup, note_page, 3640, D_00174FAC, 616, 4);
-    mc_memset(note_page, 0, 3640, D_00174FAC, 617, 4);
+    mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 616, 4);
+    mc_memset(note_page, 0, 3640, str_note_c, 617, 4);
 }
 
 void note_toggle_shadow(void)
 {
-    mc_memcpy((void *)note_page_backup, note_page, 3640, D_00174FAC, 622, 4);
+    mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 622, 4);
     if (note_selected == 0 || note_selected->kind != 1) {
         return;
     }
@@ -440,7 +440,7 @@ void note_toggle_shadow(void)
 
 void note_toggle_centre(void)
 {
-    mc_memcpy((void *)note_page_backup, note_page, 3640, D_00174FAC, 629, 4);
+    mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 629, 4);
     if (note_selected == 0 || note_selected->kind != 1) {
         return;
     }
@@ -511,7 +511,7 @@ void note_delete_in_box(void)
 int note_keep_text_cb(struct note_text *entry)
 {
     if ((entry->flags & 64) != 0) return 0;
-    mc_memcpy((void *)D_001997CC, entry, 91, D_00174FAC, 731, 4);
+    mc_memcpy((void *)D_001997CC, entry, 91, str_note_c, 731, 4);
     D_001997CC = (iptr)(*(char **)&D_001997CC + 91);
     return 0;
 }
@@ -519,7 +519,7 @@ int note_keep_text_cb(struct note_text *entry)
 int note_keep_line_cb(struct note_line *line)
 {
     if ((line->flags & 64) != 0) return 0;
-    mc_memcpy((void *)D_001997CC, line, 11, D_00174FAC, 739, 4);
+    mc_memcpy((void *)D_001997CC, line, 11, str_note_c, 739, 4);
     D_001997CC += 11;
     return 0;
 }

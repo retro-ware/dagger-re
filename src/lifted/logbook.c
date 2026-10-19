@@ -17,8 +17,8 @@ extern short D_00142928;
 extern short D_0014292C;
 extern iptr screen_buffer;
 extern iptr D_00147954;
-extern char D_00175C6C[];
-extern char D_00175C86[];
+extern char str_copyfile_dat_2[];
+extern char str_logbook_c[];
 extern struct rect logbook_buttons[];
 extern iptr logbook_notes_file;
 extern signed char D_00187CA8;
@@ -69,7 +69,7 @@ void logbook_update(void)
     int i;
 
     if (logbook_open(0) == 0) return;
-    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_00175C86, 53, 4);
+    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_logbook_c, 53, 4);
     logbook_draw();
     if (key_down_esc != 0) logbook_close();
     if (mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) {
@@ -93,7 +93,7 @@ int logbook_close(void)
     game_mode = 0;
     D_00196272 = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00175C86, 80);
+        mc_free((void *)window_image, str_logbook_c, 80);
         window_image = -1751672937;
     }
     if (((struct bf8_5_1 *)&D_001940D8)->f != 0) {
@@ -206,7 +206,7 @@ void logbook_build_entries(void)
         quest = quest_find_by_id((int)logbook->quest_ids[slot]);
         if (quest == 0) {
             logbook->quest_ids[slot] = 0;
-            mc_memset(logbook->message_ids[slot], 0, 20, D_00175C86, 204, 20);
+            mc_memset(logbook->message_ids[slot], 0, 20, str_logbook_c, 204, 20);
             continue;
         }
         for (j = 0; j < 10; j++) {
@@ -216,7 +216,7 @@ void logbook_build_entries(void)
             text_rsc_buffer[0] = 0;
             quest_load_text(quest, (int)logbook->message_ids[slot][j], 0, 0);
             if (text_rsc_buffer[0] == 0) continue;
-            mc_strncpy(out, (char *)text_rsc_buffer, 4, D_00175C86, 216);
+            mc_strncpy(out, (char *)text_rsc_buffer, 4, str_logbook_c, 216);
             out += strlen(out) + 1;
             logbook_entry_count++;
         }
@@ -232,8 +232,8 @@ void logbook_load_notes(void)
     int unused;
 
     text = scratch_buffer + 20000;
-    mc_memset(text, 0, 35000, D_00175C86, 233, 4);
-    disk_read_file((iptr)D_00175C6C, (iptr)text);
+    mc_memset(text, 0, 35000, str_logbook_c, 233, 4);
+    disk_read_file((iptr)str_copyfile_dat_2, (iptr)text);
     while (*(signed char *)text != 0) {
         text += strlen(text) + 1;
         logbook_entry_count++;
@@ -315,7 +315,7 @@ void logbook_trim_notes(void)
     while (*(int *)disk_last_file_size > 32768) {
         line_end = (char *)D_00147954;
         while (*(signed char *)line_end != 0) line_end++;
-        mc_memcpy((void *)D_00147954, line_end + 1, 40960, D_00175C86, 401, 4);
+        mc_memcpy((void *)D_00147954, line_end + 1, 40960, str_logbook_c, 401, 4);
         *(int *)disk_last_file_size -= (int)((line_end + 1) - (char *)D_00147954);
     }
     disk_write_arena2_file(logbook_notes_file, D_00147954, *(int *)disk_last_file_size);
@@ -333,7 +333,7 @@ void logbook_prune_quests(void)
             quest = quest_find_by_id((int)logbook->quest_ids[slot]);
             if (quest == 0) {
                 logbook->quest_ids[slot] = 0;
-                mc_memset(logbook->message_ids[slot], 0, 20, D_00175C86, 422, 20);
+                mc_memset(logbook->message_ids[slot], 0, 20, str_logbook_c, 422, 20);
             }
         }
     }

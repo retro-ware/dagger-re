@@ -2,9 +2,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170D55[];       /* __FILE__ */
-extern char D_00170DA2[];
-extern char D_00170DA7[];
+extern char str_text_c[];       /* __FILE__ */
+extern char str_fmt_d_2[];
+extern char str_qrc[];
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
 extern char D_00190FEC;
@@ -24,14 +24,14 @@ char *text_qrc_load_for_quest(struct quest *quest, short message_id, short unuse
     if (quest == 0)
         return 0;
     if (quest->text_file != 0) {
-        mc_set_location(545, D_00170D55);
-        mc_sprintf(((char *)text_rsc_buffer), D_00170DA2, quest->text_file);
+        mc_set_location(545, str_text_c);
+        mc_sprintf(((char *)text_rsc_buffer), str_fmt_d_2, quest->text_file);
     } else {
-        mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, D_00170D55, 547, 2048);
+        mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, str_text_c, 547, 2048);
     }
     D_00190FEC = 0;
-    mc_set_location(550, D_00170D55);
-    mc_sprintf(((char *)text_buffer), D_00170DA7, ((char *)text_rsc_buffer));
+    mc_set_location(550, str_text_c);
+    mc_sprintf(((char *)text_buffer), str_qrc, ((char *)text_rsc_buffer));
     if ((text_rsc_file = disk_open_data(((char *)text_buffer))) > 0) {
         text = text_rsc_load(message_id, 0, width);
         close(text_rsc_file);

@@ -7,11 +7,11 @@
 #include "doslow.h"
 
 extern struct monster_template monster_table[];
-extern char D_001758B8[];
-extern char D_001758E2[];
-extern char D_001758EE[];
-extern char D_001758F8[];
-extern char D_00175927[];
+extern char str_equip_c[];
+extern char str_paint_cif[];
+extern char str_paint_dat[];
+extern char str_books_bok_txt_3[];
+extern char str_magic_def[];
 extern unsigned char player_environment;
 extern struct item_template item_templates[];
 extern char potion_recipes[];
@@ -522,8 +522,8 @@ void painting_draw(void)
     int frame;
     struct image *image;
 
-    mc_set_location(625, D_001758B8);
-    mc_sprintf((char *)text_buffer, D_001758E2, (((int)(unsigned short)D_00195DC4) >> 3) + 97);
+    mc_set_location(625, str_equip_c);
+    mc_sprintf((char *)text_buffer, str_paint_cif, (((int)(unsigned short)D_00195DC4) >> 3) + 97);
     disk_read_file(text_buffer, (iptr)scratch_buffer);
     image = (struct image *)scratch_buffer;
     i = 0;
@@ -543,7 +543,7 @@ void item_info_painting(struct item *item)
     saved_seed = rand();
     srand((int)(unsigned short)(short)item->message);
     D_00195DC4 = rand() % 180;
-    fd = disk_open_data(D_001758EE);
+    fd = disk_open_data(str_paint_dat);
     lseek(fd, ((int)(unsigned short)D_00195DC4) * 40, 0);
     read(fd, (void *)scratch_buffer, 40);
     close(fd);
@@ -574,8 +574,8 @@ void item_init_book(struct item *item, int level)
 
     item->message = *(short *)(book_list + (book_pick_random(level) << 2));
     header = (int *)scratch_buffer;
-    mc_set_location(674, D_001758B8);
-    mc_sprintf((char *)text_buffer, D_001758F8, (int)(unsigned short)(short)item->message);
+    mc_set_location(674, str_equip_c);
+    mc_sprintf((char *)text_buffer, str_books_bok_txt_3, (int)(unsigned short)(short)item->message);
     fd = disk_open_data(text_buffer);
     read(fd, header, 234);
     close(fd);
@@ -745,9 +745,9 @@ void magic_def_load(void)
 {
     int fd;
 
-    fd = disk_open_data(D_00175927);
+    fd = disk_open_data(str_magic_def);
     read(fd, magic_def_count, 4);
-    magic_def = (iptr)mc_malloc(filelength(fd) - 4, D_001758B8, 1201);
+    magic_def = (iptr)mc_malloc(filelength(fd) - 4, str_equip_c, 1201);
     read(fd, (void *)magic_def, (int)(iptr)&*(signed char *)((char *)(iptr)filelength(fd) - 4));
     close(fd);
 }
@@ -861,7 +861,7 @@ void shop_stock_potions(struct record *container)
         item_data->stack_count = *(signed char *)&recipe;
         item = object_create_child(item, 0, 109);
         item->type = 31;
-        mc_memcpy(&item->data.potion_recipe, (void *)(((iptr)potion_recipes) + (recipe * 109)), 109, D_001758B8, 1330, 4);
+        mc_memcpy(&item->data.potion_recipe, (void *)(((iptr)potion_recipes) + (recipe * 109)), 109, str_equip_c, 1330, 4);
     }
 }
 
@@ -896,7 +896,7 @@ void loot_add_potion(struct record *container)
     item_data->stack_count = *(signed char *)&recipe;
     item = object_create_child(item, 0, 109);
     item->type = 31;
-    mc_memcpy(&item->data.potion_recipe, (void *)(((iptr)potion_recipes) + (recipe * 109)), 109, D_001758B8, 1366, 4);
+    mc_memcpy(&item->data.potion_recipe, (void *)(((iptr)potion_recipes) + (recipe * 109)), 109, str_equip_c, 1366, 4);
 }
 
 void ai_creature_think(struct character *monster_char, struct record *monster, struct record *target, int index)

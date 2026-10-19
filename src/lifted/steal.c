@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern signed char D_0012B508;
-extern char D_0017018C[];
+extern char str_steal_c[];
 extern short msgbox_wrap_width;
 extern iptr D_00183258;
 extern iptr D_0018325C;
@@ -63,7 +63,7 @@ void pickpocket_attempt(struct record *target)
     D_0012B508 = 145;
     gold = (rand() % 5) + 1;
     player_character->gold += gold;
-    mc_set_location(155, D_0017018C);
+    mc_set_location(155, str_steal_c);
     mc_sprintf((char *)text_buffer, (char *)D_00183340, gold);
     msgbox_show_string(text_buffer, 1);
     guild_count_crime(5, 1);

@@ -4,7 +4,7 @@
 
 extern signed char D_0012B508;
 extern iptr screen_buffer;
-extern char D_00175420[];
+extern char str_custom_c[];
 extern char *skill_names[];
 extern struct rect classmaker_buttons[];
 extern signed char text_buffer[];
@@ -32,7 +32,7 @@ int classmaker_draw(short show_name)
     short y_offset;
 
     xn_mouse_cursor_erase();
-    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, D_00175420, 235, 4);
+    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, str_custom_c, 235, 4);
     classmaker_draw_dagger();
     if (*(short *)scratch_190d66 & 2) {
         xn_draw_put_rect(44, (int)(short)scratch_190d6a, scratch_190df0->width, scratch_190df0->height, (char *)scratch_190de8, 0);

@@ -17,27 +17,27 @@ extern signed char D_0012B508;
 extern int dungeon_water_level;
 extern int xn_light_ambient;
 extern iptr xn_fog_table_last;
-extern char D_00175040[];
-extern char D_00175047[];
-extern char D_00175207[];
-extern char D_00175214[];
-extern char D_0017521C[];
-extern char D_00175226[];
-extern char D_0017523C[];
-extern char D_00175253[];
-extern char D_00175260[];
-extern char D_00175266[];
-extern char D_00175281[];
-extern char D_001752B6[];
-extern char D_001752D2[];
-extern char D_00175307[];
-extern char D_00175313[];
-extern char D_00175324[];
-extern char D_00175331[];
-extern char D_0017533E[];
-extern char D_0017534B[];
-extern char D_00175358[];
-extern char D_00175365[];
+extern char str_init_c[];
+extern char str_mem_used_k[];
+extern char str_info00i0_img_2[];
+extern char str_pal_raw[];
+extern char str_woods_wld[];
+extern char str_clean_exit_initiated[];
+extern char str_tes_daggerfall_v1_07[];
+extern char str_bethesda_inf[];
+extern char str_fmt_s_s_6[];
+extern char str_failed_internal_check[];
+extern char str_daggerfall_has_encountered_an_internal[];
+extern char str_the_error_reported_was[];
+extern char str_daggerfall_has_encountered_an_internal_2[];
+extern char str_exiting[];
+extern char str_maps[];
+extern char str_fire00c6_cif[];
+extern char str_frst00c6_cif[];
+extern char str_mjic00c6_cif[];
+extern char str_pois00c6_cif[];
+extern char str_shok00c6_cif[];
+extern char str_books_bok00000_txt[];
 extern short D_001788D3[];
 extern unsigned char player_environment;
 extern int mem_check_level;
@@ -240,8 +240,8 @@ void debug_show_mem_used(void)
         dpmi_get_free_memory((iptr)D_001A3F60);
         D_001A3F9C = D_001A3F90 - (D_001A3F7C << 2);
     }
-    mc_set_location(47, D_00175040);
-    mc_sprintf((char *)text_buffer, D_00175047, D_001A3F9C);
+    mc_set_location(47, str_init_c);
+    mc_sprintf((char *)text_buffer, str_mem_used_k, D_001A3F9C);
     D_0012B508 = 146;
     text_draw(text_buffer, 246, 23);
 }
@@ -250,11 +250,11 @@ void player_refresh_paperdoll(void)
 {
     D_001940D8 |= 8;
     mem_check_crt_heap(0);
-    xn_draw_fullscreen_overlay_shaded((char *)(window_image = disk_read_file(D_00175207, 0)));
+    xn_draw_fullscreen_overlay_shaded((char *)(window_image = disk_read_file(str_info00i0_img_2, 0)));
     paperdoll_draw(0, 0);
     xn_gfx_clear(0);
     if (window_image == 0 || window_image == (-1751672937)) return;
-    mc_free((void *)window_image, D_00175040, 246);
+    mc_free((void *)window_image, str_init_c, 246);
     window_image = -1751672937;
 }
 
@@ -312,14 +312,14 @@ void shutdown_free_all(void)
     for (i = 0; ((int)(short)*(short *)&i) < 127; i++) {
         if (D_00190704[((int)(short)*(short *)&i)] != 0) {
             if (D_00190704[((int)(short)*(short *)&i)] != 0 && D_00190704[((int)(short)*(short *)&i)] != (-1751672937)) {
-                mc_free((void *)D_00190704[((int)(short)*(short *)&i)], D_00175040, 314);
+                mc_free((void *)D_00190704[((int)(short)*(short *)&i)], str_init_c, 314);
                 D_00190704[((int)(short)*(short *)&i)] = -1751672937;
             }
         }
     }
     xn_mouse_set_sensitivity(D_001997FC, D_00199800);
     if (qbn_opcode_arg_counts != 0 && qbn_opcode_arg_counts != (-1751672937)) {
-        mc_free((void *)qbn_opcode_arg_counts, D_00175040, 319);
+        mc_free((void *)qbn_opcode_arg_counts, str_init_c, 319);
         qbn_opcode_arg_counts = -1751672937;
     }
     region_free_tables();
@@ -329,119 +329,119 @@ void shutdown_free_all(void)
     intrface_free();
     func_0007EF20();
     if ((iptr)hud_portrait != 0 && (iptr)hud_portrait != (-1751672937)) {
-        mc_free((void *)hud_portrait, D_00175040, 326);
+        mc_free((void *)hud_portrait, str_init_c, 326);
         *(iptr *)&hud_portrait = -1751672937;
     }
     if (D_001AA5FC != 0 && D_001AA5FC != (-1751672937)) {
-        mc_free((void *)D_001AA5FC, D_00175040, 327);
+        mc_free((void *)D_001AA5FC, str_init_c, 327);
         D_001AA5FC = -1751672937;
     }
     if ((iptr)spell_records != 0 && (iptr)spell_records != (-1751672937)) {
-        mc_free(spell_records, D_00175040, 328);
+        mc_free(spell_records, str_init_c, 328);
         spell_records = (struct spell *)(iptr)-1751672937;
     }
     if ((iptr)buttons_rci != 0 && (iptr)buttons_rci != (-1751672937)) {
-        mc_free(buttons_rci, D_00175040, 329);
+        mc_free(buttons_rci, str_init_c, 329);
         *(int *)&buttons_rci = -1751672937;
     }
     if (icon_image != 0 && icon_image != (-1751672937)) {
-        mc_free((void *)icon_image, D_00175040, 330);
+        mc_free((void *)icon_image, str_init_c, 330);
         icon_image = -1751672937;
     }
     if (hud_vital_bar_images != 0 && hud_vital_bar_images != (-1751672937)) {
-        mc_free((void *)hud_vital_bar_images, D_00175040, 331);
+        mc_free((void *)hud_vital_bar_images, str_init_c, 331);
         hud_vital_bar_images = -1751672937;
     }
     if (D_00195C80 != 0 && D_00195C80 != (-1751672937)) {
-        mc_free((void *)D_00195C80, D_00175040, 332);
+        mc_free((void *)D_00195C80, str_init_c, 332);
         D_00195C80 = -1751672937;
     }
     if (D_00195C84 != 0 && D_00195C84 != (-1751672937)) {
-        mc_free((void *)D_00195C84, D_00175040, 333);
+        mc_free((void *)D_00195C84, str_init_c, 333);
         D_00195C84 = -1751672937;
     }
     if (hud_compass_image != 0 && hud_compass_image != (-1751672937)) {
-        mc_free((void *)hud_compass_image, D_00175040, 334);
+        mc_free((void *)hud_compass_image, str_init_c, 334);
         hud_compass_image = -1751672937;
     }
     if (D_00190908 != 0 && D_00190908 != (-1751672937)) {
-        mc_free((void *)D_00190908, D_00175040, 335);
+        mc_free((void *)D_00190908, str_init_c, 335);
         D_00190908 = -1751672937;
     }
     if (D_0019090C != 0 && D_0019090C != (-1751672937)) {
-        mc_free((void *)D_0019090C, D_00175040, 336);
+        mc_free((void *)D_0019090C, str_init_c, 336);
         D_0019090C = -1751672937;
     }
     if (D_00190910 != 0 && D_00190910 != (-1751672937)) {
-        mc_free((void *)D_00190910, D_00175040, 337);
+        mc_free((void *)D_00190910, str_init_c, 337);
         D_00190910 = -1751672937;
     }
     if (magic_def != 0 && magic_def != (-1751672937)) {
-        mc_free((void *)magic_def, D_00175040, 338);
+        mc_free((void *)magic_def, str_init_c, 338);
         magic_def = -1751672937;
     }
     if (D_00199804 != 0 && D_00199804 != (-1751672937)) {
-        mc_free((void *)D_00199804, D_00175040, 339);
+        mc_free((void *)D_00199804, str_init_c, 339);
         D_00199804 = -1751672937;
     }
     if (D_001997F0 != 0 && D_001997F0 != (-1751672937)) {
-        mc_free((void *)D_001997F0, D_00175040, 340);
+        mc_free((void *)D_001997F0, str_init_c, 340);
         D_001997F0 = -1751672937;
     }
     if (D_00195D24 != 0 && D_00195D24 != (-1751672937)) {
-        mc_free((void *)D_00195D24, D_00175040, 341);
+        mc_free((void *)D_00195D24, str_init_c, 341);
         D_00195D24 = -1751672937;
     }
     if (D_00195CF8 != 0 && D_00195CF8 != (-1751672937)) {
-        mc_free((void *)D_00195CF8, D_00175040, 342);
+        mc_free((void *)D_00195CF8, str_init_c, 342);
         D_00195CF8 = -1751672937;
     }
     if (D_00195B64 != 0 && D_00195B64 != (-1751672937)) {
-        mc_free((void *)D_00195B64, D_00175040, 343);
+        mc_free((void *)D_00195B64, str_init_c, 343);
         D_00195B64 = -1751672937;
     }
     if (paperdoll_mask != 0 && paperdoll_mask != (-1751672937)) {
-        mc_free((void *)paperdoll_mask, D_00175040, 344);
+        mc_free((void *)paperdoll_mask, str_init_c, 344);
         paperdoll_mask = -1751672937;
     }
     if (hud_portrait_overlays != 0 && hud_portrait_overlays != (-1751672937)) {
-        mc_free((void *)hud_portrait_overlays, D_00175040, 345);
+        mc_free((void *)hud_portrait_overlays, str_init_c, 345);
         hud_portrait_overlays = -1751672937;
     }
     if (horse_overlay_image != 0 && horse_overlay_image != (-1751672937)) {
-        mc_free((void *)horse_overlay_image, D_00175040, 346);
+        mc_free((void *)horse_overlay_image, str_init_c, 346);
         horse_overlay_image = -1751672937;
     }
     if (cart_overlay_image != 0 && cart_overlay_image != (-1751672937)) {
-        mc_free((void *)cart_overlay_image, D_00175040, 347);
+        mc_free((void *)cart_overlay_image, str_init_c, 347);
         cart_overlay_image = -1751672937;
     }
     if (compass_box_image != 0 && compass_box_image != (-1751672937)) {
-        mc_free((void *)compass_box_image, D_00175040, 348);
+        mc_free((void *)compass_box_image, str_init_c, 348);
         compass_box_image = -1751672937;
     }
     if (compass_image != 0 && compass_image != (-1751672937)) {
-        mc_free((void *)compass_image, D_00175040, 349);
+        mc_free((void *)compass_image, str_init_c, 349);
         compass_image = -1751672937;
     }
     if (hud_mode_icons != 0 && hud_mode_icons != (-1751672937)) {
-        mc_free((void *)hud_mode_icons, D_00175040, 350);
+        mc_free((void *)hud_mode_icons, str_init_c, 350);
         hud_mode_icons = -1751672937;
     }
     if ((iptr)hud_bar_image != 0 && (iptr)hud_bar_image != (-1751672937)) {
-        mc_free(hud_bar_image, D_00175040, 351);
+        mc_free(hud_bar_image, str_init_c, 351);
         hud_bar_image = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)list_popup_image != 0 && (iptr)list_popup_image != (-1751672937)) {
-        mc_free(list_popup_image, D_00175040, 352);
+        mc_free(list_popup_image, str_init_c, 352);
         list_popup_image = (struct image *)(iptr)-1751672937;
     }
     if ((iptr)scratch_buffer != 0 && (iptr)scratch_buffer != (-1751672937)) {
-        mc_free((void *)scratch_buffer, D_00175040, 353);
+        mc_free((void *)scratch_buffer, str_init_c, 353);
         *(iptr *)&scratch_buffer = -1751672937;
     }
     if (D_001997F4 != 0 && D_001997F4 != (-1751672937)) {
-        mc_free((void *)D_001997F4, D_00175040, 354);
+        mc_free((void *)D_001997F4, str_init_c, 354);
         D_001997F4 = -1751672937;
     }
     weapon_free_sprites();
@@ -449,7 +449,7 @@ void shutdown_free_all(void)
     msgbox_free_borders();
     for (i = 0; ((int)(short)*(short *)&i) < 5; i++) {
         if (quest_face_images[((int)(short)*(short *)&i)] != 0 && quest_face_images[((int)(short)*(short *)&i)] != (-1751672937)) {
-            mc_free((void *)quest_face_images[((int)(short)*(short *)&i)], D_00175040, 360);
+            mc_free((void *)quest_face_images[((int)(short)*(short *)&i)], str_init_c, 360);
             quest_face_images[((int)(short)*(short *)&i)] = -1751672937;
         }
     }
@@ -470,7 +470,7 @@ void init_video(void)
     xn_sys_set_dos_transfer_buffer();
     xn_mouse_get_sensitivity((char *)&D_001997FC, (char *)&D_00199800);
     xn_mem_init(102400);
-    *(iptr *)&scratch_buffer = (iptr)mc_malloc(80780, D_00175040, 382);
+    *(iptr *)&scratch_buffer = (iptr)mc_malloc(80780, str_init_c, 382);
     file_index_build();
     xn_gfx_set_mode(19, 1);
     xn_kbd_install();
@@ -489,9 +489,9 @@ void init_video(void)
     xn_shade_load(0, 0);
     xn_shade_keep_colours_0_255();
     player_underwater = 0;
-    disk_read_file(D_00175214, (D_001997F4 = (iptr)mc_malloc(768, D_00175040, 410)));
+    disk_read_file(str_pal_raw, (D_001997F4 = (iptr)mc_malloc(768, str_init_c, 410)));
     xn_world_init();
-    xn_world_open(D_0017521C);
+    xn_world_open(str_woods_wld);
 }
 
 void shutdown_video(void)
@@ -514,22 +514,22 @@ void palette_restore(void)
 
 void game_exit(char *message)
 {
-    mc_set_location(440, D_00175040);
-    func_000A148C(D_00175226);
+    mc_set_location(440, str_init_c);
+    func_000A148C(str_clean_exit_initiated);
     engine_running = 0;
     mem_check_level = 0;
     exiting = 1;
     game_shutdown();
     if (message == 0) {
-        func_0009DA1C(449, D_00175040);
-        printf(D_0017523C);
+        func_0009DA1C(449, str_init_c);
+        printf(str_tes_daggerfall_v1_07);
     } else {
-        func_0009DA1C(451, D_00175040);
+        func_0009DA1C(451, str_init_c);
         printf(message);
     }
     kludge_print_build(1);
-    mc_set_location(455, D_00175040);
-    mc_sprintf((char *)text_buffer, D_00175260, (iptr)arena2_path, (iptr)D_00175253);
+    mc_set_location(455, str_init_c);
+    mc_sprintf((char *)text_buffer, str_fmt_s_s_6, (iptr)arena2_path, (iptr)str_bethesda_inf);
     unlink((char *)text_buffer);
     exit(0);
 }
@@ -550,29 +550,29 @@ void fatal_error(char *message)
         mem_check_level = 0;
         if (exiting != 0) return;
         if (internal_check_failed != 0) {
-            mc_set_location(480, D_00175040);
-            mc_sprintf(text, D_00175266, internal_check_failed);
+            mc_set_location(480, str_init_c);
+            mc_sprintf(text, str_failed_internal_check, internal_check_failed);
         } else {
-            mc_strncpy(text, message, 1024, D_00175040, 482);
+            mc_strncpy(text, message, 1024, str_init_c, 482);
         }
-        mc_set_location(484, D_00175040);
-        func_000A148C(D_00175281, frame_checkpoint);
-        mc_set_location(485, D_00175040);
-        func_000A148C(D_001752B6, (iptr)text);
-        mc_set_location(487, D_00175040);
+        mc_set_location(484, str_init_c);
+        func_000A148C(str_daggerfall_has_encountered_an_internal, frame_checkpoint);
+        mc_set_location(485, str_init_c);
+        func_000A148C(str_the_error_reported_was, (iptr)text);
+        mc_set_location(487, str_init_c);
         func_000A18C3(text);
         exiting = 1;
         engine_running = 0;
         mem_check_level = 0;
         game_shutdown();
-        func_0009DA1C(495, D_00175040);
-        printf(D_001752D2, frame_checkpoint);
-        func_0009DA1C(496, D_00175040);
-        printf(D_001752B6, text);
-        func_0009DA1C(497, D_00175040);
-        printf(D_00175307);
-        mc_set_location(499, D_00175040);
-        mc_sprintf(text, D_00175260, (iptr)arena2_path, (iptr)D_00175253);
+        func_0009DA1C(495, str_init_c);
+        printf(str_daggerfall_has_encountered_an_internal_2, frame_checkpoint);
+        func_0009DA1C(496, str_init_c);
+        printf(str_the_error_reported_was, text);
+        func_0009DA1C(497, str_init_c);
+        printf(str_exiting);
+        mc_set_location(499, str_init_c);
+        mc_sprintf(text, str_fmt_s_s_6, (iptr)arena2_path, (iptr)str_bethesda_inf);
         unlink(text);
         exit(10);
     }
@@ -586,8 +586,8 @@ void newgame_init_player(void)
 
     player_refresh_paperdoll();
     player_compute_jump_velocity();
-    mc_set_location(514, D_00175040);
-    mc_sprintf((char *)text_buffer, D_00175313, (iptr)arena2_path);
+    mc_set_location(514, str_init_c);
+    mc_sprintf((char *)text_buffer, str_maps, (iptr)arena2_path);
     disk_copy_file(cfg_mapsave_file, text_buffer, arena2_path);
     character = player_character;
     career = player_class;
@@ -739,35 +739,35 @@ void update_underwater(void)
 void spell_cast_anims_load(void)
 {
     spell_cast_anims_free();
-    spell_cast_anim_fire[0] = disk_read_file(D_00175324, 0);
-    spell_cast_anim_frost = disk_read_file(D_00175331, 0);
-    spell_cast_anim_magic = disk_read_file(D_0017533E, 0);
-    spell_cast_anim_poison = disk_read_file(D_0017534B, 0);
-    spell_cast_anim_shock = disk_read_file(D_00175358, 0);
+    spell_cast_anim_fire[0] = disk_read_file(str_fire00c6_cif, 0);
+    spell_cast_anim_frost = disk_read_file(str_frst00c6_cif, 0);
+    spell_cast_anim_magic = disk_read_file(str_mjic00c6_cif, 0);
+    spell_cast_anim_poison = disk_read_file(str_pois00c6_cif, 0);
+    spell_cast_anim_shock = disk_read_file(str_shok00c6_cif, 0);
 }
 
 void spell_cast_anims_free(void)
 {
     if (spell_cast_anim_fire[0] != 0 && spell_cast_anim_fire[0] != (-1751672937)) {
-        mc_free((void *)spell_cast_anim_fire[0], D_00175040, 754);
+        mc_free((void *)spell_cast_anim_fire[0], str_init_c, 754);
         spell_cast_anim_fire[0] = -1751672937;
     }
     if (spell_cast_anim_frost != 0 && spell_cast_anim_frost != (-1751672937)) {
-        mc_free((void *)spell_cast_anim_frost, D_00175040, 755);
+        mc_free((void *)spell_cast_anim_frost, str_init_c, 755);
         spell_cast_anim_frost = -1751672937;
     }
     if (spell_cast_anim_magic != 0 && spell_cast_anim_magic != (-1751672937)) {
-        mc_free((void *)spell_cast_anim_magic, D_00175040, 756);
+        mc_free((void *)spell_cast_anim_magic, str_init_c, 756);
         spell_cast_anim_magic = -1751672937;
     }
     if (spell_cast_anim_poison != 0 && spell_cast_anim_poison != (-1751672937)) {
-        mc_free((void *)spell_cast_anim_poison, D_00175040, 757);
+        mc_free((void *)spell_cast_anim_poison, str_init_c, 757);
         spell_cast_anim_poison = -1751672937;
     }
     if (spell_cast_anim_shock == 0 || spell_cast_anim_shock == (-1751672937)) {
         return;
     }
-    mc_free((void *)spell_cast_anim_shock, D_00175040, 758);
+    mc_free((void *)spell_cast_anim_shock, str_init_c, 758);
     spell_cast_anim_shock = -1751672937;
 }
 
@@ -841,8 +841,8 @@ void game_reset(void)
     for (region = 0; region < 62; region++) {
         regions[region].price_adjustment = rand_range(0, 500) + 750;
     }
-    mc_memset(saved_positions, 0, 48, D_00175040, 851, 48);
-    mc_memset(((char *)creature_list), 0, 128 * REC_SIZEOF(struct record *), D_00175040, 852, 128 * REC_SIZEOF(struct record *));
+    mc_memset(saved_positions, 0, 48, str_init_c, 851, 48);
+    mc_memset(((char *)creature_list), 0, 128 * REC_SIZEOF(struct record *), str_init_c, 852, 128 * REC_SIZEOF(struct record *));
     creature_count = 0;
 }
 
@@ -850,8 +850,8 @@ void books_find_path(void)
 {
     int handle;
 
-    mc_set_location(860, D_00175040);
-    mc_sprintf((char *)text_buffer, D_00175365, (iptr)arena2_path);
+    mc_set_location(860, str_init_c);
+    mc_sprintf((char *)text_buffer, str_books_bok00000_txt, (iptr)arena2_path);
     handle = open((char *)text_buffer, 512);
     if (handle < 0) {
         books_path = (iptr)arena2_cd_path;

@@ -1,10 +1,10 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00010010 */
 extern int xn_timer_fps;
 extern unsigned char text_shadow_colour;
-extern char D_00170004[];
-extern char D_0017000B[];
-extern char D_00170035[];
-extern char D_00170049[];
+extern char str_main_c[];
+extern char str_please_run_dagger_exe_to_run_daggerfall[];
+extern char str_arena2_copyfile_dat[];
+extern char str_you_must_run_dagger_exe_from_the_hard[];
 extern int frame_checkpoint;
 extern int D_0018DC0C;
 extern int D_0018DC1C;
@@ -64,8 +64,8 @@ int func_00010010(short argc, char **argv)
     char unused5;
 
     if (argc != 2) {
-        func_0009DA1C(54, D_00170004);
-        printf(D_0017000B);
+        func_0009DA1C(54, str_main_c);
+        printf(str_please_run_dagger_exe_to_run_daggerfall);
         exit(-1);
     }
     dpmi_memory_stats();
@@ -77,10 +77,10 @@ int func_00010010(short argc, char **argv)
     srand(*(int *)DOS_LOW(0x46C));
     D_0018DC1C = *(int *)DOS_LOW(0x46C);
     config_read(argv[1]);
-    n = open(D_00170035, 546, 384);
+    n = open(str_arena2_copyfile_dat, 546, 384);
     if (n < 0) {
-        func_0009DA1C(75, D_00170004);
-        printf(D_00170049);
+        func_0009DA1C(75, str_main_c);
+        printf(str_you_must_run_dagger_exe_from_the_hard);
         exit(-1);
     }
     close(n);

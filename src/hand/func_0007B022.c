@@ -2,9 +2,9 @@
 #include <dos.h>
 #include "clib.h"
 extern char *D_00147954;
-extern char D_00176884[];
-extern char D_0017696F[];
-extern char D_00176977[];
+extern char str_loadsave_c[];
+extern char str_atf[];
+extern char str_amf[];
 extern char arena2_path[];
 extern void disk_copy_file(char *, char *, char *);
 extern void automap_delete_files(void);
@@ -18,15 +18,15 @@ void load_copy_automap_files(char *save_dir)
     struct find_t f;
 
     automap_delete_files();
-    mc_set_location(813, D_00176884);
-    mc_sprintf(D_00147954, D_0017696F, save_dir);
+    mc_set_location(813, str_loadsave_c);
+    mc_sprintf(D_00147954, str_atf, save_dir);
     rc = func_000A13DA(D_00147954, 0, &f);
     while (rc == 0) {
         disk_copy_file(f.name, save_dir, arena2_path);
         rc = func_000A13F7(&f);
     }
-    mc_set_location(821, D_00176884);
-    mc_sprintf(D_00147954, D_00176977, save_dir);
+    mc_set_location(821, str_loadsave_c);
+    mc_sprintf(D_00147954, str_amf, save_dir);
     rc = func_000A13DA(D_00147954, 0, &f);
     while (rc == 0) {
         disk_copy_file(f.name, save_dir, arena2_path);

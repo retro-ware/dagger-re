@@ -4,7 +4,7 @@
 #include "ptrint.h"
 #include "clib.h"
 
-extern char D_001700D5[];
+extern char str_sosez_c[];
 
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
 #pragma aux (sosconv) sos_load_file;
@@ -19,7 +19,7 @@ iptr sos_load_file(char *path)
     if (handle == (-1)) return 0;
     size = lseek(handle, 0, 2);
     lseek(handle, 0, 0);
-    buffer = (iptr)mc_malloc(size, D_001700D5, 441);
+    buffer = (iptr)mc_malloc(size, str_sosez_c, 441);
     if (buffer == 0) {
         close(handle);
         return 0;
@@ -27,7 +27,7 @@ iptr sos_load_file(char *path)
     if (read(handle, (void *)buffer, size) != size) {
         close(handle);
         if (buffer != 0 && buffer != (-1751672937)) {
-            mc_free((void *)buffer, D_001700D5, 457);
+            mc_free((void *)buffer, str_sosez_c, 457);
             buffer = -1751672937;
         }
         return 0;

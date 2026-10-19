@@ -12,10 +12,10 @@ extern signed char key_down_left;
 extern signed char key_down_right;
 extern signed char key_down_down;
 extern iptr screen_buffer;
-extern char D_00170794[];
-extern char D_001707AE[];
-extern char D_001707B8[];
-extern char D_001707C3[];
+extern char str_amap00i0_img[];
+extern char str_automap_c[];
+extern char str_at_atf_2[];
+extern char str_town00i0_img[];
 extern unsigned char player_environment;
 extern struct rect town_map_buttons[6];
 extern char D_0017A104[];            /* the town map's colour per map pixel 1..: indexed from pixel - 1 */
@@ -86,9 +86,9 @@ void town_map_open(void)
     D_00196D98 = (D_00196D90 = 0);
     D_00196D94 = 0;
     scratch_190ce5 = 0;
-    mc_memset(scratch_buffer, 0, 50000, D_001707AE, 624, 4);
-    mc_set_location(625, D_001707AE);
-    mc_sprintf((char *)text_buffer, D_001707B8, location_object->id >> 16);
+    mc_memset(scratch_buffer, 0, 50000, str_automap_c, 624, 4);
+    mc_set_location(625, str_automap_c);
+    mc_sprintf((char *)text_buffer, str_at_atf_2, location_object->id >> 16);
     handle = disk_open_rw(text_buffer);
     if (handle != (-1)) {
         read(handle, scratch_buffer, 50000);
@@ -100,8 +100,8 @@ void town_map_open(void)
     mouse_buttons = (mouse_buttons_prev = 0);
     saved_screen_active = (int)(unsigned char)D_00196272;
     D_00196272 = 1;
-    *(iptr *)scratch_190de4 = disk_read_file(D_00170794, 0);
-    D_00196D9C = (struct image *)disk_read_file(D_001707C3, 0);
+    *(iptr *)scratch_190de4 = disk_read_file(str_amap00i0_img, 0);
+    D_00196D9C = (struct image *)disk_read_file(str_town00i0_img, 0);
     while (done == 0) {
         xn_mouse_cursor_erase();
         town_map_draw();
@@ -135,17 +135,17 @@ void town_map_open(void)
     }
     while (key_down_esc != 0);
     if (*(iptr *)scratch_190de4 != 0 && *(iptr *)scratch_190de4 != (-1751672937)) {
-        mc_free((void *)*(iptr *)scratch_190de4, D_001707AE, 679);
+        mc_free((void *)*(iptr *)scratch_190de4, str_automap_c, 679);
         *(iptr *)scratch_190de4 = -1751672937;
     }
     if ((iptr)D_00196D9C != 0 && (iptr)D_00196D9C != (-1751672937)) {
-        mc_free(D_00196D9C, D_001707AE, 680);
+        mc_free(D_00196D9C, str_automap_c, 680);
         D_00196D9C = (struct image *)(iptr)-1751672937;
     }
     D_00196272 = *(signed char *)&saved_screen_active;
     if (scratch_190ce5 == 0) return;
-    mc_set_location(686, D_001707AE);
-    mc_sprintf((char *)text_buffer, D_001707B8, location_object->id >> 16);
+    mc_set_location(686, str_automap_c);
+    mc_sprintf((char *)text_buffer, str_at_atf_2, location_object->id >> 16);
     disk_write_arena2_file(text_buffer, (iptr)scratch_buffer, town_notes_size());
 }
 
@@ -163,7 +163,7 @@ void town_map_draw(void)
     int colour;
     int pixel;
 
-    mc_memcpy((void *)screen_buffer, (void *)*(iptr *)scratch_190de4, 64000, D_001707AE, 695, 4);
+    mc_memcpy((void *)screen_buffer, (void *)*(iptr *)scratch_190de4, 64000, str_automap_c, 695, 4);
     player_x = player_object->x - location_object->x;
     player_y = player_object->z - location_object->z;
     player_x >>= 6;

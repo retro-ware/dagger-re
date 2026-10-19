@@ -5,21 +5,21 @@
 #include "clib.h"
 #include "doslow.h"
 
-extern char D_00177358[];
-extern char D_00177364[];
-extern char D_00177394[];
-extern char D_001773A1[];
-extern char D_001773AE[];
-extern char D_001773BB[];
-extern char D_001773C8[];
-extern char D_001773D5[];
-extern char D_001773E2[];
-extern char D_001773EF[];
-extern char D_001773FC[];
-extern char D_00177409[];
-extern char D_00177416[];
-extern char D_00177423[];
-extern char D_00177430[];
+extern char str_objcode_c[];
+extern char str_you_cannot_initiate_fast_travel_during[];
+extern char str_trav0i00_img[];
+extern char str_tele00i0_img[];
+extern char str_trav0i04_img[];
+extern char str_trav0i01_img[];
+extern char str_trav01i0_img[];
+extern char str_trav01i1_img[];
+extern char str_mbrd00i0_img[];
+extern char str_travai05_img[];
+extern char str_travbi05_img[];
+extern char str_travci05_img[];
+extern char str_travdi05_img[];
+extern char str_trav0i03_img[];
+extern char str_fmap_pal_col[];
 extern unsigned char player_environment;
 extern char travel_options[];
 extern iptr D_0018507B;
@@ -95,7 +95,7 @@ iptr marker_match_cb(struct record *object)
     case 34:
         if ((object->image >> 7) == 199 && ((object->image & 31) - 2) == marker_kind) {
             if (*(int *)D_00195B84 == 0 && marker_best < 0) {
-                mc_memcpy(found_marker, object, RECORD_LINKS_OFFSET, D_00177358, 191, 4);
+                mc_memcpy(found_marker, object, RECORD_LINKS_OFFSET, str_objcode_c, 191, 4);
                 return 1;
             }
             *(int *)D_00195B84 += marker_best;
@@ -149,7 +149,7 @@ struct record *marker_find_first(struct record *root, int kind)
     marker_kind = kind;
     *(int *)D_00195B84 = 0;
     marker_best = -1;
-    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, D_00177358, 261, 4);
+    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 261, 4);
     object_find_open(root, marker_match_cb);
     if (*(signed char *)found_marker != 0) return (struct record *)found_marker;
     return 0;
@@ -162,7 +162,7 @@ struct record *marker_find_nth(struct record *root, int kind, int n)
     marker_kind = kind;
     *(int *)D_00195B84 = n;
     marker_best = -1;
-    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, D_00177358, 287, 4);
+    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 287, 4);
     object_find_open(root, marker_match_cb);
     cell = location_cell_at(D_00195F71, D_00195F79);
     D_00195F81 = n;
@@ -177,7 +177,7 @@ struct record *marker_find_random(struct record *root, int kind)
     marker_kind = kind;
     *(int *)D_00195B84 = 0;
     marker_best = 1;
-    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, D_00177358, 317, 4);
+    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 317, 4);
     object_find_open(root, marker_match_cb);
     if (*(int *)D_00195B84 == 0) return 0;
     n = (*(int *)D_00195B84 = rand() % *(int *)D_00195B84);
@@ -205,7 +205,7 @@ void marker_nearest_cb(struct record *object)
         if (dist < marker_best) {
             found_object = object;
             marker_best = dist;
-            mc_memcpy(found_marker, object, RECORD_LINKS_OFFSET, D_00177358, 363, 4);
+            mc_memcpy(found_marker, object, RECORD_LINKS_OFFSET, str_objcode_c, 363, 4);
         }
         return;
     case 43:
@@ -257,7 +257,7 @@ struct record *marker_find_nearest(struct record *root, int kind)
 {
     marker_kind = kind;
     marker_best = 500000;
-    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, D_00177358, 432, 4);
+    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 432, 4);
     object_foreach_open(root, marker_nearest_cb);
     if (*(signed char *)found_marker != 0) return (struct record *)found_marker;
     return 0;
@@ -268,7 +268,7 @@ int marker_count(struct record *root, int kind)
     marker_kind = kind;
     *(int *)D_00195B84 = 0;
     marker_best = 1;
-    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, D_00177358, 456, 4);
+    mc_memset(found_marker, 0, RECORD_HEADER_SIZE, str_objcode_c, 456, 4);
     object_find_open(root, marker_match_cb);
     return *(int *)D_00195B84;
 }
@@ -323,7 +323,7 @@ int travel_map_open(int mode)
     if (((int)player_environment) != 1) return 0;
     if (mode != 0) {
         if ((player_character->race == 8 || (player_class->flags & 16) != 0) && is_daytime != 0) {
-            msgbox_show_string((iptr)D_00177364, 1);
+            msgbox_show_string((iptr)str_you_cannot_initiate_fast_travel_during, 1);
             return 0;
         }
         if (creature_count != 0) {
@@ -337,22 +337,22 @@ int travel_map_open(int mode)
             *(signed char *)travel_options ^= 12;
         }
         D_001AA6A6 = *(signed char *)&mode;
-        window_image = disk_read_file(D_00177394, 0);
+        window_image = disk_read_file(str_trav0i00_img, 0);
         if (mode == 100) {
-            D_001AA6A0 = disk_read_file(D_001773A1, 0);
+            D_001AA6A0 = disk_read_file(str_tele00i0_img, 0);
         } else {
-            D_001AA6A0 = disk_read_file(D_001773AE, 0);
+            D_001AA6A0 = disk_read_file(str_trav0i04_img, 0);
         }
-        D_001AA66C = disk_read_file(D_001773BB, 0);
-        *(iptr *)&D_001AA65C[0] = disk_read_file(D_001773C8, 0);
-        D_001AA660 = disk_read_file(D_001773D5, 0);
-        *(iptr *)&D_001AA670 = disk_read_file(D_001773E2, 0);
-        *(iptr *)&D_001AA64C = disk_read_file(D_001773EF, 0);
-        *(iptr *)&D_001AA650 = disk_read_file(D_001773FC, 0);
-        *(iptr *)&D_001AA654 = disk_read_file(D_00177409, 0);
-        *(iptr *)&D_001AA658 = disk_read_file(D_00177416, 0);
-        *(iptr *)&D_00195B5C = disk_read_file(D_00177423, 0);
-        disk_read_file(D_00177430, (iptr)scratch_buffer);
+        D_001AA66C = disk_read_file(str_trav0i01_img, 0);
+        *(iptr *)&D_001AA65C[0] = disk_read_file(str_trav01i0_img, 0);
+        D_001AA660 = disk_read_file(str_trav01i1_img, 0);
+        *(iptr *)&D_001AA670 = disk_read_file(str_mbrd00i0_img, 0);
+        *(iptr *)&D_001AA64C = disk_read_file(str_travai05_img, 0);
+        *(iptr *)&D_001AA650 = disk_read_file(str_travbi05_img, 0);
+        *(iptr *)&D_001AA654 = disk_read_file(str_travci05_img, 0);
+        *(iptr *)&D_001AA658 = disk_read_file(str_travdi05_img, 0);
+        *(iptr *)&D_00195B5C = disk_read_file(str_trav0i03_img, 0);
+        disk_read_file(str_fmap_pal_col, (iptr)scratch_buffer);
         xn_pal_set_all_8bit((char *)((iptr)scratch_buffer + 8));
         *(iptr *)&ticks_addr = (iptr)DOS_LOW(0x46C);
         scratch_190cac = *(int *)(*(char **)&ticks_addr);

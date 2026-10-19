@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_0017573C[];
+extern char str_char_c[];
 extern struct character *player_character;
 extern unsigned char *paperdoll_slots;
 extern unsigned char **paperdoll_items;
@@ -30,8 +30,8 @@ void paperdoll_add_item(struct item *item, int slot)
     }
     while (paperdoll_items[pos] != 0 && ((unsigned char *)item)[66] > paperdoll_items[pos][66])
         pos++;
-    mc_memmove(&paperdoll_slots[pos + 1], &paperdoll_slots[pos], 27, D_0017573C, 201, 4);
-    mc_memmove(&paperdoll_items[pos + 1], &paperdoll_items[pos], 108, D_0017573C, 202, 4);
+    mc_memmove(&paperdoll_slots[pos + 1], &paperdoll_slots[pos], 27, str_char_c, 201, 4);
+    mc_memmove(&paperdoll_items[pos + 1], &paperdoll_items[pos], 108, str_char_c, 202, 4);
     paperdoll_items[pos] = (unsigned char *)item;
     paperdoll_slots[pos] = slot;
 }

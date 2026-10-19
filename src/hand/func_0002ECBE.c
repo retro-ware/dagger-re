@@ -3,10 +3,10 @@
 #include "clib.h"
 
 extern unsigned char D_0012B508;
-extern char D_001709A1[];
-extern char D_001709C6[];
-extern char D_001709E4[];
-extern char D_001709ED[];
+extern char str_the_monster_would_have_been_dead_but[];
+extern char str_the_soul_has_nowhere_to_go[];
+extern char str_damage_c[];
+extern char str_just_died[];
 struct pic { short file, rec; };
 extern struct pic monster_corpse_textures[];
 extern struct collide_probe D_00187B44;
@@ -69,8 +69,8 @@ found:
                 object_foreach(player_entity->children, damage_find_empty_soul_trap_cb);
                 if (scratch_object == 0 && soul->type == 19) {
                     D_0012B508 = 146;
-                    hud_message_add(D_001709A1);
-                    hud_message_add(D_001709C6);
+                    hud_message_add(str_the_monster_would_have_been_dead_but);
+                    hud_message_add(str_the_soul_has_nowhere_to_go);
                     return;
                 }
                 if (scratch_object != 0) {
@@ -91,8 +91,8 @@ found:
     player_character->last_kill_time = game_minutes;
     quest_raise_event(2, creature, 0);
     creature_char = &creature->data.character;
-    mc_set_location(587, D_001709E4);
-    mc_sprintf(((char *)text_buffer), D_001709ED, creature_char->name);
+    mc_set_location(587, str_damage_c);
+    mc_sprintf(((char *)text_buffer), str_just_died, creature_char->name);
     hud_message_add(((char *)text_buffer));
     creature->type = 44;
     if (creature_char->mobile_id < 43) {
@@ -105,8 +105,8 @@ found:
     }
     collide_flags = 0;
     D_001940D7 |= 32;
-    mc_memcpy(&move, &creature->x, 12, D_001709E4, 605, 4);
-    mc_memset(&move.angle_x, 0, 12, D_001709E4, 606, 4);
+    mc_memcpy(&move, &creature->x, 12, str_damage_c, 605, 4);
+    mc_memset(&move.angle_x, 0, 12, str_damage_c, 606, 4);
     move.probe = &D_00187B44;
     collide_move_object(creature, 0, &move, 0);
     player_on_ground = saved_on_ground;

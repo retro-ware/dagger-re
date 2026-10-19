@@ -10,7 +10,7 @@ extern signed char key_down_esc;
 extern signed char key_down_enter;
 extern short D_00142928;
 extern short D_0014292C;
-extern char D_00174FAC[];
+extern char str_note_c[];
 extern struct rect note_buttons[];
 extern char D_001851F0[];
 extern char note_colour[];
@@ -86,7 +86,7 @@ void note_update(void)
             if (key_down_enter != 0 && text_rsc_buffer[0] != 0) {
                 note_cursor_y += font_height;
                 text_cursor_y = note_cursor_y;
-                mc_memset(text_rsc_buffer, 0, 81, D_00174FAC, 137, 2048);
+                mc_memset(text_rsc_buffer, 0, 81, str_note_c, 137, 2048);
                 inpstr_begin_text(text_rsc_buffer, 79);
             } else {
                 D_001940D5 &= 251;

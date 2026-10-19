@@ -6,7 +6,7 @@ extern char text_shadow_colour;
 extern char D_0012B508;
 extern short font_height;
 extern char *screen_buffer;
-extern char D_00170D55[];       /* __FILE__ */
+extern char str_text_c[];       /* __FILE__ */
 extern signed char text_buffer[];
 extern struct flags5 D_001940D5;
 extern struct flags6 D_001940D6;
@@ -111,9 +111,9 @@ void msgbox_render(char *text, char **out)
         y += -20;
     }
     save = 0;
-    save = mc_malloc(64000, D_00170D55, 353);
-    mc_memcpy(save, screen_buffer, 64000, D_00170D55, 354, 4);
-    mc_memset(screen_buffer, 0, 64000, D_00170D55, 355, 4);
+    save = mc_malloc(64000, str_text_c, 353);
+    mc_memcpy(save, screen_buffer, 64000, str_text_c, 354, 4);
+    mc_memset(screen_buffer, 0, 64000, str_text_c, 355, 4);
     ww = msgbox_w + 10;
     cols = (ww + msgbox_tile_w - 1) / msgbox_tile_w;
     if (cols < 2)
@@ -227,12 +227,12 @@ void msgbox_render(char *text, char **out)
         D_001940D6.b5 = 0;
         painting_draw();
     }
-    *out = mc_malloc(msgbox_h * msgbox_w, D_00170D55, 510);
+    *out = mc_malloc(msgbox_h * msgbox_w, str_text_c, 510);
     xn_draw_get_rect(x0, y0, msgbox_w, msgbox_h, *out, 0);
     if (save != 0) {
-        mc_memcpy(screen_buffer, save, 64000, D_00170D55, 515, 4);
+        mc_memcpy(screen_buffer, save, 64000, str_text_c, 515, 4);
         if (save != 0 && save != (char *)(iptr)-1751672937) {
-            mc_free(save, D_00170D55, 516);
+            mc_free(save, str_text_c, 516);
             save = (char *)(iptr)-1751672937;
         }
     }

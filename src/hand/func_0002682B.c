@@ -3,7 +3,7 @@
 #include "clib.h"
 
 struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
-extern char D_00170788[];
+extern char str_mplace_c[];
 extern struct collide_probe D_00187B6E;
 extern struct bits8 D_001940D7;
 extern struct bits8 player_motion_flags;
@@ -25,8 +25,8 @@ void place_settle_creature(struct record *creature)
     {
         D_001940D7.b5 = 1;
         D_001940D7.b7 = 1;
-        mc_memcpy((char *)&request, (char *)&creature->x, 12, D_00170788, 477, 4);
-        mc_memset(&request.angle_x, 0, 12, D_00170788, 478, 4);
+        mc_memcpy((char *)&request, (char *)&creature->x, 12, str_mplace_c, 477, 4);
+        mc_memset(&request.angle_x, 0, 12, str_mplace_c, 478, 4);
         request.probe = &D_00187B6E;
         player_motion_flags.b3 = 1;
         collide_move_object(creature, 0, &request, 0);

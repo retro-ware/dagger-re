@@ -9,11 +9,11 @@ extern short mouse_y;
 extern signed char D_0012B508;
 extern signed char key_down_esc;
 extern signed char key_down_enter;
-extern char D_001760B1[];
-extern char D_001760D6[];
-extern char D_001760DD[];
+extern char str_your_time_for_this_room_has_expired[];
+extern char str_rest_c[];
+extern char str_rest02i0_img[];
 extern char D_001760EA[];
-extern char D_0017610F[];
+extern char str_rest01i0_img[];
 extern char D_0017611C[];
 extern iptr D_0017D1FA;
 extern iptr D_0017D1FE;
@@ -70,7 +70,7 @@ void rest_update(void)
     D_0019629E = 1;
     D_0012B508 = 146;
     if (rest_room_expired() != 0) {
-        msgbox_show_string((iptr)D_001760B1, 1);
+        msgbox_show_string((iptr)str_your_time_for_this_room_has_expired, 1);
         rest_close();
         return;
     }
@@ -95,12 +95,12 @@ void rest_update(void)
             rest_ticks_per_hour = 9;
             D_00190D1A = 1;
             if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
-                mc_free(rest_image, D_001760D6, 165);
+                mc_free(rest_image, str_rest_c, 165);
                 rest_image = (struct image *)(iptr)-1751672937;
             }
-            rest_image = (struct image *)disk_read_file(D_001760DD, 0);
+            rest_image = (struct image *)disk_read_file(str_rest02i0_img, 0);
             prompt = (iptr)(scratch_buffer + 55000);
-            mc_set_location(168, D_001760D6);
+            mc_set_location(168, str_rest_c);
             mc_sprintf((char *)prompt, D_001760EA, D_0017D1FA);
             *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
             inpstr_begin_number(0);
@@ -115,22 +115,22 @@ void rest_update(void)
             rest_ticks_per_hour = 9;
             D_00190D1A = 3;
             if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
-                mc_free(rest_image, D_001760D6, 184);
+                mc_free(rest_image, str_rest_c, 184);
                 rest_image = (struct image *)(iptr)-1751672937;
             }
-            rest_image = (struct image *)disk_read_file(D_0017610F, 0);
+            rest_image = (struct image *)disk_read_file(str_rest01i0_img, 0);
             D_00190CBC = *(int *)DOS_LOW(0x46C);
         } else if (mouse_buttons != 0 && mouse_buttons_prev == 0 && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 185, 63, 232, 86) != 0) {
             while (mouse_buttons != 0) xn_mouse_poll_clamped();
             rest_ticks_per_hour = 32;
             D_00190D1A = 1;
             if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
-                mc_free(rest_image, D_001760D6, 193);
+                mc_free(rest_image, str_rest_c, 193);
                 rest_image = (struct image *)(iptr)-1751672937;
             }
-            rest_image = (struct image *)disk_read_file(D_001760DD, 0);
+            rest_image = (struct image *)disk_read_file(str_rest02i0_img, 0);
             prompt = (iptr)(scratch_buffer + 55000);
-            mc_set_location(196, D_001760D6);
+            mc_set_location(196, str_rest_c);
             mc_sprintf((char *)prompt, D_0017611C, D_0017D1FE);
             *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
             inpstr_begin_number(0);

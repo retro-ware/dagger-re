@@ -473,7 +473,7 @@ struct dungeon_block {
     signed char z;                  /* +0x01 */
     unsigned short number:10;       /* +0x02: DFU BlockNumber: the RDB file's number */
     unsigned short is_starting:1;   /*        DFU IsStartingBlock */
-    unsigned short index:3;         /*        DFU BlockIndex: the file's letter ('NWLSBM', D_0017A844) */
+    unsigned short index:3;         /*        DFU BlockIndex: the file's letter ('NWLSBM', str_nwlsbm) */
 };                                  /* +0x04 */
 RECORD_SIZE(dungeon_block, 4);
 

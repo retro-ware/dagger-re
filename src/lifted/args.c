@@ -10,42 +10,42 @@ extern int D_000C5404;
 extern int xn_sin_table[];
 extern int xn_cos_table[];
 extern int cfg_helmet;
-extern char D_00176A88[];
-extern char D_00176A8F[];
-extern char D_00176A91[];
-extern char D_00176A97[];
+extern char str_args_c[];
+extern char str_r[];
+extern char str_fmt_s_s_10[];
+extern char str_path[];
 extern char D_00176A9C[];
-extern char D_00176A9E[];
-extern char D_00176AA5[];
-extern char D_00176AAE[];
-extern char D_00176AB8[];
-extern char D_00176AC0[];
-extern char D_00176AC8[];
-extern char D_00176ACC[];
-extern char D_00176AD5[];
-extern char D_00176ADE[];
-extern char D_00176AE6[];
-extern char D_00176AED[];
-extern char D_00176AF2[];
-extern char D_00176AF9[];
-extern char D_00176B00[];
-extern char D_00176B05[];
-extern char D_00176B0C[];
-extern char D_00176B12[];
-extern char D_00176B1B[];
-extern char D_00176B22[];
-extern char D_00176B27[];
-extern char D_00176B2E[];
-extern char D_00176B33[];
-extern char D_00176B3A[];
-extern char D_00176B45[];
-extern char D_00176B53[];
-extern char D_00176B5F[];
-extern char D_00176B69[];
-extern char D_00176B82[];
-extern char D_00176B9F[];
-extern char D_00176BC1[];
-extern char D_00176BED[];
+extern char str_pathcd[];
+extern char str_controls[];
+extern char str_fadecolor[];
+extern char str_mapfile[];
+extern char str_faction[];
+extern char str_fpu[];
+extern char str_startmap[];
+extern char str_artifact[];
+extern char str_facloop[];
+extern char str_custom[];
+extern char str_item[];
+extern char str_gender[];
+extern char str_ps2fix[];
+extern char str_user[];
+extern char str_region[];
+extern char str_debug[];
+extern char str_blockstr[];
+extern char str_helmet[];
+extern char str_maps_2[];
+extern char str_marker[];
+extern char str_seed[];
+extern char str_stereo[];
+extern char str_objmemsize[];
+extern char str_texturememory[];
+extern char str_magicrepair[];
+extern char str_cheatmode[];
+extern char str_err_path_not_specified[];
+extern char str_err_map_file_not_specified[];
+extern char str_there_are_configuration_error_s[];
+extern char str_memory_checking_is_active_for_this[];
+extern char str_memory_checking_is_not_active_for_this[];
 extern iptr controls_file;
 extern unsigned char player_environment;
 extern int cfg_texture_memory;
@@ -137,104 +137,104 @@ void config_read(char *path)
         char value[32];
 
         missing = 0;
-        func_0009DA1C(62, D_00176A88);
-        file = (iptr)fopen(path, D_00176A8F);
+        func_0009DA1C(62, str_args_c);
+        file = (iptr)fopen(path, str_r);
         if (file != 0) {
-            while (fprintf_2((void *)file, D_00176A91, (iptr)key, (iptr)value) != (-1)) {
-                if (stricmp(key, D_00176A97) == 0) {
-                    mc_strncpy(arena2_path, value, 80, D_00176A88, 70);
+            while (fprintf_2((void *)file, str_fmt_s_s_10, (iptr)key, (iptr)value) != (-1)) {
+                if (stricmp(key, str_path) == 0) {
+                    mc_strncpy(arena2_path, value, 80, str_args_c, 70);
                     if (((int)(unsigned char)D_001917E3[strlen(arena2_path)]) != 92) {
-                        func_000A1054(arena2_path, D_00176A9C, D_00176A88, 72, 80);
+                        func_000A1054(arena2_path, D_00176A9C, str_args_c, 72, 80);
                     }
-                    mc_strncpy(cfg_last_path, value, 80, D_00176A88, 73);
+                    mc_strncpy(cfg_last_path, value, 80, str_args_c, 73);
                     cfg_flags |= 1;
-                } else if (stricmp(key, D_00176A9E) == 0) {
-                    mc_strncpy(arena2_cd_path, value, 80, D_00176A88, 78);
+                } else if (stricmp(key, str_pathcd) == 0) {
+                    mc_strncpy(arena2_cd_path, value, 80, str_args_c, 78);
                     if (((int)(unsigned char)D_00191833[strlen(arena2_cd_path)]) != 92) {
-                        func_000A1054(arena2_cd_path, D_00176A9C, D_00176A88, 80, 80);
+                        func_000A1054(arena2_cd_path, D_00176A9C, str_args_c, 80, 80);
                     }
-                    mc_strncpy(cfg_last_path, value, 80, D_00176A88, 81);
+                    mc_strncpy(cfg_last_path, value, 80, str_args_c, 81);
                     cfg_flags |= 1;
-                } else if (stricmp(key, D_00176AA5) == 0) {
-                    mc_strncpy((char *)controls_file, value, 4, D_00176A88, 86);
-                } else if (stricmp(key, D_00176AAE) == 0) {
+                } else if (stricmp(key, str_controls) == 0) {
+                    mc_strncpy((char *)controls_file, value, 4, str_args_c, 86);
+                } else if (stricmp(key, str_fadecolor) == 0) {
                     cfg_fade_colour = atoi(value);
-                } else if (stricmp(key, D_00176AB8) == 0) {
-                    mc_strncpy((char *)&cfg_map_file, value, 12, D_00176A88, 94);
+                } else if (stricmp(key, str_mapfile) == 0) {
+                    mc_strncpy((char *)&cfg_map_file, value, 12, str_args_c, 94);
                     cfg_flags |= 4;
-                } else if (stricmp(key, D_00176AC0) == 0) {
+                } else if (stricmp(key, str_faction) == 0) {
                     cfg_faction = atoi(value);
-                } else if (stricmp(key, D_00176AC8) == 0) {
+                } else if (stricmp(key, str_fpu) == 0) {
                     cfg_fpu = atoi(value);
-                } else if (stricmp(key, D_00176ACC) == 0) {
+                } else if (stricmp(key, str_startmap) == 0) {
                     cfg_start_map = atoi(value);
-                } else if (stricmp(key, D_00176AD5) == 0) {
+                } else if (stricmp(key, str_artifact) == 0) {
                     cfg_artifact = atoi(value);
-                } else if (stricmp(key, D_00176ADE) == 0) {
+                } else if (stricmp(key, str_facloop) == 0) {
                     cfg_facloop = atoi(value);
-                } else if (stricmp(key, D_00176AE6) == 0) {
-                    mc_strncpy(classmaker_file, value, 20, D_00176A88, 119);
-                } else if (stricmp(key, D_00176AED) == 0) {
-                    mc_strncpy(cfg_item_file, value, 20, D_00176A88, 123);
-                } else if (stricmp(key, D_00176AF2) == 0) {
+                } else if (stricmp(key, str_custom) == 0) {
+                    mc_strncpy(classmaker_file, value, 20, str_args_c, 119);
+                } else if (stricmp(key, str_item) == 0) {
+                    mc_strncpy(cfg_item_file, value, 20, str_args_c, 123);
+                } else if (stricmp(key, str_gender) == 0) {
                     cfg_gender = atoi(value);
-                } else if (stricmp(key, D_00176AF9) == 0) {
+                } else if (stricmp(key, str_ps2fix) == 0) {
                     cfg_ps2fix = atoi(value);
-                } else if (stricmp(key, D_00176B00) == 0) {
+                } else if (stricmp(key, str_user) == 0) {
                     cfg_user = atoi(value);
-                } else if (stricmp(key, D_00176B05) == 0) {
+                } else if (stricmp(key, str_region) == 0) {
                     cfg_region = atoi(value);
-                } else if (stricmp(key, D_00176B0C) == 0) {
+                } else if (stricmp(key, str_debug) == 0) {
                     cfg_debug = atoi(value);
-                } else if (stricmp(key, D_00176B12) == 0) {
-                    mc_strncpy(cfg_block_str, value, 80, D_00176A88, 147);
-                } else if (stricmp(key, D_00176B1B) == 0) {
+                } else if (stricmp(key, str_blockstr) == 0) {
+                    mc_strncpy(cfg_block_str, value, 80, str_args_c, 147);
+                } else if (stricmp(key, str_helmet) == 0) {
                     cfg_helmet = atoi(value);
-                } else if (stricmp(key, D_00176B22) == 0) {
-                    mc_strncpy(cfg_mapsave_file, value, 80, D_00176A88, 155);
-                } else if (stricmp(key, D_00176B27) == 0) {
+                } else if (stricmp(key, str_maps_2) == 0) {
+                    mc_strncpy(cfg_mapsave_file, value, 80, str_args_c, 155);
+                } else if (stricmp(key, str_marker) == 0) {
                     cfg_show_markers = atoi(value);
-                } else if (stricmp(key, D_00176B2E) == 0) {
+                } else if (stricmp(key, str_seed) == 0) {
                     cfg_seed = atoi(value);
-                } else if (stricmp(key, D_00176B33) == 0) {
+                } else if (stricmp(key, str_stereo) == 0) {
                     cfg_stereo = atoi(value);
-                } else if (stricmp(key, D_00176B3A) == 0) {
+                } else if (stricmp(key, str_objmemsize) == 0) {
                     object_heap_size = NATIVE_HEAP_BYTES(atoi(value) << 10);
-                } else if (stricmp(key, D_00176B45) == 0) {
+                } else if (stricmp(key, str_texturememory) == 0) {
                     cfg_texture_memory = atoi(value);
-                } else if (stricmp(key, D_00176B53) == 0) {
+                } else if (stricmp(key, str_magicrepair) == 0) {
                     cfg_magic_repair = atoi(value);
-                } else if (stricmp(key, D_00176B5F) == 0) {
+                } else if (stricmp(key, str_cheatmode) == 0) {
                     cheat_mode = atoi(value);
                 }
             }
-            func_0009DA1C(196, D_00176A88);
+            func_0009DA1C(196, str_args_c);
             fclose((void *)file);
         }
         if (((int)(unsigned char)(cfg_flags & 1)) == 0) {
-            func_0009DA1C(201, D_00176A88);
-            printf(D_00176B69);
+            func_0009DA1C(201, str_args_c);
+            printf(str_err_path_not_specified);
             missing = 1;
         }
         if (((int)(unsigned char)(cfg_flags & 4)) == 0) {
-            func_0009DA1C(207, D_00176A88);
-            printf(D_00176B82);
+            func_0009DA1C(207, str_args_c);
+            printf(str_err_map_file_not_specified);
             missing = 1;
         } else if (((int)(unsigned char)cfg_map_file) == 100) {
             player_environment = 3;
         }
         if (missing != 0) {
-            func_0009DA1C(216, D_00176A88);
-            printf(D_00176B9F);
+            func_0009DA1C(216, str_args_c);
+            printf(str_there_are_configuration_error_s);
             exit(5);
         }
         if (mem_check_level != 0) {
-            mc_set_location(221, D_00176A88);
-            func_000A148C(D_00176BC1);
+            mc_set_location(221, str_args_c);
+            func_000A148C(str_memory_checking_is_active_for_this);
             return;
         }
-        mc_set_location(223, D_00176A88);
-        func_000A148C(D_00176BED);
+        mc_set_location(223, str_args_c);
+        func_000A148C(str_memory_checking_is_not_active_for_this);
     }
 }
 

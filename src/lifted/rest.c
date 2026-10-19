@@ -8,9 +8,9 @@
 
 extern signed char mouse_buttons;
 extern signed char D_0012B508;
-extern char D_001760D6[];
-extern char D_00176141[];
-extern char D_0017614E[];
+extern char str_rest_c[];
+extern char str_anim0002_vid[];
+extern char str_anim0004_vid[];
 extern unsigned char player_environment;
 extern iptr D_00185087;
 extern signed char D_00187CA8;
@@ -71,7 +71,7 @@ void rest_close(void)
 
     if (((int)(unsigned char)game_mode) != 16) return;
     if ((iptr)rest_image != 0 && (iptr)rest_image != (-1751672937)) {
-        mc_free((void *)rest_image, D_001760D6, 271);
+        mc_free((void *)rest_image, str_rest_c, 271);
         *(iptr *)&rest_image = -1751672937;
     }
     D_00196272 = 0;
@@ -84,20 +84,20 @@ void rest_close(void)
     if (player_character->special_infection_time != 0 && player_character->special_infection != 0 && ((int)(unsigned short)(player_character->flags & 16)) != 0) {
         player_character->flags &= ~0x10;
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        path = disk_resolve_path((iptr)D_00176141);
-        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_001760D6, 285, 4);
+        path = disk_resolve_path((iptr)str_anim0002_vid);
+        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_rest_c, 285, 4);
         xn_vid_play((char *)path, 0, 0, 1);
-        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_001760D6, 287, 4);
+        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_rest_c, 287, 4);
         palette_restore();
         night_sky_loaded = 0;
         sky_loaded_frame = 10000;
     } else if (player_character->special_infection_time != 0 && player_character->special_infection == 0 && ((int)(unsigned short)(player_character->flags & 16)) != 0) {
         player_character->flags &= ~0x10;
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        path = disk_resolve_path((iptr)D_0017614E);
-        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_001760D6, 297, 4);
+        path = disk_resolve_path((iptr)str_anim0004_vid);
+        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_rest_c, 297, 4);
         xn_vid_play((char *)path, 0, 0, 1);
-        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_001760D6, 299, 4);
+        mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_rest_c, 299, 4);
         palette_restore();
         night_sky_loaded = 0;
         sky_loaded_frame = 10000;

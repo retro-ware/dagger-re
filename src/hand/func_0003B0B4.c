@@ -8,7 +8,7 @@ extern short mouse_y;
 extern unsigned char D_0012B508;
 extern char *screen_buffer;
 extern unsigned char xn_mouse_cursor_drawn;
-extern char D_00170B88[];
+extern char str_intro_c[];
 extern unsigned char D_001940D4;
 extern unsigned char D_001940D5;
 extern char *scratch_buffer;
@@ -40,7 +40,7 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
     D_00196091 = 0;
     if (image != 0) {
         disk_read_file(image, scratch_buffer);
-        mc_memcpy(screen_buffer, scratch_buffer, 64000, D_00170B88, 399, 4);
+        mc_memcpy(screen_buffer, scratch_buffer, 64000, str_intro_c, 399, 4);
     } else {
         xn_gfx_clear(0);
     }
@@ -52,7 +52,7 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
         xn_mouse_poll_clamped();
         msgbox_update();
         xn_mouse_cursor_move(mouse_x, mouse_y);
-        mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_00170B88, 412, 4);
+        mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_intro_c, 412, 4);
     }
     return D_00196271 - 1;
 }

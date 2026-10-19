@@ -4,7 +4,7 @@
 
 extern char mouse_buttons;
 extern char *screen_buffer;
-extern char D_00170D55[];        /* __FILE__ */
+extern char str_text_c[];        /* __FILE__ */
 extern char msgbox_kind;
 extern char D_00196271;
 extern char D_00196272;
@@ -25,10 +25,10 @@ void msgbox_show_qrc_text(char *name, unsigned short message_id, short kind)
 
     if (msgbox_kind != 0)
         return;
-    msgbox_saved_screen = mc_malloc(64000, D_00170D55, 765);
-    mc_memcpy(msgbox_saved_screen, screen_buffer, 64000, D_00170D55, 766, 4);
-    mc_memset(&stub, 0, sizeof(stub), D_00170D55, 768, 4);
-    mc_strncpy(stub.name, name, 9, D_00170D55, 769);
+    msgbox_saved_screen = mc_malloc(64000, str_text_c, 765);
+    mc_memcpy(msgbox_saved_screen, screen_buffer, 64000, str_text_c, 766, 4);
+    mc_memset(&stub, 0, sizeof(stub), str_text_c, 768, 4);
+    mc_strncpy(stub.name, name, 9, str_text_c, 769);
     xn_font_select(4);
     if (kind == 5) {
         D_00196271 = 0;

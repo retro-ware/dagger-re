@@ -5,9 +5,9 @@
 #include "clib.h"
 
 extern iptr screen_buffer;
-extern char D_00170DE4[];
-extern char D_00170DF7[];
-extern char D_00170E04[];
+extern char str_pickbook_c[];
+extern char str_spbk00i0_img[];
+extern char str_mask04i0_img_2[];
 extern iptr D_00184876;
 extern signed char D_00187CA8;
 extern signed char D_001940D4;
@@ -48,11 +48,11 @@ int spellbook_open(short force)
         D_001940D4 |= 128;
         D_00187CA8 = 0;
         D_001940D8 |= 2;
-        spellbook_saved_screen = (iptr)mc_malloc(64000, D_00170DE4, 101);
-        mc_memcpy((void *)spellbook_saved_screen, (void *)screen_buffer, 64000, D_00170DE4, 102, 4);
+        spellbook_saved_screen = (iptr)mc_malloc(64000, str_pickbook_c, 101);
+        mc_memcpy((void *)spellbook_saved_screen, (void *)screen_buffer, 64000, str_pickbook_c, 102, 4);
         game_mode = 5;
-        window_image = disk_read_file(D_00170DF7, 0);
-        magic_window_image = disk_read_file(D_00170E04, 0);
+        window_image = disk_read_file(str_spbk00i0_img, 0);
+        magic_window_image = disk_read_file(str_mask04i0_img_2, 0);
         D_00196272 = 1;
         sound_play(237, player_object, 100);
     }

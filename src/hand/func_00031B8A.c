@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 #pragma pack()
-extern char D_00170A64[];
+extern char str_qinit_c[];
 extern unsigned char D_0017A25C[];
 extern short D_0017A270[];
 extern struct record *nonworld_root;
@@ -73,7 +73,7 @@ int quest_init_person(struct qbn_person *qbn_person)
                 building->faction_id = 510;
             if (building->faction_id == 0)
                 building->faction_id = faction_find_type_in_region(current_region, 15)->id;
-            mc_memcpy(&object->data, building, 26, D_00170A64, 64, 4);
+            mc_memcpy(&object->data, building, 26, str_qinit_c, 64, 4);
         } else if (D_00195CE8->data.person.faction_id != 0) {
             object->data.building.faction_id = D_00195CE8->data.person.faction_id;
         }
@@ -81,8 +81,8 @@ int quest_init_person(struct qbn_person *qbn_person)
             object->faction_id = D_00195CE8->data.person.faction_id;
         else
             object->faction_id = building->faction_id;
-        mc_strncpy(object->data.quest_npc.location_name, current_location->name, 4, D_00170A64, 76);
-        mc_memcpy(&object->x, &D_00195CE8->x, 12, D_00170A64, 77, 4);
+        mc_strncpy(object->data.quest_npc.location_name, current_location->name, 4, str_qinit_c, 76);
+        mc_memcpy(&object->x, &D_00195CE8->x, 12, str_qinit_c, 77, 4);
         object->type = 41;
         object->image = D_00195CE8->image;
         qbn_person->object = object;
@@ -266,9 +266,9 @@ retry:
     if (any_building != 0 && quest_object_in_use((loc_object->id & 0xffff0000) + (candidates[i] & 0xffff)) != 0 && ++tries < 100)
         goto retry;
     object = object_create_child(nonworld_root, 0, 58);
-    mc_memcpy(&object->x, &loc_object->x, 12, D_00170A64, 307, 4);
-    mc_memcpy(&object->data, &location->buildings[(unsigned)candidates[i] >> 16], 26, D_00170A64, 308, 4);
-    mc_strncpy(object->data.quest_npc.location_name, location->name, 4, D_00170A64, 309);
+    mc_memcpy(&object->x, &loc_object->x, 12, str_qinit_c, 307, 4);
+    mc_memcpy(&object->data, &location->buildings[(unsigned)candidates[i] >> 16], 26, str_qinit_c, 308, 4);
+    mc_strncpy(object->data.quest_npc.location_name, location->name, 4, str_qinit_c, 309);
     if (object->data.building.faction_id == 0)
         object->data.building.faction_id = faction_find_type_in_region(current_region, 15)->id;
     if (npc_faction_id != 0)

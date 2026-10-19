@@ -9,22 +9,22 @@ extern signed char D_0012B508;
 extern iptr xn_tex_archives[];
 extern signed char key_down_minus;
 extern signed char key_down_equals;
-extern char D_00171044[];
-extern char D_0017104D[];
-extern char D_0017105A[];
-extern char D_0017105D[];
-extern char D_00171062[];
-extern char D_00171077[];
-extern char D_00171083[];
-extern char D_00171096[];
-extern char D_001710A7[];
-extern char D_001710BA[];
-extern char D_001710C3[];
-extern char D_001710D6[];
-extern char D_001710EB[];
+extern char str_kludge_c[];
+extern char str_verstr_dat[];
+extern char str_fmt_d_3[];
+extern char str_fmt_d_4[];
+extern char str_daggerfall_build[];
+extern char str_class02_cfg[];
+extern char str_deathstroke_bunwun[];
+extern char str_picking_from[];
+extern char str_quest_debugging_on[];
+extern char str_fmt_ld_s_2[];
+extern char str_total_memory[];
+extern char str_rasing_reputation[];
+extern char str_raising_skills[];
 extern signed char D_0017BABC[];
 extern signed char D_0017BABD[];
-extern char D_0017BAE2[];
+extern char str_2[];
 extern char *D_0017BB01[];
 extern signed char D_0017BB39[];
 extern signed char D_0017BB3F[];
@@ -115,23 +115,23 @@ void kludge_print_build(int to_console)
     int fd;
     int build;
 
-    mc_set_location(78, D_00171044);
-    mc_sprintf((char *)text_buffer, D_0017104D, (iptr)arena2_path);
+    mc_set_location(78, str_kludge_c);
+    mc_sprintf((char *)text_buffer, str_verstr_dat, (iptr)arena2_path);
     fd = open((char *)text_buffer, 512);
     if (fd < 0) {
-        mc_set_location(81, D_00171044);
-        mc_sprintf((char *)text_buffer, D_0017104D, (iptr)arena2_cd_path);
+        mc_set_location(81, str_kludge_c);
+        mc_sprintf((char *)text_buffer, str_verstr_dat, (iptr)arena2_cd_path);
         fd = open((char *)text_buffer, 512);
         if (fd < 0) return;
     }
     read(fd, text_buffer, 80);
-    fprintf(D_001903BA, D_0017105A, (iptr)&build);
+    fprintf(D_001903BA, str_fmt_d_3, (iptr)&build);
     if (to_console != 0) {
-        func_0009DA1C(90, D_00171044);
-        printf(D_0017105D, build);
+        func_0009DA1C(90, str_kludge_c);
+        printf(str_fmt_d_4, build);
     } else {
-        mc_set_location(92, D_00171044);
-        func_000A148C(D_00171062, build);
+        mc_set_location(92, str_kludge_c);
+        func_000A148C(str_daggerfall_build, build);
     }
     close(fd);
 }
@@ -198,7 +198,7 @@ void kludge_make_test_character_with_spells(int full)
         object = object_create_child(object, 0, 89);
         object->type = 9;
         object->id = object_new_id(100);
-        mc_memcpy(&object->data.spell, &spell_records[(short)i], 89, D_00171044, 165, 4);
+        mc_memcpy(&object->data.spell, &spell_records[(short)i], 89, str_kludge_c, 165, 4);
     }
 }
 
@@ -226,12 +226,12 @@ void kludge_make_test_character(int full)
     player_character->gold = 5000;
     player_character->level = 2;
     if (full != 0) {
-        disk_read_file(D_00171077, (iptr)player_class);
+        disk_read_file(str_class02_cfg, (iptr)player_class);
         player_class->forbidden_equipment = 0;
         player_class->forbidden_materials = 0;
-        mc_strncpy(player_character->name, D_00171083, 32, D_00171044, 197);
-        mc_memcpy(player_character->attributes, D_0017BAE2, 16, D_00171044, 198, 16);
-        mc_memcpy(player_character->base_attributes, player_character->attributes, 16, D_00171044, 199, 16);
+        mc_strncpy(player_character->name, str_deathstroke_bunwun, 32, str_kludge_c, 197);
+        mc_memcpy(player_character->attributes, str_2, 16, str_kludge_c, 198, 16);
+        mc_memcpy(player_character->base_attributes, player_character->attributes, 16, str_kludge_c, 199, 16);
         player_character->min_metal_to_hit = 0;
         for (i = 0; i < 35; i++) {
             player_character->skills[i].value = rand_range(10, 60);
@@ -312,7 +312,7 @@ void kludge_make_test_character(int full)
     inv_store_item(object);
     object = object_create_child(object, 0, 109);
     object->type = 31;
-    mc_memcpy(&object->data.potion_recipe, potion_recipes, 109, D_00171044, 289, 4);
+    mc_memcpy(&object->data.potion_recipe, potion_recipes, 109, str_kludge_c, 289, 4);
     object = object_create_child(D_001959DC, 0, 107);
     object->type = 2;
     item = &object->data.item;
@@ -420,8 +420,8 @@ void kludge_pick_pockets(void)
     scratch_190ce5 = *(signed char *)&monster_id;
     monster_init(creature, monster_id);
     scratch_190ce4[0] = 3;
-    mc_set_location(448, D_00171044);
-    mc_sprintf((char *)text_buffer, D_00171096, (iptr)monster_names[monster_id]);
+    mc_set_location(448, str_kludge_c);
+    mc_sprintf((char *)text_buffer, str_picking_from, (iptr)monster_names[monster_id]);
     hud_message_add(text_buffer);
     scratch_190ce4[0] = 4;
     pickpocket_attempt(creature);
@@ -436,14 +436,14 @@ void kludge_toggle_quest_debug(void)
 {
     D_001940DA ^= 2;
     if (((struct bf8_1_1 *)&D_001940DA)->f == 0) return;
-    hud_message_add(D_001710A7);
+    hud_message_add(str_quest_debugging_on);
 }
 
 void kludge_remove_all_items(void)
 {
     struct record *object;
 
-    mc_memset(player_character->equipped, 0, sizeof(player_character->equipped), D_00171044, 469, sizeof(player_character->equipped));
+    mc_memset(player_character->equipped, 0, sizeof(player_character->equipped), str_kludge_c, 469, sizeof(player_character->equipped));
     object = player_entity->children;
     while (object != 0) object = object_delete(object);
 }
@@ -462,15 +462,15 @@ void kludge_show_memory(void)
     for (; i < 512; i++) {
         if (xn_tex_archives[i] == 0) continue;
         block = xn_tex_archives[i] - REC_SIZEOF(struct tex_block);
-        mc_set_location(487, D_00171044);
-        mc_sprintf((char *)text_buffer, D_001710BA, ((struct tex_block *)block)->size, xn_tex_archives[i] + 2);
+        mc_set_location(487, str_kludge_c);
+        mc_sprintf((char *)text_buffer, str_fmt_ld_s_2, ((struct tex_block *)block)->size, xn_tex_archives[i] + 2);
         text_draw((iptr)text_buffer, (row / 25) * 160, (row % 25) << 3);
         row++;
         total += ((struct tex_block *)block)->size;
     }
     D_0012B508 = 245;
-    mc_set_location(494, D_00171044);
-    mc_sprintf((char *)text_buffer, D_001710C3, total);
+    mc_set_location(494, str_kludge_c);
+    mc_sprintf((char *)text_buffer, str_total_memory, total);
     text_draw((iptr)text_buffer, (row / 25) * 160, (row % 25) << 3);
 }
 
@@ -507,7 +507,7 @@ void cheat_raise_reputation(void)
     int i;
 
     faction = factions;
-    hud_message_add(D_001710D6);
+    hud_message_add(str_rasing_reputation);
     for (i = 0; i < faction_count; i++, faction++) {
         if (faction->reputation <= 90) faction->reputation += 10;
     }
@@ -518,7 +518,7 @@ void cheat_raise_skills(void)
 {
     int i;
 
-    hud_message_add(D_001710EB);
+    hud_message_add(str_raising_skills);
     for (i = 0; i < 35; i++) {
         if (player_character->skills[i].value != 100) player_character->skills[i].value++;
     }
@@ -548,7 +548,7 @@ void starting_spells_give(struct record *spellbook)
         while ((signed char)spell_records[record_index].id != D_0017BB3F[(class_id * 6) + i]) {
             record_index++;
         }
-        mc_memcpy(&spell->data.spell, &spell_records[record_index], 89, D_00171044, 582, 4);
+        mc_memcpy(&spell->data.spell, &spell_records[record_index], 89, str_kludge_c, 582, 4);
         i++;
     }
 }

@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0001E854 */
 #include "records.h"
 #include "clib.h"
-extern char D_00170533[];
+extern char str_krave01_hs2[];
 extern int D_001967EC;
 extern int rmb_origin_z;
 extern int rmb_origin_y;
@@ -24,7 +24,7 @@ void town_block_place_building(struct building *building, int building_index)
     rmb_origin_z = block_origin_z - rmb_block->positions[building_index].z;
     rmb_origin_y = xn_terrain_height_at(rmb_origin_x, rmb_origin_z) - 6;
     *(int *)rmb_origin_yaw = rmb_block->positions[building_index].yaw;
-    if (stricmp(rmb_block->other_names[building_index], D_00170533) != 0) return;
+    if (stricmp(rmb_block->other_names[building_index], str_krave01_hs2) != 0) return;
     building->type = 11;
     building->faction_id = 414;
 }

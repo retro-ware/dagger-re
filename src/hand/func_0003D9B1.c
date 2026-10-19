@@ -1,5 +1,5 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0003D9B1 */
-extern char D_00170D55[];       /* __FILE__ */
+extern char str_text_c[];       /* __FILE__ */
 extern short text_format_flags;
 extern void parse_expand(unsigned char *, char *);
 extern int font_char_width(unsigned char);
@@ -20,15 +20,15 @@ char *text_expand_wrap(unsigned short flags, short width, char *src, char *buf, 
     if (!(flags & 8))
         parse_expand(src, text);
     else
-        mc_strncpy(text, src, 4, D_00170D55, 169);
+        mc_strncpy(text, src, 4, str_text_c, 169);
     text_format_flags = saved;
     if (src != 0 && src != (char *)(iptr)-1751672937) {
-        mc_free(src, D_00170D55, 173);
+        mc_free(src, str_text_c, 173);
         src = (char *)(iptr)-1751672937;
     }
     if (!(flags & ~8)) {
         if (buf != 0 && buf != (char *)(iptr)-1751672937) {
-            mc_free(buf, D_00170D55, 177);
+            mc_free(buf, str_text_c, 177);
             buf = (char *)(iptr)-1751672937;
         }
         return text;
@@ -95,7 +95,7 @@ char *text_expand_wrap(unsigned short flags, short width, char *src, char *buf, 
         }
     }
     if (text != 0 && text != (char *)(iptr)-1751672937) {
-        mc_free(text, D_00170D55, 265);
+        mc_free(text, str_text_c, 265);
         text = (char *)(iptr)-1751672937;
     }
     return buf;

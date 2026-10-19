@@ -11,10 +11,10 @@ extern short mouse_y;
 extern signed char D_0012B508;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
-extern char D_00170DE4[];
-extern char D_00170DEF[];
-extern char D_00170E11[];
-extern char D_00170E17[];
+extern char str_pickbook_c[];
+extern char str_fmt_d_s[];
+extern char str_fmt_d_d_4[];
+extern char str_you_don_t_have_the_spell_points_2[];
 extern struct spell *selected_spell;
 extern struct rect spellbook_buttons[9];
 extern char *spell_effect_names[];
@@ -97,15 +97,15 @@ void spellbook_add_spell_cb(struct record *object)
         cost = spell_cost(spell, player_character);
         if (((int)(unsigned char)spell->name[strlen(spell->name) + 1]) == 36) {
             cost >>= 2;
-            mc_set_location(62, D_00170DE4);
-            mc_sprintf((char *)text_buffer, D_00170DEF, cost, spell->name);
+            mc_set_location(62, str_pickbook_c);
+            mc_sprintf((char *)text_buffer, str_fmt_d_s, cost, spell->name);
         } else {
-            mc_set_location(65, D_00170DE4);
-            mc_sprintf((char *)text_buffer, D_00170DEF, cost, &spell->name[1]);
+            mc_set_location(65, str_pickbook_c);
+            mc_sprintf((char *)text_buffer, str_fmt_d_s, cost, &spell->name[1]);
         }
     } else {
-        mc_set_location(68, D_00170DE4);
-        mc_sprintf((char *)text_buffer, D_00170DEF, spell_cost(spell, player_character), spell->name);
+        mc_set_location(68, str_pickbook_c);
+        mc_sprintf((char *)text_buffer, str_fmt_d_s, spell_cost(spell, player_character), spell->name);
     }
     picklist_add(&shared_picklist, text_buffer, 0);
     ((iptr *)scratch_190de4)[(int)(short)(*(short *)scratch_190d64)++] = (iptr)object;
@@ -122,11 +122,11 @@ void spellbook_frame(void)
     slot16 button;
 
     if (spellbook_open(0) == 0) return;
-    mc_memcpy((void *)screen_buffer, (void *)spellbook_saved_screen, 64000, D_00170DE4, 123, 4);
+    mc_memcpy((void *)screen_buffer, (void *)spellbook_saved_screen, 64000, str_pickbook_c, 123, 4);
     image = (short *)window_image;
     xn_draw_image_transparent((unsigned short)image[0], (unsigned short)image[1], (unsigned short)image[2], (unsigned short)image[3], (char *)image + 12);
-    mc_set_location(129, D_00170DE4);
-    mc_sprintf((char *)text_buffer, D_00170E11, player_character->magicka, player_character->max_magicka);
+    mc_set_location(129, str_pickbook_c);
+    mc_sprintf((char *)text_buffer, str_fmt_d_d_4, player_character->magicka, player_character->max_magicka);
     text_draw_coloured((iptr)text_buffer, 238, 20, 145, 141);
     xn_font_select(4);
     *(int *)&picked = picklist_frame(&shared_picklist);
@@ -142,7 +142,7 @@ void spellbook_frame(void)
                 cost >>= 2;
             }
             if ((player_character->magicka + spell_points_bonus) < cost) {
-                hud_message_add((iptr)D_00170E17);
+                hud_message_add((iptr)str_you_don_t_have_the_spell_points_2);
                 return;
             }
             spell_ready_cost = cost;
@@ -161,14 +161,14 @@ void spellbook_frame(void)
             new_spell = object_create_child(player_object->parent, 0, 89);
             new_spell->type = 9;
             new_spell->id = object_new_id(100);
-            mc_memcpy(&new_spell->data.spell, &spell_object->data.spell, 89, D_00170DE4, 181, 4);
+            mc_memcpy(&new_spell->data.spell, &spell_object->data.spell, 89, str_pickbook_c, 181, 4);
             if (cast_player_spell(new_spell) != 0) object_delete(new_spell);
         }
         return;
     }
     spellbook_draw_spell((selected_spell = (struct spell *)(((iptr *)scratch_190de4)[(int)(unsigned short)shared_picklist.selected] + RECORD_HEADER_SIZE)));
     if (((int)(unsigned char)msgbox_kind) == 2) {
-        mc_strncpy(shared_picklist.entries[shared_picklist.selected].text, selected_spell->name, 40, D_00170DE4, 193);
+        mc_strncpy(shared_picklist.entries[shared_picklist.selected].text, selected_spell->name, 40, str_pickbook_c, 193);
     }
     if (key_down_esc != 0 || ((int)(short)picked) == (-2)) spellbook_close();
     if (mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) {
@@ -194,15 +194,15 @@ int spellbook_close(void)
     D_001940D8 &= 253;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00170DE4, 222);
+        mc_free((void *)window_image, str_pickbook_c, 222);
         window_image = -1751672937;
     }
     if (magic_window_image != 0 && magic_window_image != (-1751672937)) {
-        mc_free((void *)magic_window_image, D_00170DE4, 223);
+        mc_free((void *)magic_window_image, str_pickbook_c, 223);
         magic_window_image = -1751672937;
     }
     if (spellbook_saved_screen != 0 && spellbook_saved_screen != (-1751672937)) {
-        mc_free((void *)spellbook_saved_screen, D_00170DE4, 224);
+        mc_free((void *)spellbook_saved_screen, str_pickbook_c, 224);
         spellbook_saved_screen = -1751672937;
     }
     D_00196272 = 0;

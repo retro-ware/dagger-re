@@ -4,7 +4,7 @@
 #include "ptrint.h"
 
 extern unsigned char player_environment;
-extern char D_0017995C[];
+extern char str_w[];
 extern short D_00179966[];
 extern char D_00179970[];
 extern char D_0017998E[];
@@ -39,9 +39,9 @@ short texture_archive_for_climate(int archive, int record)
     case 3:
         if (base == 74 && record > 2) return archive;
         if (base == 74) return base + ((short)scratch_190ce4[0] * 100);
-        found = (iptr)xn_str_find_u16((unsigned short *)D_0017995C, (int)(short)*(short *)&archive, 5);
+        found = (iptr)xn_str_find_u16((unsigned short *)str_w, (int)(short)*(short *)&archive, 5);
         if (found != 0) {
-            archive = (int)(short)D_00179966[((found - ((iptr)D_0017995C)) >> 1)];
+            archive = (int)(short)D_00179966[((found - ((iptr)str_w)) >> 1)];
         } else if (archive == 168) {
             archive = (((int)(signed char)scratch_190ce4[0]) * 100) + 68;
         }

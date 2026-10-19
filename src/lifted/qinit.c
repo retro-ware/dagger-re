@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern struct region regions[];
-extern char D_00170A64[];
+extern char str_qinit_c[];
 extern char D_00178A10[];
 extern short *item_group_templates[];
 extern signed char D_001940D5;
@@ -125,7 +125,7 @@ struct record *quest_init_item(struct qbn_item *qbn_item)
         item->image = item_data->dropped_image;
         if (item_data->group == 9 && item_data->index == 5 && qbn_item->messages[1] != 0) {
             item_data->message = qbn_item->messages[1];
-            mc_strncpy(&item_data->name[10], (char *)(signed char *)&current_quest->name[0], 4, D_00170A64, 572);
+            mc_strncpy(&item_data->name[10], (char *)(signed char *)&current_quest->name[0], 4, str_qinit_c, 572);
         }
     }
     return item;
@@ -194,7 +194,7 @@ int quest_init_resources(struct quest *quest)
     qbn_item = (struct qbn_item *)((char *)quest + quest->section_offsets[0]);
     for (i = 0; quest->section_counts[0] > i; i++, qbn_item++) {
         if ((qbn_item->flags & 2) == 0 && qbn_item->group == 100) {
-            mc_memcpy(qbn_item, (void *)D_00195984[qbn_item->index], REC_SIZEOF(struct qbn_item), D_00170A64, 660, 4);
+            mc_memcpy(qbn_item, (void *)D_00195984[qbn_item->index], REC_SIZEOF(struct qbn_item), str_qinit_c, 660, 4);
         } else {
             qbn_item->object = 0;
             if (quest_init_item(qbn_item) == 0) return 0;
@@ -319,7 +319,7 @@ int quest_place_object(struct record *object, struct qbn_place *place)
     }
     if (object->type != 2 && object->type != 18) {
         saved_faction_id = object->data.building.faction_id;
-        mc_memcpy(&object->data, &place->object->data, 26, D_00170A64, 924, 4);
+        mc_memcpy(&object->data, &place->object->data, 26, str_qinit_c, 924, 4);
         object->data.building.faction_id = *(int *)&saved_faction_id;
     }
     if ((((unsigned)object->id) >> 16) == (((unsigned)location_object->id) >> 16)) object = func_000310E1(object, 0);
@@ -385,7 +385,7 @@ void qaction_give_item_to_foe(struct quest *quest, struct qbn_op *op)
         item_twin->quest_id = (signed char)quest->id;
         item_twin->twin = item;
         item->twin = item_twin;
-        mc_memcpy(&item_twin->data, &item->data, 107, D_00170A64, 1008, 4);
+        mc_memcpy(&item_twin->data, &item->data, 107, str_qinit_c, 1008, 4);
     }
     foe_object = op->args[2].object;
     item->id = object_new_id(((unsigned)foe_object->id) >> 16);

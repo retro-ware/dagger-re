@@ -6,12 +6,12 @@
 #include "clib.h"
 
 extern signed char key_down_esc;
-extern char D_001756A3[];
+extern char str_itemmakr_c[];
 extern char D_001756BE[];
-extern char D_001756EC[];
-extern char D_0017570A[];
+extern char str_you_have_no_captured_spirits[];
+extern char str_error[];
 extern char D_00175723[];
-extern char D_00175734[];
+extern char str_fmt_s_5[];
 extern char D_00175738[];
 extern iptr D_0017D1EA;
 extern char *enchant_power_names[];
@@ -122,12 +122,12 @@ void itemmaker_reset(void)
     itemmaker_item_object = 0;
     itemmaker_item = 0;
     *(int *)inv_left_scroll = 0;
-    mc_memset(scratch_190ce4, -1, 10, D_001756A3, 77, 128);
-    mc_memset(scratch_190cee, -1, 30, D_001756A3, 78, 4);
-    mc_memset(D_00190D02, -1, 30, D_001756A3, 79, 4);
-    mc_memset((void *)D_00199868, -1, 120, D_001756A3, 80, 120);
-    mc_memset(itemmaker_slots, 0, 40, D_001756A3, 81, 40);
-    mc_memset(D_00199910, 0, 10, D_001756A3, 82, 10);
+    mc_memset(scratch_190ce4, -1, 10, str_itemmakr_c, 77, 128);
+    mc_memset(scratch_190cee, -1, 30, str_itemmakr_c, 78, 4);
+    mc_memset(D_00190D02, -1, 30, str_itemmakr_c, 79, 4);
+    mc_memset((void *)D_00199868, -1, 120, str_itemmakr_c, 80, 120);
+    mc_memset(itemmaker_slots, 0, 40, str_itemmakr_c, 81, 40);
+    mc_memset(D_00199910, 0, 10, str_itemmakr_c, 82, 10);
 }
 
 int itemmaker_close(void)
@@ -137,11 +137,11 @@ int itemmaker_close(void)
     if ((iptr)itemmaker_item != 0) inv_store_item(itemmaker_item_object);
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_001756A3, 141);
+        mc_free((void *)window_image, str_itemmakr_c, 141);
         window_image = -1751672937;
     }
     if (magic_window_image != 0 && magic_window_image != (-1751672937)) {
-        mc_free((void *)magic_window_image, D_001756A3, 142);
+        mc_free((void *)magic_window_image, str_itemmakr_c, 142);
         magic_window_image = -1751672937;
     }
     D_001940D8 &= 251;
@@ -159,7 +159,7 @@ void itemmaker_enter_name(void)
         return;
     }
     prompt = scratch_buffer + 55000;
-    mc_set_location(242, D_001756A3);
+    mc_set_location(242, str_itemmakr_c);
     mc_sprintf(prompt, D_001756BE, D_0017D1EA);
     *(strlen(prompt) + prompt + 1) = 0;
     inpstr_begin_text((iptr)itemmaker_item, 23);
@@ -291,7 +291,7 @@ void itemmaker_remove_slot(short slot)
     if (((int)(signed char)scratch_190ce4[(int)(short)slot]) == 1 && itemmaker_slots[(short)slot].type == 0) {
         itemmaker_clear_soul_slots();
     }
-    mc_memset((void *)(((iptr)D_00199868) + (((int)(short)slot) * 10)), -1, 10, D_001756A3, 511, 4);
+    mc_memset((void *)(((iptr)D_00199868) + (((int)(short)slot) * 10)), -1, 10, str_itemmakr_c, 511, 4);
     scratch_190ce4[(int)(short)slot] = 255;
     itemmaker_slots[(short)slot].param = 0;
 }
@@ -304,7 +304,7 @@ void itemmaker_soul_list_cb(struct record *soul)
     if (D_00190D63 == soul->soul_creature) scratch_object = soul;
     text_rsc_buffer[*(int *)D_00195B84] = (signed char)soul->soul_creature;
     *(iptr *)(scratch_190ee4 + ((*(int *)D_00195B84)++ << PTR_SHIFT)) = D_00190EDC;
-    mc_strncpy((char *)D_00190EDC, monster_names[soul->soul_creature], 4, D_001756A3, 526);
+    mc_strncpy((char *)D_00190EDC, monster_names[soul->soul_creature], 4, str_itemmakr_c, 526);
     next_name = D_00190EDC;
     next_name += strlen(monster_names[soul->soul_creature]) + 1;
     D_00190EDC = next_name;
@@ -324,7 +324,7 @@ int itemmaker_pick_param_list(iptr list_kind)
         *(int *)D_00195B84 = 0;
         object_foreach(player_entity->children, itemmaker_soul_list_cb);
         if (*(int *)D_00195B84 == 0 && ((int)(short)scratch_190d68) != 2) {
-            msgbox_show_string(D_001756EC, 1);
+            msgbox_show_string(str_you_have_no_captured_spirits, 1);
             return 0;
         }
         *(iptr *)(scratch_190ee4 + (*(int *)D_00195B84 << PTR_SHIFT)) = 0;
@@ -401,7 +401,7 @@ iptr spell_name_by_id(unsigned char spell_id)
         if (spell_records[i].name[0] == 0) continue;
         if (spell_records[i].id == spell_id) return (iptr)spell_records[i].name;
     }
-    return (iptr)D_0017570A;
+    return (iptr)str_error;
 }
 
 int enchant_spell_cost(unsigned char spell_id)
@@ -539,9 +539,9 @@ void itemmaker_clear_soul_slots(void)
         D_00199910[slot] = 0;
         scratch_190ce4[slot] = 255;
         itemmaker_slots[slot].type = (itemmaker_slots[slot].param = 0);
-        mc_memset((void *)(((iptr)D_00199868) + (slot * 10)), -1, 10, D_001756A3, 939, 4);
+        mc_memset((void *)(((iptr)D_00199868) + (slot * 10)), -1, 10, str_itemmakr_c, 939, 4);
     }
-    mc_memset(D_001998CC, -1, 20, D_001756A3, 942, 4);
+    mc_memset(D_001998CC, -1, 20, str_itemmakr_c, 942, 4);
 }
 
 void func_0005852D(int cells)
@@ -549,7 +549,7 @@ void func_0005852D(int cells)
     struct record *item;
 
     inv_left_count = (D_001AA586 = 0);
-    mc_memset((char *)inv_left_rows, 0, 20, D_001756A3, 951, 20);
+    mc_memset((char *)inv_left_rows, 0, 20, str_itemmakr_c, 951, 20);
     if (inv_left_container != player_entity) {
         inv_draw_item_cell(inv_left_container, 0, cells);
         D_001AA578 = (iptr)inv_left_container;
@@ -690,28 +690,28 @@ iptr enchant_powers_text(struct item *item)
     for (i = 0; i < 10; i++) {
         if (item->enchantments[i].type == (-1)) continue;
         if (item->enchantments[i].type < 15) {
-            mc_set_location(1128, D_001756A3);
-            mc_sprintf((char *)text_buffer, D_00175734, (iptr)enchant_power_names[item->enchantments[i].type]);
+            mc_set_location(1128, str_itemmakr_c);
+            mc_sprintf((char *)text_buffer, str_fmt_s_5, (iptr)enchant_power_names[item->enchantments[i].type]);
             if (item->enchantments[i].param != (-1)) {
                 if (item->enchantments[i].type < 3) {
-                    func_000A1054((char *)text_buffer, (char *)spell_name_by_id(item->enchantments[i].param), D_001756A3, 1132, 160);
+                    func_000A1054((char *)text_buffer, (char *)spell_name_by_id(item->enchantments[i].param), str_itemmakr_c, 1132, 160);
                 } else {
-                    func_000A1054((char *)text_buffer, (char *)*(iptr *)((char *)(iptr)(*(char **)&enchant_power_params[item->enchantments[i].type] + (item->enchantments[i].param << PTR_SHIFT))), D_001756A3, 1134, 160);
+                    func_000A1054((char *)text_buffer, (char *)*(iptr *)((char *)(iptr)(*(char **)&enchant_power_params[item->enchantments[i].type] + (item->enchantments[i].param << PTR_SHIFT))), str_itemmakr_c, 1134, 160);
                 }
             }
         } else {
-            mc_set_location(1139, D_001756A3);
-            mc_sprintf((char *)text_buffer, D_00175734, (iptr)enchant_side_effect_names[item->enchantments[i].type - 15]);
+            mc_set_location(1139, str_itemmakr_c);
+            mc_sprintf((char *)text_buffer, str_fmt_s_5, (iptr)enchant_side_effect_names[item->enchantments[i].type - 15]);
             if (item->enchantments[i].param != (-1)) {
                 if (item->enchantments[i].type == 15) {
-                    func_000A1054((char *)text_buffer, monster_names[item->enchantments[i].param], D_001756A3, 1143, 160);
+                    func_000A1054((char *)text_buffer, monster_names[item->enchantments[i].param], str_itemmakr_c, 1143, 160);
                 } else {
-                    func_000A1054((char *)text_buffer, (char *)*(iptr *)((char *)(iptr)(*(char **)&enchant_side_effect_params[item->enchantments[i].type - 15] + (item->enchantments[i].param << PTR_SHIFT))), D_001756A3, 1145, 160);
+                    func_000A1054((char *)text_buffer, (char *)*(iptr *)((char *)(iptr)(*(char **)&enchant_side_effect_params[item->enchantments[i].type - 15] + (item->enchantments[i].param << PTR_SHIFT))), str_itemmakr_c, 1145, 160);
                 }
             }
         }
-        func_000A1054((char *)text_buffer, D_00175738, D_001756A3, 1148, 160);
-        mc_strncpy(out, (char *)text_buffer, 4, D_001756A3, 1149);
+        func_000A1054((char *)text_buffer, D_00175738, str_itemmakr_c, 1148, 160);
+        mc_strncpy(out, (char *)text_buffer, 4, str_itemmakr_c, 1149);
         out += strlen(out);
     }
     out++;

@@ -4,8 +4,8 @@
 #include "structs.h"
 #include "clib.h"
 
-extern char D_001700D5[];
-extern char D_00170112[];
+extern char str_sosez_c[];
+extern char str_riff[];
 extern iptr D_0018DC34;
 extern char D_0018DC38[];
 extern iptr sos_drum_bank;
@@ -47,21 +47,21 @@ int sos_shutdown(void)
     if (sos_melodic_bank != 0) {
         dpmi_unlock_region(sos_melodic_bank, 8192);
         if (sos_melodic_bank != 0 && sos_melodic_bank != (-1751672937)) {
-            mc_free((void *)sos_melodic_bank, D_001700D5, 191);
+            mc_free((void *)sos_melodic_bank, str_sosez_c, 191);
             sos_melodic_bank = -1751672937;
         }
     }
     if (sos_drum_bank != 0) {
         dpmi_unlock_region(sos_drum_bank, 8192);
         if (sos_drum_bank != 0 && sos_drum_bank != (-1751672937)) {
-            mc_free((void *)sos_drum_bank, D_001700D5, 197);
+            mc_free((void *)sos_drum_bank, str_sosez_c, 197);
             sos_drum_bank = -1751672937;
         }
     }
     if (D_0018DC34 != 0) {
         dpmi_unlock_region(D_001A3F48, D_001A3F4C);
         if (D_001A3F48 != 0 && D_001A3F48 != (-1751672937)) {
-            mc_free((void *)D_001A3F48, D_001700D5, 203);
+            mc_free((void *)D_001A3F48, str_sosez_c, 203);
             D_001A3F48 = -1751672937;
         }
     }
@@ -80,7 +80,7 @@ iptr sos_load_sample(char *path)
     if (handle == (-1)) return 0;
     size = lseek(handle, 0, 2);
     lseek(handle, 0, 0);
-    buffer = (iptr)mc_malloc(size + (int)sizeof(struct sos_sample), D_001700D5, 302);
+    buffer = (iptr)mc_malloc(size + (int)sizeof(struct sos_sample), str_sosez_c, 302);
     if (buffer == 0) {
         close(handle);
         return 0;
@@ -88,15 +88,15 @@ iptr sos_load_sample(char *path)
     if (read(handle, (void *)(buffer + (int)sizeof(struct sos_sample)), size) != size) {
         close(handle);
         if (buffer != 0 && buffer != (-1751672937)) {
-            mc_free((void *)buffer, D_001700D5, 318);
+            mc_free((void *)buffer, str_sosez_c, 318);
             buffer = -1751672937;
         }
         return 0;
     }
     close(handle);
-    mc_memset((void *)buffer, 0, sizeof(struct sos_sample), D_001700D5, 328, 4);
+    mc_memset((void *)buffer, 0, sizeof(struct sos_sample), str_sosez_c, 328, 4);
     sample = (struct sos_sample *)buffer;
-    if (strncmp((char *)(buffer + (int)sizeof(struct sos_sample)), D_00170112, 4) == 0) {
+    if (strncmp((char *)(buffer + (int)sizeof(struct sos_sample)), str_riff, 4) == 0) {
         wav = (struct wav_header *)(buffer + (int)sizeof(struct sos_sample));
         sample->data = (char *)(buffer + (int)sizeof(struct sos_sample) + (int)sizeof(struct wav_header));
         sample->length = wav->data_size - 44;

@@ -1,5 +1,5 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0002829B */
-extern char D_001707AE[];
+extern char str_automap_c[];
 extern char scratch_190ce5;
 extern short scratch_190d68;
 extern short scratch_190d6a;
@@ -15,5 +15,5 @@ void town_note_add(char *text)
     offset = town_notes_size();
     *(short *)(scratch_buffer + offset) = scratch_190d68;
     *(short *)(scratch_buffer + offset + 2) = scratch_190d6a;
-    mc_strncpy(scratch_buffer + (offset + 4), text, 4, D_001707AE, 823);
+    mc_strncpy(scratch_buffer + (offset + 4), text, 4, str_automap_c, 823);
 }

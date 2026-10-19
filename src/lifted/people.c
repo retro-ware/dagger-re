@@ -4,8 +4,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170DC0[];
-extern char D_00170DD6[];
+extern char str_people_c[];
+extern char str_loc[];
 extern unsigned char player_environment;
 extern signed char text_buffer[];
 extern struct record *creature_list[];
@@ -40,7 +40,7 @@ void people_clear(void)
         if (people_list[i] != 0) object_delete(people_list[i]);
     }
     people_count = 0;
-    mc_memset(((char *)people_list), 0, 120, D_00170DC0, 554, 120);
+    mc_memset(((char *)people_list), 0, 120, str_people_c, 554, 120);
 }
 
 int people_check_witnesses(void)
@@ -104,7 +104,7 @@ void people_debug_map(void)
     y >>= 6;
     y = ((current_location->height << 6) - y) - 1;
     func_000A134C((short)x, (short)y, 244);
-    mc_set_location(677, D_00170DC0);
-    mc_sprintf((char *)text_buffer, D_00170DD6, x, y);
+    mc_set_location(677, str_people_c);
+    mc_sprintf((char *)text_buffer, str_loc, x, y);
     text_draw((iptr)text_buffer, 0, (int)(iptr)&*(signed char *)((char *)(iptr)(current_location->height << 6) + 2));
 }

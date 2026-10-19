@@ -6,9 +6,9 @@
 #include "clib.h"
 
 extern signed char D_0012B508;
-extern char D_00176D55[];
-extern char D_00176D5C[];
-extern char D_00176D7D[];
+extern char str_spfx_c[];
+extern char str_trap_will_not_work_on_humanoids[];
+extern char str_trap_active[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
 extern signed char D_001841E3[];
@@ -110,7 +110,7 @@ void spfx_dispel(struct record *spell, int slot, struct record *target)
         while (active != 0) {
             if (active->type == 9) {
                 active_data = &active->data.spell;
-                mc_strncpy((char *)text, active_data->name, 4, D_00176D55, 284);
+                mc_strncpy((char *)text, active_data->name, 4, str_spfx_c, 284);
                 *(iptr *)(scratch_190ee4 + (count << PTR_SHIFT)) = (iptr)active;
                 *(iptr *)(scratch_190de4 + (count++ << PTR_SHIFT)) = text;
                 text += strlen(active_data->name) + 1;
@@ -279,10 +279,10 @@ int spfx_soul_trap(struct record *spell, int slot, struct record *target)
     struct spell *spell_data;
 
     if (target->data.character.mobile_id >= 128) {
-        hud_message_add((iptr)D_00176D5C);
+        hud_message_add((iptr)str_trap_will_not_work_on_humanoids);
         return 0;
     }
-    hud_message_add((iptr)D_00176D7D);
+    hud_message_add((iptr)str_trap_active);
     spell_data = &spell->data.spell;
     trap = object_create_child(target, 0, 0);
     trap->type = 19;
@@ -865,7 +865,7 @@ void spfx_popup_update(void)
         } else {
             map_goto_location(recall_anchor_region, recall_anchor_environment, recall_anchor_location, D_001A9A00);
             player_position_restore(1);
-            mc_memset(saved_positions, 0, 48, D_00176D55, 1342, 48);
+            mc_memset(saved_positions, 0, 48, str_spfx_c, 1342, 48);
         }
         spfx_popup_handler = 0;
         return;

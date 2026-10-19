@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 #pragma pack()
-extern char D_00170A64[];
+extern char str_qinit_c[];
 extern struct record *nonworld_root;
 extern struct record *location_object;
 extern struct location *current_location;
@@ -125,8 +125,8 @@ retry:
     if (building->faction_id == 0)
         building->faction_id = faction_find_type_in_region(current_region, 15)->id;
     if (place->p1 != 1)
-        mc_memcpy(building, &location->buildings[candidates[i] >> 16], 26, D_00170A64, 483, 4);
-    mc_strncpy((char *)building + 26, location, 4, D_00170A64, 485);
+        mc_memcpy(building, &location->buildings[candidates[i] >> 16], 26, str_qinit_c, 483, 4);
+    mc_strncpy((char *)building + 26, location, 4, str_qinit_c, 485);
     location_free(&D_001970C8);
     return 1;
 }

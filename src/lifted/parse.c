@@ -6,21 +6,21 @@
 #include "clib.h"
 
 extern struct region regions[];
-extern char D_0017110C[];
-extern char D_00171134[];
-extern char D_00171146[];
-extern char D_0017114E[];
-extern char D_00171154[];
-extern char D_0017115C[];
-extern char D_00171164[];
-extern char D_0017116D[];
-extern char D_00171173[];
+extern char str_parse_c[];
+extern char str_the_of[];
+extern char str_nowhere[];
+extern char str_fmt_s_s_2[];
+extern char str_fmt_d_d_2[];
+extern char str_nothing[];
+extern char str_humanoid[];
+extern char str_fmt_ld_s[];
+extern char str_fmt_ld_2[];
 extern char D_00171177[];
-extern char D_00171178[];
-extern char D_00171185[];
-extern char D_0017118B[];
-extern char D_00171192[];
-extern char D_0017119C[];
+extern char str_potion_of[];
+extern char str_lower[];
+extern char str_higher[];
+extern char str_unchanged[];
+extern char str_fmt_d_d_3[];
 extern signed char D_00178630[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
@@ -28,7 +28,7 @@ extern iptr weight_fractions[];
 extern char legal_reputation_ranges[];
 extern char D_0017C552[];
 extern iptr ruler_fates[];
-extern char D_0017C912[];
+extern char str_j[];
 extern short holiday_days[];
 extern signed char holiday_regions[];
 extern iptr holiday_names[];
@@ -462,8 +462,8 @@ iptr macro_dat_date(void)
     } else {
         suffix_index = day;
     }
-    mc_set_location(431, D_0017110C);
-    mc_sprintf((char *)text_rsc_buffer, D_00171134, day_names[weekday], day + 1, ordinal_suffixes[suffix_index], month_names[month]);
+    mc_set_location(431, str_parse_c);
+    mc_sprintf((char *)text_rsc_buffer, str_the_of, day_names[weekday], day + 1, ordinal_suffixes[suffix_index], month_names[month]);
     return (iptr)text_rsc_buffer;
 }
 
@@ -483,13 +483,13 @@ iptr macro_dbl_brotherhood_building(void)
             }
         }
     }
-    return (iptr)D_00171146;
+    return (iptr)str_nowhere;
 }
 
 iptr macro_dbp_codeword(void)
 {
-    mc_set_location(454, D_0017110C);
-    mc_sprintf((char *)text_rsc_buffer, D_0017114E, codeword_first_words[(player_character->codeword >> 4)], codeword_second_words[((int)(unsigned char)(player_character->codeword & 15))]);
+    mc_set_location(454, str_parse_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_s_s_2, codeword_first_words[(player_character->codeword >> 4)], codeword_second_words[((int)(unsigned char)(player_character->codeword & 15))]);
     return (iptr)text_rsc_buffer;
 }
 
@@ -701,7 +701,7 @@ iptr macro_god_local_god(void)
         if (temple != 0 && temple->parent != 0) return (iptr)temple->parent->name;
         if (temple != 0) return (iptr)temple->name;
     } else {
-        region_temple = (struct faction *)faction_find((int)(short)*(short *)(D_0017C912 + (((int)(unsigned char)current_region) << 2)));
+        region_temple = (struct faction *)faction_find((int)(short)*(short *)(str_j + (((int)(unsigned char)current_region) << 2)));
         if (region_temple != 0) return (iptr)region_temple->parent->name;
     }
     return text_blank;
@@ -728,8 +728,8 @@ iptr macro_tim_time(void)
     minute_of_day = ((unsigned)game_minutes) % 1440;
     hour = minute_of_day / 60;
     minute = minute_of_day % 60;
-    mc_set_location(728, D_0017110C);
-    mc_sprintf((char *)text_rsc_buffer, D_00171154, hour, minute);
+    mc_set_location(728, str_parse_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_d_d_2, hour, minute);
     return (iptr)text_rsc_buffer;
 }
 
@@ -740,8 +740,8 @@ iptr macro_hea_endurance_modifier(void)
 
 iptr macro_hs_held_soul(void)
 {
-    if (scratch_current_object->children == 0) return (iptr)D_0017115C;
-    if (scratch_current_object->children->image >= 43) return (iptr)D_00171164;
+    if (scratch_current_object->children == 0) return (iptr)str_nothing;
+    if (scratch_current_object->children->image >= 43) return (iptr)str_humanoid;
     return (iptr)monster_names[scratch_current_object->children->image];
 }
 
@@ -837,11 +837,11 @@ iptr macro_kg_weight(void)
 
     weight = object_weight(scratch_current_object);
     if ((weight & 3) != 0) {
-        mc_set_location(847, D_0017110C);
-        mc_sprintf((char *)text_rsc_buffer, D_0017116D, weight >> 2, weight_fractions[(weight & 3)]);
+        mc_set_location(847, str_parse_c);
+        mc_sprintf((char *)text_rsc_buffer, str_fmt_ld_s, weight >> 2, weight_fractions[(weight & 3)]);
     } else {
-        mc_set_location(849, D_0017110C);
-        mc_sprintf((char *)text_rsc_buffer, D_00171173, weight >> 2);
+        mc_set_location(849, str_parse_c);
+        mc_sprintf((char *)text_rsc_buffer, str_fmt_ld_2, weight >> 2);
     }
     return (iptr)text_rsc_buffer;
 }
@@ -1122,8 +1122,8 @@ iptr macro_per_personality(void)
 
 iptr macro_po_potion_name(void)
 {
-    mc_set_location(1157, D_0017110C);
-    mc_sprintf((char *)text_rsc_buffer, D_00171178, D_00195ACC + 67);
+    mc_set_location(1157, str_parse_c);
+    mc_sprintf((char *)text_rsc_buffer, str_potion_of, D_00195ACC + 67);
     return (iptr)text_rsc_buffer;
 }
 
@@ -1152,7 +1152,7 @@ iptr macro_pen_penalty(void)
     if (((int)(signed char)scratch_190d16) == 2) {
         parse_expand(D_00184269, (iptr)scratch_buffer);
     } else {
-        mc_strncpy(scratch_buffer, (char *)penalty_texts[((int)(signed char)scratch_190d16)], 4, D_0017110C, 1182);
+        mc_strncpy(scratch_buffer, (char *)penalty_texts[((int)(signed char)scratch_190d16)], 4, str_parse_c, 1182);
     }
     return (iptr)scratch_buffer;
 }
@@ -1480,37 +1480,37 @@ iptr macro_rn_ruler_name(void)
 
 iptr macro_r1_commoners_change(void)
 {
-    if (player_character->reputation[0] < reputation_baseline) return (iptr)D_00171185;
-    if (player_character->reputation[0] > reputation_baseline) return (iptr)D_0017118B;
-    return (iptr)D_00171192;
+    if (player_character->reputation[0] < reputation_baseline) return (iptr)str_lower;
+    if (player_character->reputation[0] > reputation_baseline) return (iptr)str_higher;
+    return (iptr)str_unchanged;
 }
 
 iptr macro_r2_merchants_change(void)
 {
-    if (player_character->reputation[1] < D_00196D7E) return (iptr)D_00171185;
-    if (player_character->reputation[1] > D_00196D7E) return (iptr)D_0017118B;
-    return (iptr)D_00171192;
+    if (player_character->reputation[1] < D_00196D7E) return (iptr)str_lower;
+    if (player_character->reputation[1] > D_00196D7E) return (iptr)str_higher;
+    return (iptr)str_unchanged;
 }
 
 iptr macro_r3_scholars_change(void)
 {
-    if (player_character->reputation[2] < D_00196D80) return (iptr)D_00171185;
-    if (player_character->reputation[2] > D_00196D80) return (iptr)D_0017118B;
-    return (iptr)D_00171192;
+    if (player_character->reputation[2] < D_00196D80) return (iptr)str_lower;
+    if (player_character->reputation[2] > D_00196D80) return (iptr)str_higher;
+    return (iptr)str_unchanged;
 }
 
 iptr macro_r4_nobility_change(void)
 {
-    if (player_character->reputation[3] < D_00196D82) return (iptr)D_00171185;
-    if (player_character->reputation[3] > D_00196D82) return (iptr)D_0017118B;
-    return (iptr)D_00171192;
+    if (player_character->reputation[3] < D_00196D82) return (iptr)str_lower;
+    if (player_character->reputation[3] > D_00196D82) return (iptr)str_higher;
+    return (iptr)str_unchanged;
 }
 
 iptr macro_r5_underworld_change(void)
 {
-    if (player_character->reputation[4] < D_00196D84) return (iptr)D_00171185;
-    if (player_character->reputation[4] > D_00196D84) return (iptr)D_0017118B;
-    return (iptr)D_00171192;
+    if (player_character->reputation[4] < D_00196D84) return (iptr)str_lower;
+    if (player_character->reputation[4] > D_00196D84) return (iptr)str_higher;
+    return (iptr)str_unchanged;
 }
 
 iptr macro_spc_magicka(void)
@@ -1618,8 +1618,8 @@ iptr macro_wdm_weapon_damage(void)
     damage_max = material_bonus + ((int)(short)*(short *)(weapon_damage_max + (weapon_index << 2)));
     if (damage_min < 0) damage_min = 0;
     if (damage_max < 0) damage_max = 0;
-    mc_set_location(1687, D_0017110C);
-    mc_sprintf((char *)text_rsc_buffer, D_0017119C, damage_min, damage_max);
+    mc_set_location(1687, str_parse_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_d_d_3, damage_min, damage_max);
     return (iptr)text_rsc_buffer;
 }
 
@@ -1634,7 +1634,7 @@ iptr macro_wpn_poison(void)
 {
     struct disease *poison;
 
-    if (scratch_current_object->children == 0) return (iptr)D_0017115C;
+    if (scratch_current_object->children == 0) return (iptr)str_nothing;
     poison = &scratch_current_object->children->data.disease;
     return *(int *)(D_00182F92 + (poison->id << 2));
 }
@@ -1842,16 +1842,16 @@ void parse_item_name(struct item *item, char *out)
 
     i = 0;
     if (item->enchantments[0].type == 26) {
-        mc_strncpy((char *)text_rsc_buffer, item->name, 2048, D_0017110C, 1967);
+        mc_strncpy((char *)text_rsc_buffer, item->name, 2048, str_parse_c, 1967);
         return;
     }
     if (((int)(unsigned short)(item->item_flags & 32)) == 0) {
-        mc_strncpy((char *)text_rsc_buffer, item_templates[((int)(short)*(short *)(((char *)item_group_templates[item->group] + (item->index * 2))))].name, 2048, D_0017110C, 1973);
+        mc_strncpy((char *)text_rsc_buffer, item_templates[((int)(short)*(short *)(((char *)item_group_templates[item->group] + (item->index * 2))))].name, 2048, str_parse_c, 1973);
         return;
     }
     while (item->name[i] != 0) {
         if (((int)(unsigned char)item->name[i]) == 37) {
-            mc_strncpy(out, item_templates[((int)(short)*(short *)(((char *)item_group_templates[item->group] + (item->index * 2))))].name, 4, D_0017110C, 1981);
+            mc_strncpy(out, item_templates[((int)(short)*(short *)(((char *)item_group_templates[item->group] + (item->index * 2))))].name, 4, str_parse_c, 1981);
             out += strlen(out);
             i += 3;
         } else {
@@ -1870,9 +1870,9 @@ void parse_rsc_text(int id, int flags, int width)
     saved_file = *(short *)text_rsc_file;
     *(int *)text_rsc_file = text_rsc_main_file;
     text = (char *)text_rsc_load((int)(short)*(short *)&id, (int)(short)*(short *)&flags, (int)(short)*(short *)&width);
-    mc_strncpy((char *)text_rsc_buffer, text, 2048, D_0017110C, 2003);
+    mc_strncpy((char *)text_rsc_buffer, text, 2048, str_parse_c, 2003);
     if (text != 0 && text != (char *)(iptr)-1751672937) {
-        mc_free(text, D_0017110C, 2004);
+        mc_free(text, str_parse_c, 2004);
         text = (char *)(iptr)-1751672937;
     }
     *(int *)text_rsc_file = (int)(short)saved_file;
@@ -1886,9 +1886,9 @@ void parse_rsc_text_copy(int id, char *out)
     saved_file = *(short *)text_rsc_file;
     *(int *)text_rsc_file = text_rsc_main_file;
     text = (char *)text_rsc_load((int)(short)*(short *)&id, 0, 0);
-    mc_strncpy(out, text, 4, D_0017110C, 2034);
+    mc_strncpy(out, text, 4, str_parse_c, 2034);
     if (text != 0 && text != (char *)(iptr)-1751672937) {
-        mc_free(text, D_0017110C, 2035);
+        mc_free(text, str_parse_c, 2035);
         text = (char *)(iptr)-1751672937;
     }
     *(int *)text_rsc_file = (int)(short)saved_file;

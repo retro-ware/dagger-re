@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00175970[];        /* __FILE__ */
+extern char str_disease_c[];        /* __FILE__ */
 extern unsigned char vampire_spells[];
 extern unsigned char D_001940D8;
 extern struct record *player_entity;
@@ -88,7 +88,7 @@ void disease_become_vampire(void)
     o2->flags = 3;
     p = &o1->data.disease;
     p->id = 100;
-    mc_memcpy(&o2->data.career, player_class, 74, D_00175970, 407, 4);
+    mc_memcpy(&o2->data.career, player_class, 74, str_disease_c, 407, 4);
     for (i = 0; i < 8; i++) {
         if (i == 1)
             continue;

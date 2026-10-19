@@ -16,8 +16,8 @@ extern unsigned char key_down_lshift;
 extern unsigned char key_down_x;
 extern unsigned char key_down_b;
 extern unsigned char key_down_alt;
-extern char D_00170E38[];        /* __FILE__ */
-extern char D_00170E3F[];
+extern char str_keys_c[];        /* __FILE__ */
+extern char str_cheat_code_entered[];
 extern unsigned char player_environment;
 extern char *D_0018323C;
 extern char *D_00183240;
@@ -88,7 +88,7 @@ extern short steer_weight_down;
 extern short steer_weight_right;
 extern short steer_weight_left;
 extern short steer_weight_up;
-extern char *D_0017D1CA[];
+extern char *str_t_3[];
 extern char *D_0017D1EE;
 extern unsigned char key_down[];
 extern int joystick_x;
@@ -151,7 +151,7 @@ void keys_world_actions(void)
         o = player_character->equipped[(weapon_active_hand ^ 1) ? 21 : 19];
         if (o == 0 || o->data.item.group == 3) {
             weapon_active_hand ^= 1;
-            mc_set_location(96, D_00170E38);
+            mc_set_location(96, str_keys_c);
             mc_sprintf(((char *)text_buffer), D_0018323C, weapon_active_hand ? D_00183240 : D_00183244);
             D_00195F2E = 20;
             D_0012B508 = 146;
@@ -224,7 +224,7 @@ void keys_world_actions(void)
     if (key_down_ctrl && key_pressed_once(67) && cheat_mode)
         player_character->gold += 5000;
     if (cheat_flags != saved)
-        hud_message_add(D_00170E3F);
+        hud_message_add(str_cheat_code_entered);
     if (key_down_minus && cheat_mode)
         cheat_raise_reputation();
     if (key_down_equals && cheat_mode)
@@ -262,8 +262,8 @@ void keys_nop(void)
 void interaction_mode_cycle(int step)
 {
     interaction_mode = (interaction_mode + step) & 3;
-    mc_set_location(231, D_00170E38);
-    mc_sprintf(((char *)text_buffer), D_0017D1EE, D_0017D1CA[interaction_mode]);
+    mc_set_location(231, str_keys_c);
+    mc_sprintf(((char *)text_buffer), D_0017D1EE, str_t_3[interaction_mode]);
     hud_status_set(((char *)text_buffer));
 }
 

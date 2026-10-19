@@ -4,9 +4,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176E44[];
-extern char D_00176E4D[];
-extern char D_00176E70[];
+extern char str_object_c[];
+extern char str_allocating_memory_for_the_maps[];
+extern char str_unable_to_allocate_object_memory[];
 extern int next_record_id;
 extern char scratch_190be4[];
 extern signed char scratch_190ce4[];
@@ -92,8 +92,8 @@ void object_heap_init(void)
         }
     }
     object_heap_free = object_heap_size;
-    mc_set_location(55, D_00176E44);
-    func_000A148C(D_00176E4D, object_heap_size);
+    mc_set_location(55, str_object_c);
+    func_000A148C(str_allocating_memory_for_the_maps, object_heap_size);
     mem_pool_init((iptr)&object_heap, object_heap_size);
     (location_object = object_alloc(0, 0, REC_SIZEOF(struct location)))->type = 1;
     location_object->image = 65535;
@@ -160,13 +160,13 @@ struct record *object_alloc(struct record *after, struct record *source, int dat
     size = data_size + RECORD_HEADER_SIZE;
     object_heap_free -= size + MEM_BLOCK_HEADER_SIZE;
     object = (struct record *)mem_pool_alloc((iptr)&object_heap, size);
-    if (object == 0) fatal_error(D_00176E70);
+    if (object == 0) fatal_error(str_unable_to_allocate_object_memory);
     if (source != 0) {
-        mc_memcpy(object, source, RECORD_LINKS_OFFSET, D_00176E44, 163, 4);
-        mc_memcpy(&object->data, &source->data, size - RECORD_HEADER_SIZE, D_00176E44, 164, 4);
-        mc_memset(&object->next, 0, RECORD_LINKS_SIZE, D_00176E44, 165, 4);
+        mc_memcpy(object, source, RECORD_LINKS_OFFSET, str_object_c, 163, 4);
+        mc_memcpy(&object->data, &source->data, size - RECORD_HEADER_SIZE, str_object_c, 164, 4);
+        mc_memset(&object->next, 0, RECORD_LINKS_SIZE, str_object_c, 165, 4);
     } else {
-        mc_memset(object, 0, size, D_00176E44, 169, 4);
+        mc_memset(object, 0, size, str_object_c, 169, 4);
         object->id = object_new_id(1);
     }
     if (after != 0) object_insert_after(after, object);
@@ -191,8 +191,8 @@ struct record *object_clone(struct record *object)
     block = (struct mem_block *)((char *)object - MEM_BLOCK_HEADER_SIZE);
     size = block->size;
     clone = object_create_child(object->parent, 0, size - RECORD_HEADER_SIZE);
-    mc_memcpy(clone, object, RECORD_LINKS_OFFSET, D_00176E44, 203, 4);
-    mc_memcpy(&clone->data, &object->data, size - RECORD_HEADER_SIZE, D_00176E44, 204, 4);
+    mc_memcpy(clone, object, RECORD_LINKS_OFFSET, str_object_c, 203, 4);
+    mc_memcpy(&clone->data, &object->data, size - RECORD_HEADER_SIZE, str_object_c, 204, 4);
     return clone;
 }
 
@@ -461,7 +461,7 @@ struct record *object_create_in_block(struct record *parent, int type, int data_
     object->pad13 = pad13;
     object->id = location_object->id + ((int)(unsigned short)(current_location->object_counter)++);
     if (object->id == (-1016397758)) {
-        mc_memcpy(object_debug_watch_copy, object, RECORD_HEADER_SIZE, D_00176E44, 634, 4);
+        mc_memcpy(object_debug_watch_copy, object, RECORD_HEADER_SIZE, str_object_c, 634, 4);
         object_debug_watch = (iptr)object;
     }
     return object;

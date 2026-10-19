@@ -3,7 +3,7 @@
 #include "clib.h"
 struct flags8 { unsigned char b0:2; unsigned char b2:1; };
 extern char D_0012B508;
-extern char D_0017704C[];       /* __FILE__ */
+extern char str_inven_c[];       /* __FILE__ */
 extern char *D_001832A4;
 extern unsigned char D_001860DA[];
 extern unsigned char D_00186104[];
@@ -54,7 +54,7 @@ void inv_draw_left_list(struct rect *rects)
     struct record *object;
 
     inv_left_count = D_001AA586 = 0;
-    mc_memset((char *)inv_left_rows, 0, 20, D_0017704C, 1627, 20);
+    mc_memset((char *)inv_left_rows, 0, 20, str_inven_c, 1627, 20);
     if (inv_left_container->type == 2 && inv_left_container != wagon_container) {
         inv_draw_item_cell(inv_left_container, 0, rects);
         D_001AA578 = inv_left_container;
@@ -76,7 +76,7 @@ void inv_draw_right_list(struct rect *rects)
     struct record *object;
 
     inv_right_count = D_001AA588 = 0;
-    mc_memset((char *)inv_right_rows, 0, 20, D_0017704C, 1655, 20);
+    mc_memset((char *)inv_right_rows, 0, 20, str_inven_c, 1655, 20);
     if (inv_right_container != inv_right_container_base) {
         inv_draw_item_cell(inv_right_container, 0, rects);
         D_001AA558 = inv_right_container;
@@ -103,7 +103,7 @@ void func_00095EDB(void)
         return;
     gold_add(D_001AA454);
     D_0012B508 = 144;
-    mc_set_location(1688, D_0017704C);
+    mc_set_location(1688, str_inven_c);
     mc_sprintf(((char *)text_buffer), D_001832A4, D_001AA454);
     msgbox_show_string(((char *)text_buffer), 1);
 }

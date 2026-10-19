@@ -13,14 +13,14 @@ extern signed char D_0012B508;
 extern signed char key_down_esc;
 extern iptr D_00147954;
 extern char D_001704CC[];
-extern char D_001704D7[];
-extern char D_001704E4[];
-extern char D_001704F2[];
-extern char D_00170500[];
-extern char D_0017050E[];
-extern char D_00170522[];
-extern char D_0017053F[];
-extern char D_0017054A[];
+extern char str_mapsave[];
+extern char str_maptable[];
+extern char str_mapnames[];
+extern char str_mapditem[];
+extern char str_invalid_dungeon_id[];
+extern char str_mappitem[];
+extern char str_blocks_bsa[];
+extern char str_invalid_map_data[];
 extern struct rect tavern_buttons[];
 extern signed char text_buffer[];
 extern signed char tavern_state;
@@ -107,7 +107,7 @@ void region_locations_load_discovered(int region)
     saved = (signed char *)scratch_buffer;
     name = (iptr)mc_malloc(4096, D_001704CC, 57);
     mc_set_location(59, D_001704CC);
-    mc_sprintf((char *)name, D_001704D7, region);
+    mc_sprintf((char *)name, str_mapsave, region);
     archive = archive_open(cfg_mapsave_file, 0, 1);
     record = archive_find_record(archive, name, 12);
     archive_read_record(archive, record, (iptr)saved);
@@ -143,7 +143,7 @@ void region_locations_save_discovered(int region)
         if ((location->x_type_flags & 0x80000000) != 0) *saved |= 128;
     }
     mc_set_location(97, D_001704CC);
-    mc_sprintf((char *)name, D_001704D7, region);
+    mc_sprintf((char *)name, str_mapsave, region);
     archive = archive_open(cfg_mapsave_file, 0, 1);
     record = archive_find_record(archive, name, 12);
     archive_write_record(archive, record, (iptr)scratch_buffer);
@@ -169,7 +169,7 @@ void maploads_load_region(int region)
     }
     region_locations_region = region;
     mc_set_location(127, D_001704CC);
-    mc_sprintf((char *)text_buffer, D_001704E4, region);
+    mc_sprintf((char *)text_buffer, str_maptable, region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     size = archive_record_size(maps_bsa, record);
     region_location_count = ((unsigned)size) / 17;
@@ -197,7 +197,7 @@ void region_load_location_names(int region)
     int unused3;
 
     mc_set_location(170, D_001704CC);
-    mc_sprintf((char *)text_buffer, D_001704F2, region);
+    mc_sprintf((char *)text_buffer, str_mapnames, region);
     *(iptr *)&D_00196A7C = D_00147954;
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     archive_read_record(maps_bsa, record, D_00147954);
@@ -238,7 +238,7 @@ void location_load_dungeon(struct loaded_location *location, int dungeon_index)
 
     table = (struct dungeon_entry *)scratch_buffer;
     mc_set_location(248, D_001704CC);
-    mc_sprintf((char *)text_buffer, D_00170500, (int)(unsigned char)current_region);
+    mc_sprintf((char *)text_buffer, str_mapditem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
     lseek(maps_bsa, offset, 0);
@@ -265,7 +265,7 @@ void location_load_dungeon_by_id(struct loaded_location *location, int id)
 
     entry = (struct dungeon_entry *)scratch_buffer;
     mc_set_location(287, D_001704CC);
-    mc_sprintf((char *)text_buffer, D_00170500, (int)(unsigned char)current_region);
+    mc_sprintf((char *)text_buffer, str_mapditem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
     lseek(maps_bsa, offset, 0);
@@ -274,7 +274,7 @@ void location_load_dungeon_by_id(struct loaded_location *location, int id)
     for (i = 0; i < dungeon_count; i++, entry++) {
         if (entry->id == id) break;
     }
-    if (i == dungeon_count) fatal_error(D_0017050E);
+    if (i == dungeon_count) fatal_error(str_invalid_dungeon_id);
     lseek(maps_bsa, entry->offset, 1);
     location->index = i;
     location_read_record(location, maps_bsa);
@@ -294,7 +294,7 @@ void location_load_exterior(struct loaded_location *location, int location_index
     int location_offset;
 
     mc_set_location(361, D_001704CC);
-    mc_sprintf((char *)text_buffer, D_00170522, (int)(unsigned char)current_region);
+    mc_sprintf((char *)text_buffer, str_mappitem, (int)(unsigned char)current_region);
     record = archive_find_record(maps_bsa, (iptr)text_buffer, 13);
     offset = archive_record_offset(maps_bsa, record);
     lseek(maps_bsa, (location_index << 2) + offset, 0);
@@ -433,7 +433,7 @@ void town_load_blocks(void)
     building = current_location->buildings;
     town_building_counter = 0;
     rmb_block = (struct rmb_file *)D_00147954;
-    blocks_bsa = archive_open(D_0017053F, 0, 0);
+    blocks_bsa = archive_open(str_blocks_bsa, 0, 0);
     switch (current_location->kind) {
     case 0:
         if ((current_location->width * current_location->height) == 64) {
@@ -465,7 +465,7 @@ void town_load_blocks(void)
                         building_object->building_type = building->type;
                         building++;
                     } else {
-                        fatal_error(D_0017054A);
+                        fatal_error(str_invalid_map_data);
                     }
                 }
                 if ((building_object->flags & 8) != 0) building_object->flags &= ~0x8;

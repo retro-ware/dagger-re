@@ -2,9 +2,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00175EAA[];        /* __FILE__ */
-extern char D_00176089[];
-extern char D_00176096[];
+extern char str_guilds_c[];        /* __FILE__ */
+extern char str_o0a0al00_qbn[];
+extern char str_l0a01l00_qbn[];
 extern int trade_price_scale;
 extern unsigned char player_environment;
 extern struct record *player_entity;
@@ -37,14 +37,14 @@ void guild_check_invitations(void)
     if (player_character->thieves_invite_count != 100 && player_character->thieves_invite_time != 0 && ((unsigned)player_character->thieves_invite_time) < game_minutes && ((int)player_environment) == 1) {
         player_character->thieves_invite_count = 100;
         player_character->thieves_invite_time = 0;
-        mc_strncpy(D_001961F5, D_00176089, 13, D_00175EAA, 1233);
+        mc_strncpy(D_001961F5, str_o0a0al00_qbn, 13, str_guilds_c, 1233);
     }
     if (player_character->brotherhood_invite_count == 100 || player_character->brotherhood_invite_time == 0 || ((unsigned)player_character->brotherhood_invite_time) >= game_minutes || ((int)player_environment) != 1) {
         return;
     }
     player_character->brotherhood_invite_count = 100;
     player_character->brotherhood_invite_time = 0;
-    mc_strncpy(D_001961F5, D_00176096, 13, D_00175EAA, 1243);
+    mc_strncpy(D_001961F5, str_l0a01l00_qbn, 13, str_guilds_c, 1243);
 }
 
 void guild_teleport(void)

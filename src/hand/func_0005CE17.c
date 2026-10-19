@@ -4,7 +4,7 @@
 
 extern char xn_gfx_row_offset[];
 extern iptr screen_buffer;
-extern char D_00175898[];
+extern char str_icons_c[];
 extern char D_00185CDC[];
 extern int spell_points_bonus;
 extern struct image *hud_bar_image;
@@ -38,7 +38,7 @@ void hud_draw(void)
     struct image *image;
 
     if ((game_settings->view_flags & 1) == 0) {
-        mc_memcpy(*(char **)&screen_buffer + ((int *)xn_gfx_row_offset)[IMG(((char *)&hud_bar_image))->y], IMG(((char *)&hud_bar_image))->pixels, IMG(((char *)&hud_bar_image))->data_size, D_00175898, 124, 4);
+        mc_memcpy(*(char **)&screen_buffer + ((int *)xn_gfx_row_offset)[IMG(((char *)&hud_bar_image))->y], IMG(((char *)&hud_bar_image))->pixels, IMG(((char *)&hud_bar_image))->data_size, str_icons_c, 124, 4);
         xn_draw_put_rect(131, 154, 47, 22, *(char **)&hud_mode_icons + ((int *)D_00185CDC)[interaction_mode], 0);
         overlay = hud_portrait_overlay_index();
         if (overlay != -1) {

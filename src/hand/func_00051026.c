@@ -20,11 +20,11 @@ extern unsigned char key_down_up;
 extern unsigned char key_down_down;
 extern char *screen_buffer;
 extern struct bits8 xn_mouse_cursor_drawn;
-extern char D_0017539B[];        /* __FILE__ */
-extern char D_001753A6[];
-extern char D_001753B3[];
-extern char D_001753C0[];
-extern char D_001753CD[];
+extern char str_question_c[];        /* __FILE__ */
+extern char str_chgn00i0_img[];
+extern char str_scrl00i0_gfx[];
+extern char str_scrl01i0_gfx[];
+extern char str_class_cfg_3[];
 extern unsigned char class_answer_kinds[][3];
 extern unsigned char D_00185284[];
 extern unsigned char D_0018528E[];
@@ -62,19 +62,19 @@ int class_questions_run(void)
     unsigned char rgb[4];
 
     tries = 10;
-    mc_memset(screen_buffer, 0, 64000, D_0017539B, 79, 4);
-    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_0017539B, 80, 4);
-    mc_memset(class_questions_asked, 0, 10, D_0017539B, 81, 10);
-    mc_memset(class_answer_counts, 0, 3, D_0017539B, 82, 3);
+    mc_memset(screen_buffer, 0, 64000, str_question_c, 79, 4);
+    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_question_c, 80, 4);
+    mc_memset(class_questions_asked, 0, 10, str_question_c, 81, 10);
+    mc_memset(class_answer_counts, 0, 3, str_question_c, 82, 3);
     rgb[0] = rgb[1] = rgb[2] = 0;
     xn_mouse_cursor_drawn.b0 = 0;
-    disk_read_file(D_001753A6, (iptr)scratch_buffer);
+    disk_read_file(str_chgn00i0_img, (iptr)scratch_buffer);
     for (sel = 0; sel < 768; sel++)
         (sel + scratch_buffer)[64000] <<= 2;
     xn_pal_set_all_8bit(scratch_buffer + 64000);
-    mc_memcpy(screen_buffer, scratch_buffer, 64000, D_0017539B, 90, 4);
-    h.a = disk_read_file(D_001753B3, 0);
-    h.b = disk_read_file(D_001753C0, 0);
+    mc_memcpy(screen_buffer, scratch_buffer, 64000, str_question_c, 90, 4);
+    h.a = disk_read_file(str_scrl00i0_gfx, 0);
+    h.b = disk_read_file(str_scrl01i0_gfx, 0);
     while (tries-- != 0) {
         done = 0;
         xn_mouse_cursor_drawn.b0 = 0;
@@ -99,30 +99,30 @@ int class_questions_run(void)
                 xn_pal_set_range_8bit(rgb, D_0018528E[sel], 1);
                 done = 1;
             }
-            mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_0017539B, 122, 4);
+            mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_question_c, 122, 4);
         }
     }
     xn_gfx_clear(0);
-    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_0017539B, 127, 4);
+    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_question_c, 127, 4);
     palette_restore();
     sel = class_result_ids[class_question_pick_class()];
     if (chargen_popup_choice(sel + 2100, 4, 5, 0, 21, 49) != 0)
         sel = -1;
     if (sel != -1) {
-        mc_set_location(134, D_0017539B);
-        mc_sprintf(((char *)text_buffer), D_001753CD, sel);
+        mc_set_location(134, str_question_c);
+        mc_sprintf(((char *)text_buffer), str_class_cfg_3, sel);
         disk_read_file(((char *)text_buffer), (iptr)player_class);
     }
     if (h.a != 0 && h.a != (char *)(iptr)-1751672937) {
-        mc_free(h.a, D_0017539B, 138);
+        mc_free(h.a, str_question_c, 138);
         h.a = (char *)(iptr)-1751672937;
     }
     if (h.b != 0 && h.b != (char *)(iptr)-1751672937) {
-        mc_free(h.b, D_0017539B, 139);
+        mc_free(h.b, str_question_c, 139);
         h.b = (char *)(iptr)-1751672937;
     }
-    mc_memset(screen_buffer, 0, 64000, D_0017539B, 140, 4);
-    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, D_0017539B, 141, 4);
+    mc_memset(screen_buffer, 0, 64000, str_question_c, 140, 4);
+    mc_memcpy((void *)DOS_LOW(0xA0000), screen_buffer, 64000, str_question_c, 141, 4);
     palette_restore();
     return sel;
 }

@@ -4,8 +4,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_001706B6[];
-extern char D_001706BD[];
+extern char str_song_c[];
+extern char str_fmt_s_ld[];
 extern char D_001706CA[];
 extern char D_001706CD[];
 extern iptr D_00179EA8[];
@@ -38,12 +38,12 @@ void song_generate(int skip)
     n = rand();
     srand(n);
     parse_rsc_text(850, 0, 0);
-    mc_strncpy((char *)text_buffer, (char *)text_rsc_buffer, 160, D_001706B6, 42);
+    mc_strncpy((char *)text_buffer, (char *)text_rsc_buffer, 160, str_song_c, 42);
     parse_rsc_text(851, 0, 0);
-    func_000A1054((char *)text_buffer, (char *)text_rsc_buffer, D_001706B6, 44, 160);
-    mc_set_location(45, D_001706B6);
-    mc_sprintf((char *)text_rsc_buffer, D_001706BD, (iptr)text_buffer, n);
-    mc_strncpy((char *)((iptr)scratch_buffer + 50000), (char *)text_rsc_buffer, 4, D_001706B6, 46);
+    func_000A1054((char *)text_buffer, (char *)text_rsc_buffer, str_song_c, 44, 160);
+    mc_set_location(45, str_song_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_s_ld, (iptr)text_buffer, n);
+    mc_strncpy((char *)((iptr)scratch_buffer + 50000), (char *)text_rsc_buffer, 4, str_song_c, 46);
     for (n = 0; n < 26; n++) {
         *(short *)(scratch_190d64 + (n * 2)) = rand_range(0, 21) + 900;
     }
@@ -51,10 +51,10 @@ void song_generate(int skip)
     pattern = (unsigned char *)xn_str_skip_fields((char *)D_00179EA8[0], 33, n);
     while (*pattern != 33) {
         parse_rsc_text((int)(short)D_00190CA2[*pattern++], 0, 0);
-        func_000A1054((char *)((iptr)scratch_buffer + 50000), (char *)text_rsc_buffer, D_001706B6, 56, 4);
-        func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CA, D_001706B6, 57, 4);
+        func_000A1054((char *)((iptr)scratch_buffer + 50000), (char *)text_rsc_buffer, str_song_c, 56, 4);
+        func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CA, str_song_c, 57, 4);
     }
-    func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CD, D_001706B6, 59, 4);
+    func_000A1054((char *)((iptr)scratch_buffer + 50000), D_001706CD, str_song_c, 59, 4);
 }
 
 void song_init_heroes(int player_hero)

@@ -2,8 +2,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176844[];
-extern char D_0017685B[];
+extern char str_moninit_c[];
+extern char str_ascr_anc[];
 extern signed char text_buffer[];
 extern iptr D_00190704[];
 extern int monster_bsa_handle;
@@ -24,8 +24,8 @@ void monster_reload_anim_cb(struct record *object)
     career = &monster_char->career;
     anim = (struct monster_anim *)((char *)career + 74);
     script_offset = (int)(anim->anim_script_pos - anim->anim_script);
-    mc_set_location(196, D_00176844);
-    mc_sprintf((char *)text_buffer, D_0017685B, monster_char->ascr_record);
+    mc_set_location(196, str_moninit_c);
+    mc_sprintf((char *)text_buffer, str_ascr_anc, monster_char->ascr_record);
     record_index = archive_find_record(monster_bsa_handle, text_buffer, 8);
     *(char * *)&D_00190704[monster_char->anim_slot] = anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0);
     if (anim->anim_script_pos == 0) return;

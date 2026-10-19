@@ -1,9 +1,9 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00028940 */
 #include <dos.h>
 #include "clib.h"
-extern char D_001707AE[];
-extern char D_001707D0[];
-extern char D_001707DA[];
+extern char str_automap_c[];
+extern char str_at_atf[];
+extern char str_at_amf[];
 extern signed char text_buffer[];
 extern char arena2_path[];
 extern unsigned game_minutes;
@@ -19,8 +19,8 @@ void automap_purge_old_files(void)
     unsigned t;
     int fh;
 
-    mc_set_location(996, D_001707AE);
-    mc_sprintf(((char *)text_buffer), D_001707D0, arena2_path);
+    mc_set_location(996, str_automap_c);
+    mc_sprintf(((char *)text_buffer), str_at_atf, arena2_path);
     rc = func_000A13DA(((char *)text_buffer), 0, &ff);
     while (rc == 0) {
         fh = disk_open_data(ff.name);
@@ -30,8 +30,8 @@ void automap_purge_old_files(void)
             unlink(((char *)text_buffer));
         rc = func_000A13F7(&ff);
     }
-    mc_set_location(1008, D_001707AE);
-    mc_sprintf(((char *)text_buffer), D_001707DA, arena2_path);
+    mc_set_location(1008, str_automap_c);
+    mc_sprintf(((char *)text_buffer), str_at_amf, arena2_path);
     rc = func_000A13DA(((char *)text_buffer), 0, &ff);
     while (rc == 0) {
         fh = disk_open_data(ff.name);

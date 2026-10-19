@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern short font_height;
-extern char D_00176E38[];
+extern char str_picklist_c[];
 
 extern int font_text_width(char *);
 
@@ -23,16 +23,16 @@ void picklist_free(struct picklist *list)
 {
     if (list->framed != 0) {
         if (list->list_background != 0 && (iptr)list->list_background != (-1751672937)) {
-            mc_free(list->list_background, D_00176E38, 110);
+            mc_free(list->list_background, str_picklist_c, 110);
             list->list_background = (char *)(iptr)-1751672937;
         }
         if (list->bar_background != 0 && (iptr)list->bar_background != (-1751672937)) {
-            mc_free(list->bar_background, D_00176E38, 111);
+            mc_free(list->bar_background, str_picklist_c, 111);
             list->bar_background = (char *)(iptr)-1751672937;
         }
     }
     if (list->entries != 0 && (iptr)list->entries != (-1751672937)) {
-        mc_free(list->entries, D_00176E38, 114);
+        mc_free(list->entries, str_picklist_c, 114);
         list->entries = (struct picklist_entry *)(iptr)-1751672937;
     }
     list->framed = 0;

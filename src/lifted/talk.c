@@ -20,16 +20,16 @@ extern short xn_gfx_clip_left;
 extern short xn_gfx_clip_right;
 extern iptr screen_buffer;
 extern iptr D_00147954;
-extern char D_001703F0[];
-extern char D_001703F7[];
+extern char str_talk_c[];
+extern char str_no_response[];
 extern char D_0017041B[];
-extern char D_0017041C[];
-extern char D_0017042A[];
+extern char str_previous_list[];
+extern char str_any[];
 extern signed char D_00178630[];
 extern unsigned char player_environment;
 extern char talk_faction_greetings[];
-extern char D_001799AE[];
-extern char D_001799B0[];
+extern char str_g_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w[];
+extern char str_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w_x[];
 extern short talk_question_attitude_mods[];
 extern char D_001799F2[];
 extern char talk_where_answers[];
@@ -231,9 +231,9 @@ void talk_update(void)
 
     if (talk_open(0) == 0) return;
     if (talk_redraw == 0) {
-        mc_memcpy((void *)screen_buffer, (void *)talk_saved_screen, 64000, D_001703F0, 324, 4);
+        mc_memcpy((void *)screen_buffer, (void *)talk_saved_screen, 64000, str_talk_c, 324, 4);
     } else {
-        mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_001703F0, 326, 4);
+        mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_talk_c, 326, 4);
     }
     if (talk_redraw != 0) talk_draw();
     if (key_down_up != 0) {
@@ -303,20 +303,20 @@ void talk_draw(void)
     xn_draw_image(4, 26, 107, 40, (char *)D_001965E4);
     if (talk_question_mode != 0) {
         for (offset = (talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].y0) * 320; ((talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].y1) * 320) >= offset; offset += 320) {
-            mc_memcpy((void *)((talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0) + (screen_buffer + offset)), (void *)((window_image + offset) + (talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0)), 107, D_001703F0, 417, 4);
+            mc_memcpy((void *)((talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0) + (screen_buffer + offset)), (void *)((window_image + offset) + (talk_buttons[((int)(unsigned char)talk_topic_tab) + 2].x0)), 107, str_talk_c, 417, 4);
         }
     }
     src_offset = ((int)(unsigned char)talk_question_mode) * 1070;
     for (offset = (talk_buttons[(int)(unsigned char)talk_question_mode].y0) * 320; ((talk_buttons[(int)(unsigned char)talk_question_mode].y1) * 320) >= offset; offset += 320, src_offset += 107) {
-        mc_memcpy((void *)((talk_buttons[(int)(unsigned char)talk_question_mode].x0) + (screen_buffer + offset)), (void *)(D_001965F8 + src_offset), 107, D_001703F0, 423, 4);
+        mc_memcpy((void *)((talk_buttons[(int)(unsigned char)talk_question_mode].x0) + (screen_buffer + offset)), (void *)(D_001965F8 + src_offset), 107, str_talk_c, 423, 4);
     }
     D_001966B7 = 1;
     if (((int)(unsigned char)talk_topic_tab) == 3) {
         parse_rsc_text(7211, 0, 0);
-        mc_strncpy(talk_key_text, (char *)text_rsc_buffer, 4, D_001703F0, 430);
+        mc_strncpy(talk_key_text, (char *)text_rsc_buffer, 4, str_talk_c, 430);
         parse_rsc_text(((int)(unsigned char)talk_tone) + 7212, 0, 0);
         D_00190D0F = 1;
-        mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, D_001703F0, 433);
+        mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 433);
         talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
         D_00190D0F = 0;
     } else {
@@ -329,7 +329,7 @@ void talk_draw(void)
                 if (talk_list_count == 0) break;
                 parse_rsc_text(((int)(unsigned char)talk_tone) + 7225, 0, 0);
                 D_00190D0F = 1;
-                mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, D_001703F0, 448);
+                mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 448);
                 talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
                 D_00190D0F = 0;
             }
@@ -342,13 +342,13 @@ void talk_draw(void)
                 parse_rsc_text(((int)(unsigned char)talk_tone) + 7212, 0, 0);
             }
             D_00190D0F = 1;
-            mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, D_001703F0, 461);
+            mc_strncpy((((char *)D_00147954) + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 461);
             talk_wrap_text((signed char *)(((char *)D_00147954) + 90000), 134, 10, 245, 45);
             D_00190D0F = 0;
         }
     }
     talk_draw_question(125, 10, 245, 45);
-    mc_memcpy((void *)talk_saved_screen, (void *)screen_buffer, 64000, D_001703F0, 469, 4);
+    mc_memcpy((void *)talk_saved_screen, (void *)screen_buffer, 64000, str_talk_c, 469, 4);
     talk_redraw = 0;
     srand(seed);
 }
@@ -369,7 +369,7 @@ void talk_start(struct record *npc)
         return;
     }
     if (npc->type == 53 && ((int)(unsigned short)(npc->image2 & 1)) != 0) {
-        hud_message_add(D_001703F7);
+        hud_message_add(str_no_response);
         return;
     }
     *(short *)talk_flags = 0;
@@ -390,7 +390,7 @@ void talk_start(struct record *npc)
     }
     text_macro_npc = talk_npc_record;
     talk_npc_faction = faction_find(talk_npc_record->faction_id);
-    talk_face_image = (iptr)mc_malloc(4096, D_001703F0, 530);
+    talk_face_image = (iptr)mc_malloc(4096, str_talk_c, 530);
     if (talk_npc_faction->type == 4) talk_load_face(talk_npc_faction->face);
     faction = talk_npc_faction;
     while (faction != 0) {
@@ -413,7 +413,7 @@ void talk_start(struct record *npc)
     if (talk_disposition < (-20)) {
         msgbox_show_rsc(7205, 1);
         if (talk_face_image != 0 && talk_face_image != (-1751672937)) {
-            mc_free((void *)talk_face_image, D_001703F0, 562);
+            mc_free((void *)talk_face_image, str_talk_c, 562);
             talk_face_image = -1751672937;
         }
         return;
@@ -522,9 +522,9 @@ int talk_ask_news(void)
     if (*(int *)talk_selected_row != 0) return 0;
     news = rumor_pick_news((int)(short)talk_npc_faction->id);
     if (news == 0) return 0;
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)news, 4, D_001703F0, 699);
+    mc_strncpy((char *)(D_00147954 + 90000), (char *)news, 4, str_talk_c, 699);
     D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)news, 4, D_001703F0, 701);
+    mc_strncpy((char *)(D_00147954 + 95000), (char *)news, 4, str_talk_c, 701);
     talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
     return 1;
 }
@@ -582,24 +582,24 @@ void talk_close(void)
         if (talk_npc_object->type == 53) talk_npc_object->image2 |= 1;
     }
     if (talk_face_image != 0 && talk_face_image != (-1751672937)) {
-        mc_free((void *)talk_face_image, D_001703F0, 760);
+        mc_free((void *)talk_face_image, str_talk_c, 760);
         talk_face_image = -1751672937;
     }
     D_00190D10 = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_001703F0, 762);
+        mc_free((void *)window_image, str_talk_c, 762);
         window_image = -1751672937;
     }
     if (D_001965E4 != 0 && D_001965E4 != (-1751672937)) {
-        mc_free((void *)D_001965E4, D_001703F0, 763);
+        mc_free((void *)D_001965E4, str_talk_c, 763);
         D_001965E4 = -1751672937;
     }
     if (talk_saved_screen != 0 && talk_saved_screen != (-1751672937)) {
-        mc_free((void *)talk_saved_screen, D_001703F0, 764);
+        mc_free((void *)talk_saved_screen, str_talk_c, 764);
         talk_saved_screen = -1751672937;
     }
     if (D_001965F8 != 0 && D_001965F8 != (-1751672937)) {
-        mc_free((void *)D_001965F8, D_001703F0, 765);
+        mc_free((void *)D_001965F8, str_talk_c, 765);
         D_001965F8 = -1751672937;
     }
     game_mode = 0;
@@ -733,17 +733,17 @@ int func_000164CD(void)
 void talk_say_text(int text_id)
 {
     parse_rsc_text(text_id, 0, 0);
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)text_rsc_buffer, 4, D_001703F0, 934);
+    mc_strncpy((char *)(D_00147954 + 90000), (char *)text_rsc_buffer, 4, str_talk_c, 934);
     D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)text_rsc_buffer, 4, D_001703F0, 936);
+    mc_strncpy((char *)(D_00147954 + 95000), (char *)text_rsc_buffer, 4, str_talk_c, 936);
     talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
 }
 
 void talk_say_string(iptr text)
 {
-    mc_strncpy((char *)(D_00147954 + 90000), (char *)text, 4, D_001703F0, 942);
+    mc_strncpy((char *)(D_00147954 + 90000), (char *)text, 4, str_talk_c, 942);
     D_001966BB = 1;
-    mc_strncpy((char *)(D_00147954 + 95000), (char *)text, 4, D_001703F0, 944);
+    mc_strncpy((char *)(D_00147954 + 95000), (char *)text, 4, str_talk_c, 944);
     talk_wrap_text((signed char *)(D_00147954 + 90000), 190, 66, 302, 191);
 }
 
@@ -777,7 +777,7 @@ void func_00016907(signed char *src, signed char *dest)
                 text_buffer[length] = 0;
                 in_word = 0;
                 length = in_word;
-                mc_strncpy(dest, (char *)func_000169D4((iptr)text_buffer), 4, D_001703F0, 1038);
+                mc_strncpy(dest, (char *)func_000169D4((iptr)text_buffer), 4, str_talk_c, 1038);
                 dest += strlen(dest);
             }
             *dest++ = *src++;
@@ -797,7 +797,7 @@ iptr func_000169D4(iptr word)
     count = rand_range(2, 4);
     *(signed char *)D_00191016 = 0;
     for (i = 0; i < count; i++) {
-        func_000A1054(D_00191016, (char *)parse_bio_answer_text((int)(unsigned short)D_001966A6), D_001703F0, 1059, 4);
+        func_000A1054(D_00191016, (char *)parse_bio_answer_text((int)(unsigned short)D_001966A6), str_talk_c, 1059, 4);
     }
     return (iptr)D_00191016;
 }
@@ -820,11 +820,11 @@ void talk_wrap_text(signed char *text, int left, int top, int right, int bottom)
     while (*text != 0) {
         word_width = talk_next_word(&text);
         if (((line_width + word_width) + left) < right) {
-            func_000A1054((char *)text_rsc_buffer, (char *)text_buffer, D_001703F0, 1108, 2048);
+            func_000A1054((char *)text_rsc_buffer, (char *)text_buffer, str_talk_c, 1108, 2048);
             line_width += word_width;
         } else {
             talk_add_line((iptr)text_rsc_buffer);
-            mc_strncpy((char *)text_rsc_buffer, (char *)text_buffer, 2048, D_001703F0, 1114);
+            mc_strncpy((char *)text_rsc_buffer, (char *)text_buffer, 2048, str_talk_c, 1114);
             line_width = word_width;
         }
     }
@@ -850,11 +850,11 @@ void talk_add_line(iptr line)
 {
     if (D_00190D0F != 0) {
         ((iptr *)talk_question_lines)[talk_question_line_count] = talk_alloc_line();
-        mc_strncpy((char *)((iptr *)talk_question_lines)[talk_question_line_count++], (char *)line, 4, D_001703F0, 1148);
+        mc_strncpy((char *)((iptr *)talk_question_lines)[talk_question_line_count++], (char *)line, 4, str_talk_c, 1148);
         return;
     }
     ((iptr *)talk_answer_lines)[talk_answer_line_count] = talk_alloc_line();
-    mc_strncpy((char *)((iptr *)talk_answer_lines)[talk_answer_line_count++], (char *)line, 4, D_001703F0, 1153);
+    mc_strncpy((char *)((iptr *)talk_answer_lines)[talk_answer_line_count++], (char *)line, 4, str_talk_c, 1153);
 }
 
 int talk_next_word(signed char **cursor)
@@ -886,10 +886,10 @@ iptr talk_alloc_line(void)
 
 void talk_init_text(void)
 {
-    if (D_001965A0 == 0) D_001965A0 = (iptr)mc_malloc(20480, D_001703F0, 1238);
-    if (D_001965C4 == 0) D_001965C4 = (iptr)mc_malloc(20480, D_001703F0, 1241);
-    mc_memset((void *)D_001965A0, 0, 20480, D_001703F0, 1243, 4);
-    mc_memset((void *)D_001965C4, 0, 20480, D_001703F0, 1244, 4);
+    if (D_001965A0 == 0) D_001965A0 = (iptr)mc_malloc(20480, str_talk_c, 1238);
+    if (D_001965C4 == 0) D_001965C4 = (iptr)mc_malloc(20480, str_talk_c, 1241);
+    mc_memset((void *)D_001965A0, 0, 20480, str_talk_c, 1243, 4);
+    mc_memset((void *)D_001965C4, 0, 20480, str_talk_c, 1244, 4);
     talk_text_pool_next = D_001965A0;
     *(iptr *)&talk_answer_lines = D_001965C4;
     talk_answer_line_count = 0;
@@ -898,8 +898,8 @@ void talk_init_text(void)
 
 void talk_clear_question(void)
 {
-    if (D_001965AC == 0) D_001965AC = (iptr)mc_malloc(20480, D_001703F0, 1257);
-    mc_memset((void *)D_001965AC, 0, 20480, D_001703F0, 1259, 4);
+    if (D_001965AC == 0) D_001965AC = (iptr)mc_malloc(20480, str_talk_c, 1257);
+    mc_memset((void *)D_001965AC, 0, 20480, str_talk_c, 1259, 4);
     *(iptr *)&talk_question_lines = D_001965AC;
     talk_question_line_count = 0;
 }
@@ -916,7 +916,7 @@ void talk_draw_place_list(void)
     talk_list_count = 0;
     if (talk_topic_tab == 0) {
         if (talk_list_count >= talk_list_top && talk_list_count <= talk_list_bottom) {
-            talk_list_draw_item((iptr)D_0017041C, 6, (int)(iptr)&*(signed char *)((char *)(iptr)((talk_list_count - talk_list_top) * 7) + 71), 96, 156);
+            talk_list_draw_item((iptr)str_previous_list, 6, (int)(iptr)&*(signed char *)((char *)(iptr)((talk_list_count - talk_list_top) * 7) + 71), 96, 156);
         }
         talk_list_count++;
         if (((int)(unsigned char)talk_location_category) == 14) {
@@ -931,7 +931,7 @@ void talk_draw_place_list(void)
                 name = building_name((iptr)talk_place_topics[i].building);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1300);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1300);
                 } else {
                     colour = 145;
                 }
@@ -1049,7 +1049,7 @@ L1776B:;
                     }
                     if (*(int *)talk_selected_row == talk_list_count) {
                         colour = 244;
-                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1448);
+                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1448);
                     } else {
                         colour = 145;
                     }
@@ -1072,7 +1072,7 @@ L1790A:;
                     }
                     if (*(int *)talk_selected_row == talk_list_count) {
                         colour = 244;
-                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1477);
+                        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1477);
                     } else {
                         colour = 145;
                     }
@@ -1148,11 +1148,11 @@ void talk_add_regional_item(int index)
         talk_list_count++;
         return;
     }
-    mc_set_location(1590, D_001703F0);
-    mc_sprintf((char *)text_buffer, D_0017042A, talk_regional_names[index]);
+    mc_set_location(1590, str_talk_c);
+    mc_sprintf((char *)text_buffer, str_any, talk_regional_names[index]);
     if (*(int *)talk_selected_row == talk_list_count) {
         colour = 244;
-        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)text_buffer, 4, D_001703F0, 1595);
+        mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)text_buffer, 4, str_talk_c, 1595);
     } else {
         colour = 145;
     }
@@ -1167,7 +1167,7 @@ int talk_find_regional(int index)
 
         location_pick_random_with_service(&found, (int)(short)D_00179CC8[index], (int)(short)talk_regional_ids[index]);
         if (found.object == 0) return 0;
-        mc_strncpy(text_macro_fcn, found.data->name, 32, D_001703F0, 1610);
+        mc_strncpy(text_macro_fcn, found.data->name, 32, str_talk_c, 1610);
         location_free(&found);
         return 1;
     }
@@ -1217,9 +1217,9 @@ void talk_build_place_topics(void)
             next_distance = talk_place_topics[i + 1].distance;
             if (next_distance < distance) {
                 swapped = 1;
-                mc_memcpy(&swap, &talk_place_topics[i], sizeof(swap), D_001703F0, 1678, 4);
-                mc_memcpy(&talk_place_topics[i], &talk_place_topics[i + 1], sizeof(swap), D_001703F0, 1679, 4);
-                mc_memcpy(&talk_place_topics[i + 1], &swap, sizeof(swap), D_001703F0, 1680, 4);
+                mc_memcpy(&swap, &talk_place_topics[i], sizeof(swap), str_talk_c, 1678, 4);
+                mc_memcpy(&talk_place_topics[i], &talk_place_topics[i + 1], sizeof(swap), str_talk_c, 1679, 4);
+                mc_memcpy(&talk_place_topics[i + 1], &swap, sizeof(swap), str_talk_c, 1680, 4);
             }
         }
         last--;
@@ -1315,7 +1315,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(place->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1790);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1790);
                 } else {
                     colour = 145;
                 }
@@ -1340,7 +1340,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(person->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1821);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1821);
                 } else {
                     colour = 145;
                 }
@@ -1363,7 +1363,7 @@ void talk_add_quest_info_topics(void)
                 name = quest_symbol_text(item->symbol, 0, 0);
                 if (*(int *)talk_selected_row == talk_list_count) {
                     colour = 244;
-                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, D_001703F0, 1852);
+                    mc_strncpy((char *)(((iptr)talk_key_text) + (((int)(unsigned char)D_001966B8) * 65)), (char *)name, 4, str_talk_c, 1852);
                 } else {
                     colour = 145;
                 }
@@ -1395,10 +1395,10 @@ int talk_faction_greeting(short faction_id)
         return (int)(short)*(short *)(talk_faction_greetings + (relation * 6));
     }
     if (((int)(short)D_001966AC) >= roll) {
-        return (int)(short)*(short *)(D_001799AE + (relation * 6));
+        return (int)(short)*(short *)(str_g_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w + (relation * 6));
     }
     D_001966BA = 1;
-    return (int)(short)*(short *)(D_001799B0 + (relation * 6));
+    return (int)(short)*(short *)(str_h_i_j_k_l_m_n_o_p_q_r_r_s_t_t_u_v_v_w_x + (relation * 6));
 }
 
 int talk_roll_knows(void)

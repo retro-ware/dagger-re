@@ -4,7 +4,7 @@
 
 extern char D_0012B508;
 extern iptr screen_buffer;
-extern char D_00175420[];
+extern char str_custom_c[];
 extern struct rect classmaker_reputation_buttons[];
 extern signed char text_buffer[];
 extern iptr scratch_190df4;
@@ -26,7 +26,7 @@ void classmaker_draw_reputations(void)
     short height;
 
     xn_mouse_cursor_erase();
-    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, D_00175420, 283, 4);
+    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, str_custom_c, 283, 4);
     xn_draw_image(39, 5, *(unsigned short *)(scratch_190df8 + 4), *(unsigned short *)(scratch_190df8 + 6), scratch_190df8 + 12);
     width = classmaker_reputation_buttons[0].x1 - classmaker_reputation_buttons[0].x0 + 1;
     centre = (classmaker_reputation_buttons[0].y0 + classmaker_reputation_buttons[0].y1) >> 1;

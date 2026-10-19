@@ -3,7 +3,7 @@
 #include "clib.h"
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
 #pragma aux (sosconv) profile_set_number;
-extern char D_00170129[];        /* __FILE__ */
+extern char str_profile_c[];        /* __FILE__ */
 
 int profile_set_number(struct profile *r, int value)
 {
@@ -32,13 +32,13 @@ int profile_set_number(struct profile *r, int value)
     len = strlen(buf);
     if (len < n) {
         cnt = (int)((r->buffer + r->length) - q) - (n - len);
-        mc_memmove(q, q + (n - len), cnt, D_00170129, 768, 4);
+        mc_memmove(q, q + (n - len), cnt, str_profile_c, 768, 4);
         r->length -= n - len;
     } else if (len > n) {
         if ((len - n) + r->length > r->capacity)
             return 0;
         cnt = (int)((r->buffer + r->length) - q) + (len - n);
-        mc_memmove(q + (len - n), q, cnt, D_00170129, 786, 4);
+        mc_memmove(q + (len - n), q, cnt, str_profile_c, 786, 4);
         r->length += len - n;
     }
     i = 0;

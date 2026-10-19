@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0003E8A8 */
 #include "ptrint.h"
 #include "clib.h"
-extern char D_00170D55[];
+extern char str_text_c[];
 extern short msgbox_wrap_width;
 extern iptr msgbox_next_page;
 extern char *text_rsc_load(int, int, int);
@@ -22,7 +22,7 @@ int msgbox_render_rsc(short text_id, char **image, short flags)
         single_page = 1;
     }
     if (text != 0 && text != (char *)(iptr)-1751672937) {
-        mc_free(text, D_00170D55, 599);
+        mc_free(text, str_text_c, 599);
         text = (char *)(iptr)-1751672937;
     }
     return single_page;

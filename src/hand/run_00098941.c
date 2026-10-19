@@ -6,11 +6,11 @@ struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 extern char mouse_buttons;
 extern short mouse_x;
 extern short mouse_y;
-extern char D_0017704C[];
-extern char D_0017729E[];
-extern char D_001772BC[];
-extern char D_001772E6[];
-extern char D_001772F3[];
+extern char str_inven_c[];
+extern char str_you_do_not_have_enough_money[];
+extern char str_you_cannot_change_transportation_indoors[];
+extern char str_move00i0_img[];
+extern char str_move01i0_img[];
 extern unsigned char player_environment;
 extern char *D_001832B4;
 extern char *D_001832BC;
@@ -65,7 +65,7 @@ int trade_can_identify_selected(void)
         holiday = holiday_today(game_minutes, current_region);
         price = (unsigned)(*(int *)(item + 36) * 25) >> 8;
         if (holiday != 43 && gold_can_afford(price) == 0 && ((struct bits8 *)&player_motion_flags)->b7 == 0) {
-            msgbox_show_string(D_0017729E, 1);
+            msgbox_show_string(str_you_do_not_have_enough_money, 1);
             return 0;
         }
         return 1;
@@ -83,11 +83,11 @@ void transport_menu(void)
     done = 0;
     enabled = 17;
     if (player_environment != 1) {
-        hud_message_add(D_001772BC);
+        hud_message_add(str_you_cannot_change_transportation_indoors);
         return;
     }
-    D_00195B5C = disk_read_file(D_001772E6, 0);
-    D_00195B60 = disk_read_file(D_001772F3, 0);
+    D_00195B5C = disk_read_file(str_move00i0_img, 0);
+    D_00195B60 = disk_read_file(str_move01i0_img, 0);
     scratch_190d16 = 0;
     travel_find_transport();
     if (func_00098B20() != 0) {
@@ -123,11 +123,11 @@ void transport_menu(void)
         xn_gfx_present_inclusive(0);
     }
     if (D_00195B5C != 0 && D_00195B5C != FREED) {
-        mc_free(D_00195B5C, D_0017704C, 2870);
+        mc_free(D_00195B5C, str_inven_c, 2870);
         D_00195B5C = FREED;
     }
     if (D_00195B60 != 0 && D_00195B60 != FREED) {
-        mc_free(D_00195B60, D_0017704C, 2871);
+        mc_free(D_00195B60, str_inven_c, 2871);
         D_00195B60 = FREED;
     }
 }

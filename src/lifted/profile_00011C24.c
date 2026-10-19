@@ -5,7 +5,7 @@
 #include "bitfield.h"
 #include "clib.h"
 
-extern char D_00170129[];
+extern char str_profile_c[];
 
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
 #pragma aux (sosconv) profile_close;
@@ -18,7 +18,7 @@ int profile_close(struct profile *profile)
         handle = open(profile->path, 610, 0);
         if (handle == (-1)) {
             if (profile->buffer != 0 && (iptr)profile->buffer != (-1751672937)) {
-                mc_free(profile->buffer, D_00170129, 171);
+                mc_free(profile->buffer, str_profile_c, 171);
                 profile->buffer = (char *)(iptr)-1751672937;
             }
             return 0;
@@ -27,7 +27,7 @@ int profile_close(struct profile *profile)
         close(handle);
     }
     if (profile->buffer != 0 && (iptr)profile->buffer != (-1751672937)) {
-        mc_free(profile->buffer, D_00170129, 185);
+        mc_free(profile->buffer, str_profile_c, 185);
         profile->buffer = (char *)(iptr)-1751672937;
     }
     return 1;

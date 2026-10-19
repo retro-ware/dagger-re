@@ -4,7 +4,7 @@
 
 extern unsigned char D_00178E59;
 extern unsigned char D_00178E5F;
-extern int D_0017C912[];
+extern int str_j[];
 extern struct region regions[];
 extern int D_00195B84;
 extern char current_region;
@@ -236,8 +236,8 @@ void faction_politics_update(int mode)
                     region_flag_set(faction->region, 7);
                 }
             }
-            if (D_0017C912[faction->region])
-                other = faction_find(D_0017C912[faction->region]);
+            if (str_j[faction->region])
+                other = faction_find(str_j[faction->region]);
             else
                 other = 0;
             if (regions[faction->region].flags[6]) {
@@ -265,8 +265,8 @@ void faction_politics_update(int mode)
                     region_flag_set(faction->region, 4);
                 }
             }
-            if (D_0017C912[faction->region]) {
-                other = faction_find(D_0017C912[faction->region]);
+            if (str_j[faction->region]) {
+                other = faction_find(str_j[faction->region]);
                 if (regions[faction->region].flags[18])
                     other->power--;
                 if (rand_range(0, 100) < (other->power - faction->power + 5) / 5) {

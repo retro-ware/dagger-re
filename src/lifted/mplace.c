@@ -6,7 +6,7 @@
 
 extern int dungeon_water_level;
 extern struct monster_template monster_table[];
-extern char D_00170788[];
+extern char str_mplace_c[];
 extern unsigned char player_environment;
 extern signed char loan_collector_monsters[];
 extern iptr encounter_tables[];
@@ -101,8 +101,8 @@ int place_spawn_from_marker(struct record *marker)
         D_00196293 = 0;
         D_001940D7 |= 32;
         D_001940D7 |= 128;
-        mc_memcpy(&request, &creature->x, 12, D_00170788, 119, 4);
-        mc_memset(&request.angle_x, 0, 12, D_00170788, 120, 4);
+        mc_memcpy(&request, &creature->x, 12, str_mplace_c, 119, 4);
+        mc_memset(&request.angle_x, 0, 12, str_mplace_c, 120, 4);
         request.probe = &D_00187B6E;
         player_motion_flags |= 8;
         collide_move_object(creature, 0, &request, 0);

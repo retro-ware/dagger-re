@@ -15,9 +15,9 @@ extern short mouse_y;
 extern int dungeon_water_level;
 extern short xn_gfx_clip_left;
 extern short xn_gfx_clip_top;
-extern char D_00176A68[];
-extern char D_00176A72[];
-extern char D_00176A7C[];
+extern char str_pnter_cif[];
+extern char str_arrow_raw[];
+extern char str_intrface_c[];
 extern int steer_turn_speed_max;
 extern unsigned char player_environment;
 extern short D_001789FD;
@@ -157,12 +157,12 @@ void intrface_init(void)
 {
     slot16 i;
 
-    cursor_region_images = disk_read_file(D_00176A68, 0);
-    cursor_arrow_image = disk_read_file(D_00176A72, 0);
-    mc_memset((void *)scratch_buffer, 0, 256, D_00176A7C, 44, 4);
+    cursor_region_images = disk_read_file(str_pnter_cif, 0);
+    cursor_arrow_image = disk_read_file(str_arrow_raw, 0);
+    mc_memset((void *)scratch_buffer, 0, 256, str_intrface_c, 44, 4);
     *(int *)&i = 0;
     for (; ((int)(short)i) < 10; (*(int *)&i)++) {
-        mc_memcpy((scratch_buffer + (((int)(short)i) << 4)), (((char *)cursor_arrow_image) + (((int)(short)i) * 10)), 10, D_00176A7C, 46, 4);
+        mc_memcpy((scratch_buffer + (((int)(short)i) << 4)), (((char *)cursor_arrow_image) + (((int)(short)i) * 10)), 10, str_intrface_c, 46, 4);
     }
     xn_mouse_set_cursor_image(scratch_buffer, 0, 0);
     intrface_set_regions();
@@ -182,11 +182,11 @@ void intrface_set_regions(void)
 void intrface_free(void)
 {
     if (cursor_region_images != 0 && cursor_region_images != (-1751672937)) {
-        mc_free((void *)cursor_region_images, D_00176A7C, 67);
+        mc_free((void *)cursor_region_images, str_intrface_c, 67);
         cursor_region_images = -1751672937;
     }
     if (cursor_arrow_image == 0 || cursor_arrow_image == (-1751672937)) return;
-    mc_free((void *)cursor_arrow_image, D_00176A7C, 68);
+    mc_free((void *)cursor_arrow_image, str_intrface_c, 68);
     cursor_arrow_image = -1751672937;
 }
 
@@ -643,11 +643,11 @@ void player_movement_update(void)
     if (D_00195CD8 != 0) {
         D_001A5B30 = 0;
         if (player_on_ground != 0) vertical_velocity = 0;
-        mc_memcpy(D_00195E30, (void *)D_00195CD8, 30, D_00176A7C, 695, 4);
+        mc_memcpy(D_00195E30, (void *)D_00195CD8, 30, str_intrface_c, 695, 4);
         D_00195CD8 = (iptr)D_00195E30;
     }
     if (D_00195CD4 != 0) {
-        mc_memcpy(D_00195E4E, (void *)D_00195CD4, 30, D_00176A7C, 701, 4);
+        mc_memcpy(D_00195E4E, (void *)D_00195CD4, 30, str_intrface_c, 701, 4);
         D_00195CD4 = (iptr)D_00195E4E;
     }
     if (vertical_velocity == 0 && prev_velocity != 0) {

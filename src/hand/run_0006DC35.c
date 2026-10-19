@@ -30,18 +30,18 @@ extern void msgbox_yes_no_rsc(int);
 extern struct record *object_delete(struct record *);
 extern struct record *object_create_child(struct record *, struct record *, int);
 extern void xn_mouse_poll_clamped(void);
-extern char D_00175EAA[];
-extern char D_00175EB3[];
-extern char D_00175EC1[];
-extern char D_00175EEC[];
-extern char D_00175F17[];
-extern char D_00175F42[];
-extern char D_00175F6D[];
-extern char D_00175F98[];
-extern char D_00175FC3[];
-extern char D_00175FEE[];
-extern char D_00176019[];
-extern char D_00176044[];
+extern char str_guilds_c[];
+extern char str_gild0_i0_img[];
+extern char str_my_services_are_reserved_for_members[];
+extern char str_my_services_are_reserved_for_members_2[];
+extern char str_my_services_are_reserved_for_members_3[];
+extern char str_my_services_are_reserved_for_members_4[];
+extern char str_my_services_are_reserved_for_members_5[];
+extern char str_my_services_are_reserved_for_members_6[];
+extern char str_my_services_are_reserved_for_members_7[];
+extern char str_my_services_are_reserved_for_members_8[];
+extern char str_my_services_are_reserved_for_members_9[];
+extern char str_my_services_are_reserved_for_members_10[];
 extern int trade_price_scale;
 extern iptr D_001832B0;
 extern char *region_names[];
@@ -216,40 +216,40 @@ void guild_service_dispatch(struct record *npc)
         return;
     }
     is_member = ((guild_membership != 0) ? 1 : 0);
-    mc_set_location(163, D_00175EAA);
-    mc_sprintf((char *)text_buffer, D_00175EB3, is_member + 48);
+    mc_set_location(163, str_guilds_c);
+    mc_sprintf((char *)text_buffer, str_gild0_i0_img, is_member + 48);
     image = disk_read_file(text_buffer, 0);
     choice = guild_menu(image, is_member, label);
     switch (choice) {
     case 0:
         guild_join_or_promote(guild, 1);
         if (image != 0 && image != (-1751672937)) {
-            mc_free((void *)image, D_00175EAA, 170);
+            mc_free((void *)image, str_guilds_c, 170);
             image = -1751672937;
         }
         return;
     case 1:
         npc_talk(npc);
         if (image != 0 && image != (-1751672937)) {
-            mc_free((void *)image, D_00175EAA, 174);
+            mc_free((void *)image, str_guilds_c, 174);
             image = -1751672937;
         }
         return;
     case 2:
         if (image != 0 && image != (-1751672937)) {
-            mc_free((void *)image, D_00175EAA, 177);
+            mc_free((void *)image, str_guilds_c, 177);
             image = -1751672937;
         }
         break;
     case 3:
         if (image != 0 && image != (-1751672937)) {
-            mc_free((void *)image, D_00175EAA, 180);
+            mc_free((void *)image, str_guilds_c, 180);
             image = -1751672937;
         }
         return;
     default:
         if (image != 0 && image != (-1751672937)) {
-            mc_free((void *)image, D_00175EAA, 183);
+            mc_free((void *)image, str_guilds_c, 183);
             image = -1751672937;
         }
     }
@@ -369,7 +369,7 @@ void guild_service_dispatch(struct record *npc)
                 inventory_open_container((iptr)D_001960D9, 4, 8);
                 break;
             default:
-                msgbox_show_string(D_00175EC1, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members, 1);
             }
         }
         break;
@@ -491,8 +491,8 @@ void guild_service_dispatch(struct record *npc)
                 D_001A41E4 = RECORD_FROM_DATA(bank_houses_for_sale[choice].block);
                 D_001A41DC = (iptr)bank_houses_for_sale[choice].building;
                 msgbox_show_rsc(462, 1);
-                mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, D_00175EAA, 413);
-                mc_strncpy(saved_location_name, (char *)current_location, 32, D_00175EAA, 414);
+                mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_guilds_c, 413);
+                mc_strncpy(saved_location_name, (char *)current_location, 32, str_guilds_c, 414);
                 break;
             default:
                 not_served = 1;
@@ -512,7 +512,7 @@ void guild_service_dispatch(struct record *npc)
                 }
                 break;
             default:
-                msgbox_show_string(D_00175EEC, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_2, 1);
             }
         }
         break;
@@ -571,7 +571,7 @@ L6E949:;
                 guild_cure_diseases();
                 break;
             default:
-                msgbox_show_string(D_00175F17, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_3, 1);
             }
         }
         break;
@@ -624,7 +624,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00175F42, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_4, 1);
             }
         }
         break;
@@ -677,7 +677,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00175F6D, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_5, 1);
             }
         }
         break;
@@ -730,7 +730,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00175F98, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_6, 1);
             }
         }
         break;
@@ -783,7 +783,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00175FC3, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_7, 1);
             }
         }
         break;
@@ -836,7 +836,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00175FEE, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_8, 1);
             }
         }
         break;
@@ -889,7 +889,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00176019, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_9, 1);
             }
         }
         break;
@@ -942,7 +942,7 @@ L6E949:;
                 guild_temple_quest();
                 break;
             default:
-                msgbox_show_string(D_00176044, 1);
+                msgbox_show_string(str_my_services_are_reserved_for_members_10, 1);
             }
         }
     }

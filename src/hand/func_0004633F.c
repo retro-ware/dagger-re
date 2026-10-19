@@ -5,8 +5,8 @@
 #pragma pack(1)
 #endif
 struct macro { char name[5]; char *(*fn)(void); };   /* 9 bytes */
-extern char D_0017110C[];        /* __FILE__ */
-extern char D_00171114[];
+extern char str_parse_c[];        /* __FILE__ */
+extern char str_invalid_parse_command[];
 extern unsigned char D_00178630[];   /* _IsTable */
 extern struct macro macro_table[];     /* the 255 macros, by first letter (the data: tools/port_data.py) */
 extern struct macro *macro_letter_tables[];
@@ -85,7 +85,7 @@ void parse_expand(unsigned char *src, char *out)
                     macro_count = macro_letter_counts[letter];
                     table = macro_letter_tables[letter];
                     if (*src == 'z') {
-                        mc_memcpy(token, src, 3, D_0017110C, 108, 1024);
+                        mc_memcpy(token, src, 3, str_parse_c, 108, 1024);
                         token[3] = 0;
                         src += 3;
                         src += parse_read_number(src);
@@ -95,11 +95,11 @@ void parse_expand(unsigned char *src, char *out)
                         if (strcmp(&table[i], token) == 0) {
                             result = table[i].fn();
                             if (result < (char *)1000) {
-                                mc_set_location(122, D_0017110C);
-                                mc_sprintf(D_001911E4, D_00171114, result, token);
+                                mc_set_location(122, str_parse_c);
+                                mc_sprintf(D_001911E4, str_invalid_parse_command, result, token);
                                 fatal_error(D_001911E4);
                             }
-                            mc_strncpy(out, result, 4, D_0017110C, 125);
+                            mc_strncpy(out, result, 4, str_parse_c, 125);
                             out += strlen(out);
                             break;
                         }

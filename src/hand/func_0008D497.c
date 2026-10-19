@@ -4,7 +4,7 @@
 
 extern unsigned char D_0012B508;
 extern unsigned char font_height;
-extern char D_00176E38[];
+extern char str_picklist_c[];
 extern char D_001A9AF3;
 extern void text_draw(char *, int, int);
 extern void picklist_clip_text(char *, short);
@@ -51,7 +51,7 @@ void picklist_draw(struct picklist *list, int unused)
     i = list->top;
     y = 1;
     while (i < list->count && y < list->list_rect.h - line_height) {
-        mc_strncpy(text, list->entries[i].text, 80, D_00176E38, 236);
+        mc_strncpy(text, list->entries[i].text, 80, str_picklist_c, 236);
         picklist_clip_text(text, list->list_rect.w);
         if (i != list->selected || D_001A9AF3 != 0) {
             D_0012B508 = i != list->selected ? 156 : 0;

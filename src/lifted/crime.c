@@ -7,7 +7,7 @@
 extern struct region regions[];
 extern char region_legal_reputation[];  /* court_frame: regions[].legal_reputation evaluates in another order */
 extern iptr screen_buffer;
-extern char D_001706E1[];
+extern char str_crime_c[];
 extern int crime_reputation_loss[];
 extern signed char D_00187CA8;
 extern struct record *creature_list[];
@@ -61,7 +61,7 @@ void court_frame(void)
     int unused;
 
     if (court_open(0) == 0) return;
-    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, D_001706E1, 172, 4);
+    mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_crime_c, 172, 4);
     if (((int)(unsigned char)game_mode) == 8) return;
     D_001940D5 |= 64;
     D_00195F34 = 194;
@@ -203,7 +203,7 @@ void court_close(void)
     game_mode = 0;
     D_00196272 = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_001706E1, 350);
+        mc_free((void *)window_image, str_crime_c, 350);
         window_image = -1751672937;
     }
     court_remove_creatures();

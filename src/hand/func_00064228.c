@@ -1,6 +1,6 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00064228 */
 #include "records.h"
-extern char D_00175940[];
+extern char str_exceeded_maximum_number_of_links[];
 extern struct record *location_object;
 extern struct link links[];
 extern int link_count;
@@ -15,7 +15,7 @@ void links_resolve(void)
     struct link *end;
 
     if (link_count >= 1024)
-        fatal_error(D_00175940);
+        fatal_error(str_exceeded_maximum_number_of_links);
     for (e = links, end = links + link_count; e < end; e++) {
         if (e->trigger == 6)
             e->trigger = 2;

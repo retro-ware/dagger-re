@@ -4,8 +4,8 @@
 #include "ptrint.h"
 #include "clib.h"
 
-extern char D_00176198[];
-extern char D_0017627D[];
+extern char str_click_c[];
+extern char str_books_bok_txt_4[];
 extern signed char text_buffer[];
 
 extern int disk_open_data(char *);
@@ -15,8 +15,8 @@ void book_read_header(char *header, int book_id)
 {
     int handle;
 
-    mc_set_location(586, D_00176198);
-    mc_sprintf((char *)text_buffer, D_0017627D, book_id);
+    mc_set_location(586, str_click_c);
+    mc_sprintf((char *)text_buffer, str_books_bok_txt_4, book_id);
     handle = disk_open_data(text_buffer);
     read(handle, header, 234);
     close(handle);

@@ -6,7 +6,7 @@
 
 extern int xn_world_slot_cells[];
 extern char *xn_world_tile_layer;
-extern char D_001705F8[];
+extern char str_region_c[];
 extern signed char climate_categories[];
 extern int D_00187F30[];
 extern struct region regions[];
@@ -30,11 +30,11 @@ void region_enter(unsigned char, unsigned char);
 void region_free_tables(void)
 {
     if (politic_pak != 0 && politic_pak != (-1751672937)) {
-        mc_free((void *)politic_pak, D_001705F8, 33);
+        mc_free((void *)politic_pak, str_region_c, 33);
         politic_pak = -1751672937;
     }
     if (climate_pak == 0 || climate_pak == (-1751672937)) return;
-    mc_free((void *)climate_pak, D_001705F8, 34);
+    mc_free((void *)climate_pak, str_region_c, 34);
     climate_pak = -1751672937;
 }
 

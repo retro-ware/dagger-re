@@ -3,7 +3,7 @@ extern unsigned char D_0012B508;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
-extern char D_00176E2C[];        /* __FILE__ */
+extern char str_inpstr_c[];        /* __FILE__ */
 extern char D_00190B44[];
 extern char *inpstr_text;
 extern short inpstr_max_length;
@@ -31,7 +31,7 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
     xn_mouse_cursor_erase();
     xn_kbd_flush();
     inpstr_text = text;
-    mc_strncpy(D_00190B44, inpstr_text, 160, D_00176E2C, 56);
+    mc_strncpy(D_00190B44, inpstr_text, 160, str_inpstr_c, 56);
     inpstr_cursor = strlen(inpstr_text);
     inpstr_max_length = max_length;
     for (;;) {
@@ -54,7 +54,7 @@ int inpstr_edit(char *text, short x, short y, short w, short h, short max_length
         }
         r = inpstr_handle_key(key);
         if (r == 32768) {
-            mc_strncpy(inpstr_text, D_00190B44, 4, D_00176E2C, 83);
+            mc_strncpy(inpstr_text, D_00190B44, 4, str_inpstr_c, 83);
             return 0;
         }
         if (r != 0x87654321)

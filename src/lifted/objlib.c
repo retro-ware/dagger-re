@@ -7,10 +7,10 @@
 
 extern int xn_anim_ticks;
 extern char D_00176C20[];
-extern char D_00176C29[];
-extern char D_00176C4F[];
-extern char D_00176C6B[];
-extern char D_00176C80[];
+extern char str_insufficent_memory_to_load_3d_object[];
+extern char str_error_reading_from_disk_2[];
+extern char str_unable_to_add_bnode[];
+extern char str_invalid_tree_data[];
 extern unsigned char player_environment;
 extern short D_00187CB4[];
 extern char D_00187D30[];
@@ -308,13 +308,13 @@ iptr model_load(int slot, int key)
         } else {
             model_cache_purge_old(model_cache_root);
             if ((model_cache_nodes[slot].model = (char *)mem_pool_alloc((iptr)model_heap, size)) == 0) {
-                fatal_error((iptr)D_00176C29);
+                fatal_error((iptr)str_insufficent_memory_to_load_3d_object);
             }
         }
     }
     if (archive_read_record(arch3d_bsa, record, (iptr)model_cache_nodes[slot].model) == 0) {
         mc_set_location(1104, D_00176C20);
-        mc_sprintf(scratch_buffer, D_00176C4F, record);
+        mc_sprintf(scratch_buffer, str_error_reading_from_disk_2, record);
         fatal_error((iptr)scratch_buffer);
     }
     model_heap_free -= (size + 1) & -2;
@@ -364,7 +364,7 @@ iptr model_cache_add(int key)
                     if (in_use3 == 0 || slot >= 512) break;
                     slot++;
                 }
-                if (slot == 512) fatal_error((iptr)D_00176C6B);
+                if (slot == 512) fatal_error((iptr)str_unable_to_add_bnode);
             }
         }
         model_cache_nodes[slot].key = key;
@@ -416,7 +416,7 @@ void model_cache_purge_unused(struct model_node *parent, int age, struct model_n
     if (node->right != 0) model_cache_purge_unused(node, age, node->right);
     if (((unsigned)(*(int *)frame_counter - node->last_frame)) >= age) model_cache_remove_node(parent, node);
     if (parent->left != parent->right || parent->left == 0) return;
-    fatal_error((iptr)D_00176C80);
+    fatal_error((iptr)str_invalid_tree_data);
 }
 
 void model_cache_remove_node(struct model_node *parent, struct model_node *node)

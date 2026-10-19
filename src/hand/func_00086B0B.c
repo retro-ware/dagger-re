@@ -2,8 +2,8 @@
 #include "records.h"
 #include "clib.h"
 extern int dungeon_water_level;
-extern char D_00176C94[];       /* __FILE__ */
-extern char D_00176CC9[];
+extern char str_maplogic_c[];       /* __FILE__ */
+extern char str_you_are_entering[];
 extern int D_00187F2C;
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
@@ -50,8 +50,8 @@ void town_load(int location_index)
     if (location_object->image == 65535)
         object_delete_block((iptr)location_object->children, location_object->id);
     location_load_exterior(&loaded_location, location_index);
-    mc_memcpy(location_object, loaded_location.object, RECORD_LINKS_OFFSET, D_00176C94, 365, 4);
-    mc_memcpy(current_location, loaded_location.data, REC_SIZEOF(struct location), D_00176C94, 366, 4);
+    mc_memcpy(location_object, loaded_location.object, RECORD_LINKS_OFFSET, str_maplogic_c, 365, 4);
+    mc_memcpy(current_location, loaded_location.data, REC_SIZEOF(struct location), str_maplogic_c, 366, 4);
     location_object->y = xn_terrain_height_at(location_object->x, location_object->z);
     automap_alloc_town_map();
     town_load_blocks();
@@ -79,8 +79,8 @@ void town_load(int location_index)
             hud_message_add(((char *)text_rsc_buffer));
             break;
         default:
-            mc_set_location(401, D_00176C94);
-            mc_sprintf(((char *)text_buffer), D_00176CC9, current_location->name);
+            mc_set_location(401, str_maplogic_c);
+            mc_sprintf(((char *)text_buffer), str_you_are_entering, current_location->name);
             hud_message_add(((char *)text_buffer));
             break;
         }

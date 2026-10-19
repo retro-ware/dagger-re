@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170464[];        /* __FILE__ */
+extern char str_faction_c[];        /* __FILE__ */
 extern unsigned char scratch_190d16;
 extern unsigned char scratch_190d17;
 extern signed char text_rsc_buffer[];
@@ -59,7 +59,7 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
     rumor.region = region;
     rumor.flags = func_0001D66C(&rumor);
     rumor.quest_id = 0;
-    mc_memset(rumor.quest_name, 0, 9, D_00170464, 1606, 9);
+    mc_memset(rumor.quest_name, 0, 9, str_faction_c, 1606, 9);
     rumor.message = 0;
     rumor.target = 0;
     rumor.text_length = strlen(((char *)text_rsc_buffer)) + 1;

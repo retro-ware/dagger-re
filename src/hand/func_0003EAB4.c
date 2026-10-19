@@ -2,9 +2,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170D55[];
-extern char D_00170DA2[];
-extern char D_00170DA7[];
+extern char str_text_c[];
+extern char str_fmt_d_2[];
+extern char str_qrc[];
 extern short msgbox_wrap_width;
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
@@ -27,14 +27,14 @@ int msgbox_render_quest_text(struct quest *quest, short message_id, char **image
     saved_file = text_rsc_file;
     current_quest = quest;
     if (quest->text_file != 0) {
-        mc_set_location(657, D_00170D55);
-        mc_sprintf(((char *)text_rsc_buffer), D_00170DA2, quest->text_file);
+        mc_set_location(657, str_text_c);
+        mc_sprintf(((char *)text_rsc_buffer), str_fmt_d_2, quest->text_file);
     } else {
-        mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, D_00170D55, 659, 2048);
+        mc_memcpy(((char *)text_rsc_buffer), quest->name, 8, str_text_c, 659, 2048);
     }
     D_00190FEC = 0;
-    mc_set_location(662, D_00170D55);
-    mc_sprintf(((char *)text_buffer), D_00170DA7, ((char *)text_rsc_buffer));
+    mc_set_location(662, str_text_c);
+    mc_sprintf(((char *)text_buffer), str_qrc, ((char *)text_rsc_buffer));
     if ((text_rsc_file = disk_open_data(((char *)text_buffer))) > 0) {
         text = text_rsc_load(message_id, flags | 0x8002, msgbox_wrap_width);
         if (text == 0)
@@ -49,7 +49,7 @@ int msgbox_render_quest_text(struct quest *quest, short message_id, char **image
         close(text_rsc_file);
     }
     if (text != 0 && text != (char *)(iptr)-1751672937) {
-        mc_free(text, D_00170D55, 685);
+        mc_free(text, str_text_c, 685);
         text = (char *)(iptr)-1751672937;
     }
     text_rsc_file = saved_file;

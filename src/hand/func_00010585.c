@@ -7,8 +7,8 @@ struct bits8 {
 };
 struct nib { unsigned char lo:4; };
 extern unsigned char mouse_buttons;
-extern char D_00170077[];
-extern char D_0017008C[];
+extern char str_right_hand_equipped[];
+extern char str_left_hand_equipped[];
 extern short D_001788D3[];
 extern unsigned char player_environment;
 extern int D_00187CA9;
@@ -132,14 +132,14 @@ void player_frame_update(void)
         D_0019597C -= frame_ticks;
         if (D_0019597C <= 0) {
             D_0019597C = 0;
-            hud_message_add(D_00170077);
+            hud_message_add(str_right_hand_equipped);
         }
     }
     if (left_hand_ready_delay > 0) {
         left_hand_ready_delay -= frame_ticks;
         if (left_hand_ready_delay <= 0) {
             left_hand_ready_delay = 0;
-            hud_message_add(D_0017008C);
+            hud_message_add(str_left_hand_equipped);
         }
     }
     if (game_mode != 8 && game_mode != 2 && msgbox_kind != 0)

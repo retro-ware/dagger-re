@@ -12,9 +12,9 @@ extern signed char key_down_a;
 extern signed char key_down_c;
 extern signed char key_down_b;
 extern iptr screen_buffer;
-extern char D_0017539B[];
-extern char D_001753DB[];
-extern char D_001753E7[];
+extern char str_question_c[];
+extern char str_classes_dat[];
+extern char str_invalid_answer_combination[];
 extern iptr class_answer_cels[];
 extern signed char text_buffer[];
 extern char scratch_190d64[];
@@ -70,9 +70,9 @@ void class_question_show(int *scroll_cels)
     } while (atoi(text_buffer) != (short)question);
     text += 2;
     *(signed char *)memchr(text, 123, 32000) = 0;
-    saved_screen = (char *)mc_malloc(64000, D_0017539B, 176);
-    mc_memcpy(saved_screen, (void *)screen_buffer, 64000, D_0017539B, 178, 4);
-    mc_memset((void *)screen_buffer, 0, 64000, D_0017539B, 179, 4);
+    saved_screen = (char *)mc_malloc(64000, str_question_c, 176);
+    mc_memcpy(saved_screen, (void *)screen_buffer, 64000, str_question_c, 178, 4);
+    mc_memset((void *)screen_buffer, 0, 64000, str_question_c, 179, 4);
     while (*(signed char *)text != 0 && *(signed char *)(text - 1) != 0) {
         xn_str_copy_until(text_buffer, text, 252);
         text += strlen(text_buffer) + 1;
@@ -83,16 +83,16 @@ void class_question_show(int *scroll_cels)
         text_draw((iptr)text_buffer, 20, font_height * (short)line);
         (*(short *)&line)++;
     }
-    mc_memcpy((void *)scratch_buffer, (void *)screen_buffer, 64000, D_0017539B, 193, 4);
-    mc_memcpy((void *)screen_buffer, saved_screen, 64000, D_0017539B, 194, 4);
+    mc_memcpy((void *)scratch_buffer, (void *)screen_buffer, 64000, str_question_c, 193, 4);
+    mc_memcpy((void *)screen_buffer, saved_screen, 64000, str_question_c, 194, 4);
     if (saved_screen != 0 && saved_screen != (char *)(iptr)-1751672937) {
-        mc_free(saved_screen, D_0017539B, 195);
+        mc_free(saved_screen, str_question_c, 195);
         saved_screen = (char *)(iptr)-1751672937;
     }
     *(short *)scratch_190d66 = (font_height * line) - 52;
     class_question_scroll(scroll_cels, 0);
     if (rsc_text == 0 || rsc_text == (char *)(iptr)-1751672937) return;
-    mc_free(rsc_text, D_0017539B, 199);
+    mc_free(rsc_text, str_question_c, 199);
     rsc_text = (char *)(iptr)-1751672937;
 }
 
@@ -167,7 +167,7 @@ int class_question_pick_class(void)
     int answers;
     slot16 i;
 
-    disk_read_file(D_001753DB, (iptr)scratch_buffer);
+    disk_read_file(str_classes_dat, (iptr)scratch_buffer);
     *(iptr *)&entry = (iptr)scratch_buffer + 18;
     answers = ((((int)(unsigned char)D_0019981B) << 16) | (((int)(unsigned char)D_0019981A) << 8)) | ((int)(unsigned char)class_answer_counts);
     *(int *)&i = 0;
@@ -180,6 +180,6 @@ int class_question_pick_class(void)
         if ((*(int *)(*(char **)&entry) & 16777215) == answers) return (((int)(short)i) >> 2) + 12;
         *(iptr *)&entry += 3;
     }
-    fatal_error(D_001753E7);
+    fatal_error(str_invalid_answer_combination);
     return 0;
 }

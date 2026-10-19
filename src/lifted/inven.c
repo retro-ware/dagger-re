@@ -11,37 +11,37 @@ extern short mouse_x;
 extern short mouse_y;
 extern signed char D_0012B508;
 extern signed char key_down_esc;
-extern char D_00176FE4[];
-extern char D_00176FF1[];
-extern char D_00176FFE[];
-extern char D_0017700B[];
-extern char D_00177018[];
-extern char D_00177025[];
-extern char D_00177032[];
-extern char D_0017703F[];
-extern char D_0017704C[];
-extern char D_00177054[];
-extern char D_00177063[];
-extern char D_00177099[];
-extern char D_001770A7[];
-extern char D_001770C0[];
-extern char D_001770CA[];
-extern char D_001770EA[];
-extern char D_0017710F[];
-extern char D_00177129[];
-extern char D_00177147[];
-extern char D_0017716F[];
-extern char D_0017718D[];
-extern char D_001771B5[];
-extern char D_001771C5[];
-extern char D_001771D3[];
-extern char D_001771FF[];
-extern char D_00177217[];
-extern char D_0017722B[];
-extern char D_00177255[];
-extern char D_0017727F[];
-extern char D_00177300[];
-extern char D_00177323[];
+extern char str_inve00i0_img[];
+extern char str_inve01i0_img[];
+extern char str_inve02i0_img[];
+extern char str_inve05i0_img[];
+extern char str_inve06i0_img[];
+extern char str_inve07i0_img[];
+extern char str_shop00i0_img[];
+extern char str_inve16i0_cif[];
+extern char str_inven_c[];
+extern char str_inve_i0_img[];
+extern char str_you_cannot_access_the_inventory_while[];
+extern char str_equipping_t[];
+extern char str_750[];
+extern char str_1000[];
+extern char str_you_cannot_carry_anymore_stuff[];
+extern char str_your_cart_cannot_hold_anymore_stuff[];
+extern char str_you_do_not_own_this_item[];
+extern char str_there_are_no_monsters_nearby[];
+extern char str_no_summoned_monster_appeared_this_time[];
+extern char str_there_are_no_monsters_nearby_2[];
+extern char str_no_summoned_monster_appeared_this_time_2[];
+extern char str_recipe_for_o[];
+extern char str_is_broken[];
+extern char str_the_soul_from_your_broken_item_is[];
+extern char str_you_are_not_successful[];
+extern char str_you_are_successful[];
+extern char str_you_do_not_have_enough_spell_points_left[];
+extern char str_you_cannot_hide_something_you_re_wearing[];
+extern char str_you_cannot_hide_anymore_stuff[];
+extern char str_you_have_already_selected_an_item[];
+extern char str_item_to_be_repaired_must_be_empty[];
 extern char D_00177346[];
 extern char D_0017887F[];
 extern int trade_price_scale;
@@ -280,64 +280,64 @@ void trade_mark_in_repair(void);
 
 void inventory_load_images(void)
 {
-    inventory_images = disk_read_file(D_00176FE4, 0);
-    D_001AA420 = disk_read_file(D_00176FF1, 0);
-    D_001AA424 = disk_read_file(D_00176FFE, 0);
-    D_001AA428 = disk_read_file(D_0017700B, 0);
-    D_001AA42C = disk_read_file(D_00177018, 0);
-    D_001AA430 = disk_read_file(D_00177025, 0);
-    D_001AA43C = disk_read_file(D_00177032, 0);
-    D_001AA440 = disk_read_file(D_0017703F, 0);
+    inventory_images = disk_read_file(str_inve00i0_img, 0);
+    D_001AA420 = disk_read_file(str_inve01i0_img, 0);
+    D_001AA424 = disk_read_file(str_inve02i0_img, 0);
+    D_001AA428 = disk_read_file(str_inve05i0_img, 0);
+    D_001AA42C = disk_read_file(str_inve06i0_img, 0);
+    D_001AA430 = disk_read_file(str_inve07i0_img, 0);
+    D_001AA43C = disk_read_file(str_shop00i0_img, 0);
+    D_001AA440 = disk_read_file(str_inve16i0_cif, 0);
     if (trade_mode == 0) return;
-    mc_set_location(313, D_0017704C);
-    mc_sprintf((char *)text_buffer, D_00177054, (trade_mode * 2) + 6);
+    mc_set_location(313, str_inven_c);
+    mc_sprintf((char *)text_buffer, str_inve_i0_img, (trade_mode * 2) + 6);
     D_001AA434 = disk_read_file(text_buffer, 0);
-    mc_set_location(315, D_0017704C);
-    mc_sprintf((char *)text_buffer, D_00177054, (trade_mode * 2) + 7);
+    mc_set_location(315, str_inven_c);
+    mc_sprintf((char *)text_buffer, str_inve_i0_img, (trade_mode * 2) + 7);
     D_001AA438 = disk_read_file(text_buffer, 0);
 }
 
 void inventory_free_images(void)
 {
     if (inventory_images != 0 && inventory_images != (-1751672937)) {
-        mc_free((void *)inventory_images, D_0017704C, 322);
+        mc_free((void *)inventory_images, str_inven_c, 322);
         inventory_images = -1751672937;
     }
     if (D_001AA420 != 0 && D_001AA420 != (-1751672937)) {
-        mc_free((void *)D_001AA420, D_0017704C, 323);
+        mc_free((void *)D_001AA420, str_inven_c, 323);
         D_001AA420 = -1751672937;
     }
     if (D_001AA424 != 0 && D_001AA424 != (-1751672937)) {
-        mc_free((void *)D_001AA424, D_0017704C, 324);
+        mc_free((void *)D_001AA424, str_inven_c, 324);
         D_001AA424 = -1751672937;
     }
     if (D_001AA428 != 0 && D_001AA428 != (-1751672937)) {
-        mc_free((void *)D_001AA428, D_0017704C, 325);
+        mc_free((void *)D_001AA428, str_inven_c, 325);
         D_001AA428 = -1751672937;
     }
     if (D_001AA42C != 0 && D_001AA42C != (-1751672937)) {
-        mc_free((void *)D_001AA42C, D_0017704C, 326);
+        mc_free((void *)D_001AA42C, str_inven_c, 326);
         D_001AA42C = -1751672937;
     }
     if (D_001AA430 != 0 && D_001AA430 != (-1751672937)) {
-        mc_free((void *)D_001AA430, D_0017704C, 327);
+        mc_free((void *)D_001AA430, str_inven_c, 327);
         D_001AA430 = -1751672937;
     }
     if (D_001AA43C != 0 && D_001AA43C != (-1751672937)) {
-        mc_free((void *)D_001AA43C, D_0017704C, 328);
+        mc_free((void *)D_001AA43C, str_inven_c, 328);
         D_001AA43C = -1751672937;
     }
     if (D_001AA440 != 0 && D_001AA440 != (-1751672937)) {
-        mc_free((void *)D_001AA440, D_0017704C, 329);
+        mc_free((void *)D_001AA440, str_inven_c, 329);
         D_001AA440 = -1751672937;
     }
     if (trade_mode == 0) return;
     if (D_001AA434 != 0 && D_001AA434 != (-1751672937)) {
-        mc_free((void *)D_001AA434, D_0017704C, 333);
+        mc_free((void *)D_001AA434, str_inven_c, 333);
         D_001AA434 = -1751672937;
     }
     if (D_001AA438 == 0 || D_001AA438 == (-1751672937)) return;
-    mc_free((void *)D_001AA438, D_0017704C, 334);
+    mc_free((void *)D_001AA438, str_inven_c, 334);
     D_001AA438 = -1751672937;
 }
 
@@ -350,7 +350,7 @@ int inventory_open(int how, int mode, int icon)
     if (how != 0 || (game_mode == 0 && key_action_held(37) != 0 && player_death_timer == 0)) {
         inv_temp_pile = 0;
         if (player_character->race > 8) {
-            msgbox_show_string((iptr)D_00177063, 1);
+            msgbox_show_string((iptr)str_you_cannot_access_the_inventory_while, 1);
             return 0;
         }
         if (how == 0) how = 1;
@@ -500,12 +500,12 @@ void inventory_close(void)
     inv_track_hand_weapons(1);
     if (D_0019597C[0] > 0 && player_character->equipped[19] != 0) {
         text_macro_item = &player_character->equipped[19]->data.item;
-        parse_expand(D_00177099, D_001913E4);
+        parse_expand(str_equipping_t, D_001913E4);
         hud_message_add(D_001913E4);
     }
     if (left_hand_ready_delay > 0 && player_character->equipped[21] != 0) {
         text_macro_item = &player_character->equipped[21]->data.item;
-        parse_expand(D_00177099, D_001913E4);
+        parse_expand(str_equipping_t, D_001913E4);
         hud_message_add(D_001913E4);
     }
     if (((struct bf8_5_1 *)&D_001940D8)->f != 0) {
@@ -535,8 +535,8 @@ void inv_draw_container_icon(int button, int icon)
     if (wagon_container == 0 || icon != 3) return;
     D_001962AE = 1;
     scratch_current_object = wagon_container;
-    mc_set_location(657, D_0017704C);
-    mc_sprintf((char *)text_buffer, D_001770A7, macro_kg_weight());
+    mc_set_location(657, str_inven_c);
+    mc_sprintf((char *)text_buffer, str_750, macro_kg_weight());
     text_draw_coloured((iptr)text_buffer, (int)(short)(x + 1), (int)(short)(y + 1), 145, 156);
     D_001962AE = 0;
 }
@@ -562,11 +562,11 @@ void func_00093BD9(iptr unused, struct rect *buttons, int button)
     height = image->height;
     size_fit(&width, &height, (int)(short)((buttons[button].x1 - buttons[button].x0) - 4), (int)(short)((buttons[button].y1 - buttons[button].y0) - 4));
     for (button = 0; image->height > button; button++) {
-        mc_memcpy((scratch_buffer + (button << 8)), image->pixels + (image->width * button), image->width, D_0017704C, 787, 4);
+        mc_memcpy((scratch_buffer + (button << 8)), image->pixels + (image->width * button), image->width, str_inven_c, 787, 4);
     }
     xn_draw_image_scaled(((int)(short)centre_x) - (((int)(short)width) >> 1), ((int)(short)centre_y) - (((int)(short)height) >> 1), (int)(short)width, (int)(short)height, image->width, image->height, 0, scratch_buffer);
-    mc_set_location(791, D_0017704C);
-    mc_sprintf((char *)text_buffer, D_001770C0, macro_kg_weight());
+    mc_set_location(791, str_inven_c);
+    mc_sprintf((char *)text_buffer, str_1000, macro_kg_weight());
     text_draw_coloured((iptr)text_buffer, (int)(short)(buttons[button].x0 + 3), (int)(short)(buttons[button].y0 + 2), 145, 156);
 }
 
@@ -645,7 +645,7 @@ int inv_take_item(struct record *object)
                 carried = object_weight(player_entity);
                 capacity = carry_capacity() << 2;
                 if ((weight + carried) > capacity) {
-                    msgbox_show_string((iptr)D_001770CA, 1);
+                    msgbox_show_string((iptr)str_you_cannot_carry_anymore_stuff, 1);
                     return 0;
                 }
             }
@@ -655,7 +655,7 @@ int inv_take_item(struct record *object)
             carried = object_weight(wagon_container);
             D_001962AE = 0;
             if ((weight + carried) > 3000) {
-                msgbox_show_string((iptr)D_001770EA, 1);
+                msgbox_show_string((iptr)str_your_cart_cannot_hold_anymore_stuff, 1);
                 return 0;
             }
         }
@@ -706,7 +706,7 @@ int inv_take_item(struct record *object)
     if (D_001AA454 != 0) {
         gold_add(D_001AA454);
         D_0012B508 = 144;
-        mc_set_location(1237, D_0017704C);
+        mc_set_location(1237, str_inven_c);
         mc_sprintf((char *)text_buffer, (char *)D_001832A4, D_001AA454);
         msgbox_show_string((iptr)text_buffer, 1);
         sound_play(204, player_object, 100);
@@ -743,8 +743,8 @@ void inv_unequip_all_saved(void)
     struct item *item;
     int slot;
 
-    mc_memset(D_001AA4CC, 0, 27 * REC_SIZEOF(iptr), D_0017704C, 1274, 27 * REC_SIZEOF(iptr));
-    mc_memset(D_001AA460, 0, 108, D_0017704C, 1275, 108);
+    mc_memset(D_001AA4CC, 0, 27 * REC_SIZEOF(iptr), str_inven_c, 1274, 27 * REC_SIZEOF(iptr));
+    mc_memset(D_001AA460, 0, 108, str_inven_c, 1275, 108);
     for (slot = 0; slot < 27; slot++) {
         if (player_character->equipped[slot] != 0) {
             item = &player_character->equipped[slot]->data.item;
@@ -786,7 +786,7 @@ void inv_use_item(void)
     object = inv_selected_item;
     item = &inv_selected_item->data.item;
     if (((int)(unsigned short)(object->flags & 32)) != 0) {
-        msgbox_show_string((iptr)D_0017710F, 1);
+        msgbox_show_string((iptr)str_you_do_not_own_this_item, 1);
         return;
     }
     item->item_flags |= 0x200;
@@ -799,14 +799,14 @@ void inv_use_item(void)
     }
     if (item->enchantments[0].type == 26 && item->enchantments[0].param == 4) {
         if (creature_count == 0) {
-            hud_message_add(D_00177129);
+            hud_message_add(str_there_are_no_monsters_nearby);
             return;
         }
         D_0019629D = 1;
         monster = monster_summon_near_player(27);
         D_0019629D = 0;
         if (monster == 0) {
-            hud_message_add(D_00177147);
+            hud_message_add(str_no_summoned_monster_appeared_this_time);
             return;
         }
         monster->data.character.flags |= 2;
@@ -815,14 +815,14 @@ void inv_use_item(void)
     }
     if (item->enchantments[0].type == 26 && item->enchantments[0].param == 8) {
         if (creature_count == 0) {
-            hud_message_add(D_0017716F);
+            hud_message_add(str_there_are_no_monsters_nearby_2);
             return;
         }
         D_0019629D = 1;
         monster = monster_summon_near_player(creature_list[0]->data.character.mobile_id);
         D_0019629D = 0;
         if (monster == 0) {
-            hud_message_add(D_0017718D);
+            hud_message_add(str_no_summoned_monster_appeared_this_time_2);
             return;
         }
         monster->data.character.flags |= 2;
@@ -919,7 +919,7 @@ void inv_item_info(struct record *object, struct item *item)
         msgbox_show_rsc(1004, 1);
     } else if (item->group == 27 && item->index == 4) {
         D_00195ACC = ((iptr)potion_recipes) + (item->stack_count * 109);
-        msgbox_show_string((iptr)D_001771B5, 1);
+        msgbox_show_string((iptr)str_recipe_for_o, 1);
         msgbox_show_string(potion_recipe_text((signed char *)D_00195ACC), 1);
     } else if (item->group == 27 && item->index == 6) {
         msgbox_show_rsc(1073, 1);
@@ -1153,8 +1153,8 @@ void item_break(struct record *object)
     text_macro_item = item;
     item->condition = 0;
     inv_store_item(object);
-    mc_set_location(2157, D_0017704C);
-    mc_sprintf((char *)text_buffer, D_001771C5, item->name);
+    mc_set_location(2157, str_inven_c);
+    mc_sprintf((char *)text_buffer, str_is_broken, item->name);
     parse_expand(text_buffer, D_00190B44);
     hud_message_add(D_00190B44);
     for (i = 0; i < 27; i++) {
@@ -1165,7 +1165,7 @@ void item_break(struct record *object)
         i = 0;
         while (i < 10 && item->enchantments[i].type != (-1)) {
             if (item->enchantments[i].type == 15) {
-                hud_message_add(D_001771D3);
+                hud_message_add(str_the_soul_from_your_broken_item_is);
                 monster_summon_near_player(item->enchantments[i].param)->data.character.team = 1;
             }
             i++;
@@ -1423,10 +1423,10 @@ void trade_steal_button(void)
         inventory_close();
         crime_current = 13;
         guards_summon(1);
-        hud_message_add(D_001771FF);
+        hud_message_add(str_you_are_not_successful);
         return;
     }
-    hud_message_add(D_00177217);
+    hud_message_add(str_you_are_successful);
     object_foreach(player_entity->children, inv_claim_item);
     for (chance = 0; chance < 27; chance++) {
         if (player_character->equipped[chance] != 0) {
@@ -1502,7 +1502,7 @@ void trade_identify_button(void)
     count = 0;
     if (current_building->type != 11 || current_building->faction_id != 40) {
         if (trade_pay_spell_points() == 0) {
-            msgbox_show_string((iptr)D_0017722B, 1);
+            msgbox_show_string((iptr)str_you_do_not_have_enough_spell_points_left, 1);
             return;
         }
         object = inv_right_container->children;
@@ -1516,7 +1516,7 @@ void trade_identify_button(void)
             count++;
             object = object->next;
         }
-        mc_set_location(2642, D_0017704C);
+        mc_set_location(2642, str_inven_c);
         mc_sprintf((char *)text_buffer, (char *)key_names[0], identified, count);
         msgbox_show_string((iptr)text_buffer, 1);
         object = inv_right_container->children;
@@ -1544,14 +1544,14 @@ void inv_toggle_hidden(void)
         return;
     }
     if (PTR_TABLE_FIND(player_character->equipped, object, 27) != 0) {
-        msgbox_show_string((iptr)D_00177255, 1);
+        msgbox_show_string((iptr)str_you_cannot_hide_something_you_re_wearing, 1);
         return;
     }
     capacity = equip_hiding_capacity(1);
     *(int *)D_00195B84 = 0;
     object_foreach(player_entity, inv_sum_hidden_weight);
     if ((object_weight(object) + *(int *)D_00195B84) > capacity) {
-        msgbox_show_string((iptr)D_0017727F, 1);
+        msgbox_show_string((iptr)str_you_cannot_hide_anymore_stuff, 1);
         return;
     }
     sound_play(235, player_object, 100);
@@ -1585,11 +1585,11 @@ void func_00098A15(void)
 
     if (((unsigned)(((unsigned)location_object->id) >> 16)) < 1000) {
         map_goto_location(D_001AA540, D_001AA544, D_001AA580, 0);
-        mc_memcpy(player_object, saved_player_object, RECORD_LINKS_OFFSET, D_0017704C, 2917, 4);
+        mc_memcpy(player_object, saved_player_object, RECORD_LINKS_OFFSET, str_inven_c, 2917, 4);
         camera_object->yaw = player_object->yaw;
         return;
     }
-    mc_memcpy(saved_player_object, player_object, RECORD_LINKS_OFFSET, D_0017704C, 2922, 4);
+    mc_memcpy(saved_player_object, player_object, RECORD_LINKS_OFFSET, str_inven_c, 2922, 4);
     D_001AA540 = (int)(unsigned char)current_region;
     D_001AA544 = (int)player_environment;
     D_001AA580 = location_object->image;
@@ -1748,11 +1748,11 @@ void inv_refresh_magic_values(void)
 int trade_can_repair_item(struct item *item)
 {
     if (inv_right_container->children != 0 && current_building->type == 11) {
-        msgbox_show_string((iptr)D_00177300, 1);
+        msgbox_show_string((iptr)str_you_have_already_selected_an_item, 1);
         return 0;
     }
     if (inv_selected_item->children != 0) {
-        msgbox_show_string((iptr)D_00177323, 1);
+        msgbox_show_string((iptr)str_item_to_be_repaired_must_be_empty, 1);
         return 0;
     }
     if (item->group == 3 && item->index == 18) {
@@ -1799,8 +1799,8 @@ iptr potion_recipe_text(signed char *recipe)
     text = scratch_buffer + 55000;
     *text = 0;
     while (recipe[i] != (-2) && i < 8) {
-        func_000A1054(text, item_templates[((int)(short)*(short *)(((char *)item_group_templates[recipe[i + 10]] + (recipe[i] * 2))))].name, D_0017704C, 3200, 4);
-        func_000A1054(text, D_00177346, D_0017704C, 3201, 4);
+        func_000A1054(text, item_templates[((int)(short)*(short *)(((char *)item_group_templates[recipe[i + 10]] + (recipe[i] * 2))))].name, str_inven_c, 3200, 4);
+        func_000A1054(text, D_00177346, str_inven_c, 3201, 4);
         i++;
     }
     *(strlen(text) + text + 1) = 0;

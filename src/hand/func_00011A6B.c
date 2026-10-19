@@ -3,27 +3,27 @@
 #include "clib.h"
 #pragma aux sosconv "*" parm caller [] value [eax] modify [eax ebx ecx edx];
 #pragma aux (sosconv) profile_open;
-extern char D_00170129[];        /* __FILE__ */
+extern char str_profile_c[];        /* __FILE__ */
 
 int profile_open(struct profile *r, char *name)
 {
     int fd;
 
-    mc_strncpy(r->path, name, 4, D_00170129, 77);
+    mc_strncpy(r->path, name, 4, str_profile_c, 77);
     fd = open(name, 512);
     if (fd == -1)
         return 0;
     r->length = lseek(fd, 0, 2);
     r->capacity = r->length + 1024;
     lseek(fd, 0, 0);
-    if ((r->buffer = mc_malloc(r->capacity, D_00170129, 94)) == 0) {
+    if ((r->buffer = mc_malloc(r->capacity, str_profile_c, 94)) == 0) {
         close(fd);
         return 0;
     }
     if (read(fd, r->buffer, r->length) != r->length) {
         close(fd);
         if (r->buffer != 0 && r->buffer != (char *)(iptr)-1751672937) {
-            mc_free(r->buffer, D_00170129, 110);
+            mc_free(r->buffer, str_profile_c, 110);
             r->buffer = (char *)(iptr)-1751672937;
         }
         return 0;

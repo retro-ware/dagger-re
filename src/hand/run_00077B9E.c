@@ -1,17 +1,17 @@
 /* matched by the real Watcom C32 10.0a (-d2): a run of click.c from 0x00077960 to 0x00077B9E, kept together for its switch table's alignment */
 #include "records.h"
 #include "clib.h"
-extern char D_001766F9[];
-extern char D_001767E4[];
-extern char D_001767EE[];
-extern char D_001767FA[];
-extern char D_00176807[];
-extern char D_00176813[];
-extern char D_0017681A[];
-extern char D_00176823[];
-extern char D_0017682A[];
-extern char D_00176833[];
-extern char D_0017683A[];
+extern char str_fm_sqr_2_hmi[];
+extern char str_gshop_hmi[];
+extern char str_gmage_3_hmi[];
+extern char str_fm_nite3_hmi[];
+extern char str_magic_2_hmi[];
+extern char str_23_hmi[];
+extern char str_23fm_hmi[];
+extern char str_17_hmi[];
+extern char str_17fm_hmi[];
+extern char str_06_hmi[];
+extern char str_06fm_hmi[];
 extern char D_001789E8[];
 extern char D_001789F0[];
 extern unsigned char player_environment;
@@ -40,13 +40,13 @@ extern void music_play(char *);
 extern char *music_dungeon_song(void);
 extern int location_contains(int, int);
 extern int D_0018767C[];
-extern char *D_001876AC[];
+extern char *str_0c[];
 extern char *D_001876E8[];
 extern char *D_00187734[];
 extern char *D_00187750[];
 extern char *D_00187770[];
-extern char *D_00187784[];
-extern char *D_001877A0[];
+extern char *str_e[];
+extern char *str_e_2[];
 extern char *D_001877DC[];
 extern char *D_00187828[];
 extern char *D_00187844[];
@@ -107,7 +107,7 @@ void head_bob_update(void)
 void music_select_tables(void)
 {
     if (music_uses_fm) {
-        D_001A4FB0 = D_001877A0;
+        D_001A4FB0 = str_e_2;
         D_001A4FA8 = D_001877DC;
         D_001A4FAC = D_00187828;
         D_001A4FA4 = D_00187844;
@@ -115,12 +115,12 @@ void music_select_tables(void)
         D_001A4FA0 = D_00187878;
         return;
     }
-    D_001A4FB0 = D_001876AC;
+    D_001A4FB0 = str_0c;
     D_001A4FA8 = D_001876E8;
     D_001A4FAC = D_00187734;
     D_001A4FA4 = D_00187750;
     D_001A4FB4 = D_00187770;
-    D_001A4FA0 = D_00187784;
+    D_001A4FA0 = str_e;
 }
 
 void music_choose_song(void)
@@ -212,28 +212,28 @@ void music_choose_song(void)
         case 10:
         case 12:
         case 13:
-            music_play(music_uses_fm == 0 ? D_001767E4 : D_001766F9);
+            music_play(music_uses_fm == 0 ? str_gshop_hmi : str_fm_sqr_2_hmi);
             break;
         case 11:
             if (current_building->faction_id == 40) {
                 if (rand() & 1)
-                    music_play(music_uses_fm == 0 ? D_001767EE : D_001767FA);
+                    music_play(music_uses_fm == 0 ? str_gmage_3_hmi : str_fm_nite3_hmi);
                 else
-                    music_play(music_uses_fm == 0 ? D_00176807 : D_001767FA);
+                    music_play(music_uses_fm == 0 ? str_magic_2_hmi : str_fm_nite3_hmi);
             } else {
-                music_play(music_uses_fm == 0 ? D_00176813 : D_0017681A);
+                music_play(music_uses_fm == 0 ? str_23_hmi : str_23fm_hmi);
             }
             break;
         case 14:
             if (in_knightly_order_hall) {
-                music_play(music_uses_fm == 0 ? D_00176823 : D_0017682A);
+                music_play(music_uses_fm == 0 ? str_17_hmi : str_17fm_hmi);
             } else {
                 p = memchr(D_001789E8, current_building->faction_id, 8);
                 idx = (int)(p - D_001789E8);
                 if (p == 0) {
                     p = memchr(D_001789F0, current_building->faction_id, 8);
                     if (p == 0) {
-                        music_play(music_uses_fm == 0 ? D_00176823 : D_0017682A);
+                        music_play(music_uses_fm == 0 ? str_17_hmi : str_17fm_hmi);
                         break;
                     }
                     idx = (int)(p - D_001789F0);
@@ -248,12 +248,12 @@ void music_choose_song(void)
             /* a random pick from one choice: the code generator folds `% 1` to 0 and drops the
              * then-branch, but its ?: temp keeps the frame slot at [ebp-0x50] */
             if (rand() % 1)
-                music_play(music_uses_fm == 0 ? D_00176833 : D_0017683A);
+                music_play(music_uses_fm == 0 ? str_06_hmi : str_06fm_hmi);
             else
-                music_play(music_uses_fm == 0 ? D_00176833 : D_0017683A);
+                music_play(music_uses_fm == 0 ? str_06_hmi : str_06fm_hmi);
             break;
         default:
-            music_play(music_uses_fm == 0 ? D_00176813 : D_0017681A);
+            music_play(music_uses_fm == 0 ? str_23_hmi : str_23fm_hmi);
             break;
         }
     }

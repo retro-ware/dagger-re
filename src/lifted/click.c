@@ -13,19 +13,19 @@ extern short mouse_x;
 extern short mouse_y;
 extern int dungeon_water_level;
 extern signed char key_down_esc;
-extern char D_00176198[];
-extern char D_001761A0[];
-extern char D_001761C4[];
-extern char D_001761E8[];
-extern char D_0017620C[];
-extern char D_0017622D[];
-extern char D_00176255[];
-extern char D_0017628F[];
-extern char D_00176297[];
-extern char D_001762DD[];
-extern char D_001762EA[];
-extern char D_001762F7[];
-extern char D_00176322[];
+extern char str_click_c[];
+extern char str_you_cannot_enter_while_not_on_foot[];
+extern char str_you_cannot_enter_while_not_on_foot_2[];
+extern char str_you_cannot_enter_while_not_on_foot_3[];
+extern char str_this_house_has_nothing_of_value[];
+extern char str_you_need_to_be_a_member_to_access_this[];
+extern char str_you_need_to_be_a_member_to_access_this_2[];
+extern char str_banking[];
+extern char str_sell[];
+extern char str_repr01i0_img[];
+extern char str_daed00i0_img[];
+extern char str_store_is_closed_open_from_00_to_00[];
+extern char str_gnrc01i0_img[];
 extern unsigned char player_environment;
 extern signed char building_open_hours[];
 extern signed char D_0017C5B9[];
@@ -41,7 +41,7 @@ extern iptr D_00185093;
 extern struct rect repair_menu_buttons[];
 extern struct rect coven_menu_buttons[];
 extern struct rect service_menu_buttons[];
-extern char D_00187644[];
+extern char str_s[];
 extern signed char footstep_sound_ids[];
 extern short music_special_dungeon_ids[];
 extern iptr D_001878AC[];
@@ -240,10 +240,10 @@ void spawn_point_occupied_cb(struct record *);
 void click_describe_item(struct item *item)
 {
     if (strchr((char *)D_00183248, (int)(unsigned char)item->name[0]) != 0) {
-        mc_set_location(204, D_00176198);
+        mc_set_location(204, str_click_c);
         mc_sprintf((char *)text_buffer, (char *)D_0018324C, item);
     } else {
-        mc_set_location(206, D_00176198);
+        mc_set_location(206, str_click_c);
         mc_sprintf((char *)text_buffer, (char *)D_00183250, item);
     }
     hud_message_add((iptr)text_buffer);
@@ -252,10 +252,10 @@ void click_describe_item(struct item *item)
 void click_describe_creature(struct character *unused, struct career *creature_class)
 {
     if (strchr((char *)D_00183248, (int)(unsigned char)creature_class->name[0]) != 0) {
-        mc_set_location(215, D_00176198);
+        mc_set_location(215, str_click_c);
         mc_sprintf((char *)text_buffer, (char *)D_0018324C, creature_class->name);
     } else {
-        mc_set_location(217, D_00176198);
+        mc_set_location(217, str_click_c);
         mc_sprintf((char *)text_buffer, (char *)D_00183250, creature_class->name);
     }
     hud_message_add((iptr)text_buffer);
@@ -281,7 +281,7 @@ int click_world_face(struct pick_result *hit)
             case 56:
             case 331:
                 if (((int)(unsigned short)(player_character->flags & 1536)) != 0) {
-                    hud_message_add((iptr)D_001761A0);
+                    hud_message_add((iptr)str_you_cannot_enter_while_not_on_foot);
                     break;
                 }
                 dungeon_load(-1);
@@ -289,11 +289,11 @@ int click_world_face(struct pick_result *hit)
                 break;
             case 74:
                 if (((int)(unsigned short)(player_character->flags & 1536)) != 0) {
-                    hud_message_add((iptr)D_001761C4);
+                    hud_message_add((iptr)str_you_cannot_enter_while_not_on_foot_2);
                     break;
                 }
                 if (player_object->parent->type == 1) {
-                    if (xn_str_find_u16((unsigned short *)D_00187644, (int)(short)building->faction_id, 21) != 0) {
+                    if (xn_str_find_u16((unsigned short *)str_s, (int)(short)building->faction_id, 21) != 0) {
                         knightly = 1;
                     } else {
                         knightly = 0;
@@ -328,14 +328,14 @@ int click_world_face(struct pick_result *hit)
         case 56:
         case 331:
             if (((int)(unsigned short)(player_character->flags & 1536)) != 0) {
-                hud_message_add((iptr)D_001761E8);
+                hud_message_add((iptr)str_you_cannot_enter_while_not_on_foot_3);
                 break;
             }
             dungeon_load(-1);
             automap_load();
             break;
         case 74:
-            hud_message_add((iptr)D_0017620C);
+            hud_message_add((iptr)str_this_house_has_nothing_of_value);
             break;
         case 95:
             if (wagon_container != 0) {
@@ -361,14 +361,14 @@ void shelf_open(struct record *shelf, struct building *shelf_building, int model
         return;
     case 11:
         if (guild_find_membership_by_kind(1) == 0) {
-            msgbox_show_string(D_0017622D, 1);
+            msgbox_show_string(str_you_need_to_be_a_member_to_access_this, 1);
             return;
         }
         shelf_open_books(shelf, shelf_building, model_index);
         return;
     case 14:
         if (guild_find_membership_by_bits(128) == 0) {
-            msgbox_show_string(D_00176255, 1);
+            msgbox_show_string(str_you_need_to_be_a_member_to_access_this_2, 1);
             return;
         }
         shelf_open_books(shelf, shelf_building, model_index);
@@ -485,7 +485,7 @@ void shelf_open_books(struct record *shelf, struct building *shelf_building, int
         while (object != 0) {
             *(short *)(shelf_book_ids + (i * 2)) = (short)object->data.item.message;
             book_read_header(header, (int)(unsigned short)*(short *)(shelf_book_ids + (i++ * 2)));
-            mc_strncpy(text, header, 4, D_00176198, 479);
+            mc_strncpy(text, header, 4, str_click_c, 479);
             text += strlen(text) + 1;
             object = object->next;
         }
@@ -629,7 +629,7 @@ void npc_click_service(struct record *npc)
                 service_menu_handler = (iptr)bank_open;
                 service_menu_npc = npc;
                 if (((int)(unsigned char)(person->flags & 8)) != 0) {
-                    service_menu_open((iptr)D_0017628F);
+                    service_menu_open((iptr)str_banking);
                 } else {
                     npc_talk(npc);
                 }
@@ -669,7 +669,7 @@ void npc_click_service(struct record *npc)
                 if (((int)(unsigned char)(person->flags & 8)) != 0) {
                     service_menu_npc = npc;
                     service_menu_handler = (iptr)service_menu_sell;
-                    service_menu_open((iptr)D_00176297);
+                    service_menu_open((iptr)str_sell);
                 } else {
                     npc_talk(npc);
                 }
@@ -735,7 +735,7 @@ int repair_menu_open(int opening)
     if (((int)(unsigned char)game_mode) == 26) return 1;
     if (opening != 0) {
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        window_image = disk_read_file(D_001762DD, 0);
+        window_image = disk_read_file(str_repr01i0_img, 0);
         game_mode = 26;
         D_00196272 = 1;
         return 1;
@@ -767,7 +767,7 @@ void repair_menu_close(void)
     while (key_down_esc != 0);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00176198, 891);
+        mc_free((void *)window_image, str_click_c, 891);
         window_image = -1751672937;
     }
     game_mode = 0;
@@ -798,7 +798,7 @@ int coven_menu_open(int opening)
     if (((int)(unsigned char)game_mode) == 27) return 1;
     if (opening != 0) {
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        window_image = disk_read_file(D_001762EA, 0);
+        window_image = disk_read_file(str_daed00i0_img, 0);
         game_mode = 27;
         D_00196272 = 1;
         return 1;
@@ -830,7 +830,7 @@ void coven_menu_close(void)
     while (key_down_esc != 0);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00176198, 957);
+        mc_free((void *)window_image, str_click_c, 957);
         window_image = -1751672937;
     }
     game_mode = 0;
@@ -891,7 +891,7 @@ void click_npc(struct pick_result *unused, struct record *npc)
         }
         return;
     case 1:
-        mc_set_location(1021, D_00176198);
+        mc_set_location(1021, str_click_c);
         mc_sprintf((char *)text_buffer, (char *)D_00183254, npc_display_name(npc));
         hud_message_add((iptr)text_buffer);
     default:;
@@ -1004,10 +1004,10 @@ void click_corpse(struct pick_result *unused, struct record *corpse)
     case 1:
         character = &corpse->data.character;
         if (character->race < 43) {
-            mc_set_location(1153, D_00176198);
+            mc_set_location(1153, str_click_c);
             mc_sprintf((char *)text_buffer, (char *)D_00184329, (iptr)monster_names[character->race]);
         } else {
-            mc_strncpy((char *)text_buffer, (char *)D_00185093, 160, D_00176198, 1155);
+            mc_strncpy((char *)text_buffer, (char *)D_00185093, 160, str_click_c, 1155);
         }
         hud_message_add((iptr)text_buffer);
         return;
@@ -1101,8 +1101,8 @@ void click_show_building_info(struct pick_result *unused, struct record *object)
     town_map_note_building(object, building);
     hud_message_add(building_name(building));
     if (building->type == 1 || building_is_open(building) != 0 || building->type >= 14) return;
-    mc_set_location(1274, D_00176198);
-    mc_sprintf((char *)text_buffer, D_001762F7, (int)(unsigned char)building_open_hours[building->type * 2], (int)(unsigned char)D_0017C5B9[building->type * 2]);
+    mc_set_location(1274, str_click_c);
+    mc_sprintf((char *)text_buffer, str_store_is_closed_open_from_00_to_00, (int)(unsigned char)building_open_hours[building->type * 2], (int)(unsigned char)D_0017C5B9[building->type * 2]);
     hud_message_add((iptr)text_buffer);
 }
 
@@ -1146,7 +1146,7 @@ int service_menu_open(iptr label)
     if (label != 0) {
         service_menu_label = label;
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        window_image = disk_read_file(D_00176322, 0);
+        window_image = disk_read_file(str_gnrc01i0_img, 0);
         game_mode = 28;
         D_00196272 = 1;
         return 1;
@@ -1179,7 +1179,7 @@ void service_menu_close(void)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     while (key_down_esc != 0);
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00176198, 1372);
+        mc_free((void *)window_image, str_click_c, 1372);
         window_image = -1751672937;
     }
     game_mode = 0;

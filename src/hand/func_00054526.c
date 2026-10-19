@@ -5,7 +5,7 @@ struct AB { unsigned char a; unsigned char b; };
 extern short mouse_y;
 extern short font_height;
 extern iptr screen_buffer;
-extern char D_00175420[];
+extern char str_custom_c[];
 extern char *classmaker_advantage_names[];
 extern char *classmaker_disadvantage_names[];
 extern char **classmaker_advantage_sublists[];
@@ -54,7 +54,7 @@ void classmaker_specials_screen(void)
     if ((int)(short)(classmaker_screen & 16) != 0)
         index++;
     xn_mouse_cursor_erase();
-    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, D_00175420, 675, 4);
+    mc_memcpy((void *)screen_buffer, (void *)scratch_190df4, 64000, str_custom_c, 675, 4);
     xn_draw_image(0, 0, *(unsigned short *)(D_00190E00 + 4), *(unsigned short *)(D_00190E00 + 6), D_00190E00 + 12);
     if (index == 2 || index == 3)
         xn_draw_image(0, 0, *(unsigned short *)(scratch_190dfc + 4), *(unsigned short *)(scratch_190dfc + 6), scratch_190dfc + 12);

@@ -20,7 +20,7 @@ extern signed char xn_tex_cache_full;
 extern char xn_cam_rotation[];
 extern char xn_cam_view_matrix[];
 extern int xn_model_queue_count;
-extern char D_001700A0[];
+extern char str_insufficient_texture_memory[];
 extern int D_001788E8[];
 extern int D_00178968[];
 extern unsigned char player_environment;
@@ -361,7 +361,7 @@ L10C1B:;
         D_0018DC08 = xn_model_queue_count;
         if (incomplete == 0) if (xn_tex_cache_full == 0) break;
         ++retries;
-        if (retries != 1) fatal_error(D_001700A0);
+        if (retries != 1) fatal_error(str_insufficient_texture_memory);
         xn_tex_cache_full = 0;
         xn_tex_cache_flush();
     }

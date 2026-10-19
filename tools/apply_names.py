@@ -16,7 +16,12 @@ Re-running is safe: a name that changed in names.csv is renamed again, and one t
 below strong goes back to its address. Tools that read the sources by address use
 names.canonical() to see them that way.
 
-usage: apply_names.py [apply | revert | report]
+usage: apply_names.py [apply | revert | report | symbols]
+
+`symbols` adds to config/symbols.txt the names already put into the sources by
+tools/lsp_rename.py (clangd): a confirmed or strong name whose address identifier no longer
+appears in the sources, but whose name does. Existing entries are kept as they are (the
+sources were verified with them). It never edits a source file.
 """
 import os
 import re
@@ -108,6 +113,18 @@ def main():
         if os.path.exists(SYMBOLS):
             os.remove(SYMBOLS)
         print("%d files back to addresses" % n)
+        return
+    if cmd == "symbols":
+        present = set()
+        for p in files:
+            present.update(IDENT.findall(open(p, encoding="latin-1").read()))
+        applied = {ident: n for n, ident in back.items()}   # ident -> name, as verified before
+        want, _ = wanted(namesmod.load(), set())
+        new = {ident: n for ident, n in want.items()
+               if ident not in applied and ident not in present and n in present}
+        applied.update(new)
+        write_symbols(applied)
+        print("config/symbols.txt: %d names (%d new)" % (len(applied), len(new)))
         return
     # identifiers the sources use for anything else (address tokens and applied names aside)
     used = set()

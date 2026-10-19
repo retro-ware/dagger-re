@@ -7,9 +7,9 @@
 
 extern struct region regions[];
 extern signed char mouse_buttons;
-extern char D_001707F0[];
-extern char D_001707F7[];
-extern char D_00170801[];
+extern char str_qcom_c[];
+extern char str_s_qbn[];
+extern char str_anim_vid[];
 extern char D_001708ED[];
 extern short D_0017A120[];
 extern signed char D_001841E3[];
@@ -170,8 +170,8 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 8:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0 && ((int)(unsigned char)current_region) != 31) {
-                    mc_set_location(64, D_001707F0);
-                    mc_sprintf(D_001911E4, D_001707F7, rand_range(op->args[1].value, op->args[2].value));
+                    mc_set_location(64, str_qcom_c);
+                    mc_sprintf(D_001911E4, str_s_qbn, rand_range(op->args[1].value, op->args[2].value));
                     quest_start(D_001911E4);
                     quest_op_done(quest, op);
                 }
@@ -424,12 +424,12 @@ void quest_run_opcodes(struct quest *quest)
                 break;
             case 50:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
-                    mc_set_location(358, D_001707F0);
-                    mc_sprintf((char *)text_buffer, D_00170801, op->args[1].value);
+                    mc_set_location(358, str_qcom_c);
+                    mc_sprintf((char *)text_buffer, str_anim_vid, op->args[1].value);
                     while (mouse_buttons != 0) xn_mouse_poll_clamped();
                     path = disk_resolve_path((iptr)text_buffer);
                     xn_vid_play((char *)path, 0, 0, 1);
-                    mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_001707F0, 362, 4);
+                    mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_qcom_c, 362, 4);
                     palette_restore();
                     sky_loaded_frame = 10000;
                     night_sky_loaded = 0;

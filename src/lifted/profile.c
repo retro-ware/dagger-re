@@ -4,10 +4,10 @@
 #include "structs.h"
 #include "clib.h"
 
-extern char D_00170129[];
-extern char D_00170133[];
-extern char D_00170137[];
-extern char D_0017013B[];
+extern char str_profile_c[];
+extern char str_yes[];
+extern char str_yes_2[];
+extern char str_no[];
 extern iptr D_00178848[];
 
 extern int profile_find_section(struct profile *, char *);
@@ -59,7 +59,7 @@ int profile_get_yes(struct profile *profile, char *item)
 
     if ((short)profile_find_item(profile, item) == 0) return 0;
     if ((short)profile_get_string(profile, value, 32) == 0) return 0;
-    if (stricmp(value, D_00170133) == 0) return 1;
+    if (stricmp(value, str_yes) == 0) return 1;
     return 0;
 }
 
@@ -74,8 +74,8 @@ int profile_set_yes_no(struct profile *profile, char *item, short yes)
 {
     if ((short)profile_find_item(profile, item) == 0) return 0;
     if (yes != 0) {
-        if ((short)profile_set_string(profile, D_00170137) == 0) return 0;
-    } else if ((short)profile_set_string(profile, D_0017013B) == 0) {
+        if ((short)profile_set_string(profile, str_yes_2) == 0) return 0;
+    } else if ((short)profile_set_string(profile, str_no) == 0) {
         return 0;
     }
     return 1;
@@ -94,7 +94,7 @@ int profile_delete_section(struct profile *profile, char *section)
     while (start[length] != 91 && start + length < end) {
         length++;
     }
-    mc_memmove(start, start + length, (int)(end - (start + length)), D_00170129, 1179, 4);
+    mc_memmove(start, start + length, (int)(end - (start + length)), str_profile_c, 1179, 4);
     profile->length -= length;
     profile->flags |= 128;
     return 1;

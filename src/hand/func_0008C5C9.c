@@ -6,7 +6,7 @@ extern unsigned char D_0012B508;
 extern short font_height;
 extern short D_00142928;
 extern short D_0014292C;
-extern char D_00176E2C[];
+extern char str_inpstr_c[];
 extern char D_00190B44[];
 extern int inpstr_result;
 extern iptr inpstr_text;
@@ -47,7 +47,7 @@ int inpstr_update(void)
         if (r == 0x87654321)
             return 0;
         if (r == 0x8000) {
-            mc_strncpy((char *)inpstr_text, D_00190B44, 4, D_00176E2C, 157);
+            mc_strncpy((char *)inpstr_text, D_00190B44, 4, str_inpstr_c, 157);
             return 2;
         }
         inpstr_result = r;

@@ -24,13 +24,13 @@ extern signed char key_down_esc;
 extern signed char key_down_minus;
 extern signed char key_down_equals;
 extern iptr screen_buffer;
-extern char D_00175C90[];
-extern char D_00175C9D[];
-extern char D_00175CAA[];
-extern char D_00175CB7[];
-extern char D_00175CC4[];
-extern char D_00175CD0[];
-extern char D_00175CEF[];
+extern char str_bank00i0_img[];
+extern char str_bank01i0_img[];
+extern char str_bank01i1_img[];
+extern char str_bank01i2_img[];
+extern char str_bank_c[];
+extern char str_you_cannot_carry_so_much_gold[];
+extern char str_price_gold[];
 extern char *region_names[];
 extern struct rect bank_buttons[];
 extern signed char D_00187CA8;
@@ -129,10 +129,10 @@ int bank_open(int opening)
     if (opening != 0) {
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
         D_001A41E4 = 0;
-        window_image = disk_read_file(D_00175C90, 0);
-        *(iptr *)&D_00195B5C = disk_read_file(D_00175C9D, 0);
-        D_001A41E8 = disk_read_file(D_00175CAA, 0);
-        D_001A4140 = disk_read_file(D_00175CB7, 0);
+        window_image = disk_read_file(str_bank00i0_img, 0);
+        *(iptr *)&D_00195B5C = disk_read_file(str_bank01i0_img, 0);
+        D_001A41E8 = disk_read_file(str_bank01i1_img, 0);
+        D_001A4140 = disk_read_file(str_bank01i2_img, 0);
         xn_cam_set_view_window(51, 45, 216, 72);
         D_00196272 = 1;
         game_mode = 15;
@@ -140,8 +140,8 @@ int bank_open(int opening)
         bank_house_count = (bank_ship_count = (bank_screen = (bank_selected = 0)));
         *(int *)bank_list_top = 0;
         D_001A41E0 = 1500;
-        bank_saved_screen = (iptr)mc_malloc(64000, D_00175CC4, 89);
-        mc_memcpy((void *)bank_saved_screen, (void *)screen_buffer, 64000, D_00175CC4, 90, 4);
+        bank_saved_screen = (iptr)mc_malloc(64000, str_bank_c, 89);
+        mc_memcpy((void *)bank_saved_screen, (void *)screen_buffer, 64000, str_bank_c, 90, 4);
         bank_account = &bank_accounts->data.bank_accounts[(int)(unsigned char)current_region];
         object_foreach(location_object, bank_add_house_for_sale);
         bank_init_ships();
@@ -158,26 +158,26 @@ void bank_close(void)
         xn_cam_set_view_window(160, 77, 160, 77);
     }
     if (bank_saved_screen != 0 && bank_saved_screen != (-1751672937)) {
-        mc_free((void *)bank_saved_screen, D_00175CC4, 110);
+        mc_free((void *)bank_saved_screen, str_bank_c, 110);
         bank_saved_screen = -1751672937;
     }
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00175CC4, 111);
+        mc_free((void *)window_image, str_bank_c, 111);
         window_image = -1751672937;
     }
     if ((iptr)D_00195B5C != 0 && (iptr)D_00195B5C != (-1751672937)) {
-        mc_free((void *)D_00195B5C, D_00175CC4, 112);
+        mc_free((void *)D_00195B5C, str_bank_c, 112);
         *(iptr *)&D_00195B5C = -1751672937;
     }
     if (D_001A41E8 != 0 && D_001A41E8 != (-1751672937)) {
-        mc_free((void *)D_001A41E8, D_00175CC4, 113);
+        mc_free((void *)D_001A41E8, str_bank_c, 113);
         D_001A41E8 = -1751672937;
     }
     if (D_001A4140 != 0 && D_001A4140 != (-1751672937)) {
-        mc_free((void *)D_001A4140, D_00175CC4, 114);
+        mc_free((void *)D_001A4140, str_bank_c, 114);
         D_001A4140 = -1751672937;
     }
-    mc_memset(text_rsc_buffer, 0, 2048, D_00175CC4, 116, 2048);
+    mc_memset(text_rsc_buffer, 0, 2048, str_bank_c, 116, 2048);
     func_0006CB02();
     game_mode = 0;
     D_00196272 = 0;
@@ -287,7 +287,7 @@ void bank_withdraw_gold(void)
         player_character->gold += amount;
         return;
     }
-    msgbox_show_string(D_00175CD0, 1);
+    msgbox_show_string(str_you_cannot_carry_so_much_gold, 1);
 }
 
 void bank_deposit_letter(struct record *object)
@@ -490,8 +490,8 @@ void bank_draw_house_list(void)
         } else {
             colour = 146;
         }
-        mc_set_location(573, D_00175CC4);
-        mc_sprintf((char *)text_buffer, D_00175CEF, bank_houses_for_sale[row].price);
+        mc_set_location(573, str_bank_c);
+        mc_sprintf((char *)text_buffer, str_price_gold, bank_houses_for_sale[row].price);
         text_draw_coloured((iptr)text_buffer, 52, (int)(short)(((row - *(short *)bank_list_top) * 7) + 38), (int)(short)*(short *)&colour, 156);
     }
     if (*(int *)bank_list_top != 0) {
@@ -566,8 +566,8 @@ void bank_house_bought(void)
     D_001A41E4 = (iptr)RECORD_FROM_DATA(bank_houses_for_sale[(unsigned char)bank_selected].block);
     D_001A41DC = (iptr)bank_houses_for_sale[(unsigned char)bank_selected].building;
     msgbox_show_rsc(282, 1);
-    mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, D_00175CC4, 647);
-    mc_strncpy(saved_location_name, (char *)current_location, 32, D_00175CC4, 648);
+    mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_bank_c, 647);
+    mc_strncpy(saved_location_name, (char *)current_location, 32, str_bank_c, 648);
     bank_screen = 0;
 }
 

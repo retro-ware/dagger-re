@@ -5,7 +5,7 @@ struct rec131 {
     unsigned char f2[129];
 };
 extern char xn_world_nature_flat_odds[];
-extern char D_00176C94[];
+extern char str_maplogic_c[];
 extern unsigned char month_seasons[];
 extern unsigned char climate_texture_sets[];
 extern unsigned int game_minutes;
@@ -24,7 +24,7 @@ void climate_set_textures(void)
 
     if (region_flats[climate_index].f2[0] > 50)
         region_flats[climate_index].f2[0] = 50;
-    mc_memcpy(xn_world_nature_flat_odds, region_flats[climate_index].f2, 129, D_00176C94, 1455, 4);
+    mc_memcpy(xn_world_nature_flat_odds, region_flats[climate_index].f2, 129, str_maplogic_c, 1455, 4);
     ground_texture_archive = climate_texture_sets[climate_index] * 100 + 2;
     nature_texture_archive = region_flats[climate_index].f0;
     climate = climate_category();

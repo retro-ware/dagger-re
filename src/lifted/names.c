@@ -4,19 +4,19 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176D8C[];
-extern char D_00176D98[];
+extern char str_namegen_dat[];
+extern char str_names_c[];
 extern char D_00176DA0[];
-extern char D_00176DA6[];
-extern char D_00176DB0[];
-extern char D_00176DB6[];
-extern char D_00176DC2[];
-extern char D_00176DD1[];
-extern char D_00176DE0[];
-extern char D_00176DE7[];
-extern char D_00176DF1[];
-extern char D_00176E06[];
-extern char D_00176E18[];
+extern char str_residence[];
+extern char str_fmt_s_s_11[];
+extern char str_your_house[];
+extern char str_house_for_sale[];
+extern char str_the_bank_of[];
+extern char str_palace[];
+extern char str_city_wall[];
+extern char str_the_dark_brotherhood[];
+extern char str_the_thieves_guild[];
+extern char str_the_residence[];
 extern char **shop_name_last_words[];
 extern char *shop_name_first_words[];
 extern char *tavern_name_first_words[];
@@ -58,14 +58,14 @@ iptr name_generate(unsigned char bank, unsigned char female)
     char *surname;
 
     *(signed char *)namegen_name = 0;
-    namegen_file = disk_open_data(D_00176D8C);
+    namegen_file = disk_open_data(str_namegen_dat);
     lseek((int)(short)namegen_file, ((int)(unsigned char)bank) * 48, 0);
     read((int)(short)namegen_file, namegen_part_offsets, 48);
-    mc_strncpy(namegen_name, (char *)name_generate_first((int)(unsigned char)bank, (int)(unsigned char)female), 40, D_00176D98, 90);
+    mc_strncpy(namegen_name, (char *)name_generate_first((int)(unsigned char)bank, (int)(unsigned char)female), 40, str_names_c, 90);
     surname = (char *)name_generate_surname((int)(unsigned char)bank, (int)(unsigned char)female);
     if (*surname != 0) {
-        func_000A1054(namegen_name, D_00176DA0, D_00176D98, 96, 40);
-        func_000A1054(namegen_name, surname, D_00176D98, 97, 40);
+        func_000A1054(namegen_name, D_00176DA0, str_names_c, 96, 40);
+        func_000A1054(namegen_name, surname, str_names_c, 97, 40);
     }
     close((int)(short)namegen_file);
     return (iptr)namegen_name;
@@ -81,18 +81,18 @@ iptr name_generate_first(unsigned char bank, unsigned char female)
         switch ((unsigned char)bank) {
         case 1:
             namegen_read_part((int)(short)namegen_file, 0);
-            mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 156);
+            mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 156);
             namegen_read_part((int)(short)namegen_file, 1);
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 158, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 158, 30);
             namegen_read_part((int)(short)namegen_file, 2);
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 160, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 160, 30);
             if (female == 0 && (rand() % 100) < 75) {
                 namegen_read_part((int)(short)namegen_file, 3);
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 165, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 165, 30);
             }
             if (female != 0) {
                 namegen_read_part((int)(short)namegen_file, 4);
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 171, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 171, 30);
             }
             break;
         case 2:
@@ -103,52 +103,52 @@ iptr name_generate_first(unsigned char bank, unsigned char female)
             }
             *(int *)&part = nord_part;
             namegen_read_part((int)(short)namegen_file, (int)(short)part);
-            mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 177);
+            mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 177);
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 1));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 179, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 179, 30);
             break;
         case 8:
             *(int *)&part = 0;
             namegen_read_part((int)(short)namegen_file, (int)(short)part);
-            mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 184);
+            mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 184);
             if ((rand() % 50) < 25) {
                 namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 1));
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 189, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 189, 30);
             }
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 2));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 193, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 193, 30);
             break;
         case 9:
             *(int *)&part = 0;
             namegen_read_part((int)(short)namegen_file, (int)(short)part);
-            mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 199);
+            mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 199);
             if ((rand() % 50) < 25) {
                 namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 1));
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 204, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 204, 30);
             }
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 2));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 208, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 208, 30);
             if (female != 0) {
                 namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 3));
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 213, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 213, 30);
             }
             break;
         case 10:
             *(int *)&part = 0;
             if (female == 0 && (rand() % 100) < 25) {
                 namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 3));
-                mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 223);
-                func_000A1054(namegen_part_name, D_00176DA0, D_00176D98, 224, 30);
+                mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 223);
+                func_000A1054(namegen_part_name, D_00176DA0, str_names_c, 224, 30);
                 namegen_read_part((int)(short)namegen_file, (int)(short)part);
-                func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 226, 30);
+                func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 226, 30);
             } else {
                 namegen_read_part((int)(short)namegen_file, (int)(short)part);
-                mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 231);
+                mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 231);
             }
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 1));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 235, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 235, 30);
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 2));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 237, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 237, 30);
             break;
         default:
             if (female != 0) {
@@ -158,9 +158,9 @@ iptr name_generate_first(unsigned char bank, unsigned char female)
             }
             *(int *)&part = default_part;
             namegen_read_part((int)(short)namegen_file, (int)(short)part);
-            mc_strncpy(namegen_part_name, namegen_syllable, 30, D_00176D98, 242);
+            mc_strncpy(namegen_part_name, namegen_syllable, 30, str_names_c, 242);
             namegen_read_part((int)(short)namegen_file, (int)(short)(*(int *)&part + 1));
-            func_000A1054(namegen_part_name, namegen_syllable, D_00176D98, 244, 30);
+            func_000A1054(namegen_part_name, namegen_syllable, str_names_c, 244, 30);
         }
         return (iptr)namegen_part_name;
     }
@@ -175,7 +175,7 @@ iptr building_name(struct building *building)
     char *space;
     struct record *quest_object;
 
-    if (building == 0) return (iptr)D_00176DA6;
+    if (building == 0) return (iptr)str_residence;
     saved_seed = rand();
     if (building->id == player_character->house) {
         parse_expand(D_00184872, (iptr)D_00190B44);
@@ -197,51 +197,51 @@ iptr building_name(struct building *building)
     case 10:
     case 12:
     case 13:
-        mc_set_location(308, D_00176D98);
-        mc_sprintf((char *)text_buffer, D_00176DB0, str_list_random(shop_name_first_words), str_list_random(shop_name_last_words[building->type]));
+        mc_set_location(308, str_names_c);
+        mc_sprintf((char *)text_buffer, str_fmt_s_s_11, str_list_random(shop_name_first_words), str_list_random(shop_name_last_words[building->type]));
         parse_expand((iptr)text_buffer, (iptr)text_rsc_buffer);
         break;
     case 1:
         if (((location_object->id & -65536) + building->id) == player_character->house) {
-            mc_strncpy((char *)text_rsc_buffer, D_00176DB6, 2048, D_00176D98, 313);
+            mc_strncpy((char *)text_rsc_buffer, str_your_house, 2048, str_names_c, 313);
         } else {
-            mc_strncpy((char *)text_rsc_buffer, D_00176DC2, 2048, D_00176D98, 315);
+            mc_strncpy((char *)text_rsc_buffer, str_house_for_sale, 2048, str_names_c, 315);
         }
         break;
     case 3:
-        mc_set_location(318, D_00176D98);
-        mc_sprintf((char *)text_rsc_buffer, D_00176DD1, (iptr)region_names[((int)(unsigned char)current_region)]);
+        mc_set_location(318, str_names_c);
+        mc_sprintf((char *)text_rsc_buffer, str_the_bank_of, (iptr)region_names[((int)(unsigned char)current_region)]);
         break;
     case 11:
         faction = (struct faction *)faction_find((int)(short)building->faction_id);
         if (faction != 0) {
-            mc_strncpy((char *)text_rsc_buffer, faction->name, 2048, D_00176D98, 323);
+            mc_strncpy((char *)text_rsc_buffer, faction->name, 2048, str_names_c, 323);
         }
         break;
     case 14:
         faction = (struct faction *)faction_find((int)(short)building->faction_id);
         if (faction->child != 0) {
-            mc_strncpy((char *)text_rsc_buffer, faction->child->name, 2048, D_00176D98, 332);
+            mc_strncpy((char *)text_rsc_buffer, faction->child->name, 2048, str_names_c, 332);
         } else if (faction != 0) {
-            mc_strncpy((char *)text_rsc_buffer, faction->name, 2048, D_00176D98, 334);
+            mc_strncpy((char *)text_rsc_buffer, faction->name, 2048, str_names_c, 334);
         }
         break;
     case 15:
-        mc_set_location(341, D_00176D98);
-        mc_sprintf((char *)text_rsc_buffer, D_00176DB0, str_list_random(tavern_name_first_words), str_list_random(tavern_name_last_words));
+        mc_set_location(341, str_names_c);
+        mc_sprintf((char *)text_rsc_buffer, str_fmt_s_s_11, str_list_random(tavern_name_first_words), str_list_random(tavern_name_last_words));
         break;
     case 16:
-        mc_set_location(344, D_00176D98);
-        mc_sprintf((char *)text_rsc_buffer, D_00176DE0);
+        mc_set_location(344, str_names_c);
+        mc_sprintf((char *)text_rsc_buffer, str_palace);
         break;
     case 23:
-        mc_strncpy((char *)text_rsc_buffer, D_00176DE7, 2048, D_00176D98, 347);
+        mc_strncpy((char *)text_rsc_buffer, str_city_wall, 2048, str_names_c, 347);
         break;
     default:
         if (building->faction_id == 108 && guild_find_membership_by_kind(0) != 0) {
-            mc_strncpy((char *)text_rsc_buffer, D_00176DF1, 2048, D_00176D98, 351);
+            mc_strncpy((char *)text_rsc_buffer, str_the_dark_brotherhood, 2048, str_names_c, 351);
         } else if (building->faction_id == 42 && guild_find_membership_by_kind(3) != 0) {
-            mc_strncpy((char *)text_rsc_buffer, D_00176E06, 2048, D_00176D98, 353);
+            mc_strncpy((char *)text_rsc_buffer, str_the_thieves_guild, 2048, str_names_c, 353);
         } else {
             quest_object = quest_find_site_for_building(building);
             if (quest_object != 0) {
@@ -252,10 +252,10 @@ iptr building_name(struct building *building)
                 }
                 space = (char *)strchr(resident_name, 32);
                 if (space != 0) resident_name = space + 1;
-                mc_set_location(363, D_00176D98);
-                mc_sprintf((char *)text_rsc_buffer, D_00176E18, resident_name);
+                mc_set_location(363, str_names_c);
+                mc_sprintf((char *)text_rsc_buffer, str_the_residence, resident_name);
             } else {
-                mc_strncpy((char *)text_rsc_buffer, D_00176DA6, 2048, D_00176D98, 366);
+                mc_strncpy((char *)text_rsc_buffer, str_residence, 2048, str_names_c, 366);
             }
         }
     }

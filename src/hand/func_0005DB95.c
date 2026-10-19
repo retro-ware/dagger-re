@@ -4,7 +4,7 @@
 
 extern int xn_cam_yaw;
 extern char *screen_buffer;
-extern char D_00175898[];
+extern char str_icons_c[];
 extern struct record *detect_target;
 extern struct record *player_object;
 extern struct settings *game_settings;
@@ -31,7 +31,7 @@ void hud_draw_heading_strip(int on_automap)
         xn_draw_image(compass_box_image->x, compass_box_image->y, compass_box_image->width, compass_box_image->height, compass_box_image->pixels);
         off = ((short)(player_object->yaw & 0x7ff) << 5) / 256;
         for (i = 185; i <= 197; i++)
-            mc_memcpy(screen_buffer + (i * 320 + 253), (i - 185) * 322 + (compass_image + off), 65, D_00175898, 440, 4);
+            mc_memcpy(screen_buffer + (i * 320 + 253), (i - 185) * 322 + (compass_image + off), 65, str_icons_c, 440, 4);
         if (detect_target != 0) {
             dir = ai_angle_diff(player_object->yaw, xn_math_angle_to_point(player_object->x, player_object->z, detect_target->x, detect_target->z), &dist);
             dir = (dir << 5) / 256;
@@ -49,5 +49,5 @@ void hud_draw_heading_strip(int on_automap)
     xn_draw_image(compass_box_image->x - 250, compass_box_image->y - 11, compass_box_image->width, compass_box_image->height, compass_box_image->pixels);
     off = ((xn_cam_yaw & 2047) << 5) / 256;
     for (i = 174; i <= 186; i++)
-        mc_memcpy(screen_buffer + (i * 320 + 3), (i - 174) * 322 + (compass_image + off), 65, D_00175898, 460, 4);
+        mc_memcpy(screen_buffer + (i * 320 + 3), (i - 174) * 322 + (compass_image + off), 65, str_icons_c, 460, 4);
 }

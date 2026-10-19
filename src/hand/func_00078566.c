@@ -2,11 +2,11 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00176844[];
-extern char D_0017684E[];
-extern char D_0017685B[];
-extern char D_00176868[];
-extern char D_00176876[];
+extern char str_moninit_c[];
+extern char str_texture[];
+extern char str_ascr_anc[];
+extern char str_class_cfg_4[];
+extern char str_enemy_cfg[];
 extern struct monster_template monster_table[];
 extern signed char class_creature_types[];
 extern signed char text_buffer[];
@@ -80,8 +80,8 @@ void monster_init(struct record *monster, int monster_type)
         } else {
             texture_base = 255;
         }
-        mc_set_location(73, D_00176844);
-        mc_sprintf((char *)text_buffer, D_0017684E, monster_type + texture_base);
+        mc_set_location(73, str_moninit_c);
+        mc_sprintf((char *)text_buffer, str_texture, monster_type + texture_base);
         monster_char->anim_slot = monster_alloc_anim_slot();
         monster_char->action = 0;
         xn_anim_reset(anim);
@@ -95,8 +95,8 @@ void monster_init(struct record *monster, int monster_type)
             }
             monster_char->ascr_record = *(signed char *)&ascr;
         }
-        mc_set_location(91, D_00176844);
-        mc_sprintf((char *)text_buffer, D_0017685B, monster_char->ascr_record);
+        mc_set_location(91, str_moninit_c);
+        mc_sprintf((char *)text_buffer, str_ascr_anc, monster_char->ascr_record);
         record_index = archive_find_record(monster_bsa_handle, text_buffer, 8);
         D_00190704[monster_char->anim_slot] = (iptr)(anim->anim_script = (char *)archive_read_record(monster_bsa_handle, record_index, 0));
         anim->anim_request = 0;
@@ -109,12 +109,12 @@ void monster_init(struct record *monster, int monster_type)
         if (monster_type == 23 || monster_type == 18) xn_tex_archive_set_translucent(texture_base + monster_type);
         table_row = &monster_table[monster_type];
         if (monster_type >= 43) {
-            mc_set_location(112, D_00176844);
-            mc_sprintf((char *)text_buffer, D_00176868, class_index);
+            mc_set_location(112, str_moninit_c);
+            mc_sprintf((char *)text_buffer, str_class_cfg_4, class_index);
             disk_read_file(text_buffer, (iptr)career);
         } else {
-            mc_set_location(117, D_00176844);
-            mc_sprintf((char *)text_buffer, D_00176876, monster_type);
+            mc_set_location(117, str_moninit_c);
+            mc_sprintf((char *)text_buffer, str_enemy_cfg, monster_type);
             record_index = archive_find_record(monster_bsa_handle, text_buffer, 8);
             archive_read_record(monster_bsa_handle, record_index, (iptr)career);
         }
@@ -134,12 +134,12 @@ void monster_init(struct record *monster, int monster_type)
             monster_char->level = table_row->level;
             monster_char->health = (monster_char->max_health = monster_roll_d8_health(career->hp_per_level, table_row->hp_bonus));
         }
-        mc_memset(monster_char->armor_values, table_row->armor * 5, 7, D_00176844, 145, 7);
+        mc_memset(monster_char->armor_values, table_row->armor * 5, 7, str_moninit_c, 145, 7);
         monster_char->loot_table = table_row->loot_table;
         monster_char->table_flags = table_row->flags;
-        mc_memcpy(monster_char->attack_damage, table_row->attack_damage, 10, D_00176844, 148, 20);
+        mc_memcpy(monster_char->attack_damage, table_row->attack_damage, 10, str_moninit_c, 148, 20);
         monster_char->min_metal_to_hit = table_row->min_metal_to_hit;
-        mc_memcpy(monster_char->attributes, career->attributes, 16, D_00176844, 150, 16);
+        mc_memcpy(monster_char->attributes, career->attributes, 16, str_moninit_c, 150, 16);
         if (table_row->range_min == table_row->range_max) {
             monster_char->pad22A = table_row->range_min;
         } else {
@@ -156,7 +156,7 @@ void monster_init(struct record *monster, int monster_type)
         for (i = 0; i < 35; i++) {
             monster_char->skills[i].value = skill_value;
         }
-        mc_strncpy(monster_char->name, career->name, 32, D_00176844, 169);
+        mc_strncpy(monster_char->name, career->name, 32, str_moninit_c, 169);
         monster_init_gear(monster);
         monster_maybe_give_map(monster, monster_char->mobile_id);
         monster->image = (texture_base + monster_type) << 7;

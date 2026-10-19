@@ -6,16 +6,16 @@
 #include "clib.h"
 
 extern iptr D_00147954;
-extern char D_001708F0[];
-extern char D_001708F7[];
-extern char D_00170909[];
-extern char D_0017090D[];
-extern char D_00170918[];
-extern char D_00170928[];
-extern char D_0017093A[];
-extern char D_00170949[];
-extern char D_00170959[];
-extern char D_00170968[];
+extern char str_qkey_c[];
+extern char str_books_bok_txt[];
+extern char str_t_2[];
+extern char str_an_unknown[];
+extern char str_orsinium_castle[];
+extern char str_castle_daggerfall[];
+extern char str_castle_wayrest[];
+extern char str_castle_sentinel[];
+extern char str_scourg_barrow[];
+extern char str_the_material_of_the_weapon_you_are_using[];
 extern signed char weapon_skills[];
 extern signed char D_0017A144[];
 extern signed char struck_body_part_table[];
@@ -133,15 +133,15 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
                     }
                     if (text_macro_item->group == 7) {
                         book_header = *(char **)&D_00147954 + 90000;
-                        mc_set_location(115, D_001708F0);
-                        mc_sprintf((char *)text_buffer, D_001708F7, (int)(unsigned short)(short)text_macro_item->message);
+                        mc_set_location(115, str_qkey_c);
+                        mc_sprintf((char *)text_buffer, str_books_bok_txt, (int)(unsigned short)(short)text_macro_item->message);
                         book_file = disk_open_data(text_buffer);
                         read(book_file, book_header, 234);
                         close(book_file);
-                        mc_strncpy((char *)text_rsc_buffer, book_header, 2048, D_001708F0, 119);
+                        mc_strncpy((char *)text_rsc_buffer, book_header, 2048, str_qkey_c, 119);
                         return (iptr)text_rsc_buffer;
                     }
-                    parse_expand(D_00170909, D_00190B44);
+                    parse_expand(str_t_2, D_00190B44);
                     return (iptr)D_00190B44;
                 }
             }
@@ -185,7 +185,7 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
             if ((form & 15) == 1) return (iptr)flats_cfg_find(object->image)->name;
             if ((form & 15) > 1) {
                 if (object->faction_id != 0) return (iptr)faction_find(object->faction_id)->name;
-                return (iptr)D_0017090D;
+                return (iptr)str_an_unknown;
             }
             switch (form & 240) {
             case 0:
@@ -197,11 +197,11 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
                 }
                 return name_generate_seeded((int)(unsigned char)D_001841E3[object->home_region], (int)(unsigned char)((signed char)object->flags & 4), object->name_seed);
             case 16:
-                if ((object->id >> 16) == 50015) return (iptr)D_00170918;
-                if ((object->id >> 16) == 50027) return (iptr)D_00170928;
-                if ((object->id >> 16) == 50029) return (iptr)D_0017093A;
-                if ((object->id >> 16) == 50033) return (iptr)D_00170949;
-                if ((object->id >> 16) == 50041) return (iptr)D_00170959;
+                if ((object->id >> 16) == 50015) return (iptr)str_orsinium_castle;
+                if ((object->id >> 16) == 50027) return (iptr)str_castle_daggerfall;
+                if ((object->id >> 16) == 50029) return (iptr)str_castle_wayrest;
+                if ((object->id >> 16) == 50033) return (iptr)str_castle_sentinel;
+                if ((object->id >> 16) == 50041) return (iptr)str_scourg_barrow;
                 return building_name(&object->data.building);
             case 32:
                 return (iptr)object->data.quest_npc.location_name;
@@ -365,7 +365,7 @@ void damage_resolve_attack(struct record *attacker, struct record *target, int h
         return;
     }
     if (target_character->min_metal_to_hit > weapon->material && attacker == player_entity) {
-        hud_message_add((iptr)D_00170968);
+        hud_message_add((iptr)str_the_material_of_the_weapon_you_are_using);
     }
     if (target_character->min_metal_to_hit <= weapon->material && damage_roll_to_hit(attacker_character, target_character, body_part, chance, weapon->index, (int)(short)*(short *)(material_to_hit + (weapon->material * 2))) != 0) {
         damage = rand_range((int)(short)*(short *)(weapon_damage_min + (weapon->index << 2)), (int)(short)*(short *)(weapon_damage_max + (weapon->index << 2)));

@@ -6,7 +6,7 @@
 #include "clib.h"
 #include "doslow.h"
 
-extern char D_00177350[];
+extern char str_color_c[];
 extern unsigned char player_environment;
 extern struct collide_probe D_00187B6E;
 extern signed char D_001886A8[];
@@ -34,7 +34,7 @@ void color_init_remap_tables(void)
     int table;
     int colour;
 
-    D_001AA5FC = (iptr)mc_malloc(8448, D_00177350, 59);
+    D_001AA5FC = (iptr)mc_malloc(8448, str_color_c, 59);
     color_remap_tables = (unsigned char *)xn_mem_align_up(D_001AA5FC, 256);
     for (table = 0; table < 32; table++) {
         for (colour = 0; colour < 256; colour++) {
@@ -57,7 +57,7 @@ void color_init_remap_tables(void)
     xn_str_fill_ascending((char *)(iptr)((iptr)color_remap_tables + 7489), 129, 15);
     color_remap_tables[7677] = 216;
     for (table = 0; table < 10; table++) {
-        mc_memcpy((void *)(iptr)((iptr)(color_remap_tables + ((table << 8) + 4096)) + 112), (void *)(((iptr)D_001886D2) + (table << 4)), 16, D_00177350, 87, 4);
+        mc_memcpy((void *)(iptr)((iptr)(color_remap_tables + ((table << 8) + 4096)) + 112), (void *)(((iptr)D_001886D2) + (table << 4)), 16, str_color_c, 87, 4);
     }
 }
 

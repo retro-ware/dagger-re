@@ -4,15 +4,15 @@
 
 extern signed char D_0012B508;
 extern short font_height;
-extern char D_001707F0[];
-extern char D_0017080E[];
-extern char D_00170813[];
-extern char D_00170819[];
-extern char D_00170823[];
-extern char D_00170832[];
-extern char D_00170847[];
-extern char D_00170856[];
-extern char D_0017086D[];
+extern char str_qcom_c[];
+extern char str_true[];
+extern char str_false[];
+extern char str_fmt_s_s_5[];
+extern char str_fmt_s_ld_ld[];
+extern char str_fmt_s_ld_ld_ld[];
+extern char str_flag[];
+extern char str_player[];
+extern char str_quest[];
 extern char D_0017A134[];
 extern signed char text_buffer[];
 extern signed char quest_global_states[];
@@ -103,24 +103,24 @@ void quest_debug_overlay(void)
                     else
                         state_value = state->value;
                     if (state_value) COLOR = 240;
-                    mc_set_location(888, D_001707F0);
-                    mc_sprintf(((char *)text_buffer), D_00170819, text_var, state_value ? D_0017080E : D_00170813);
+                    mc_set_location(888, str_qcom_c);
+                    mc_sprintf(((char *)text_buffer), str_fmt_s_s_5, text_var, state_value ? str_true : str_false);
                     break;
                 case 6:
                     timer = (struct qbn_timer *)text_var->record;
-                    mc_set_location(892, D_001707F0);
-                    mc_sprintf(((char *)text_buffer), D_00170823, text_var, game_minutes - timer->start, timer->delay);
+                    mc_set_location(892, str_qcom_c);
+                    mc_sprintf(((char *)text_buffer), str_fmt_s_ld_ld, text_var, game_minutes - timer->start, timer->delay);
                     break;
                 }
                 if (object) {
                     if (object->twin) {
                         object = object->twin;
                         COLOR = 240;
-                        mc_set_location(904, D_001707F0);
-                        mc_sprintf(((char *)text_buffer), D_00170832, text_var, object->x, object->y, object->z);
+                        mc_set_location(904, str_qcom_c);
+                        mc_sprintf(((char *)text_buffer), str_fmt_s_ld_ld_ld, text_var, object->x, object->y, object->z);
                     } else {
-                        mc_set_location(907, D_001707F0);
-                        mc_sprintf(((char *)text_buffer), D_00170832, text_var, object->x, object->y, object->z);
+                        mc_set_location(907, str_qcom_c);
+                        mc_sprintf(((char *)text_buffer), str_fmt_s_ld_ld_ld, text_var, object->x, object->y, object->z);
                     }
                 }
                 NEXTLINE();
@@ -141,17 +141,17 @@ void quest_debug_overlay(void)
             }
             if (state_value) COLOR = 240;
             else COLOR = 145;
-            mc_set_location(935, D_001707F0);
-            mc_sprintf(((char *)text_buffer), D_00170847, flag_id, state_value ? D_0017080E : D_00170813);
+            mc_set_location(935, str_qcom_c);
+            mc_sprintf(((char *)text_buffer), str_flag, flag_id, state_value ? str_true : str_false);
             NEXTLINE();
         }
     }
     COLOR = 112;
-    mc_set_location(942, D_001707F0);
-    mc_sprintf(((char *)text_buffer), D_00170856, player_object->x, player_object->y, player_object->z);
+    mc_set_location(942, str_qcom_c);
+    mc_sprintf(((char *)text_buffer), str_player, player_object->x, player_object->y, player_object->z);
     NEXTLINE();
-    mc_set_location(945, D_001707F0);
-    mc_sprintf(((char *)text_buffer), D_0017086D, CUR->name);
+    mc_set_location(945, str_qcom_c);
+    mc_sprintf(((char *)text_buffer), str_quest, CUR->name);
     text_draw(((char *)text_buffer), line >= column_lines ? 160 : 0, line % column_lines * LINEH);
     xn_font_select(4);
 }

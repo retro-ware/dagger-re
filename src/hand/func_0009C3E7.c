@@ -5,7 +5,7 @@
 
 extern unsigned char mouse_buttons;
 extern iptr screen_buffer;
-extern char D_0017743D[];
+extern char str_travel_c[];
 extern short travel_options;
 extern unsigned char D_00187CA8;
 extern unsigned char D_001889BC;
@@ -101,8 +101,8 @@ void travel_begin_trip(void)
         last_skill_check_minutes = game_minutes;
         raise_skills();
     }
-    mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, D_0017743D, 782, 4);
-    mc_memset((void *)screen_buffer, 0, 64000, D_0017743D, 783, 4);
+    mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_travel_c, 782, 4);
+    mc_memset((void *)screen_buffer, 0, 64000, str_travel_c, 783, 4);
     D_00196294 = 0;
     D_001962A8 = 0;
     quests_suspended = 0;

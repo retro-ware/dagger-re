@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00175ACC[];        /* __FILE__ */
+extern char str_sound_c[];        /* __FILE__ */
 extern int D_0018DD5C;
 extern int D_0018DD60;
 extern struct sound_channel sound_channels[];
@@ -60,7 +60,7 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
         sound_volume_pan(sound_channels[i].position, &sound_channels[i].source->x, &volume, &pan, sound_channels[i].source);
     else
         sound_volume_pan(sound_channels[i].position, sound_channels[i].position, &volume, &pan, sound_channels[i].source);
-    mc_memset(&sound_channels[i].sample, 0, sizeof(sound_channels[i].sample), D_00175ACC, 246, 4);
+    mc_memset(&sound_channels[i].sample, 0, sizeof(sound_channels[i].sample), str_sound_c, 246, 4);
     sound_channels[i].priority = priority;
     sound_channels[i].sample.data = (char *)sample;
     sound_channels[i].sample.length = length;

@@ -6,7 +6,7 @@
 #pragma aux (sosconv) profile_add_item_string;
 #pragma aux (sosconv) profile_find_item;
 #pragma aux (sosconv) profile_set_string;
-extern char D_00170129[];
+extern char str_profile_c[];
 extern short profile_find_item(struct profile *, char *);
 extern int profile_set_string(struct profile *, char *);
 
@@ -23,7 +23,7 @@ int profile_add_item_string(struct profile *s, char *key, char *val, int width)
     len = width + 4 + strlen(val);
     if (s->length + len > s->capacity)
         return 0;
-    mc_memmove(p + len, p, (int)(s->buffer + s->length - p), D_00170129, 1324, 4);
+    mc_memmove(p + len, p, (int)(s->buffer + s->length - p), str_profile_c, 1324, 4);
     while (*key != 0) {
         *p++ = *key++;
         width--;

@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_001758B8[];        /* __FILE__ */
+extern char str_equip_c[];        /* __FILE__ */
 extern unsigned char D_001865CA[];
 extern unsigned char D_00186634[];
 extern struct character *player_character;
@@ -59,7 +59,7 @@ void item_make_magic(struct item *item, int which)
     do
         item_make_random(kind, item);
     while (item->group == 3 && item->index == 18);
-    mc_strncpy(item->name, magic_def[i].name, 32, D_001758B8, 1039);
+    mc_strncpy(item->name, magic_def[i].name, 32, str_equip_c, 1039);
     for (j = 0; j < 10; j++) {
         if (magic_def[i].enchantments[j].type == 255)
             break;
@@ -109,7 +109,7 @@ void item_make_artifact(struct item *item, int which)
         }
     }
     item_make(magic_def[i].group, magic_def[i].group_index, item);
-    mc_strncpy(item->name, magic_def[i].name, 32, D_001758B8, 1094);
+    mc_strncpy(item->name, magic_def[i].name, 32, str_equip_c, 1094);
     for (j = 0; j < 10; j++) {
         if (magic_def[i].enchantments[j].type == 255)
             break;

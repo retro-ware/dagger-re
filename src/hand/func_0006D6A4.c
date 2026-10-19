@@ -1,9 +1,9 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x0006D6A4 */
 #include <dos.h>
 #include "clib.h"
-extern char D_00175D00[];        /* __FILE__ */
-extern char D_00175D88[];
-extern char D_00175D8F[];
+extern char str_disk_c[];        /* __FILE__ */
+extern char str_fmt_s_6[];
+extern char str_fmt_s_7[];
 extern char D_00175D95[];
 extern char D_00175D97[];
 extern char D_00175D9A[];
@@ -21,11 +21,11 @@ void file_index_scan(char *dir)
     struct find_t ff;
 
     if (dir[strlen(dir) - 1] != '\\') {
-        mc_set_location(337, D_00175D00);
-        mc_sprintf(path, D_00175D88, dir);
+        mc_set_location(337, str_disk_c);
+        mc_sprintf(path, str_fmt_s_6, dir);
     } else {
-        mc_set_location(339, D_00175D00);
-        mc_sprintf(path, D_00175D8F, dir);
+        mc_set_location(339, str_disk_c);
+        mc_sprintf(path, str_fmt_s_7, dir);
     }
     rc = func_000A13DA(path, 16, &ff);
     while (rc == 0) {
@@ -41,12 +41,12 @@ void file_index_scan(char *dir)
                 continue;
             }
             file_index_add_dir(ff.name);
-            mc_strncpy(&path[strlen(path) - 3], ff.name, 4, D_00175D00, 359);
+            mc_strncpy(&path[strlen(path) - 3], ff.name, 4, str_disk_c, 359);
             file_index_scan(path);
             i = strlen(path) - 1;
             while (i != 0 && path[i] != '\\')
                 i--;
-            mc_strncpy(path + i, D_00175D9A, 4, D_00175D00, 363);
+            mc_strncpy(path + i, D_00175D9A, 4, str_disk_c, 363);
         }
         rc = func_000A13F7(&ff);
     }

@@ -6,8 +6,8 @@
 #include "doslow.h"
 
 extern signed char key_down_backslash;
-extern char D_00170194[];
-extern char D_0017019D[];
+extern char str_camera_c[];
+extern char str_pics_scr_bmp[];
 extern char D_00178A1C[];
 extern signed char D_00178A52[];
 extern signed char D_00178A53[];
@@ -23,8 +23,8 @@ void screenshot_save_bmp(char *);
 void screenshot_poll(void)
 {
     if (key_down_backslash == 0) return;
-    mc_set_location(44, D_00170194);
-    mc_sprintf(D_0019645A, D_0017019D, (int)(short)screenshot_number);
+    mc_set_location(44, str_camera_c);
+    mc_sprintf(D_0019645A, str_pics_scr_bmp, (int)(short)screenshot_number);
     screenshot_save_bmp(D_0019645A);
     while (key_down_backslash != 0) xn_kbd_flush();
 }
@@ -35,7 +35,7 @@ void screenshot_save_bmp(char *filename)
     slot16 i;
     slot16 fd;
 
-    buffer = (iptr)mc_malloc(768, D_00170194, 67);
+    buffer = (iptr)mc_malloc(768, str_camera_c, 67);
     xn_pal_read_dac((char *)buffer);
     *(int *)&i = 0;
     for (; ((int)(short)i) < 256; (*(int *)&i)++) {
@@ -49,7 +49,7 @@ void screenshot_save_bmp(char *filename)
     if (((int)(short)fd) != (-1) && buffer != 0) {
         write((int)(short)fd, D_00178A1C, 1078);
         if (buffer != 0 && buffer != (-1751672937)) {
-            mc_free((void *)buffer, D_00170194, 82);
+            mc_free((void *)buffer, str_camera_c, 82);
             buffer = -1751672937;
         }
         buffer = (iptr)DOS_LOW(0xA0000);
@@ -63,6 +63,6 @@ void screenshot_save_bmp(char *filename)
         return;
     }
     if (buffer == 0 || buffer == (-1751672937)) return;
-    mc_free((void *)buffer, D_00170194, 93);
+    mc_free((void *)buffer, str_camera_c, 93);
     buffer = -1751672937;
 }

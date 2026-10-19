@@ -12,27 +12,27 @@ extern short mouse_y;
 extern signed char D_0012B508;
 extern int dungeon_water_level;
 extern iptr D_00147954;
-extern char D_00176884[];
-extern char D_001768A8[];
-extern char D_001768BD[];
-extern char D_001768D5[];
-extern char D_001768DF[];
-extern char D_001768E4[];
-extern char D_001768FC[];
-extern char D_00176909[];
+extern char str_loadsave_c[];
+extern char str_invalid_object_data[];
+extern char str_invalid_character_data[];
+extern char str_image_raw[];
+extern char str_fmt_s_s_4[];
+extern char str_error_writing_to_drive[];
+extern char str_savename_txt[];
+extern char str_save[];
 extern char D_00176911[];
-extern char D_00176915[];
-extern char D_0017691F[];
-extern char D_00176927[];
-extern char D_00176934[];
-extern char D_0017693D[];
-extern char D_0017697F[];
-extern char D_0017698C[];
-extern char D_00176999[];
-extern char D_001769A9[];
+extern char str_rumor_dat_2[];
+extern char str_bio_dat_2[];
+extern char str_savetree_dat[];
+extern char str_s0000021[];
+extern char str_s0000021_qbn[];
+extern char str_load00i0_img[];
+extern char str_save00i0_img[];
+extern char str_savex_image_raw[];
+extern char str_savex_savename_txt[];
 extern char D_001769BC[];
-extern char D_001769EA[];
-extern char D_001769F7[];
+extern char str_savevars_dat[];
+extern char str_invalid_quest_object[];
 extern unsigned char player_environment;
 extern char travel_options[];
 extern char D_00178A10[];
@@ -268,8 +268,8 @@ struct record *savetree_attach_record(struct record *root, struct record *record
                     return object;
                 }
             }
-            mc_memcpy(object, record, RECORD_LINKS_OFFSET, D_00176884, 217, 4);
-            mc_memcpy(&object->data, &record->data, (int)(iptr)&*(signed char *)((char *)(iptr)mem_block_size((iptr)object) - RECORD_HEADER_SIZE), D_00176884, 218, 4);
+            mc_memcpy(object, record, RECORD_LINKS_OFFSET, str_loadsave_c, 217, 4);
+            mc_memcpy(&object->data, &record->data, (int)(iptr)&*(signed char *)((char *)(iptr)mem_block_size((iptr)object) - RECORD_HEADER_SIZE), str_loadsave_c, 218, 4);
             object->parent_id = 0;
             return object;
         }
@@ -277,7 +277,7 @@ struct record *savetree_attach_record(struct record *root, struct record *record
         object->parent_id = 0;
         return object;
     }
-    fatal_error(D_001768A8);
+    fatal_error(str_invalid_object_data);
     return 0;
 }
 
@@ -397,7 +397,7 @@ void load_relink_character(struct record *object)
     }
     if (character->target != 0) {
         character->target = object_find_by_id(location_object, (iptr)character->target);
-        if (character->target == 0) fatal_error(D_001768BD);
+        if (character->target == 0) fatal_error(str_invalid_character_data);
     }
     if (object->type != 18) if (object->type != 44) return;
     xn_anim_reset(anim);
@@ -458,11 +458,11 @@ void load_drop_spawned_markers(void)
 
 void save_write_image(void)
 {
-    mc_set_location(494, D_00176884);
-    mc_sprintf(D_001913E4, D_001768DF, (iptr)text_buffer, (iptr)D_001768D5);
+    mc_set_location(494, str_loadsave_c);
+    mc_sprintf(D_001913E4, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_image_raw);
     unlink(D_001913E4);
     if ((save_file_handle = open(D_001913E4, 546, 384)) < 0) {
-        fatal_error(D_001768E4);
+        fatal_error(str_error_writing_to_drive);
     }
     write(save_file_handle, (void *)(D_00147954 + 24000), 4000);
     close(save_file_handle);
@@ -470,8 +470,8 @@ void save_write_image(void)
 
 int save_write_name(char *name)
 {
-    mc_set_location(516, D_00176884);
-    mc_sprintf(D_001913E4, D_001768DF, (iptr)text_buffer, (iptr)D_001768FC);
+    mc_set_location(516, str_loadsave_c);
+    mc_sprintf(D_001913E4, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savename_txt);
     unlink(D_001913E4);
     save_file_handle = open(D_001913E4, 546, 384);
     write(save_file_handle, name, 32);
@@ -484,22 +484,22 @@ int save_game(int slot, char *name)
     int size;
 
     mem_check_now(1000);
-    mc_set_location(540, D_00176884);
-    mc_sprintf((char *)text_buffer, D_00176909, slot);
+    mc_set_location(540, str_loadsave_c);
+    mc_sprintf((char *)text_buffer, str_save, slot);
     disk_delete_matching(text_buffer, D_00176911);
     save_write_image();
     save_write_name(name);
     savevars_write(slot);
     region_locations_save_discovered((int)(unsigned char)current_region);
     automap_save();
-    mc_set_location(550, D_00176884);
-    mc_sprintf((char *)text_buffer, D_00176909, slot);
-    disk_copy_file(D_00176915, arena2_path, text_buffer);
-    disk_copy_file(D_0017691F, arena2_path, text_buffer);
+    mc_set_location(550, str_loadsave_c);
+    mc_sprintf((char *)text_buffer, str_save, slot);
+    disk_copy_file(str_rumor_dat_2, arena2_path, text_buffer);
+    disk_copy_file(str_bio_dat_2, arena2_path, text_buffer);
     disk_copy_file(cfg_mapsave_file, arena2_path, text_buffer);
     save_copy_automap_files(slot);
-    mc_set_location(558, D_00176884);
-    mc_sprintf((char *)text_rsc_buffer, D_001768DF, (iptr)text_buffer, (iptr)D_00176927);
+    mc_set_location(558, str_loadsave_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savetree_dat);
     unlink((char *)text_rsc_buffer);
     save_file_handle = open((char *)text_rsc_buffer, 546, 384);
     write(save_file_handle, savetree_version, 4);
@@ -539,12 +539,12 @@ void load_requeue_s0000021(void)
     while (object != 0) {
         if (object->type == 14) {
             quest = &object->data.quest;
-            if (stricmp(quest->name, D_00176934) == 0) count++;
+            if (stricmp(quest->name, str_s0000021) == 0) count++;
         }
         object = object->next;
     }
     if (count != 0 || D_00195303 == 0 || D_0019530D != 0) return;
-    mc_strncpy(D_001961F5, D_0017693D, 13, D_00176884, 616);
+    mc_strncpy(D_001961F5, str_s0000021_qbn, 13, str_loadsave_c, 616);
     D_001952EE = 0;
 }
 
@@ -560,10 +560,10 @@ void saveload_menu(int saving)
     done = 0;
     used_slots = 0;
     slot = 0;
-    window = (window_image = disk_read_file(D_0017697F, 0));
-    *(iptr *)&D_00195B5C = disk_read_file(D_0017698C, 0);
-    mc_memset((void *)scratch_buffer, 0, 256, D_00176884, 862, 4);
-    mc_strncpy((char *)text_buffer, D_00176999, 160, D_00176884, 864);
+    window = (window_image = disk_read_file(str_load00i0_img, 0));
+    *(iptr *)&D_00195B5C = disk_read_file(str_save00i0_img, 0);
+    mc_memset((void *)scratch_buffer, 0, 256, str_loadsave_c, 862, 4);
+    mc_strncpy((char *)text_buffer, str_savex_image_raw, 160, str_loadsave_c, 864);
     for (i = 0; i < 6; i++) {
         D_001903A8 = *(signed char *)&i + 48;
         handle = open((char *)text_buffer, 512);
@@ -572,7 +572,7 @@ void saveload_menu(int saving)
         close(handle);
         used_slots |= 1 << i;
     }
-    mc_strncpy((char *)text_buffer, D_001769A9, 160, D_00176884, 874);
+    mc_strncpy((char *)text_buffer, str_savex_savename_txt, 160, str_loadsave_c, 874);
     for (i = 0; i < 6; i++) {
         D_001903A8 = *(signed char *)&i + 48;
         *(signed char *)((scratch_buffer + (i << 5))) = 0;
@@ -608,11 +608,11 @@ void saveload_menu(int saving)
         if (slot == (-1)) done = 1;
     }
     if (window != 0 && window != (-1751672937)) {
-        mc_free((void *)window, D_00176884, 924);
+        mc_free((void *)window, str_loadsave_c, 924);
         window = -1751672937;
     }
     if ((iptr)D_00195B5C == 0 || (iptr)D_00195B5C == (-1751672937)) return;
-    mc_free((void *)D_00195B5C, D_00176884, 925);
+    mc_free((void *)D_00195B5C, str_loadsave_c, 925);
     *(iptr *)&D_00195B5C = -1751672937;
 }
 
@@ -631,10 +631,10 @@ int saveload_confirm(int button, int saving, int slot, int used_slots)
     iptr prompt;
 
     if (saving != 0) {
-        mc_strncpy((char *)text_rsc_buffer, (scratch_buffer + (slot << 5)), 2048, D_00176884, 948);
+        mc_strncpy((char *)text_rsc_buffer, (scratch_buffer + (slot << 5)), 2048, str_loadsave_c, 948);
         D_0012B508 = 146;
         prompt = (iptr)scratch_buffer + 55000;
-        mc_set_location(951, D_00176884);
+        mc_set_location(951, str_loadsave_c);
         mc_sprintf((char *)prompt, D_001769BC, D_001846F8);
         *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
         xn_kbd_flush();
@@ -658,10 +658,10 @@ int saveload_exit(int button, int saving, int slot, int used_slots)
 
 void savevars_read(iptr slot)
 {
-    mc_set_location(1008, D_00176884);
-    mc_sprintf((char *)text_buffer, D_00176909, slot);
-    mc_set_location(1009, D_00176884);
-    mc_sprintf((char *)text_rsc_buffer, D_001768DF, (iptr)text_buffer, (iptr)D_001769EA);
+    mc_set_location(1008, str_loadsave_c);
+    mc_sprintf((char *)text_buffer, str_save, slot);
+    mc_set_location(1009, str_loadsave_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savevars_dat);
     save_file_handle = open((char *)text_rsc_buffer, 512);
     read(save_file_handle, saved_positions, 48);
     read(save_file_handle, bio_modifiers, 64);
@@ -731,8 +731,8 @@ void savevars_read(iptr slot)
 
 void savevars_write(int slot)
 {
-    mc_set_location(1092, D_00176884);
-    mc_sprintf((char *)text_rsc_buffer, D_001768DF, (iptr)text_buffer, (iptr)D_001769EA);
+    mc_set_location(1092, str_loadsave_c);
+    mc_sprintf((char *)text_rsc_buffer, str_fmt_s_s_4, (iptr)text_buffer, (iptr)str_savevars_dat);
     unlink((char *)text_rsc_buffer);
     save_file_handle = open((char *)text_rsc_buffer, 546, 384);
     write(save_file_handle, saved_positions, 48);
@@ -815,8 +815,8 @@ void load_reset_state(void)
     xn_cam_set_focal(200, 180);
     sky_loaded_frame = 10000;
     night_sky_loaded = 0;
-    mc_memset(hud_message_ptrs, 0, 68, D_00176884, 1188, 68);
-    mc_memset(hud_message_expiry, 0, 68, D_00176884, 1189, 68);
+    mc_memset(hud_message_ptrs, 0, 68, str_loadsave_c, 1188, 68);
+    mc_memset(hud_message_expiry, 0, 68, str_loadsave_c, 1189, 68);
     D_00195B44 = game_minutes;
     D_001940D7 |= 1;
     D_001940D5 |= 2;
@@ -849,7 +849,7 @@ void load_fix_object_cb(struct record *object)
                 twin = object_find_by_id(load_relink_root, (iptr)object->twin);
                 object->twin = twin;
                 if ((iptr)load_relink_root == (iptr)location_object) {
-                    if (object->twin == 0) fatal_error(D_001769F7);
+                    if (object->twin == 0) fatal_error(str_invalid_quest_object);
                     if (object->twin->twin == 0) object->twin->twin = (struct record *)object;
                 }
             } else {

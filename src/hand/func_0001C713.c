@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170464[];       /* __FILE__ */
+extern char str_faction_c[];       /* __FILE__ */
 extern struct record *player_entity;
 extern int D_001966FC[];
 extern struct record *object_create_child(struct record *, struct record *, int);
@@ -18,7 +18,7 @@ unsigned short bio_person_add(struct character *person, char *career, int kind)
     object->type = kind + 45;
     object->flags |= 3;
     object->image = D_001966FC[kind]++;
-    mc_memcpy(&object->data.character, person, REC_OFFSETOF(struct character, career), D_00170464, 1334, 4);
-    mc_memcpy(&object->data.character.career, career, 74, D_00170464, 1335, 4);
+    mc_memcpy(&object->data.character, person, REC_OFFSETOF(struct character, career), str_faction_c, 1334, 4);
+    mc_memcpy(&object->data.character.career, career, 74, str_faction_c, 1335, 4);
     return object->image;
 }

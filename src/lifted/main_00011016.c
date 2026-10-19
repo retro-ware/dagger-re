@@ -4,8 +4,8 @@
 #include "ptrint.h"
 #include "clib.h"
 
-extern char D_001700C0[];
-extern char D_001700CC[];
+extern char str_melodic_bnk[];
+extern char str_drum_bnk[];
 extern iptr D_0018DC34;
 extern char D_0018DC38[];
 extern int D_0018DC3C;
@@ -56,11 +56,11 @@ int sos_init(int digi_device, int midi_device)
     if (digi_device != (-1)) func_0009E2BB(90, (void (*)(void))D_0018DD40, (int *)D_0018DD50);
     if (midi_device == 40962 || (midi_device == 40969 && midi_device != (-1))) {
         music_uses_fm = 1;
-        if ((sos_melodic_bank = sos_load_file(D_001700C0)) == 0) {
+        if ((sos_melodic_bank = sos_load_file(str_melodic_bnk)) == 0) {
             sos_shutdown();
             return 3;
         }
-        if ((sos_drum_bank = sos_load_file(D_001700CC)) == 0) {
+        if ((sos_drum_bank = sos_load_file(str_drum_bnk)) == 0) {
             sos_shutdown();
             return 4;
         }

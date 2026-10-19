@@ -8,10 +8,10 @@
 extern int pick_distance;
 extern signed char mouse_buttons;
 extern int xn_anim_ticks;
-extern char D_0017615C[];
-extern char D_00176166[];
-extern char D_00176175[];
-extern char D_00176184[];
+extern char str_weapons_c[];
+extern char str_weapo1_cif[];
+extern char str_weapon_cif[];
+extern char str_you_have_no_arrows[];
 extern unsigned char player_environment;
 extern iptr D_00185097;
 extern signed char weapon_cif_by_index[];
@@ -130,11 +130,11 @@ L72941:;
     }
     D_001A4A30[hand] = (iptr)item;
     if (item != 0 && item_data->enchantments[0].type != (-1) && item_data->index != 17 && item_data->index != 16) {
-        mc_set_location(85, D_0017615C);
-        mc_sprintf((char *)text_buffer, D_00176166, cif_index);
+        mc_set_location(85, str_weapons_c);
+        mc_sprintf((char *)text_buffer, str_weapo1_cif, cif_index);
     } else {
-        mc_set_location(87, D_0017615C);
-        mc_sprintf((char *)text_buffer, D_00176175, cif_index);
+        mc_set_location(87, str_weapons_c);
+        mc_sprintf((char *)text_buffer, str_weapon_cif, cif_index);
     }
     weapon_hand_cif[hand] = disk_read_file(text_buffer, 0);
 }
@@ -210,7 +210,7 @@ void weapon_fire_arrow(void)
     struct record *arrow;
 
     if (inv_take_arrow(1) == 0) {
-        hud_message_add((iptr)D_00176184);
+        hud_message_add((iptr)str_you_have_no_arrows);
         return;
     }
     arrow = object_create_child(player_object->parent, 0, 107);
@@ -219,7 +219,7 @@ void weapon_fire_arrow(void)
     arrow->image = 0;
     item_make(3, 18, &arrow->data.item);
     arrow->data.item.stack_count = 1;
-    mc_memset(aim, 0, 12, D_0017615C, 404, 4);
+    mc_memset(aim, 0, 12, str_weapons_c, 404, 4);
     xn_math_advance_pitch_yaw(player_object->angle_x, player_object->yaw, 1024, aim);
     aim[0] += player_object->x;
     aim[1] += player_object->y;
@@ -240,7 +240,7 @@ void weapon_missile_orient(struct record *arrow)
 {
     int angles[3];
 
-    mc_memcpy(angles, arrow->data.item.arrow.direction, 12, D_0017615C, 426, 12);
+    mc_memcpy(angles, arrow->data.item.arrow.direction, 12, str_weapons_c, 426, 12);
     xn_vec_dir_to_angles(angles);
     arrow->missile_yaw = (short)angles[0] & 2047;
     arrow->angle_z = (short)angles[1] & 2047;
@@ -336,11 +336,11 @@ void weapon_monster_arrow(struct record *shooter, struct record *target)
 void weapon_free_sprites(void)
 {
     if (weapon_hand_cif[0] != 0 && weapon_hand_cif[0] != (-1751672937)) {
-        mc_free((void *)weapon_hand_cif[0], D_0017615C, 542);
+        mc_free((void *)weapon_hand_cif[0], str_weapons_c, 542);
         weapon_hand_cif[0] = -1751672937;
     }
     if (D_001A4A5C == 0 || D_001A4A5C == (-1751672937)) return;
-    mc_free((void *)D_001A4A5C, D_0017615C, 543);
+    mc_free((void *)D_001A4A5C, str_weapons_c, 543);
     D_001A4A5C = -1751672937;
 }
 

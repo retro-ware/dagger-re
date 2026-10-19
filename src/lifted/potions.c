@@ -6,15 +6,15 @@
 
 extern signed char D_0012B508;
 extern signed char key_down_esc;
-extern char D_00176E94[];
-extern char D_00176E9E[];
-extern char D_00176EBA[];
-extern char D_00176ED0[];
-extern char D_00176EDF[];
-extern char D_00176EFB[];
+extern char str_potions_c[];
+extern char str_your_potion_has_been_mixed[];
+extern char str_you_have_no_recipies[];
+extern char str_unnamed_potion[];
+extern char str_mask00i0_img[];
+extern char str_you_do_not_have_the_ingredients_required[];
 extern char potion_recipes[];
 extern char D_00180B42[];
-extern signed char D_00180B7D[];
+extern signed char str_stamina[];
 extern char scratch_190be4[];
 extern char scratch_190de4[];
 extern struct record *D_001959E4;
@@ -70,7 +70,7 @@ void potionmaker_mix(void)
     struct record *potion;
 
     i = 0;
-    while (i < 64 && D_00180B7D[i * 109] != 0) {
+    while (i < 64 && str_stamina[i * 109] != 0) {
         if (potion_match_recipe((struct potion_recipe *)(((iptr)potion_recipes) + (i * 109)), D_001A9BB4, D_001A9BAC, &value) != 0) {
             potion = object_create_child(location_object, 0, 107);
             potion->type = 2;
@@ -81,9 +81,9 @@ void potionmaker_mix(void)
             inv_store_item(potion);
             potion = object_create_child(potion, 0, 109);
             potion->type = 31;
-            mc_memcpy(&potion->data.potion_recipe, (void *)(((iptr)potion_recipes) + (i * 109)), 109, D_00176E94, 69, 4);
+            mc_memcpy(&potion->data.potion_recipe, (void *)(((iptr)potion_recipes) + (i * 109)), 109, str_potions_c, 69, 4);
             i = 0;
-            msgbox_show_string(D_00176E9E, 1);
+            msgbox_show_string(str_your_potion_has_been_mixed, 1);
             sound_play(208, player_object, 100);
             while ((iptr)potion_cauldron[i] != 0) {
                 object_delete(potion_cauldron[i]);
@@ -103,9 +103,9 @@ void potionmaker_mix(void)
     inv_store_item(potion);
     potion = object_create_child(potion, 0, 109);
     potion->type = 31;
-    mc_memcpy(&potion->data.potion_recipe.spell, spellmaker_spell, 89, D_00176E94, 94, 4);
+    mc_memcpy(&potion->data.potion_recipe.spell, spellmaker_spell, 89, str_potions_c, 94, 4);
     i = 0;
-    msgbox_show_string(D_00176E9E, 1);
+    msgbox_show_string(str_your_potion_has_been_mixed, 1);
     sound_play(208, player_object, 100);
     while ((iptr)potion_cauldron[i] != 0 && i < 8) {
         object_delete(potion_cauldron[i]);
@@ -129,7 +129,7 @@ void potionmaker_recipes(void)
     *(int *)D_00195B84 = 0;
     object_foreach(player_entity->children, potion_recipe_list_cb);
     if (*(int *)D_00195B84 == 0) {
-        msgbox_show_string(D_00176EBA, 1);
+        msgbox_show_string(str_you_have_no_recipies, 1);
         return;
     }
     if (*(int *)D_00195B84 == 1) {
@@ -145,13 +145,13 @@ int potionmaker_open(int show)
 {
     if (((int)D_0019626F) == 1) return 1;
     if (show != 0) {
-        potion_name = (iptr)D_00176ED0;
+        potion_name = (iptr)str_unnamed_potion;
         game_mode = 1;
-        window_image = disk_read_file(D_00176EDF, 0);
+        window_image = disk_read_file(str_mask00i0_img, 0);
         potion_cauldron_count = (*(int *)potion_ingredient_scroll = 0);
         D_00196272 = 1;
-        mc_memset(((char *)potion_cauldron), 0, 32, D_00176E94, 156, 32);
-        mc_memset(D_001A9BB4, 254, 8, D_00176E94, 157, 8);
+        mc_memset(((char *)potion_cauldron), 0, 32, str_potions_c, 156, 32);
+        mc_memset(D_001A9BB4, 254, 8, str_potions_c, 157, 8);
     }
     return ((((int)(unsigned char)game_mode) == 1) ? 1 : 0);
 }
@@ -216,7 +216,7 @@ int potionmaker_close(void)
     while (key_down_esc != 0);
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
-        mc_free((void *)window_image, D_00176E94, 359);
+        mc_free((void *)window_image, str_potions_c, 359);
         window_image = -1751672937;
     }
     D_00196272 = 0;
@@ -305,7 +305,7 @@ void potion_drink(struct record *recipe)
     spell->type = 9;
     spell->flags |= 1;
     spell->id = object_new_id(801);
-    mc_memcpy(&spell->data.spell, &recipe->data.potion_recipe.spell, 89, D_00176E94, 540, 4);
+    mc_memcpy(&spell->data.spell, &recipe->data.potion_recipe.spell, 89, str_potions_c, 540, 4);
     D_0019629A = 1;
     cast_player_spell(spell);
     D_0019629A = *(signed char *)&saved_ignore_silence;
@@ -319,7 +319,7 @@ void potion_make(struct item *recipe_item)
         potion_load_recipe(recipe_item);
         return;
     }
-    msgbox_show_string(D_00176EFB, 1);
+    msgbox_show_string(str_you_do_not_have_the_ingredients_required, 1);
 }
 
 int potion_have_recipe_ingredients(struct item *recipe_item)
@@ -330,7 +330,7 @@ int potion_have_recipe_ingredients(struct item *recipe_item)
     struct potion_recipe *recipe;
 
     n = 0;
-    mc_memset(((char *)potion_cauldron), 0, 32, D_00176E94, 566, 32);
+    mc_memset(((char *)potion_cauldron), 0, 32, str_potions_c, 566, 32);
     recipe = (struct potion_recipe *)(((iptr)potion_recipes) + (recipe_item->stack_count * 109));
     potion_name = (iptr)recipe->spell.name;
     while (recipe->ingredient_indices[n] != (-2)) {

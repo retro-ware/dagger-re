@@ -5,9 +5,9 @@
 
 extern struct rect sheet_buttons[23];
 extern short font_height;
-extern char D_00170C67[];
-extern char D_00170C6F[];
-extern char D_00170C73[];
+extern char str_sheet_c[];
+extern char str_fmt_ld[];
+extern char str_fmt_d_d[];
 extern char *race_names[];
 extern signed char text_buffer[];
 extern signed char D_001940D9;
@@ -41,14 +41,14 @@ void sheet_draw(void)
     level = player_character->level;
     text_draw_coloured(itoa(level, ((char *)text_buffer), 10), 45, 34, 145, 141);
     text_draw_coloured(race_names[player_character->race], 41, 14, 145, 141);
-    mc_set_location(180, D_00170C67);
-    mc_sprintf(((char *)text_buffer), D_00170C6F, gold_total());
+    mc_set_location(180, str_sheet_c);
+    mc_sprintf(((char *)text_buffer), str_fmt_ld, gold_total());
     text_draw_coloured(((char *)text_buffer), 39, 44, 145, 141);
-    mc_set_location(183, D_00170C67);
-    mc_sprintf(((char *)text_buffer), D_00170C73, player_character->health, player_character->max_health);
+    mc_set_location(183, str_sheet_c);
+    mc_sprintf(((char *)text_buffer), str_fmt_d_d, player_character->health, player_character->max_health);
     text_draw_centred_coloured(((char *)text_buffer), 72, 64, 145, 141);
-    mc_set_location(185, D_00170C67);
-    mc_sprintf(((char *)text_buffer), D_00170C73, player_character->fatigue >> 6, player_character->attributes[0] + player_character->attributes[4]);
+    mc_set_location(185, str_sheet_c);
+    mc_sprintf(((char *)text_buffer), str_fmt_d_d, player_character->fatigue >> 6, player_character->attributes[0] + player_character->attributes[4]);
     text_draw_centred_coloured(((char *)text_buffer), 77, 54, 145, 141);
     x = ((sheet_buttons[13].x0 + sheet_buttons[13].x1) >> 1) + 1;
     if (((struct bf8_2_1 *)&D_001940D9)->f) attributes = player_character->base_attributes;
@@ -68,8 +68,8 @@ void sheet_draw(void)
     }
     xn_draw_put_rect(192, 1, 125, 197, (char *)D_00195B64, 0);
     weight = object_weight(player_entity) >> 2;
-    mc_set_location(218, D_00170C67);
-    mc_sprintf(((char *)text_buffer), D_00170C73, weight, carry_capacity());
+    mc_set_location(218, str_sheet_c);
+    mc_sprintf(((char *)text_buffer), str_fmt_d_d, weight, carry_capacity());
     text_draw_coloured(((char *)text_buffer), 91, 74, 145, 141);
     sheet_draw_levelup_points();
 }

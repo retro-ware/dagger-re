@@ -2,9 +2,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170604[];
-extern char D_00170634[];
-extern char D_0017063D[];
+extern char str_today_is_a_day_for_summoning_enemies_we[];
+extern char str_daedra_c[];
+extern char str_0c0_y00_qbn[];
 extern char D_00179E60[];
 extern char D_00179E66[];
 extern unsigned char D_00179E7F[];
@@ -106,7 +106,7 @@ void daedra_summon(struct record *object)
         daedra_id = (int)((day_entry - D_00179E60) / 2) + 1;
         for (n = 0; n < 3; n++) {
             if (guild->enemies[n] != 0 && guild->enemies[n]->id == daedra_id) {
-                msgbox_show_string(D_00170604, 1);
+                msgbox_show_string(str_today_is_a_day_for_summoning_enemies_we, 1);
                 return;
             }
         }
@@ -174,7 +174,7 @@ void daedra_summon(struct record *object)
     }
     if (daedra->flags & 64) {
         daedra_entry = &REGION(daedra);
-        mc_memset(flc, 0, sizeof(flc), D_00170634, 189, 4);
+        mc_memset(flc, 0, sizeof(flc), str_daedra_c, 189, 4);
         current_quest = 0;
         flc_play_with_text(D_001850E5[daedra_entry - D_001850D4], flc, 482, 0);
         object = monster_summon_near_player(D_00179E90[rand_range(0, 4)]);
@@ -183,7 +183,7 @@ void daedra_summon(struct record *object)
         return;
     }
     daedra->flags |= 64;
-    mc_set_location(200, D_00170634);
-    mc_sprintf(((char *)text_buffer), D_0017063D, REGION(daedra), quest_letter);
-    mc_strncpy(D_001961F5, ((char *)text_buffer), 13, D_00170634, 201);
+    mc_set_location(200, str_daedra_c);
+    mc_sprintf(((char *)text_buffer), str_0c0_y00_qbn, REGION(daedra), quest_letter);
+    mc_strncpy(D_001961F5, ((char *)text_buffer), 13, str_daedra_c, 201);
 }

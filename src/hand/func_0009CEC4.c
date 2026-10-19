@@ -3,7 +3,7 @@
 #include "clib.h"
 
 extern char *screen_buffer;
-extern char D_0017743D[];
+extern char str_travel_c[];
 extern unsigned short travel_options;
 extern char D_00190CE8;
 extern struct character *player_character;
@@ -39,8 +39,8 @@ int travel_route(int x0, int y0, int x1, int y1, int go)
 
     flag = 0;
     if (D_001AA698 != 0) {
-        D_001AA690 = mc_malloc(64000, D_0017743D, 984);
-        mc_memcpy(D_001AA690, screen_buffer, 64000, D_0017743D, 985, 4);
+        D_001AA690 = mc_malloc(64000, str_travel_c, 984);
+        mc_memcpy(D_001AA690, screen_buffer, 64000, str_travel_c, 985, 4);
     }
     save = player_character->fatigue;
     x0 = x0 / 32768;
@@ -102,7 +102,7 @@ int travel_route(int x0, int y0, int x1, int y1, int go)
     }
     if (D_001AA698 != 0) {
         if (!(D_001AA690 == 0 || D_001AA690 == (char *)(iptr)-1751672937)) {
-            mc_free(D_001AA690, D_0017743D, 1058);
+            mc_free(D_001AA690, str_travel_c, 1058);
             D_001AA690 = (char *)(iptr)-1751672937;
         }
     }

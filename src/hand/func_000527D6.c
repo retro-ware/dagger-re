@@ -1,5 +1,5 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000527D6 */
-extern char D_00175404[];
+extern char str_pflc_c[];
 #include "clib.h"
 
 void flc_decode_palette(unsigned char *palette, unsigned char *chunk, unsigned char to_6bit)
@@ -24,7 +24,7 @@ void flc_decode_palette(unsigned char *palette, unsigned char *chunk, unsigned c
             }
         } else {
             n = colours * 3;
-            mc_memcpy(palette, chunk, n, D_00175404, 412, 4);
+            mc_memcpy(palette, chunk, n, str_pflc_c, 412, 4);
             chunk += n;
             palette += n;
         }

@@ -2,8 +2,8 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_00170738[];        /* __FILE__ */
-extern char D_00170765[];
+extern char str_career_c[];        /* __FILE__ */
+extern char str_class_cfg_2[];
 extern signed char text_buffer[];
 extern struct career *player_class;
 extern struct career *scratch_buffer;     /* scratch_buffer: the 18 classes CLASS00-17.CFG */
@@ -21,10 +21,10 @@ int career_nearest_class(void)
     int weight;
 
     classes = scratch_buffer;
-    mc_memset(scores, 0, 72, D_00170738, 397, 72);
+    mc_memset(scores, 0, 72, str_career_c, 397, 72);
     for (i = 0; i < 18; i++) {
-        mc_set_location(401, D_00170738);
-        mc_sprintf(((char *)text_buffer), D_00170765, i);
+        mc_set_location(401, str_career_c);
+        mc_sprintf(((char *)text_buffer), str_class_cfg_2, i);
         disk_read_file(((char *)text_buffer), &classes[i]);
     }
     for (i = 0; i < 12; i++) {

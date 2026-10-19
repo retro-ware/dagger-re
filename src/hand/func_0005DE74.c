@@ -2,9 +2,9 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_001758B8[];
+extern char str_equip_c[];
 extern char D_001758C0[];
-extern char D_001758C1[];
+extern char str_invalid_index_requested[];
 extern struct item_template item_templates[];
 extern unsigned char D_00190CF2;
 extern char D_001911E4[];
@@ -54,16 +54,16 @@ void item_init_from_template(unsigned short template_id, short group, short inde
             index = rand_range(0, 3);
     }
     if (template_id >= 288) {
-        mc_set_location(58, D_001758B8);
+        mc_set_location(58, str_equip_c);
         func_000A18C3(D_001758C0);
-        mc_set_location(59, D_001758B8);
-        mc_sprintf(D_001911E4, D_001758C1, requested_id, template_id);
+        mc_set_location(59, str_equip_c);
+        mc_sprintf(D_001911E4, str_invalid_index_requested, requested_id, template_id);
         fatal_error(D_001911E4);
     }
     template = &item_templates[template_id];
     if (template->inventory_image == 32512)
         item->index = 0;
-    mc_strncpy(item->name, template->name, 32, D_001758B8, 68);
+    mc_strncpy(item->name, template->name, 32, str_equip_c, 68);
     item->group = group;
     item->index = index;
     item->value = template->value;
@@ -104,7 +104,7 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     item->enchant_points = template->enchant_points;
     item->variants = template->variants;
     item->draw_order = template->draw_order;
-    mc_memset(item->enchantments, -1, 40, D_001758B8, 118, 40);
+    mc_memset(item->enchantments, -1, 40, str_equip_c, 118, 40);
     D_0019626D = template->rarity;
     D_00195F28 = template->draw_order;
     if (group == 27 && index == 4)

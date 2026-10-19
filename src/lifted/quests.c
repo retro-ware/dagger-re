@@ -8,10 +8,10 @@
 
 extern char disk_last_file_size[];
 extern char D_00174F47[];
-extern char D_00174F57[];
-extern char D_00174F5C[];
-extern char D_00174F71[];
-extern char D_00174F8F[];
+extern char str_fmt_s_s_3[];
+extern char str_n0c00y01_qbn[];
+extern char str_invalid_person_selected[];
+extern char str_unable_to_assign_questid[];
 extern unsigned char player_environment;
 extern char material_to_hit[];
 extern char D_00185128[];
@@ -83,14 +83,14 @@ iptr quest_start(char *file_name)
     int handle;
 
     if (file_name[0] == 0) return 0;
-    if (stricmp(file_name, D_00174F5C) == 0) return 0;
+    if (stricmp(file_name, str_n0c00y01_qbn) == 0) return 0;
     if (quest_is_active(file_name) != 0) return 0;
     mc_set_location(172, D_00174F47);
-    mc_sprintf((char *)text_buffer, D_00174F57, (iptr)arena2_path, file_name);
+    mc_sprintf((char *)text_buffer, str_fmt_s_s_3, (iptr)arena2_path, file_name);
     handle = open((char *)text_buffer, 512);
     if (handle < 0) {
         mc_set_location(177, D_00174F47);
-        mc_sprintf((char *)text_buffer, D_00174F57, (iptr)arena2_cd_path, file_name);
+        mc_sprintf((char *)text_buffer, str_fmt_s_s_3, (iptr)arena2_cd_path, file_name);
         handle = open((char *)text_buffer, 512);
         if (handle < 0) return 0;
     }
@@ -178,7 +178,7 @@ void func_0004C588(struct record *object)
         if (found_object == 0) return;
         if (found_object->twin != 0) {
             mc_set_location(422, D_00174F47);
-            mc_sprintf((char *)text_buffer, D_00174F71, (int)(unsigned short)(short)found_object->image);
+            mc_sprintf((char *)text_buffer, str_invalid_person_selected, (int)(unsigned short)(short)found_object->image);
             fatal_error(text_buffer);
         }
         object->id = found_object->id;
@@ -227,7 +227,7 @@ int quest_free_id(void)
     for (id = 1; id < 256; id++) {
         if (id_used[id] == 0) return id;
     }
-    fatal_error(D_00174F8F);
+    fatal_error(str_unable_to_assign_questid);
     return 0;
 }
 
