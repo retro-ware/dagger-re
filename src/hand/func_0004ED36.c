@@ -56,7 +56,7 @@ extern char *D_00190908;
 extern char *D_0019090C;
 extern char *D_00190910;
 extern char arena2_path[];
-extern unsigned char D_001940D8;
+extern unsigned char ui_dirty_flags;
 extern char *horse_overlay_image;
 extern char *cart_overlay_image;
 extern int last_skill_check_minutes;
@@ -195,7 +195,7 @@ void init_game_data(void)
     hud_portrait = mc_malloc(2048, str_init_c, 95);
     D_00195B64 = mc_malloc(24625, str_init_c, 96);
     paperdoll_mask = mc_malloc(24625, str_init_c, 97);
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     quest_face_images = disk_read_file(str_face00i0_cif, 0);
     D_00195D08 = disk_read_file(str_face01i0_cif, 0);
     D_00195D0C = disk_read_file(str_face10i0_cif, 0);

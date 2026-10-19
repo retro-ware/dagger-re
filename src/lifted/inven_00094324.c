@@ -5,7 +5,7 @@
 
 extern short mouse_x;
 extern short mouse_y;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct item *text_macro_item;
 extern struct record *player_object;
 extern struct record *scratch_current_object;
@@ -41,7 +41,7 @@ void inv_click_paperdoll(void)
 
     slot = inv_paperdoll_slot_at((int)(short)mouse_x, (int)(short)mouse_y, slot);
     if (slot == 0) return;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     slot += -64;
     object = (inv_selected_item = player_character->equipped[slot]);
     scratch_current_object = inv_selected_item;

@@ -11,13 +11,13 @@ extern char str_mask04i0_img_2[];
 extern iptr D_00184876;
 extern signed char world_running;
 extern signed char D_001940D4;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *player_object;
 extern iptr magic_window_image;
 extern iptr window_image;
 extern int spell_cast_busy;
 extern int player_death_timer;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern iptr spellbook_saved_screen;
@@ -33,7 +33,7 @@ int spellbook_open(short force)
 {
     int is_open;
 
-    if (((int)D_0019626F) == 5 && ((int)(unsigned char)game_mode) == 8) {
+    if (((int)game_mode_under_popup) == 5 && ((int)(unsigned char)game_mode) == 8) {
         return 1;
     }
     if (player_death_timer > 0) return 0;
@@ -43,11 +43,11 @@ int spellbook_open(short force)
             return 0;
         }
         xn_font_select(4);
-        D_001940D8 &= 254;
+        ui_dirty_flags &= 254;
         if (spellbook_build_list() == 0) return 0;
         D_001940D4 |= 128;
         world_running = 0;
-        D_001940D8 |= 2;
+        ui_dirty_flags |= 2;
         spellbook_saved_screen = (iptr)mc_malloc(64000, str_pickbook_c, 101);
         mc_memcpy((void *)spellbook_saved_screen, (void *)screen_buffer, 64000, str_pickbook_c, 102, 4);
         game_mode = 5;

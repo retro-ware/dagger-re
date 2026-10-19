@@ -26,7 +26,7 @@ extern short list_popup_y;
 extern short list_popup_x;
 extern short list_popup_width;
 extern signed char D_0019626C;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern struct image *D_00199638;
@@ -43,7 +43,7 @@ int sheet_open(short opening)
     int result;
 
     if (player_death_timer > 0) return 0;
-    if (((int)D_0019626F) == 3 && ((int)(unsigned char)game_mode) == 8) {
+    if (((int)game_mode_under_popup) == 3 && ((int)(unsigned char)game_mode) == 8) {
         return 1;
     }
     if (opening != 0 || (game_mode == 0 && key_action_held(36) != 0 && player_death_timer == 0)) {

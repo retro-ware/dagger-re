@@ -12,9 +12,9 @@ extern char str_s_qbn[];
 extern char str_anim_vid[];
 extern char D_001708ED[];
 extern short D_0017A120[];
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern signed char text_buffer[];
-extern char D_001911E4[];
+extern char fatal_error_text[];
 extern signed char quest_global_states[];
 extern iptr D_00195984[4];            /* quest_passed_items: op 75's items for the next quest */
 extern struct record *nonworld_root;
@@ -29,7 +29,7 @@ extern struct record *quest_tick_object;
 extern int sky_loaded_frame;
 extern iptr qbn_opcode_arg_counts;
 extern signed char current_region;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char D_00196298;
 extern signed char night_sky_loaded;
@@ -171,8 +171,8 @@ void quest_run_opcodes(struct quest *quest)
             case 8:
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0 && ((int)(unsigned char)current_region) != 31) {
                     mc_set_location(64, str_qcom_c);
-                    mc_sprintf(D_001911E4, str_s_qbn, rand_range(op->args[1].value, op->args[2].value));
-                    quest_start(D_001911E4);
+                    mc_sprintf(fatal_error_text, str_s_qbn, rand_range(op->args[1].value, op->args[2].value));
+                    quest_start(fatal_error_text);
                     quest_op_done(quest, op);
                 }
                 break;
@@ -232,7 +232,7 @@ void quest_run_opcodes(struct quest *quest)
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
                     if (((int)(unsigned char)game_mode) == 16) {
                         rest_close();
-                        D_0019626F = 0;
+                        game_mode_under_popup = 0;
                     }
                     quest->flags |= 2;
                     quest_op_done(quest, op);
@@ -473,7 +473,7 @@ void quest_run_opcodes(struct quest *quest)
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
                     object = op->args[1].object;
                     if (object != 0) {
-                        quest_face_add(object, (int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], (int)(unsigned short)(object->flags & 4), object->id);
+                        quest_face_add(object, (int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned short)(object->flags & 4), object->id);
                     }
                     quest_op_done(quest, op);
                 }
@@ -533,7 +533,7 @@ void quest_run_opcodes(struct quest *quest)
                 if (((int)(short)(op->flags & 1)) == 0 && quest_arg_state(op, 0) != 0) {
                     object = op->args[1].object;
                     if (object != 0) {
-                        quest_face_add(object, (int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], 0, object->image2);
+                        quest_face_add(object, (int)(unsigned char)region_name_races[(int)(unsigned char)current_region], 0, object->image2);
                     }
                     quest_op_done(quest, op);
                 }

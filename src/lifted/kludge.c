@@ -29,7 +29,7 @@ extern char *D_0017BB01[];
 extern signed char D_0017BB39[];
 extern signed char D_0017BB3F[];
 extern char potion_recipes[];
-extern char D_00180B42[];
+extern char potion_recipe_values[];
 extern char *monster_names[];
 extern struct region regions[];
 extern signed char text_buffer[];
@@ -308,7 +308,7 @@ void kludge_make_test_character(int full)
     object->type = 2;
     object->flags |= 1;
     item_make(1, 1, &object->data.item);
-    object->data.item.value = (int)(unsigned short)*(short *)D_00180B42;
+    object->data.item.value = (int)(unsigned short)*(short *)potion_recipe_values;
     inv_store_item(object);
     object = object_create_child(object, 0, 109);
     object->type = 31;

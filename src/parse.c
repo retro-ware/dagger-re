@@ -8,7 +8,7 @@ iptr macro_bn_biography_name(void)
     iptr name;
     saved_seed = rand();
     srand(parse_name_seed + 0xd81);
-    name = name_generate(player_character[0x43], D_00190C78 & 1);
+    name = name_generate(player_character[0x43], career_bio_seed & 1);
     srand(saved_seed);
     return name;
 }

@@ -46,7 +46,7 @@ extern short scratch_190d6a;
 extern short D_00190D8C[];
 extern char scratch_190de4[];
 extern signed char D_001940D4;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern signed char D_001940D9;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -63,7 +63,7 @@ extern char text_rsc_file[];
 extern int text_rsc_main_file;
 extern short text_cursor_x;
 extern signed char D_0019626C;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char D_00196272;
 extern signed char game_mode;
@@ -200,7 +200,7 @@ void sheet_button_inventory(void)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     sheet_close();
     inventory_open(1, 0, 2);
-    D_001940D8 |= 32;
+    ui_dirty_flags |= 32;
 }
 
 void sheet_affiliation_line(struct record *object)
@@ -239,7 +239,7 @@ void sheet_button_spellbook(void)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     sheet_close();
     spellbook_open(1);
-    D_001940D8 |= 32;
+    ui_dirty_flags |= 32;
 }
 
 void sheet_show_primary_skills(void)
@@ -363,7 +363,7 @@ void sheet_button_log(void)
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
     sheet_close();
     logbook_open(1);
-    D_001940D8 |= 32;
+    ui_dirty_flags |= 32;
 }
 
 void show_health_status(void)
@@ -485,7 +485,7 @@ void training_update(void)
             D_00190C34 = 1235;
             return;
         }
-        D_001940D8 |= 1;
+        ui_dirty_flags |= 1;
         skills = *(unsigned char **)scratch_190de4;
         row = 0;
         dest = scratch_buffer;
@@ -593,7 +593,7 @@ void raise_skills(void)
 
 void levelup_check(void)
 {
-    if (((struct bf8_2_1 *)&D_001940D9)->f == 0 || creature_count != 0 || game_mode != 0 || ((int)D_0019626F) != 16 || player_character->race >= 9) {
+    if (((struct bf8_2_1 *)&D_001940D9)->f == 0 || creature_count != 0 || game_mode != 0 || ((int)game_mode_under_popup) != 16 || player_character->race >= 9) {
         return;
     }
     sheet_open(1);

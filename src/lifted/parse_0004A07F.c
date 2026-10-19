@@ -3,12 +3,12 @@
  * tables from the start of the file, so moving functions can change the code. */
 #include "ptrint.h"
 
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern signed char D_00190D1F;
 
 extern iptr name_generate_seeded(unsigned char, unsigned char, int);
 
 iptr parse_regional_name(int seed, int gender)
 {
-    return name_generate_seeded((int)(unsigned char)D_001841E3[(int)(signed char)D_00190D1F], (int)(unsigned char)*(signed char *)&gender, seed);
+    return name_generate_seeded((int)(unsigned char)region_name_races[(int)(signed char)D_00190D1F], (int)(unsigned char)*(signed char *)&gender, seed);
 }

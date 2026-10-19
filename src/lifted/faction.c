@@ -24,7 +24,7 @@ extern iptr D_001966BC[16];
 extern int rumor_file;
 extern int D_00196708;
 extern int faction_count;
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern struct faction *factions;
 extern signed char D_00196732;
 extern struct membership *guild_membership;
@@ -455,8 +455,8 @@ void func_0001CB3C(struct record *object)
     if (object->type != 10) return;
     faction = faction_find(object->data.membership.faction);
     if (faction == 0) return;
-    if (faction != D_0019671C && faction_has_enemy(faction, D_0019671C) == 0) {
-        if (faction_has_ally(faction, D_0019671C) == 0) return;
+    if (faction != found_faction && faction_has_enemy(faction, found_faction) == 0) {
+        if (faction_has_ally(faction, found_faction) == 0) return;
     }
     guild_membership = &object->data.membership;
     (*(int *)shared_scratch)++;
@@ -465,7 +465,7 @@ void func_0001CB3C(struct record *object)
 int faction_player_related(struct faction *faction)
 {
     if (faction == 0) return 0;
-    D_0019671C = faction;
+    found_faction = faction;
     *(int *)shared_scratch = 0;
     object_foreach(player_entity->children, func_0001CB3C);
     return *(int *)shared_scratch;

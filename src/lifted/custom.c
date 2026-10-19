@@ -111,7 +111,7 @@ extern iptr classmaker_picklist_costs;
 extern iptr itemmaker_spells_file;
 extern char scratch_190ee4[];
 extern signed char D_001940D4;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *player_object;
 extern iptr magic_window_image;
 extern struct character *player_character;
@@ -119,7 +119,7 @@ extern iptr window_image;
 extern struct career *player_class;
 extern char *scratch_buffer;
 extern char classmaker_file[];
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
@@ -178,7 +178,7 @@ void classmaker_run(void)
     *(short *)classmaker_screen = 0;
     D_00190D84 = 65535;
     classmaker_hp_repeat = 0;
-    D_001940D8 |= 1;
+    ui_dirty_flags |= 1;
     if (*(signed char *)classmaker_file != 0) {
         disk_read_file(classmaker_file, (iptr)player_class);
     }
@@ -267,7 +267,7 @@ void classmaker_run(void)
             *(int *)scratch_190be4 = *bios_ticks_set;
         }
     }
-    D_001940D8 &= 254;
+    ui_dirty_flags &= 254;
     mc_free((void *)*(iptr *)scratch_190de4, str_custom_c, 217);
     mc_free((void *)scratch_190dec, str_custom_c, 218);
     mc_free((void *)scratch_190de8, str_custom_c, 219);
@@ -853,19 +853,19 @@ void career_specials_line(iptr label, iptr detail)
 
 int itemmaker_open(int opening)
 {
-    if (((int)D_0019626F) == 10 && ((int)(unsigned char)game_mode) == 8) {
+    if (((int)game_mode_under_popup) == 10 && ((int)(unsigned char)game_mode) == 8) {
         return 1;
     }
     if (opening != 0) {
         scratch_190d68 = opening;
         world_running = 0;
-        D_001940D8 |= 4;
+        ui_dirty_flags |= 4;
         game_mode = 10;
         window_image = disk_read_file(str_item00i0_img, 0);
         magic_window_image = disk_read_file(str_item01i0_img, 0);
         itemmaker_spells_file = disk_read_file(str_spells_std_3, 0);
         D_00196272 = 1;
-        D_001940D8 &= 254;
+        ui_dirty_flags &= 254;
         itemmaker_select_tab(15);
         itemmaker_reset();
     }

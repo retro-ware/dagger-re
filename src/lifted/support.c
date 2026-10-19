@@ -77,7 +77,7 @@ extern signed char D_00196034;
 extern signed char msgbox_button_ids;
 extern signed char D_00196090;
 extern signed char D_00196091;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char D_00196272;
 extern signed char game_mode;
@@ -301,7 +301,7 @@ void mode_push(void)
 {
     mode_stack[((int)(short)mode_stack_depth) * 2] = D_00196272;
     mode_stack_game_mode[((int)(short)(mode_stack_depth)++) * 2] = game_mode;
-    D_0019626F = game_mode;
+    game_mode_under_popup = game_mode;
 }
 
 void mode_pop(void)
@@ -310,10 +310,10 @@ void mode_pop(void)
     D_00196272 = mode_stack[((int)(short)mode_stack_depth) * 2];
     game_mode = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
     if (mode_stack_depth != 0) {
-        D_0019626F = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
+        game_mode_under_popup = mode_stack_game_mode[((int)(short)mode_stack_depth) * 2];
         return;
     }
-    D_0019626F = 255;
+    game_mode_under_popup = 255;
 }
 
 void size_fit(short *width, short *height, slot16 max_width, slot16 max_height)

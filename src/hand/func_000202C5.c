@@ -19,7 +19,7 @@ extern int trade_price;
 extern unsigned char climate_weathers[];
 extern char D_001961F5[];
 extern unsigned char D_00196271;
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern iptr current_quest;
 extern struct faction *faction_find(short);
 extern int climate_category(void);
@@ -69,7 +69,7 @@ void daedra_summon(struct record *object)
         }
         daedra_id = (int)((day_entry - D_00179E60) / 2) + 1;
         daedra = faction_find(daedra_id);
-        D_0019671C = daedra;
+        found_faction = daedra;
         if (REGION(daedra) == 56) {
             if (game_settings->view_flags & 4) {
                 msgbox_show_rsc(400, 1);
@@ -111,7 +111,7 @@ void daedra_summon(struct record *object)
             }
         }
         daedra = faction_find(daedra_id);
-        D_0019671C = daedra;
+        found_faction = daedra;
         if (REGION(daedra) == 56) {
             if (game_settings->view_flags & 4) {
                 msgbox_show_rsc(400, 1);
@@ -133,7 +133,7 @@ void daedra_summon(struct record *object)
                 daedra_id = rand_range(1, 16);
         }
         daedra = faction_find(daedra_id);
-        D_0019671C = daedra;
+        found_faction = daedra;
         if (REGION(daedra) == 56) {
             if (game_settings->view_flags & 4) {
                 msgbox_show_rsc(400, 1);

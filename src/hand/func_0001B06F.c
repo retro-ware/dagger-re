@@ -2,8 +2,8 @@
 #include "records.h"
 
 extern int shared_scratch;
-extern struct faction *D_0019670C;
-extern struct faction *D_0019671C;
+extern struct faction *macro_faction2;
+extern struct faction *found_faction;
 extern int faction_subtree_search_r(struct faction *);
 
 int faction_tree_relation(struct faction *faction, struct faction *other)
@@ -11,8 +11,8 @@ int faction_tree_relation(struct faction *faction, struct faction *other)
     struct faction *original;
 
     original = faction;
-    D_0019671C = other;
-    D_0019670C = faction->parent;
+    found_faction = other;
+    macro_faction2 = faction->parent;
     shared_scratch = 0;
     if ((unsigned char)(faction_subtree_search_r(other->child) & 1))
         return 3;

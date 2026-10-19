@@ -12,8 +12,8 @@ extern unsigned char D_00196269;
 extern unsigned char D_001962A5;
 extern int rumor_file;
 extern int D_00196708;
-extern struct faction *D_0019670C;
-extern struct faction *D_0019671C;
+extern struct faction *macro_faction2;
+extern struct faction *found_faction;
 extern int faction_player_related(struct faction *);
 extern int func_0001D66C(struct rumor *);
 extern void parse_rsc_text(int, int, int);
@@ -33,8 +33,8 @@ void rumor_add_faction(struct faction *faction1, struct faction *faction2, int k
             shared_scratch = saved;
             return;
         }
-    D_0019671C = faction1;
-    D_0019670C = faction2;
+    found_faction = faction1;
+    macro_faction2 = faction2;
     scratch_190d16 = kind;
     scratch_190d17 = region;
     D_00196708++;

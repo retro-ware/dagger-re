@@ -11,7 +11,7 @@ extern char str_trap_will_not_work_on_humanoids[];
 extern char str_trap_active[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern iptr D_00184620;
 extern iptr D_00184624;
 extern iptr D_00184628;
@@ -53,7 +53,7 @@ extern int recall_anchor_location;
 extern int recall_anchor_region;
 extern int D_001A9A00;
 extern int recall_anchor_environment;
-extern char D_001AA458[];
+extern char trade_spell_cost[];
 
 extern struct faction *faction_find(short);
 extern int damage_apply(struct record *, int, struct record *);
@@ -576,7 +576,7 @@ int spfx_identify(struct record *spell, int slot, struct record *target)
     if (player_character->magicka > player_character->max_magicka) {
         player_character->magicka = player_character->max_magicka;
     }
-    *(int *)D_001AA458 = (int)(short)spell_ready_cost;
+    *(int *)trade_spell_cost = (int)(short)spell_ready_cost;
     inventory_open(1, 4, 8);
     return 0;
 }
@@ -968,7 +968,7 @@ iptr npc_display_name(struct record *npc)
         if (faction->type == 4) return (iptr)faction->name;
     }
     if (npc->twin != 0) {
-        return name_generate_seeded((int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)npc->flags & 4), npc->name_seed);
+        return name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)npc->flags & 4), npc->name_seed);
     }
-    return name_generate_seeded((int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], npc_data->flags & 16, npc->id);
+    return name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], npc_data->flags & 16, npc->id);
 }

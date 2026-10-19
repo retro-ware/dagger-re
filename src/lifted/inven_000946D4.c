@@ -13,7 +13,7 @@ extern int trade_mode;
 extern int inventory_action;
 extern char picked_model_index[];
 extern char D_00196120[];
-extern signed char D_001962AE;
+extern signed char inv_weight_container_only;
 extern struct record *inv_selected_item;
 
 extern int object_weight(struct record *);
@@ -61,9 +61,9 @@ L94793:;
             if (item->group == 23 && (iptr)inv_right_container == (iptr)wagon_container) return;
             if ((iptr)inv_right_container == (iptr)wagon_container) {
                 weight = object_weight(object);
-                D_001962AE = 1;
+                inv_weight_container_only = 1;
                 wagon_weight = object_weight(wagon_container);
-                D_001962AE = 0;
+                inv_weight_container_only = 0;
                 if ((weight + wagon_weight) > 3000) return;
             }
             if (trade_mode == 3 && item->enchantments[0].type != (-1)) {

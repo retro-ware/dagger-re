@@ -17,7 +17,7 @@ extern struct record *found_object;
 extern struct character *player_character;
 extern unsigned int game_minutes;
 extern unsigned char D_00196271;
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern struct membership *guild_membership;
 extern unsigned char D_001A4A1D;
 extern void msgbox_show_rsc(int, int);
@@ -145,7 +145,7 @@ void guild_join_or_promote(int guild, int joining)
         object->flags = 3;
         (guild_membership = &object->data.membership)->rank = 0;
         guild_membership->kind = kind;
-        guild_membership->faction = D_0019671C->id;
+        guild_membership->faction = found_faction->id;
         guild_membership->rank_time = game_minutes;
         while (mouse_buttons)
             xn_mouse_poll_clamped();
@@ -157,7 +157,7 @@ void guild_join_or_promote(int guild, int joining)
     if (game_minutes - guild_membership->rank_time <= 40320)
         return;
     delta = guild_rank_for_skills(guild) - guild_membership->rank;
-    if (D_0019671C->reputation < 0) {
+    if (found_faction->reputation < 0) {
         delta = -(guild_membership->rank + 1);
         expelled = 1;
     }
@@ -204,9 +204,9 @@ void guild_service_dispatch(struct record *npc)
     not_served = 0;
     D_001A4A1C = 0;
     object_free_children((iptr)D_001960D9);
-    D_0019671C = faction_find(current_building->faction_id);
+    found_faction = faction_find(current_building->faction_id);
     guild_membership = guild_find_membership_by_faction(current_building->faction_id);
-    guild = guild_kind_of_faction(D_0019671C);
+    guild = guild_kind_of_faction(found_faction);
     scratch_object = npc;
     guild_join_or_promote(guild, 0);
     D_001A4A1A = ((unsigned)npc->id) >> 16;

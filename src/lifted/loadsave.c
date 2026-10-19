@@ -57,7 +57,7 @@ extern char arena2_path[];
 extern signed char D_001940D4;
 extern signed char D_001940D5;
 extern unsigned char D_001940D7;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern signed char quest_global_states[];
 extern signed char D_001952EE;
 extern signed char D_00195303;
@@ -139,10 +139,10 @@ extern int recall_anchor_location;
 extern int recall_anchor_region;
 extern int D_001A9A00;
 extern int recall_anchor_environment;
-extern int D_001AA540;
-extern int D_001AA544;
+extern int return_region;
+extern int return_environment;
 extern struct record *inv_left_container;
-extern int D_001AA580;
+extern int return_location;
 
 extern int func_000641CD(struct record *);
 extern int sound_play(int, struct record *, int);
@@ -721,9 +721,9 @@ void savevars_read(iptr slot)
     read(save_file_handle, &recall_anchor_region, 4);
     read(save_file_handle, &D_001A9A00, 4);
     if (save_version >= 294) {
-        read(save_file_handle, &D_001AA540, 4);
-        read(save_file_handle, &D_001AA544, 4);
-        read(save_file_handle, &D_001AA580, 4);
+        read(save_file_handle, &return_region, 4);
+        read(save_file_handle, &return_environment, 4);
+        read(save_file_handle, &return_location, 4);
     }
     faction_load(save_file_handle);
     close(save_file_handle);
@@ -792,9 +792,9 @@ void savevars_write(int slot)
     write(save_file_handle, &recall_anchor_location, 4);
     write(save_file_handle, &recall_anchor_region, 4);
     write(save_file_handle, &D_001A9A00, 4);
-    write(save_file_handle, &D_001AA540, 4);
-    write(save_file_handle, &D_001AA544, 4);
-    write(save_file_handle, &D_001AA580, 4);
+    write(save_file_handle, &return_region, 4);
+    write(save_file_handle, &return_environment, 4);
+    write(save_file_handle, &return_location, 4);
     faction_save(save_file_handle);
     close(save_file_handle);
 }
@@ -820,7 +820,7 @@ void load_reset_state(void)
     D_00195B44 = game_minutes;
     D_001940D7 |= 1;
     D_001940D5 |= 2;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     current_building = 0;
     minute_of_day = ((unsigned)game_minutes) % 1440;
     if (minute_of_day > 360 && minute_of_day < 1080) {

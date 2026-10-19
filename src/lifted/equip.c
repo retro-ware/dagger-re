@@ -15,36 +15,36 @@ extern char str_magic_def[];
 extern unsigned char player_environment;
 extern struct item_template item_templates[];
 extern char potion_recipes[];
-extern char D_00180B42[];
+extern char potion_recipe_values[];
 extern short *item_group_templates[];
-extern char D_00185FFC[];
-extern char D_0018606B[];
-extern iptr D_00186483[];
-extern signed char D_0018654F[];
-extern signed char D_00186578[];
-extern char D_00186583[];
-extern signed char D_00186589[];
-extern signed char D_00186591[];
-extern signed char D_0018659B[];
-extern signed char D_0018659F[];
-extern signed char D_001865F2[];
-extern signed char D_00186605[];
-extern signed char D_00186610[];
-extern signed char D_0018661E[];
-extern signed char D_00186626[];
-extern char D_00186639[];
-extern char D_00186678[];
-extern char D_00186774[];
-extern char D_00186870[];
-extern char D_001868D9[];
-extern char D_001869C0[];
-extern char D_001869D4[];
-extern char D_001869EA[];
-extern char D_001869FE[];
+extern char item_clothing_styles_male[];
+extern char item_clothing_styles_female[];
+extern iptr shelf_stock_lists[];
+extern signed char hiding_capacity_a[];
+extern signed char hiding_capacity_b[];
+extern char hiding_items[];
+extern signed char race_image_rows[];
+extern signed char material_roll_weights[];
+extern signed char dye_colours_a[];
+extern signed char dye_colours_b[];
+extern signed char loot_table_by_location[];
+extern signed char loot_kinds[];
+extern signed char loot_chances[];
+extern signed char loot_ingredient_groups[];
+extern signed char loot_misc_groups[];
+extern char shop_groups_3[];
+extern char shop_groups_12a[];
+extern char shop_groups_12b[];
+extern char shop_groups_5[];
+extern char shop_groups_11[];
+extern char material_value_mults[];
+extern char material_weight_mults[];
+extern char material_condition_mults[];
+extern char material_enchant_mults[];
 extern char monster_soul_values[];
 extern signed char world_running;
 extern char book_list[];
-extern char D_0018E046[];
+extern char book_levels[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern signed char D_001940D6;
@@ -67,13 +67,13 @@ extern char magic_def_count[];
 extern iptr magic_def;
 extern char picked_model_index[];
 extern int ai_monster_flags;
-extern short D_00195DC4;
+extern short painting_index;
 extern short painting_subject_text;
 extern short painting_adjective_text;
 extern short painting_prefix1_text;
 extern short painting_prefix2_text;
 extern short book_count;
-extern struct record *D_0019615F;
+extern struct record *equip_scratch_item;
 extern signed char forced_material;
 extern int D_00199D74;
 
@@ -147,10 +147,10 @@ default:
 void item_set_race_image(struct item *item, int race)
 {
     if (race > 7) {
-        item->inventory_image += ((unsigned short)(unsigned char)D_00186589[player_character->original_race]) << 7;
+        item->inventory_image += ((unsigned short)(unsigned char)race_image_rows[player_character->original_race]) << 7;
         return;
     }
-    item->inventory_image += ((unsigned short)(unsigned char)D_00186589[race]) << 7;
+    item->inventory_image += ((unsigned short)(unsigned char)race_image_rows[race]) << 7;
 }
 
 void func_0005E636(struct item *item)
@@ -164,11 +164,11 @@ void func_0005E636(struct item *item)
     switch (item->group) {
     case 12:
         extra_index = 9;
-        style_table = (signed char *)D_00185FFC;
+        style_table = (signed char *)item_clothing_styles_male;
         break;
     case 6:
         extra_index = 13;
-        style_table = (signed char *)D_0018606B;
+        style_table = (signed char *)item_clothing_styles_female;
         break;
     case 2:
         item->inventory_image += rand_range(0, (int)(iptr)&*(signed char *)((char *)(iptr)(item->variants) - 1));
@@ -192,10 +192,10 @@ void item_next_clothing_style(struct item *item)
     signed char *style_table;
 
     if (item->group == 12) {
-        style_table = (signed char *)D_00185FFC;
+        style_table = (signed char *)item_clothing_styles_male;
         extra_index = 9;
     } else {
-        style_table = (signed char *)D_0018606B;
+        style_table = (signed char *)item_clothing_styles_female;
         extra_index = 13;
     }
     style = (int)(unsigned short)(item->inventory_image & 127);
@@ -220,9 +220,9 @@ void func_0005E7FC(struct item *item)
     signed char *style_table;
 
     if (item->group == 12) {
-        style_table = (signed char *)D_00185FFC;
+        style_table = (signed char *)item_clothing_styles_male;
     } else {
-        style_table = (signed char *)D_0018606B;
+        style_table = (signed char *)item_clothing_styles_female;
     }
     style = (int)(unsigned short)(item->inventory_image & 127);
     style--;
@@ -267,15 +267,15 @@ void item_roll_material(struct item *item)
         item->material = forced_material - 1;
         forced_material = 0;
     } else {
-        while (((int)(unsigned char)D_00186591[item->material]) < roll) {
-            roll -= (int)(unsigned char)D_00186591[item->material];
+        while (((int)(unsigned char)material_roll_weights[item->material]) < roll) {
+            roll -= (int)(unsigned char)material_roll_weights[item->material];
             item->material++;
         }
     }
-    item->value = item->value * (((int)(short)*(short *)(D_001869C0 + (item->material * 2))) * 3);
-    item->weight = ((unsigned)(((int)(short)*(short *)(D_001869D4 + (item->material * 2))) * item->weight)) >> 2;
-    item->condition = (item->max_condition = (item->max_condition * ((int)(short)*(short *)(D_001869EA + (item->material * 2)))) >> 2);
-    item->enchant_points = (item->enchant_points * ((int)(short)*(short *)(D_001869FE + (item->material * 2)))) >> 2;
+    item->value = item->value * (((int)(short)*(short *)(material_value_mults + (item->material * 2))) * 3);
+    item->weight = ((unsigned)(((int)(short)*(short *)(material_weight_mults + (item->material * 2))) * item->weight)) >> 2;
+    item->condition = (item->max_condition = (item->max_condition * ((int)(short)*(short *)(material_condition_mults + (item->material * 2)))) >> 2);
+    item->enchant_points = (item->enchant_points * ((int)(short)*(short *)(material_enchant_mults + (item->material * 2)))) >> 2;
     item->color = item->material + 16;
 }
 
@@ -320,15 +320,15 @@ void item_roll_armor_type(struct item *item)
             item->material = forced_material - 1;
             forced_material = 0;
         } else {
-            while (((int)(unsigned char)D_00186591[item->material]) < roll) {
-                roll -= (int)(unsigned char)D_00186591[item->material];
+            while (((int)(unsigned char)material_roll_weights[item->material]) < roll) {
+                roll -= (int)(unsigned char)material_roll_weights[item->material];
                 item->material++;
             }
         }
-        item->value = item->value * (((int)(short)*(short *)(D_001869C0 + (item->material * 2))) * 3);
-        item->weight = ((unsigned)(((int)(short)*(short *)(D_001869D4 + (item->material * 2))) * item->weight)) >> 2;
-        item->condition = (item->max_condition = (item->max_condition * ((int)(short)*(short *)(D_001869EA + (item->material * 2)))) >> 2);
-        item->enchant_points = (item->enchant_points * ((int)(short)*(short *)(D_001869FE + (item->material * 2)))) >> 2;
+        item->value = item->value * (((int)(short)*(short *)(material_value_mults + (item->material * 2))) * 3);
+        item->weight = ((unsigned)(((int)(short)*(short *)(material_weight_mults + (item->material * 2))) * item->weight)) >> 2;
+        item->condition = (item->max_condition = (item->max_condition * ((int)(short)*(short *)(material_condition_mults + (item->material * 2)))) >> 2);
+        item->enchant_points = (item->enchant_points * ((int)(short)*(short *)(material_enchant_mults + (item->material * 2)))) >> 2;
         item->color = item->material + 16;
     } else {
         item->value = item->value * ((int)(iptr)&*(signed char *)((char *)(iptr)(item->armor_type) + 1));
@@ -347,14 +347,14 @@ void item_roll_dye(struct item *item)
     item->color = rand_range(1, 10);
     if (item->group == 6) {
         if (item->index == 10 || item->index == 11) {
-            item->color = D_0018659B[rand() & 3];
+            item->color = dye_colours_a[rand() & 3];
         } else if (item->index == 4) {
-            item->color = D_0018659F[rand() & 3];
+            item->color = dye_colours_b[rand() & 3];
         }
         return;
     }
     if (item->group != 12 || item->index != 8) return;
-    item->color = D_0018659B[rand() & 3];
+    item->color = dye_colours_a[rand() & 3];
 }
 
 void shelf_stock_items(struct record *container, int list_index, int quality)
@@ -369,7 +369,7 @@ void shelf_stock_items(struct record *container, int list_index, int quality)
     struct item *item_data;
     struct record *item;
 
-    entry = (unsigned char *)D_00186483[list_index];
+    entry = (unsigned char *)shelf_stock_lists[list_index];
     if (entry == 0) return;
     while (*entry != 255) {
         if (*entry == 6 && ((int)(unsigned short)(player_character->flags & 1)) != 0) {
@@ -523,11 +523,11 @@ void painting_draw(void)
     struct image *image;
 
     mc_set_location(625, str_equip_c);
-    mc_sprintf((char *)text_buffer, str_paint_cif, (((int)(unsigned short)D_00195DC4) >> 3) + 97);
+    mc_sprintf((char *)text_buffer, str_paint_cif, (((int)(unsigned short)painting_index) >> 3) + 97);
     disk_read_file(text_buffer, (iptr)scratch_buffer);
     image = (struct image *)scratch_buffer;
     i = 0;
-    frame = (int)(unsigned short)(D_00195DC4 & 7);
+    frame = (int)(unsigned short)(painting_index & 7);
     while (i < frame) {
         image = (struct image *)(image->data_size + (char *)image + 12);
         i++;
@@ -542,9 +542,9 @@ void item_info_painting(struct item *item)
 
     saved_seed = rand();
     srand((int)(unsigned short)(short)item->message);
-    D_00195DC4 = rand() % 180;
+    painting_index = rand() % 180;
     fd = disk_open_data(str_paint_dat);
-    lseek(fd, ((int)(unsigned short)D_00195DC4) * 40, 0);
+    lseek(fd, ((int)(unsigned short)painting_index) * 40, 0);
     read(fd, (void *)scratch_buffer, 40);
     close(fd);
     painting_subject_text = pick_random_byte((unsigned char *)scratch_buffer) + 6100;
@@ -594,13 +594,13 @@ int book_pick_random(int level)
     i = 0;
     count = i;
     for (; ((int)(unsigned short)book_count) > i; i++) {
-        if (((int)(unsigned short)*(short *)(D_0018E046 + (i << 2))) <= level) count++;
+        if (((int)(unsigned short)*(short *)(book_levels + (i << 2))) <= level) count++;
     }
     if (count == 0) count = 1;
     pick = rand() % count;
     i = 0;
     while (pick >= 0) {
-        if (((int)(unsigned short)*(short *)(D_0018E046 + (i << 2))) <= level) pick--;
+        if (((int)(unsigned short)*(short *)(book_levels + (i << 2))) <= level) pick--;
         i++;
     }
     return i - 1;
@@ -617,14 +617,14 @@ int equip_hiding_capacity(int with_armor)
     for (; slot < 27; slot++) {
         if (player_character->equipped[slot] == 0) continue;
         item = &player_character->equipped[slot]->data.item;
-        if (item->group == 1 && memchr(D_00186583, item->index, 6) != 0) {
+        if (item->group == 1 && memchr(hiding_items, item->index, 6) != 0) {
             capacity += 10;
             continue;
         }
         if (item->group == 2 && with_armor != 0) {
-            capacity += (int)(unsigned char)D_00186578[item->index];
+            capacity += (int)(unsigned char)hiding_capacity_b[item->index];
         } else if (item->group == 6 || item->group == 12) {
-            capacity += (int)(unsigned char)D_0018654F[item->index];
+            capacity += (int)(unsigned char)hiding_capacity_a[item->index];
         }
     }
     return capacity;
@@ -637,12 +637,12 @@ void loot_fill_container(struct record *container)
     struct building *building;
 
     if (((int)player_environment) != 1) {
-        table = ((int)(unsigned char)D_001865F2[current_location->kind]) - 1;
+        table = ((int)(unsigned char)loot_table_by_location[current_location->kind]) - 1;
         while (container->children == 0) {
             loot_generate(table, container, player_character->level, (int)(unsigned short)(player_character->flags & 1));
         }
         if (table < 9 || table > 14) return;
-        if (rand_range(1, 100) <= ((int)(unsigned char)D_00186610[table])) {
+        if (rand_range(1, 100) <= ((int)(unsigned char)loot_chances[table])) {
             container = object_create_child(container, 0, 107);
             container->type = 2;
             item_make(27, 8, &container->data.item);
@@ -658,7 +658,7 @@ void loot_fill_container(struct record *container)
         table = building->type;
     }
     while (container->children == 0) {
-        loot_generate(((int)(unsigned char)D_00186605[table]) - 1, container, player_character->level, (int)(unsigned short)(player_character->flags & 1));
+        loot_generate(((int)(unsigned char)loot_kinds[table]) - 1, container, player_character->level, (int)(unsigned short)(player_character->flags & 1));
     }
 }
 
@@ -687,7 +687,7 @@ void loot_add_ingredient(struct record *container)
     item->x = container->x;
     item->y = container->y;
     item->z = container->z;
-    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)D_0018661E[rand() % 8]), &item->data.item);
+    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)loot_ingredient_groups[rand() % 8]), &item->data.item);
 }
 
 void loot_add_misc_item(struct record *container)
@@ -699,7 +699,7 @@ void loot_add_misc_item(struct record *container)
     item->x = container->x;
     item->y = container->y;
     item->z = container->z;
-    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)D_00186626[rand() % 4]), &item->data.item);
+    item_make_random((int)(unsigned short)((unsigned short)(unsigned char)loot_misc_groups[rand() % 4]), &item->data.item);
 }
 
 void loot_add_item_of_group(struct record *container, int group)
@@ -764,19 +764,19 @@ void shop_generate_stock(struct record *container, int variant, int quality, int
     if (building_type >= 21) return;
     if (variant < 2) {
         group_count = 3;
-        groups = D_00186639 + building_type * 3;
+        groups = shop_groups_3 + building_type * 3;
     } else if (variant < 4) {
         group_count = 12;
-        groups = D_00186678 + building_type * 12;
+        groups = shop_groups_12a + building_type * 12;
     } else if (variant < 11) {
         group_count = 12;
-        groups = D_00186774 + building_type * 12;
+        groups = shop_groups_12b + building_type * 12;
     } else if (variant < 15) {
         group_count = 5;
-        groups = D_00186870 + building_type * 5;
+        groups = shop_groups_5 + building_type * 5;
     } else {
         group_count = 11;
-        groups = D_001868D9 + building_type * 11;
+        groups = shop_groups_11 + building_type * 11;
     }
     for (pick = 0; pick < group_count; pick++) {
         if (groups[pick] == 0) break;
@@ -816,7 +816,7 @@ int func_000612A1(void)
     int count;
 
     count = 0;
-    item = D_0019615F;
+    item = equip_scratch_item;
     while (item != 0) {
         if (item->owner == *(int *)picked_model_index) count++;
         item->x = player_object->x;
@@ -857,7 +857,7 @@ void shop_stock_potions(struct record *container)
         item->y = player_object->y;
         item->z = player_object->z;
         item_make(1, 1, item_data);
-        item_data->value = (int)(unsigned short)*(short *)(D_00180B42 + (recipe * 109));
+        item_data->value = (int)(unsigned short)*(short *)(potion_recipe_values + (recipe * 109));
         item_data->stack_count = *(signed char *)&recipe;
         item = object_create_child(item, 0, 109);
         item->type = 31;
@@ -872,7 +872,7 @@ int potion_random_recipe(void)
 
     i = 0;
     count = 0;
-    while (*(short *)(D_00180B42 + (i++ * 109)) != 0) count++;
+    while (*(short *)(potion_recipe_values + (i++ * 109)) != 0) count++;
     return rand_range(0, count - 1);
 }
 
@@ -892,7 +892,7 @@ void loot_add_potion(struct record *container)
     item->y = player_object->y;
     item->z = player_object->z;
     item_make(1, 1, item_data);
-    item_data->value = (int)(unsigned short)*(short *)(D_00180B42 + (recipe * 109));
+    item_data->value = (int)(unsigned short)*(short *)(potion_recipe_values + (recipe * 109));
     item_data->stack_count = *(signed char *)&recipe;
     item = object_create_child(item, 0, 109);
     item->type = 31;

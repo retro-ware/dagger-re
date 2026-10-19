@@ -22,7 +22,7 @@ extern char note_colour[];
 extern signed char D_00185201[];
 extern signed char text_rsc_buffer[];
 extern signed char D_001940D5;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern char frame_counter[];
 extern struct record *player_object;
 extern iptr window_image;
@@ -110,8 +110,8 @@ int note_close(void)
     note_silent = 0;
     D_001940D5 &= 247;
     close((int)(short)note_file);
-    if (((struct bf8_5_1 *)&D_001940D8)->f != 0) {
-        D_001940D8 &= 223;
+    if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
+        ui_dirty_flags &= 223;
         sheet_open(1);
     }
     return 1;

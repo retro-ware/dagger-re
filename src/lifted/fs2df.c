@@ -8,10 +8,10 @@ extern char str_fs2df_c[];
 extern char str_info01i0_img[];
 extern char str_mask01i0_img[];
 extern char str_mask05i0_img[];
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern iptr magic_window_image;
 extern iptr window_image;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern struct rdb_object_id rdb_object_ids[];
@@ -197,14 +197,14 @@ void action_axis_to_translation(struct link *link)
 
 int spellmaker_open(int opening)
 {
-    if (((int)D_0019626F) == 2) return 1;
+    if (((int)game_mode_under_popup) == 2) return 1;
     if (opening != 0) {
         game_mode = 2;
         window_image = disk_read_file(str_info01i0_img, 0);
         magic_window_image = disk_read_file(str_mask01i0_img, 0);
         spellmaker_settings_image = disk_read_file(str_mask05i0_img, 0);
         D_00196272 = 1;
-        D_001940D8 |= 1;
+        ui_dirty_flags |= 1;
         spellmaker_new();
     }
     return ((((int)(unsigned char)game_mode) == 2) ? 1 : 0);

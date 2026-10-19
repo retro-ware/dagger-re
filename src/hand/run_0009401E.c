@@ -26,7 +26,7 @@ extern int inv_right_scroll;
 extern struct record *inv_left_container;
 extern short inv_right_count;
 extern short inv_left_count;
-extern unsigned char D_001AA5F8;
+extern unsigned char inv_right_icon_at_open;
 extern unsigned char inv_tab;
 extern void inv_wagon_button(void);
 
@@ -61,7 +61,7 @@ void inv_select_tab(int button)
     if (inventory_containers[button] == 0)
         return;
     if (trade_mode != 0) {
-        inv_right_icon = D_001AA5F8;
+        inv_right_icon = inv_right_icon_at_open;
         inv_wagon_button();
     }
     inv_tab = button;

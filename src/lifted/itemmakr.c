@@ -43,7 +43,7 @@ extern iptr itemmaker_soul_name_next;
 extern char scratch_190ee4[];
 extern signed char text_rsc_buffer[];
 extern char D_001913E4[];
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern char enchant_reference_character[];
 extern signed char D_001957CD;
 extern char D_001957E9[];
@@ -144,7 +144,7 @@ int itemmaker_close(void)
         mc_free((void *)magic_window_image, str_itemmakr_c, 142);
         magic_window_image = -1751672937;
     }
-    D_001940D8 &= 251;
+    ui_dirty_flags &= 251;
     D_00196272 = 0;
     player_refresh_paperdoll();
     return 1;

@@ -27,7 +27,7 @@ extern char inpstr_result[];
 extern struct character *player_character;
 extern struct career *player_class;
 extern char *scratch_buffer;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char time_skip_active;
@@ -61,7 +61,7 @@ void rest_update(void)
 
     D_0019629E = 0;
     if (((int)(unsigned char)game_mode) != 16) {
-        if (((int)D_0019626F) != 16 || ((int)(unsigned char)game_mode) != 8) {
+        if (((int)game_mode_under_popup) != 16 || ((int)(unsigned char)game_mode) != 8) {
             return;
         }
     }

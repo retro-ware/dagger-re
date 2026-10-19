@@ -6,7 +6,7 @@
 struct bits8 { unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 #pragma pack()
 extern char str_picklist_c[];
-extern struct bits8 D_001940D8;
+extern struct bits8 ui_dirty_flags;
 extern void picklist_update_thumb(struct picklist *);
 
 void picklist_add(struct picklist *l, char *name, short flags)
@@ -14,7 +14,7 @@ void picklist_add(struct picklist *l, char *name, short flags)
     int unused;
     short i;
 
-    if (D_001940D8.b0) {
+    if (ui_dirty_flags.b0) {
         if (l->count == 0) {
             mc_strncpy(l->entries->text, name, 40, str_picklist_c, 70);
             l->entries->flags = flags;

@@ -13,9 +13,9 @@ extern struct record *inv_right_container;
 extern iptr color_remap;
 extern int game_minutes;
 extern int trade_mode;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
-extern iptr D_001AA420;
+extern iptr inv_background_image;
 extern struct record *inv_selected_item;
 extern struct record *inv_left_container;
 extern unsigned char *color_remap_tables;
@@ -27,9 +27,9 @@ extern void inv_draw_cell_mark(int, int, struct rect *, int);
 #pragma aux mc_set_location parm routine [];
 
 #define SCREEN (*(char **)&screen_buffer)
-#define BUFS ((char **)&D_001AA420)
+#define BUFS ((char **)&inv_background_image)
 #define MODE ((unsigned char)game_mode)
-#define MODE2 (D_0019626F)
+#define MODE2 (game_mode_under_popup)
 #define U16(p, o) (*(unsigned short *)((p) + (o)))
 
 int inv_draw_item_cell(char *object, short cell, struct rect *rects)

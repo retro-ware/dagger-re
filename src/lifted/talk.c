@@ -131,9 +131,9 @@ extern signed char talk_key_index;
 extern unsigned char talk_prostitute_offer;
 extern signed char talk_refused;
 extern signed char talk_logbook_ready;
-extern struct faction *D_0019670C;
+extern struct faction *macro_faction2;
 extern int faction_count;
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern struct faction *factions;
 extern struct quest *current_quest;
 extern struct quest *quest_tick_data;
@@ -1463,7 +1463,7 @@ struct faction *faction_find_type_in_region_r(struct faction *faction, short reg
 
     while (faction != 0) {
         if ((short)((unsigned short)faction->type) == type && faction->region == (-1)) {
-            D_0019671C = faction;
+            found_faction = faction;
         } else if ((short)((unsigned short)faction->type) == type && (short)((unsigned short)faction->region) == region) {
             return faction;
         }
@@ -1669,8 +1669,8 @@ int faction_subtree_search_r(struct faction *faction)
 {
     if (*(int *)shared_scratch != 0) return *(int *)shared_scratch;
     while (faction != 0) {
-        if ((iptr)faction == (iptr)D_0019670C) *(signed char *)shared_scratch |= 2;
-        if (faction == D_0019671C) {
+        if ((iptr)faction == (iptr)macro_faction2) *(signed char *)shared_scratch |= 2;
+        if (faction == found_faction) {
             *(signed char *)shared_scratch |= 1;
             return *(int *)shared_scratch;
         }

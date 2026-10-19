@@ -94,10 +94,10 @@ extern signed char mouse_buttons_prev;
 extern signed char player_underwater;
 extern signed char in_dungeon_water;
 extern signed char crime_current;
-extern signed char D_0019629D;
+extern signed char monster_summon_anywhere;
 extern signed char D_001962A0;
 extern signed char D_001962A1;
-extern signed char D_001962B1;
+extern signed char inv_wagon_reached;
 extern int daylight;
 extern signed char music_uses_fm;
 extern char stocked_shop_ids[];
@@ -344,7 +344,7 @@ int click_world_face(struct pick_result *hit)
                 D_00196271 = 2;
             }
             if (((int)D_00196271) == 1) {
-                D_001962B1 = 1;
+                inv_wagon_reached = 1;
                 inventory_open(1, 0, 2);
             } else {
                 automap_save();
@@ -1310,7 +1310,7 @@ int spawn_point_visible(struct record *object)
     int angle_diff;
     int direction;
 
-    if (D_0019629D != 0) return 0;
+    if (monster_summon_anywhere != 0) return 0;
     if (collide_line_of_sight(player_object, object) == 0) return 0;
     bearing = xn_math_angle_to_point(player_object->x, player_object->z, object->x, object->z);
     angle_diff = ai_angle_diff(object->yaw, bearing, &direction);

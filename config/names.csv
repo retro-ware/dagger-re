@@ -1341,7 +1341,7 @@ global,0x00195AB8,vertical_velocity,confirmed,"fall speed: gravity adds to it, f
 global,0x00195ABC,attack_angle,candidate,code reading (damage code); not tested. Keep: code only (weapon_melee_strike -> damage_resolve_attack -> damage_knockback)
 global,0x00195AC4,location_object,confirmed,"root object of the loaded location or dungeon: +0x1B its location index, +0x1F high word the id in the at%05d.amf/.atf names; children walked for seen marks; audit: build/names/scratch/audit_euw/C/s1_survey.py: its location index equals location_here's index (416 Ipscart Rock, 394 Crossing, 6 Sentinel) and its x/z the map_location's; build/names/scratch/audit_euw/C/s4_load.py: map_goto_location(21,1,2,0) made it index 2 (Charmarket) with 4 type-38 block children"
 global,0x00195AC8,monster_bsa_handle,strong,MONSTER.BSA's open archive handle (init_game_data opens it; monster_init and monster_reload_anim_cb read through it). New: the save-load traces (exp2) read MONSTER.BSA records through this handle
-global,0x00195ACC,text_macro_potion,candidate,potion recipe the %po macro reads ('Recipe for %po.')
+global,0x00195ACC,text_macro_potion,strong,potion recipe the %po macro reads ('Recipe for %po.')
 global,0x00195AD4,text_macro_book,strong,"book header that %bt (title, +0) and %ba (author, +64) read"
 global,0x00195AD8,ai_chosen_spell,strong,"spell object picked by ai_pick_ranged_spell / ai_pick_touch_spell / ai_pick_any_spell, cast by monster_cast_spell. New: exp_mord: after ai_pick_ranged_spell it pointed at 'Fireball' (Mages) and 'Ice Bolt' (Frost Daedra), type-9 records in the creatures' spellbooks"
 global,0x00195ADC,inventory_close_callback,confirmed,"function inventory_close calls (and clears) when the inventory window closes; shelf_open_books/shelf_open_stock set it to shelf_return_items; audit: build/names/scratch/audit_euw/A/town.py shelf: after shelf_open_books on save_morthag1's bookseller it held shelf_return_items (0x74C10) with game_mode 4; inventory_close() cleared it, game_mode 0, and the 9 shelf items were back on the shelf object as type 36 with shelf_owner 778"
@@ -1504,7 +1504,7 @@ global,0x00196269,previous_region,candidate,"copied from current_region at the e
 global,0x0019626A,weapon_active_hand,strong,"0 right, 1 left: indexes right_hand + hand*8 (character+0x1BB/+0x1C3), weapon_hand_* arrays and the strike slot 19+2*hand"
 global,0x0019626B,cfg_user,strong,config key 'user'
 global,0x0019626C,sheet_selected_attribute,candidate,attribute index 0..7 set by sheet_select_attribute (button-13); the level-up spinner changes this attribute. Keep: code only; a click on an attribute box in level-up mode would settle it
-global,0x0019626F,game_mode_under_popup,candidate,mode a popup (game_mode 8) returns to: inventory_open treats 4 under 8 as open
+global,0x0019626F,game_mode_under_popup,strong,mode a popup (game_mode 8) returns to (mode_pop)
 global,0x00196270,msgbox_kind,strong,"byte: kind of the message box up: 0 none, 1 click/Enter closes, 2 text input, 4 closes on D_001940D5 bit 5, 5 buttons (popup_answer); set by msgbox_show_*, cleared by msgbox_close"
 global,0x00196271,popup_answer,candidate,yes/no answer: training cancels on 2; travel_map_update starts the trip on 1 after 'Do you wish to travel to %tcn?'
 global,0x00196272,screen_active,candidate,"set to 1 when the sheet, travel map or automap opens and back to 0 (or its old value) when it closes"
@@ -1608,7 +1608,7 @@ global,0x001966FC,bio_person_counts,candidate,"per kind (enemy, friend) the biog
 global,0x00196704,rumor_file,strong,"rumor.dat file handle (rumor_file_open/close, rumor_add_faction/quest)"
 global,0x00196708,rumor_added_count,candidate,"rumours appended since rumor_file_open. Keep: code only (rumor_file_open, rumor_add_faction)"
 global,0x00196710,faction_count,strong,number of faction records
-global,0x0019671C,found_faction,candidate,"result/default slot of faction searches (parse.c rumor and faction macros, talk, guilds, faction.c, daedra_summon); guild_npc_menu leaves the guild's faction in it; a struct faction * (econ and quests struct agents); was faction_match"
+global,0x0019671C,found_faction,strong,"result/default slot of faction searches; also %fl1, %ol1"
 global,0x0019672C,factions,strong,"faction records (92 bytes) as one array and tree root; faction_find walks it, faction_politics_update indexes it up to faction_count"
 global,0x00196734,region_location_type_counts,confirmed,"14 ints: locations per type (map_location+4 bits 25-29), counted by maploads_load_region; exp2: equal to a count of region 21's 719 records"
 global,0x0019676C,dungeon_blocks,confirmed,"4-byte dungeon block entries {x, z, u16 number | start bit 10 | prefix index << 11}: exp3 read (0,0,1,0x2C) = start block M0000001 and border blocks B0000009"
@@ -1736,7 +1736,7 @@ global,0x00199728,kludge_menu_active,strong,"set by kludge_menu_open, cleared wh
 global,0x0019972C,parse_name_seed,strong,"random seed saved by parse_expand at its start; the name macros reseed from it (+0 %fn, +123 %fn2, +3457 %mn and %bn, +9543 %mn2) so one text gets the same names"
 global,0x00199730,parse_output,strong,"build/names/scratch/audit_tq/exp_final.py save_tlalac_s: = the destination after parse_expand(""abc %ra def"") -> ""abc Redguard def"""
 global,0x00199734,parse_number,strong,"build/names/scratch/audit_tq/exp_parse.py save_tlalac_s: parse_read_number(""123 rest"") set it to 123"
-global,0x00199738,parse_stop,candidate,code reading
+global,0x00199738,parse_stop,strong,parse_expand stops and clears it when set
 global,0x00199764,current_quest,strong,"data (+0x47) of the quest being run or started: set by quest_run_opcodes, quest_start, quest_load_text, quest_event_individual_npc"
 global,0x00199768,quest_reward_container,strong,"record pointer: qaction_op04_give_reward points it at the trade container (D_001960D9, emptied first) or inv_right_container and reparents the reward items into it; quest_run_opcodes shows it with inventory_open_container(.., 6) after the opcodes run when it has children; inventory_close clears it (quests struct agent)"
 global,0x0019976C,quest_debug_data,strong,data of quest_debug_object; also set by quest_start and quests_run_all when 0; cleared by quest_end
@@ -1975,7 +1975,7 @@ global,0x001AA419,chargen_saved_points,strong,byte: bonus points saved with the 
 global,0x001AA41A,chargen_screen,confirmed,"byte bits of the chargen screens being drawn: 1 name, 2 face, 4 attributes, 8 skills, 16 reflexes, 255 summary (chargen_name_character sets them in order; the experiment saw the matching draw functions per step)"
 global,0x001AA41C,inventory_images,strong,"inventory_load_images stores 8 image handles here, one per inve*.img/cif it opens (fallcall)"
 global,0x001AA45C,inv_temp_pile,strong,"loot pile object (type 33, treasure texture 216, at the player) made by inventory_open; freed at close when empty"
-global,0x001AA53C,inv_ground_pile,candidate,"right container saved at open; inv_wagon_button switches back to it. Keep: code only (inventory_open, inv_wagon_button)"
+global,0x001AA53C,inv_ground_pile,strong,right container saved at open; inv_wagon_button switches back to it
 global,0x001AA548,inv_right_rows,strong,4 item pointers shown in the right rows (D_001AA534 is the 10-entry base used by inv_click_list_row; [9] = right header)
 global,0x001AA55C,inv_selected_item,confirmed,item object last clicked (list row or slot); exp: set by the clicks
 global,0x001AA560,inv_left_scroll,strong,first visible row of the left list (scroll buttons 37/38)
@@ -7295,3 +7295,96 @@ global,0x001A5A3A,swift_rm_regs_eax,strong,"swift_rm_regs+0x1C: eax, returned by
 global,0x001A5A40,swift_rm_regs_es,strong,"swift_rm_regs+0x22: es, set to swift_dos_segment"
 global,0x001A5A50,swift_dos_segment,strong,real-mode segment of the SWIFT DOS buffer
 global,0x001A5A54,swift_dos_selector_seg,strong,segment of the SWIFT DOS buffer the info is copied from (MK_FP)
+global,0x00177346,potion_text_end,strong,text record end 0xFD; potion_recipe_text closes the recipe text with it
+global,0x0017887F,weapon_swing_delays,strong,int per weapon index: delay added per hand weapon by inv_track_hand_weapons
+global,0x00184221,text_cannot_use_this,strong,"pointer to ""You cannot use this."" (inv_use_item)"
+global,0x00187DAC,loot_pile_images,strong,"20 TEXTURE.216 frames for a loot pile (+27648): inventory_open, marker_make_loot_pile"
+global,0x0018824D,inv_armor_value_ys,strong,"str_x+4: y of each armor value on the paper doll (8-byte x, y entries); inv_draw_armor_values"
+global,0x00190CA8,trade_total_weight,strong,weight of the items being bought (trade_add_buy_price); trade_steal_button subtracts /4 from the chance
+global,0x001940D8,ui_dirty_flags,strong,"redraw bits: bit 3 paper doll (paperdoll_draw), bit 0 cleared by spfx_create_item; set by init_game_data, inventory, books, spellbook"
+global,0x00195DA8,inv_opened_container,strong,container inventory_open_container opened; inventory_close marks an emptied pile (type 33) for deletion
+global,0x0019628A,inv_store_on_close,strong,while set inv_close_return_unpaid also stores the carried items (inv_store_cb)
+global,0x0019629D,monster_summon_anywhere,strong,set while inv_use_item summons a monster; spawn_point_visible then accepts any point
+global,0x001962AE,inv_weight_container_only,strong,set while the wagon weight is drawn or an item taken: object_weight_add counts the container alone
+global,0x001962AF,inv_from_guild_shop,strong,set by guild_buy_magic_items; inventory_close handles the guild purchase
+global,0x001962B1,inv_wagon_reached,strong,set by click_world_face when the wagon was clicked; inv_wagon_button outside needs it
+global,0x001AA420,inv_background_image,strong,"inve01i0.img, the inventory background (inventory_draw); first of the inventory image pointers"
+global,0x001AA424,inv_image_inve02,strong,inve02i0.img
+global,0x001AA428,inv_image_inve05,strong,inve05i0.img
+global,0x001AA434,inv_paperdoll_background,strong,paper doll background image (name in text_buffer) drawn by inventory_draw
+global,0x001AA438,inv_paperdoll_overlay,strong,second paper doll image (name in text_buffer) inventory_draw copies parts of
+global,0x001AA43C,inv_shop_image,strong,shop00i0.img drawn by inventory_draw in a shop
+global,0x001AA440,inv_container_icons,strong,"inve16i0.cif, the container icons (inv_draw_container_icon)"
+global,0x001AA444,inv_left_weapon_index,strong,item index of the left-hand weapon (equipped[21]) inv_track_hand_weapons last saw
+global,0x001AA448,inv_right_weapon_index,strong,item index of the right-hand weapon (equipped[19]) inv_track_hand_weapons last saw
+global,0x001AA44C,inv_right_weapon,strong,right-hand weapon (equipped[19]) inv_track_hand_weapons last saw
+global,0x001AA450,inv_left_weapon,strong,left-hand weapon (equipped[21]) inv_track_hand_weapons last saw
+global,0x001AA458,trade_spell_cost,strong,"spell point cost of a guild identify (spfx_identify sets, trade_pay_spell_points pays)"
+global,0x001AA460,inv_saved_conditions,strong,27 ints: conditions of the equipped items inv_unequip_all_saved took off
+global,0x001AA4CC,inv_saved_equipped,strong,27 items inv_unequip_all_saved took off; inv_reequip_saved puts them back on
+global,0x001AA534,inv_list_rows,strong,item per list row for inv_click_list_row (rows 5-9)
+global,0x001AA540,return_region,strong,region saved by func_00098A15 to go back to (savevars)
+global,0x001AA544,return_environment,strong,player_environment saved with return_region
+global,0x001AA580,return_location,strong,location image saved with return_region
+global,0x001AA588,inv_right_item_count,strong,items counted into the right inventory list (inv_list_right_item)
+global,0x001AA5F8,inv_right_icon_at_open,strong,container icon chosen by inventory_open; inv_select_tab restores it
+global,0x00171177,str_empty_2,strong,"empty string literal """" (next ""Potion of %s""); %mat and %rf macros return it"
+global,0x0017C552,legal_reputation_ranges_max,strong,"legal_reputation_ranges+4: upper bound of each 8-byte (min, max) standing range"
+global,0x0017CC1F,race_home_provinces,strong,"province index per race (%hpn, %hpw macros)"
+global,0x0017D042,local_province_names,strong,"pointers ""High Rock"", ""Hammerfell"" indexed by local_province (%lp, %ap)"
+global,0x00182F92,poison_names,strong,text per poison id (%wpn macro)
+global,0x001837E0,ruler_title_lord,strong,"pointer to ""Lord""; parse_faction_ruler_title's default"
+global,0x001841E3,region_name_races,strong,"per region the race whose names are generated there (buildings, NPCs, quests)"
+global,0x00184269,text_penalty_fines,strong,"pointer to ""%gtp gold pieces in fines and %dip days ..."" (%pen macro)"
+global,0x0018508F,honorific_maam,strong,"pointer to ""Ma'am"" (%hnr for a female player)"
+global,0x00190BF8,macro_12f_value,strong,number the %12f macro prints
+global,0x00190C78,career_bio_seed,strong,random seed career_background_summary picks; biography names use its low bits
+global,0x00190CD4,song_hero1_seed,strong,name seed of the first song hero (0 none); song_init_heroes
+global,0x00190CD8,song_hero2_seed,strong,name seed of the second song hero
+global,0x00190CDC,song_hero3_seed,strong,name seed of the third song hero
+global,0x00190D21,song_hero2_gender,strong,gender of the second song hero (pronoun macros)
+global,0x00190D22,song_hero3_gender,strong,gender of the third song hero
+global,0x001911E4,fatal_error_text,strong,buffer the fatal error message is formatted into
+global,0x00195AC0,parse_value_195ac0,strong,int func_00048765 returns plus 28
+global,0x00196267,local_province,strong,"0 High Rock, 1 Hammerfell: local province and race for generated names"
+global,0x00196661,talk_key_text_2,strong,talk_key_text+65: the %key2 text
+global,0x0019670C,macro_faction2,strong,"second faction of a rumour or relation (%fx2, %fl2, %lt2)"
+global,0x00196714,macro_faction_op,strong,faction %fop names
+global,0x00196720,macro_faction_xn,strong,"faction %cnr, %fxn, %fln name"
+global,0x00196724,macro_faction_al,strong,faction %fal names
+global,0x00196728,macro_faction_other,strong,"faction %alc, %alf, %cne, %enf, %foe name"
+global,0x00196D7E,reputation_baseline_r2,strong,reputation_baseline+2: merchants (%r2)
+global,0x00196D80,reputation_baseline_r3,strong,reputation_baseline+4: scholars (%r3)
+global,0x00196D82,reputation_baseline_r4,strong,reputation_baseline+6: nobility (%r4)
+global,0x00196D84,reputation_baseline_r5,strong,reputation_baseline+8: underworld (%r5)
+global,0x001758C0,str_empty_3,strong,"empty string literal """" (next ""Invalid index requested""); item_init_from_template"
+global,0x00180B42,potion_recipe_values,strong,potion_recipes+8: the value short of each 109-byte recipe (0 ends the list)
+global,0x00185FFC,item_clothing_styles_male,strong,clothing style table built at run time (item_next_clothing_style)
+global,0x0018606B,item_clothing_styles_female,strong,second clothing style table
+global,0x00186483,shelf_stock_lists,strong,pointers to the stock lists of shelves (shelf_stock_items)
+global,0x0018654F,hiding_capacity_a,strong,per item index: hiding capacity added (equip_hiding_capacity)
+global,0x00186578,hiding_capacity_b,strong,second per item index hiding capacity table
+global,0x00186583,hiding_items,strong,6 item indices of group 1 that count for hiding
+global,0x00186589,race_image_rows,strong,per race: row of 128 inventory images for race-specific items
+global,0x00186591,material_roll_weights,strong,per material: weight of the material roll
+global,0x0018659B,dye_colours_a,strong,4 dye colours rolled by item_roll_dye
+global,0x0018659F,dye_colours_b,strong,4 other dye colours rolled by item_roll_dye
+global,0x001865F2,loot_table_by_location,strong,per location kind: loot table + 1 (loot_fill_container)
+global,0x00186605,loot_kinds,strong,per loot table: loot_generate kind + 1
+global,0x00186610,loot_chances,strong,per loot table: percent chance there is loot
+global,0x0018661E,loot_ingredient_groups,strong,8 groups a random ingredient comes from
+global,0x00186626,loot_misc_groups,strong,4 groups a random misc item comes from
+global,0x00186639,shop_groups_3,strong,3 item groups per building type (shop_generate_stock)
+global,0x00186678,shop_groups_12a,strong,12 item groups per building type
+global,0x00186774,shop_groups_12b,strong,another 12 item groups per building type
+global,0x00186870,shop_groups_5,strong,5 item groups per building type
+global,0x001868D9,shop_groups_11,strong,11 item groups per building type
+global,0x001869C0,material_value_mults,strong,short per material: value x 3
+global,0x001869D4,material_weight_mults,strong,short per material: weight x /4
+global,0x001869EA,material_condition_mults,strong,short per material: max condition x /4
+global,0x001869FE,material_enchant_mults,strong,short per material: enchant points x /4
+global,0x0018E046,book_levels,strong,short level per book (4-byte entries) book_pick_random compares with the level
+global,0x00190CF2,item_init_count,strong,counted up by item_init_from_template
+global,0x00195DC4,painting_index,strong,random painting 0-179 (item_info_painting); file paint letter and frame
+global,0x0019615F,equip_scratch_item,strong,item func_000612A1 reads
+global,0x0019626E,item_template_capacity,strong,capacity of the last item template (potionmaker stores it per slot)

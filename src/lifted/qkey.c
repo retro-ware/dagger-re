@@ -25,7 +25,7 @@ extern char weapon_damage_min[];
 extern char weapon_damage_max[];
 extern char *monster_names[];
 extern char *region_names[];
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern iptr text_blank;
 extern char monster_category[];
 extern iptr D_0018506F;
@@ -195,7 +195,7 @@ iptr quest_symbol_text(int symbol, int form, int second_symbol)
                     faction = faction_find(qbn_person->faction_id);
                     if (faction->type == 4) return (iptr)faction->name;
                 }
-                return name_generate_seeded((int)(unsigned char)D_001841E3[object->home_region], (int)(unsigned char)((signed char)object->flags & 4), object->name_seed);
+                return name_generate_seeded((int)(unsigned char)region_name_races[object->home_region], (int)(unsigned char)((signed char)object->flags & 4), object->name_seed);
             case 16:
                 if ((object->id >> 16) == 50015) return (iptr)str_orsinium_castle;
                 if ((object->id >> 16) == 50027) return (iptr)str_castle_daggerfall;
@@ -219,7 +219,7 @@ L2D3DB:;
                         creature = &object->data.character;
                         if ((form & 15) == 1) {
                             if (creature->mobile_id >= 128) {
-                                return name_generate_seeded((int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)creature->flags & 1), object->name_seed);
+                                return name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)creature->flags & 1), object->name_seed);
                             }
                             return name_generate_seeded((int)(unsigned char)D_0017A144[current_quest->id % 3], 0, object->name_seed);
                         }

@@ -38,7 +38,7 @@ extern char scratch_190d64[];
 extern char scratch_190d66[];
 extern short scratch_190d68;
 extern signed char D_001940D6;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern char inpstr_result[];
@@ -106,7 +106,7 @@ void book_update(void)
     slot16 i;
 
     if (((int)(short)book_file) < 1) return;
-    D_001940D8 |= 16;
+    ui_dirty_flags |= 16;
     mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_book_c, 65, 4);
     book_draw_page((int)(short)book_page);
     if (scratch_190d68 != 0 && ((int)(unsigned char)game_mode) != 8) {
@@ -135,7 +135,7 @@ void book_close(void)
 {
     while (key_down_esc != 0);
     if (((int)(short)book_file) < 1) return;
-    D_001940D8 &= 239;
+    ui_dirty_flags &= 239;
     close((int)(short)book_file);
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_book_c, 101);
@@ -150,8 +150,8 @@ void book_close(void)
     game_mode = 0;
     D_00196272 = 0;
     world_running = 1;
-    if (((struct bf8_7_1 *)&D_001940D8)->f == 0) return;
-    D_001940D8 &= 127;
+    if (((struct bf8_7_1 *)&ui_dirty_flags)->f == 0) return;
+    ui_dirty_flags &= 127;
     inventory_open(2, trade_mode, (int)(unsigned char)inv_right_icon);
 }
 

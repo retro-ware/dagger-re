@@ -49,7 +49,7 @@ extern int D_00195F79;
 extern short D_00195F81;
 extern short D_00195F85;
 extern int D_00195F89;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char is_daytime;
@@ -317,7 +317,7 @@ int travel_map_open(int mode)
 {
     pslot16 ticks_addr;
 
-    if (((int)D_0019626F) == 19 && ((int)(unsigned char)game_mode) == 8) {
+    if (((int)game_mode_under_popup) == 19 && ((int)(unsigned char)game_mode) == 8) {
         return 1;
     }
     if (((int)player_environment) != 1) return 0;

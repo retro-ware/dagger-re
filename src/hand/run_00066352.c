@@ -4,7 +4,7 @@
 
 extern char str_disease_c[];        /* __FILE__ */
 extern unsigned char vampire_spells[];
-extern unsigned char D_001940D8;
+extern unsigned char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *location_object;
 extern struct character *player_character;
@@ -78,7 +78,7 @@ void disease_become_vampire(void)
         kind = d->vampire_clan;
     else
         kind = 153;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     player_character->flags |= 20;
     o1 = object_create_child(player_entity, 0, 47);
     o1->type = 11;

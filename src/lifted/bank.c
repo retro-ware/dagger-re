@@ -58,7 +58,7 @@ extern signed char climate_weathers[];
 extern short text_cursor_x;
 extern unsigned short text_cursor_y;
 extern signed char current_region;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char D_00196272;
 extern signed char game_mode;
@@ -123,7 +123,7 @@ void func_0006CB02(void);
 
 int bank_open(int opening)
 {
-    if (((int)(unsigned char)game_mode) == 8 && ((int)D_0019626F) == 15) {
+    if (((int)(unsigned char)game_mode) == 8 && ((int)game_mode_under_popup) == 15) {
         return 1;
     }
     if (opening != 0) {

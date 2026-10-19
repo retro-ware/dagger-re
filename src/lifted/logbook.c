@@ -27,7 +27,7 @@ extern char scratch_190be4[];
 extern char scratch_190d64[];
 extern char scratch_190d66[];
 extern signed char text_rsc_buffer[];
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *logbook_object;
 extern struct record *player_object;
 extern iptr window_image;
@@ -96,8 +96,8 @@ int logbook_close(void)
         mc_free((void *)window_image, str_logbook_c, 80);
         window_image = -1751672937;
     }
-    if (((struct bf8_5_1 *)&D_001940D8)->f != 0) {
-        D_001940D8 &= 223;
+    if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
+        ui_dirty_flags &= 223;
         sheet_open(1);
     } else {
         world_running = 1;

@@ -5,7 +5,7 @@
 #include "clib.h"
 
 extern char str_char_c[];
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern signed char current_region;
 extern char npc_record_buffer[];
 extern char D_0019995C[];
@@ -37,7 +37,7 @@ iptr npc_talk_record_build(struct record *npc)
     } else if (flat_cfg == 0 && ((int)(unsigned char)(*(signed char *)(npc_data + 2) & 16)) != 0) {
         *(signed char *)D_0019995C |= 1;
     }
-    D_0019995F = D_001841E3[(int)(unsigned char)current_region];
+    D_0019995F = region_name_races[(int)(unsigned char)current_region];
     if (npc->type == 8) {
         D_00199B43 = *(short *)npc_data;
     } else {

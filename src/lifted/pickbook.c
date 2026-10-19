@@ -29,7 +29,7 @@ extern char scratch_190d64[];
 extern char scratch_190de4[];
 extern signed char D_001940D4;
 extern signed char D_001940D5;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern int spell_points_bonus;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -191,7 +191,7 @@ int spellbook_close(void)
     }
     while (key_down_esc != 0);
     while (mouse_buttons != 0) xn_mouse_poll_clamped();
-    D_001940D8 &= 253;
+    ui_dirty_flags &= 253;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_pickbook_c, 222);
@@ -206,11 +206,11 @@ int spellbook_close(void)
         spellbook_saved_screen = -1751672937;
     }
     D_00196272 = 0;
-    if (((struct bf8_5_1 *)&D_001940D8)->f != 0) {
-        D_001940D8 &= 223;
+    if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
+        ui_dirty_flags &= 223;
         sheet_open(1);
-    } else if (((struct bf8_7_1 *)&D_001940D8)->f != 0) {
-        D_001940D8 &= 127;
+    } else if (((struct bf8_7_1 *)&ui_dirty_flags)->f != 0) {
+        ui_dirty_flags &= 127;
         inventory_open(2, trade_mode, (int)(unsigned char)inv_right_icon);
     } else {
         world_running = 1;
@@ -289,7 +289,7 @@ int spellbook_build_list(void)
         msgbox_show_rsc(12, 1);
         return 0;
     }
-    D_001940D8 &= 254;
+    ui_dirty_flags &= 254;
     D_001940D4 |= 4;
     return 1;
 }

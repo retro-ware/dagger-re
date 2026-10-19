@@ -22,13 +22,13 @@ extern char scratch_190d64[];
 extern char scratch_190de4[];
 extern signed char D_001940D4;
 extern signed char D_001940D6;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *wagon_container;
 extern struct record *house_container;
 extern struct item *text_macro_item;
 extern struct record *player_entity;
 extern struct record *player_object;
-extern iptr D_00195ACC;
+extern iptr text_macro_potion;
 extern struct character *player_character;
 extern struct settings *game_settings;
 extern struct image *magic_items_image;
@@ -188,7 +188,7 @@ void magic_items_add_cb(struct record *object)
     if (kind == 0) return;
     text_macro_item = item;
     if (kind == 2) {
-        D_00195ACC = (iptr)&object->children->data.potion_recipe;
+        text_macro_potion = (iptr)&object->children->data.potion_recipe;
         parse_expand(str_o, D_00190B44);
     } else {
         parse_expand(str_t_4, D_00190B44);
@@ -209,7 +209,7 @@ void magic_items_open(void)
         return;
     }
     world_running = 0;
-    D_001940D8 &= 254;
+    ui_dirty_flags &= 254;
     D_001940D4 |= 32;
     magic_items_image = (struct image *)disk_read_file(str_main02i0_img, 0);
     D_00196272 = 1;

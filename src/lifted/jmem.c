@@ -14,7 +14,7 @@ extern int mem_check_level;
 extern int frame_checkpoint;
 extern struct record *player_object;
 extern iptr window_image;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern int logbook_first_entry;
@@ -118,7 +118,7 @@ void mem_check_now(int checkpoint)
 
 int logbook_open(int force)
 {
-    if (((int)D_0019626F) == 14 && ((int)(unsigned char)game_mode) == 8) {
+    if (((int)game_mode_under_popup) == 14 && ((int)(unsigned char)game_mode) == 8) {
         return 1;
     }
     if (force != 0 || (game_mode == 0 && key_action_held(24) != 0)) {

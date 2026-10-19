@@ -13,7 +13,7 @@ extern char str_unnamed_potion[];
 extern char str_mask00i0_img[];
 extern char str_you_do_not_have_the_ingredients_required[];
 extern char potion_recipes[];
-extern char D_00180B42[];
+extern char potion_recipe_values[];
 extern signed char str_stamina[];
 extern char scratch_190be4[];
 extern char scratch_190de4[];
@@ -26,8 +26,8 @@ extern iptr window_image;
 extern char D_00195F28[];
 extern char spellmaker_spell[];
 extern signed char D_0019626D;
-extern signed char D_0019626E;
-extern unsigned char D_0019626F;
+extern signed char item_template_capacity;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char D_0019629A;
@@ -76,7 +76,7 @@ void potionmaker_mix(void)
             potion->type = 2;
             potion->flags |= 1;
             item_make(1, 1, &potion->data.item);
-            potion->data.item.value = (int)(unsigned short)*(short *)(D_00180B42 + (i * 109));
+            potion->data.item.value = (int)(unsigned short)*(short *)(potion_recipe_values + (i * 109));
             potion->data.item.stack_count = *(signed char *)&i;
             inv_store_item(potion);
             potion = object_create_child(potion, 0, 109);
@@ -143,7 +143,7 @@ void potionmaker_recipes(void)
 
 int potionmaker_open(int show)
 {
-    if (((int)D_0019626F) == 1) return 1;
+    if (((int)game_mode_under_popup) == 1) return 1;
     if (show != 0) {
         potion_name = (iptr)str_unnamed_potion;
         game_mode = 1;
@@ -175,7 +175,7 @@ void potionmaker_add_ingredient(int index)
         D_001A9BB4[item_buf.slot] = item_buf.item.variants;
         D_001A9BAC[item_buf.slot] = D_0019626D;
         D_001A9B8C[item_buf.slot] = *(signed char *)D_00195F28;
-        D_001A9B94[item_buf.slot] = D_0019626E;
+        D_001A9B94[item_buf.slot] = item_template_capacity;
     }
 }
 

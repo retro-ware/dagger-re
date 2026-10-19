@@ -11,13 +11,13 @@ extern char D_001706CD[];
 extern iptr D_00179EA8[];
 extern signed char text_buffer[];
 extern short D_00190CA2[];
-extern int D_00190CD4;
-extern int D_00190CD8;
-extern int D_00190CDC;
+extern int song_hero1_seed;
+extern int song_hero2_seed;
+extern int song_hero3_seed;
 extern signed char D_00190D1F;
 extern signed char scratch_190d20;
-extern signed char D_00190D21;
-extern signed char D_00190D22;
+extern signed char song_hero2_gender;
+extern signed char song_hero3_gender;
 extern char scratch_190d64[];
 extern signed char text_rsc_buffer[];
 extern struct character *player_character;
@@ -64,21 +64,21 @@ void song_init_heroes(int player_hero)
 
         D_00190D1F = rand() & -255;
         if (player_hero != 0) {
-            D_00190CD4 = 0;
+            song_hero1_seed = 0;
             scratch_190d20 = (signed char)player_character->flags & 1;
         } else {
-            D_00190CD4 = rand();
+            song_hero1_seed = rand();
             scratch_190d20 = rand() & -255;
         }
-        D_00190CD8 = rand();
+        song_hero2_seed = rand();
         if (scratch_190d20 != 0) {
             gender = 0;
         } else {
             gender = 1;
         }
-        D_00190D21 = *(signed char *)&gender;
-        D_00190CDC = rand();
-        D_00190D22 = 0;
+        song_hero2_gender = *(signed char *)&gender;
+        song_hero3_seed = rand();
+        song_hero3_gender = 0;
     }
 }
 

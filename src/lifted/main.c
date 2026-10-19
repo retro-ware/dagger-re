@@ -55,7 +55,7 @@ extern int D_00195CEC;
 extern int head_bob_offset;
 extern int player_death_timer;
 extern char D_001960D9[];
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char game_mode;
 extern signed char player_on_ground;
 extern signed char in_dungeon_water;
@@ -189,7 +189,7 @@ void game_frame(void)
     frame_checkpoint = 107;
     D_0012B508 = 146;
     xn_font_select(4);
-    if (((int)D_0019626F) != 4 || ((int)(unsigned char)game_mode) != 8) {
+    if (((int)game_mode_under_popup) != 4 || ((int)(unsigned char)game_mode) != 8) {
         reset_container = 1;
     } else {
         reset_container = 0;

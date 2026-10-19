@@ -11,10 +11,10 @@ extern unsigned char D_00178630[];   /* _IsTable */
 extern struct macro macro_table[];     /* the 255 macros, by first letter (the data: tools/port_data.py) */
 extern struct macro *macro_letter_tables[];
 extern short macro_letter_counts[];
-extern char D_001911E4[];
+extern char fatal_error_text[];
 extern int parse_name_seed;
 extern char *parse_output;
-extern char D_00199738;
+extern char parse_stop;
 extern char *quest_symbol_text(int, int, int);
 extern int parse_read_number(signed char *);
 extern void fatal_error(char *);
@@ -96,8 +96,8 @@ void parse_expand(unsigned char *src, char *out)
                             result = table[i].fn();
                             if (result < (char *)1000) {
                                 mc_set_location(122, str_parse_c);
-                                mc_sprintf(D_001911E4, str_invalid_parse_command, result, token);
-                                fatal_error(D_001911E4);
+                                mc_sprintf(fatal_error_text, str_invalid_parse_command, result, token);
+                                fatal_error(fatal_error_text);
                             }
                             mc_strncpy(out, result, 4, str_parse_c, 125);
                             out += strlen(out);
@@ -110,8 +110,8 @@ void parse_expand(unsigned char *src, char *out)
             *out++ = ch;
         }
 next:
-        if (D_00199738 != 0) {
-            D_00199738 = 0;
+        if (parse_stop != 0) {
+            parse_stop = 0;
             return;
         }
     }

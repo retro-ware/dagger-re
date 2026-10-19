@@ -26,7 +26,7 @@ extern int D_0018DDE0;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
 extern signed char D_00190D63;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *player_entity;
 extern struct record *scratch_current_object;
 extern struct spell *spell_records;
@@ -43,7 +43,7 @@ extern int game_minutes;
 extern signed char D_00195F24;
 extern signed char D_00195F25;
 extern char D_001961F5[];
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char game_mode;
 extern signed char in_dungeon_water;
@@ -377,7 +377,7 @@ void disease_cure_vampirism(void)
     object_delete(saved_class);
     object_delete(vampirism);
     player_character->max_health = (short)player_character->max_health_base;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     paperdoll_draw(0, 0);
 }
 
@@ -509,7 +509,7 @@ void disease_lycanthrope_shapechange(int forced)
             return;
         }
     }
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     player_character->last_shapechange_time = game_minutes;
     child = player_entity->children;
     while (child != 0) {
@@ -534,7 +534,7 @@ void disease_lycanthrope_shapechange(int forced)
         player_character->reputation[4] -= 100;
         player_character->min_metal_to_hit = 2;
         player_character->health = player_character->max_health;
-        D_001940D8 |= 8;
+        ui_dirty_flags |= 8;
         paperdoll_draw(0, 0);
         player_character->equipped[19] = 0;
         player_character->equipped[21] = 0;
@@ -549,7 +549,7 @@ void disease_lycanthrope_shapechange(int forced)
     player_character->reputation[4] += 100;
     player_character->min_metal_to_hit = 0;
     player_character->health = player_character->max_health;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     paperdoll_draw(0, 0);
     weapon_reload_hand_sprites();
 }
@@ -629,7 +629,7 @@ void disease_cure_lycanthropy(void)
         if (child->data.spell.id == 92) object_delete(child);
         child = next;
     }
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     paperdoll_draw(0, 0);
     player_character->max_health = (short)player_character->max_health_base;
 }
@@ -873,7 +873,7 @@ void trade_haggle_frame(void)
 {
     int agreed_price;
 
-    if (((int)(unsigned char)game_mode) != 13 && ((int)D_0019626F) != 13) {
+    if (((int)(unsigned char)game_mode) != 13 && ((int)game_mode_under_popup) != 13) {
         return;
     }
     D_0012B508 = 146;

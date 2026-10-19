@@ -13,7 +13,7 @@ extern iptr window_image;
 extern char *scratch_buffer;
 extern struct talk_where *talk_where_target;
 extern int talk_disposition;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196272;
 extern unsigned char game_mode;
 extern unsigned char crime_current;
@@ -70,7 +70,7 @@ int talk_open(struct record *npc)
     iptr rumor_text;
     int greeting;
 
-    if (D_0019626F == 12 && game_mode == 8)
+    if (game_mode_under_popup == 12 && game_mode == 8)
         return 1;
     if (npc != 0) {
         if (talk_npc_faction->social_group == 4 && (people_check_witnesses() & 2)) {

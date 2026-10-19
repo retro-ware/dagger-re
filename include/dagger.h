@@ -10,7 +10,7 @@
 extern iptr text_blank;
 extern int scratch_190be4;
 extern int scratch_190be8;
-extern unsigned char D_00190C78;
+extern unsigned char career_bio_seed;
 extern iptr scratch_190df4;
 extern char *nonworld_root;
 extern char *player_object;

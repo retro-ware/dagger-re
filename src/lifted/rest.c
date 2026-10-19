@@ -31,7 +31,7 @@ extern int game_minutes;
 extern char breath_remaining[];
 extern int sky_loaded_frame;
 extern int player_death_timer;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern signed char D_00196272;
 extern signed char game_mode;
 extern signed char in_dungeon_water;
@@ -76,7 +76,7 @@ void rest_close(void)
     }
     D_00196272 = 0;
     game_mode = 0;
-    D_0019626F = 16;
+    game_mode_under_popup = 16;
     world_running = 1;
     time_skip_active = 0;
     night_sky_loaded = 0;

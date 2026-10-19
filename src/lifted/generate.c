@@ -14,7 +14,7 @@ extern signed char xn_mouse_cursor_drawn;
 extern char D_00176F41[];
 extern char scratch_190be4[];
 extern int scratch_190be8;
-extern int D_00190CA8;
+extern int trade_total_weight;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190cee[];
 extern char scratch_190d64[];
@@ -22,7 +22,7 @@ extern short D_00190DEA[];
 extern short scratch_190df0[];
 extern signed char D_001940D5;
 extern signed char D_001940D6;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern struct record *inventory_containers[];
 extern struct record *wagon_container;
 extern struct building *current_building;
@@ -37,7 +37,7 @@ extern iptr window_image;
 extern struct career *player_class;
 extern int game_minutes;
 extern int trade_total;
-extern struct record *D_00195DA8;
+extern struct record *inv_opened_container;
 extern short D_00195F34;
 extern signed char current_region;
 extern signed char msgbox_kind;
@@ -270,7 +270,7 @@ void trade_add_buy_price(struct record *object)
     if (object->type != 2) return;
     item = &object->data.item;
     if (object->image2 == 998 && item->group == 3 && item->index == 18 && item->condition == 0) return;
-    D_00190CA8 += object_weight(object);
+    trade_total_weight += object_weight(object);
     price = item->value;
     if (object->image2 == 998) price = item->value * item->condition;
     if (object->image2 != 998 && ((int)(unsigned short)(object->flags & 32)) == 0) return;
@@ -327,7 +327,7 @@ void inv_return_unpaid_item(struct record *object)
     for (slot = 0; slot < 27; slot++) {
         if (player_character->equipped[slot] == object) player_character->equipped[slot] = 0;
     }
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
 }
 
 void inv_store_cb(struct record *object)
@@ -365,7 +365,7 @@ void inv_reset_left_list(void)
 
 void inventory_open_container(struct record *container, int mode, int icon)
 {
-    D_00195DA8 = container;
+    inv_opened_container = container;
     inv_right_container = (inv_right_container_base = container);
     if (inventory_open(2, mode, icon) != 0) return;
     object_free_children(container);

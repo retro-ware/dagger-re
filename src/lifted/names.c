@@ -22,7 +22,7 @@ extern char *shop_name_first_words[];
 extern char *tavern_name_first_words[];
 extern char *tavern_name_last_words[];
 extern char *region_names[];
-extern signed char D_001841E3[];
+extern signed char region_name_races[];
 extern iptr D_00184872;
 extern signed char text_buffer[];
 extern char D_00190B44[];
@@ -246,9 +246,9 @@ iptr building_name(struct building *building)
             quest_object = quest_find_site_for_building(building);
             if (quest_object != 0) {
                 if (quest_object != 0 && (quest_object->type == 41 || quest_object->type == 8)) {
-                    resident_name = (char *)name_generate_seeded((int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)quest_object->flags & 4), quest_object->name_seed);
+                    resident_name = (char *)name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], (int)(unsigned char)((signed char)quest_object->flags & 4), quest_object->name_seed);
                 } else {
-                    resident_name = (char *)name_generate_seeded((int)(unsigned char)D_001841E3[(int)(unsigned char)current_region], 0, (((unsigned)building->id) >> 16) ^ building->id);
+                    resident_name = (char *)name_generate_seeded((int)(unsigned char)region_name_races[(int)(unsigned char)current_region], 0, (((unsigned)building->id) >> 16) ^ building->id);
                 }
                 space = (char *)strchr(resident_name, 32);
                 if (space != 0) resident_name = space + 1;

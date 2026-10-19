@@ -19,7 +19,7 @@ extern signed char world_running;
 extern int frame_checkpoint;
 extern struct record *creature_list[];
 extern signed char scratch_190ce4[];
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern signed char D_001940D9;
 extern struct record *quest_root;
 extern struct record *bank_accounts;
@@ -131,7 +131,7 @@ void time_update_realtime(void)
     int *bios_clock;
     int *bios_clock2;
 
-    if (((struct bf8_6_1 *)&D_001940D8)->f != 0 || world_running == 0) {
+    if (((struct bf8_6_1 *)&ui_dirty_flags)->f != 0 || world_running == 0) {
         bios_clock = (int *)DOS_LOW(0x46C);
         realtime_clock_tick = *bios_clock;
         return;

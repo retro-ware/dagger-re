@@ -24,7 +24,7 @@ extern char *window_image;
 extern int free_later_count;
 extern short D_00195F34;
 extern unsigned char current_region;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern char D_00196271;
 extern char D_00196272;
 extern unsigned char game_mode;
@@ -59,7 +59,7 @@ int court_open(int crime)
 
     penalty = 0;
     half_penalty = 0;
-    if (game_mode == 21 || D_0019626F == 21)
+    if (game_mode == 21 || game_mode_under_popup == 21)
         return 1;
     if (crime != 0) {
         crime--;

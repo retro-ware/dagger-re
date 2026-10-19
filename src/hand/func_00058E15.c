@@ -17,7 +17,7 @@ extern char str_were0_i0_img[];
 extern char str_vamp00i0_cif[];
 extern char str_face_i0_cif[];
 extern signed char text_buffer[];
-extern struct bits8 D_001940D8;
+extern struct bits8 ui_dirty_flags;
 extern struct record *player_entity;
 extern iptr D_00195B64;
 extern char *paperdoll_mask;
@@ -54,8 +54,8 @@ void paperdoll_draw(int x, int y)
     iptr saved;
 
     found = 0;
-    if (!D_001940D8.b3) return;
-    D_001940D8.b3 = 0;
+    if (!ui_dirty_flags.b3) return;
+    ui_dirty_flags.b3 = 0;
     if (player_character->race == 9) {
         mc_strncpy(((char *)text_buffer), str_wolf00i0_img, 160, str_char_c, 40);
     } else if (player_character->race == 10) {

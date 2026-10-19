@@ -19,12 +19,12 @@ extern int inventory_action;
 extern unsigned char current_region;
 extern unsigned char inv_right_icon;
 extern char *inventory_images;
-extern char *D_001AA420;
-extern struct image *D_001AA434;
-extern struct image *D_001AA438;
-extern struct image *D_001AA43C;
+extern char *inv_background_image;
+extern struct image *inv_paperdoll_background;
+extern struct image *inv_paperdoll_overlay;
+extern struct image *inv_shop_image;
 extern iptr inv_left_container;
-extern unsigned char D_001AA5F8;
+extern unsigned char inv_right_icon_at_open;
 extern unsigned char inv_tab;
 extern int holiday_today(int, int);
 extern void paperdoll_draw(int, int);
@@ -59,21 +59,21 @@ void inventory_draw(void)
 
     mc_memcpy(screen_buffer, inventory_images, 64000, str_inven_c, 553, 4);
     if (trade_mode != 0)
-        xn_draw_image(D_001AA434->x, D_001AA434->y, D_001AA434->width, D_001AA434->height, D_001AA434->pixels);
+        xn_draw_image(inv_paperdoll_background->x, inv_paperdoll_background->y, inv_paperdoll_background->width, inv_paperdoll_background->height, inv_paperdoll_background->pixels);
     rect = &inv_mode_buttons[trade_mode][inventory_action];
     if (trade_mode == 0) {
         for (y = rect->y0; rect->y1 >= y; y++)
-            mc_memcpy(rect->x0 + (screen_buffer + y * 320), D_001AA420 + y * 320 + rect->x0, rect->x1 - rect->x0 + 1, str_inven_c, 566, 4);
+            mc_memcpy(rect->x0 + (screen_buffer + y * 320), inv_background_image + y * 320 + rect->x0, rect->x1 - rect->x0 + 1, str_inven_c, 566, 4);
     } else {
-        src = D_001AA438->pixels;
+        src = inv_paperdoll_overlay->pixels;
         for (y = rect->y0; rect->y1 >= y; y++)
-            mc_memcpy(rect->x0 + (screen_buffer + y * 320), (rect->x0 - (unsigned short)(short)D_001AA438->x) + (src + D_001AA438->width * (y - D_001AA438->y)), rect->x1 - rect->x0 + 1, str_inven_c, 574, 4);
+            mc_memcpy(rect->x0 + (screen_buffer + y * 320), (rect->x0 - (unsigned short)(short)inv_paperdoll_overlay->x) + (src + inv_paperdoll_overlay->width * (y - inv_paperdoll_overlay->y)), rect->x1 - rect->x0 + 1, str_inven_c, 574, 4);
     }
-    inv_blit_rect_from_image(inv_tab + 41, D_001AA420);
+    inv_blit_rect_from_image(inv_tab + 41, inv_background_image);
     paperdoll_draw(-147, 0);
     xn_draw_copy_rect_stride_bytes(D_00195B64 + 1008, screen_buffer + 4209, 111, 184, 125);
     if (trade_mode != 0) {
-        xn_draw_image(D_001AA43C->x, D_001AA43C->y, D_001AA43C->width, D_001AA43C->height, D_001AA43C->pixels);
+        xn_draw_image(inv_shop_image->x, inv_shop_image->y, inv_shop_image->width, inv_shop_image->height, inv_shop_image->pixels);
         holiday = holiday_today(game_minutes, current_region);
         if (holiday == 43 || ((struct bf8_7_1 *)&player_motion_flags)->f)
             shown_total = 0;
@@ -91,7 +91,7 @@ void inventory_draw(void)
     }
     inv_draw_scroll_arrows();
     if (inv_left_container == wagon_container)
-        inv_draw_container_icon(32, D_001AA5F8);
+        inv_draw_container_icon(32, inv_right_icon_at_open);
     else
         inv_draw_container_icon(32, inv_right_icon);
     mode = trade_mode;

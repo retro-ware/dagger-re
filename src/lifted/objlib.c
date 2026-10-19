@@ -14,7 +14,7 @@ extern char str_invalid_tree_data[];
 extern unsigned char player_environment;
 extern short D_00187CB4[];
 extern char D_00187D30[];
-extern signed char D_00187DAC[];
+extern signed char loot_pile_images[];
 extern char D_00187DC0[];
 extern char D_00187DE8[];
 extern char D_00187EC8[];
@@ -494,7 +494,7 @@ void marker_make_loot_pile(struct record *marker, struct building *building)
         marker->image = *(short *)(D_00187DC0 + (building->type * 2));
     } else {
         marker->type = 33;
-        marker->image = ((unsigned short)(unsigned char)D_00187DAC[rand() % 20]) + 27648;
+        marker->image = ((unsigned short)(unsigned char)loot_pile_images[rand() % 20]) + 27648;
         marker->pad19 = 1;
     }
     if (marker->image != 0) if (marker->image != 65535) return;

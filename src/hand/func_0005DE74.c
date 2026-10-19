@@ -3,15 +3,15 @@
 #include "clib.h"
 
 extern char str_equip_c[];
-extern char D_001758C0[];
+extern char str_empty_3[];
 extern char str_invalid_index_requested[];
 extern struct item_template item_templates[];
-extern unsigned char D_00190CF2;
-extern char D_001911E4[];
+extern unsigned char item_init_count;
+extern char fatal_error_text[];
 extern struct character *player_character;
 extern short D_00195F28;
 extern unsigned char D_0019626D;
-extern unsigned char D_0019626E;
+extern unsigned char item_template_capacity;
 extern void fatal_error(char *);
 extern void item_set_race_image(struct item *, int);
 extern void func_0005E636(struct item *);
@@ -48,17 +48,17 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     if (group == 10 && index == 11)
         index = 10;
     if (group == 7) {
-        D_00190CF2++;
+        item_init_count++;
         template_id = 277;
         if (index > 3)
             index = rand_range(0, 3);
     }
     if (template_id >= 288) {
         mc_set_location(58, str_equip_c);
-        func_000A18C3(D_001758C0);
+        func_000A18C3(str_empty_3);
         mc_set_location(59, str_equip_c);
-        mc_sprintf(D_001911E4, str_invalid_index_requested, requested_id, template_id);
-        fatal_error(D_001911E4);
+        mc_sprintf(fatal_error_text, str_invalid_index_requested, requested_id, template_id);
+        fatal_error(fatal_error_text);
     }
     template = &item_templates[template_id];
     if (template->inventory_image == 32512)
@@ -68,10 +68,10 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     item->index = index;
     item->value = template->value;
     if (template->capacity != 0 && (template->flags & 1) != 0) {
-        D_0019626E = template->capacity;
+        item_template_capacity = template->capacity;
         *(short *)item->pad28 = 0;
     } else {
-        D_0019626E = 0;
+        item_template_capacity = 0;
         *(short *)item->pad28 = template->capacity;
     }
     item->item_flags = (unsigned short)template->flags;

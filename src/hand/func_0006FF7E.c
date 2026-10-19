@@ -2,7 +2,7 @@
 #include "records.h"
 
 extern iptr guild_skill_lists[];
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern int guild_best_skill(int *, iptr, int);
 
 int guild_join_check(int guild)
@@ -12,7 +12,7 @@ int guild_join_check(int guild)
     int primary;
     int secondary;
 
-    if (D_0019671C->reputation < 0)
+    if (found_faction->reputation < 0)
         return 1;
     primary = guild_best_skill(&best_id, guild_skill_lists[guild], -1);
     if (primary < 22)

@@ -56,7 +56,7 @@ extern char arena2_path[];
 extern char arena2_cd_path[];
 extern struct flat_cfg flats_cfg[];
 extern unsigned char D_001940D7;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern iptr horse_overlay_image;
 extern iptr cart_overlay_image;
 extern int last_skill_check_minutes;
@@ -248,7 +248,7 @@ void debug_show_mem_used(void)
 
 void player_refresh_paperdoll(void)
 {
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     mem_check_crt_heap(0);
     xn_draw_fullscreen_overlay_shaded((char *)(window_image = disk_read_file(str_info00i0_img_2, 0)));
     paperdoll_draw(0, 0);
@@ -833,7 +833,7 @@ void game_reset(void)
     frame_checkpoint = 502;
     inv_reset_left_list();
     frame_checkpoint = 503;
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     last_skill_check_minutes = (game_minutes = 519210);
     frame_checkpoint = 504;
     faction_load_file();

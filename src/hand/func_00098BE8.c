@@ -1,6 +1,6 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x00098BE8 */
 extern char str_x[];
-extern char D_0018824D[];
+extern char inv_armor_value_ys[];
 extern signed char text_rsc_buffer[];
 extern struct character *player_character;
 extern void text_draw_coloured(char *, int, int, int, unsigned char);
@@ -11,5 +11,5 @@ void inv_draw_armor_values(void)
     int i;
 
     for (i = 0; i < 7; i++)
-        text_draw_coloured(itoa((100 - ((signed char *)((char *)player_character + 68))[i]) / 5, ((char *)text_rsc_buffer), 10), *(short *)(str_x + (i << 3)), *(short *)(D_0018824D + (i << 3)), 145, 156);
+        text_draw_coloured(itoa((100 - ((signed char *)((char *)player_character + 68))[i]) / 5, ((char *)text_rsc_buffer), 10), *(short *)(str_x + (i << 3)), *(short *)(inv_armor_value_ys + (i << 3)), 145, 156);
 }

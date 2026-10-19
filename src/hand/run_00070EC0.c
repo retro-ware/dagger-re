@@ -10,7 +10,7 @@ extern int inpstr_result;
 extern struct record *scratch_object;
 extern struct character *player_character;
 extern unsigned char current_region;
-extern struct faction *D_0019671C;
+extern struct faction *found_faction;
 extern struct membership *guild_membership;
 extern void msgbox_show_rsc(int, int);
 extern int quest_pick_file(unsigned char, unsigned char, unsigned char, unsigned char, unsigned char);
@@ -71,8 +71,8 @@ void guild_donate(void)
         return;
     }
     gold_spend(inpstr_result);
-    if (rand_range(1, 100) <= inpstr_result * 2 / (abs(D_0019671C->reputation) + 1))
-        D_0019671C->reputation++;
+    if (rand_range(1, 100) <= inpstr_result * 2 / (abs(found_faction->reputation) + 1))
+        found_faction->reputation++;
     msgbox_show_rsc(703, 1);
 }
 

@@ -11,7 +11,7 @@ extern unsigned char D_001940D5;
 extern struct record *player_object;
 extern iptr window_image;
 extern char *scratch_buffer;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196272;
 extern unsigned char game_mode;
 extern int note_file_size;
@@ -33,7 +33,7 @@ extern int disk_create(char *);
 
 int note_open_notebook(short mode)
 {
-    if (D_0019626F == 9 && game_mode == 8) return 1;
+    if (game_mode_under_popup == 9 && game_mode == 8) return 1;
     note_silent = (mode == 100);
     if (mode != 0 || (game_mode == 0 && key_action_held(25) != 0)) {
         D_001940D5 |= 8;

@@ -34,7 +34,7 @@ extern signed char scratch_190d20;
 extern short D_00190DD0;
 extern short guild_search_faction;
 extern signed char D_001940D4;
-extern signed char D_001940D8;
+extern signed char ui_dirty_flags;
 extern signed char D_001940D9;
 extern struct building *current_building;
 extern struct record *player_entity;
@@ -58,8 +58,8 @@ extern signed char mouse_buttons_prev;
 extern signed char in_dungeon_water;
 extern signed char D_00196299;
 extern signed char D_001962A0;
-extern signed char D_001962AF;
-extern struct faction *D_0019671C;
+extern signed char inv_from_guild_shop;
+extern struct faction *found_faction;
 extern iptr guild_saved_screen;
 extern struct membership *guild_membership;
 extern short D_001A4A18;
@@ -177,7 +177,7 @@ void guild_buy_magic_items(void)
         trade_price_scale = 128;
     }
     inventory_open_container((iptr)D_001960D9, 1, 4);
-    D_001962AF = 1;
+    inv_from_guild_shop = 1;
 }
 
 void spellshop_open(void)
@@ -185,8 +185,8 @@ void spellshop_open(void)
     D_001A4A18 = rand();
     srand((int)(short)D_001A4A1A);
     game_mode = 5;
-    D_001940D8 &= 254;
-    D_001940D8 |= 2;
+    ui_dirty_flags &= 254;
+    ui_dirty_flags |= 2;
     window_image = disk_read_file(str_spbk01i0_img, 0);
     magic_window_image = disk_read_file(str_mask04i0_img, 0);
     D_00196272 = 1;
@@ -198,7 +198,7 @@ int spellshop_close(void)
 {
     if (((struct bf8_2_1 *)&D_001940D4)->f != 0) picklist_free((iptr)shared_picklist);
     srand((int)(short)D_001A4A18);
-    D_001940D8 &= 253;
+    ui_dirty_flags &= 253;
     game_mode = 0;
     if (window_image != 0 && window_image != (-1751672937)) {
         mc_free((void *)window_image, str_guilds_c, 963);
@@ -283,7 +283,7 @@ int guild_rank_for_skills(int guild)
     int primary_step;
     int secondary_step;
 
-    rank = D_0019671C->reputation / 10;
+    rank = found_faction->reputation / 10;
     primary = guild_best_skill(&primary_step, (unsigned char *)guild_skill_lists[guild], -1);
     secondary = guild_best_skill(&primary_step, (unsigned char *)guild_skill_lists[guild], primary_step);
     primary_step = 0;

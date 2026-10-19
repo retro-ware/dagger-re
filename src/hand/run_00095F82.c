@@ -9,13 +9,13 @@ extern unsigned char D_001860DA[];
 extern unsigned char D_00186104[];
 extern short D_00188208[];
 extern signed char text_buffer[];
-extern unsigned char D_001940D8;
+extern unsigned char ui_dirty_flags;
 extern struct record *wagon_container;
 extern iptr player_object;
 extern struct record *inv_right_container;
 extern struct record *inv_right_container_base;
 extern struct character *player_character;
-extern unsigned char D_0019626F;
+extern unsigned char game_mode_under_popup;
 extern unsigned char game_mode;
 extern unsigned char inv_right_icon;
 extern int D_001AA454;
@@ -27,7 +27,7 @@ extern struct record *D_001AA578;
 extern struct record *inv_left_container;
 extern short inv_right_count;
 extern short inv_left_item_count;
-extern short D_001AA588;
+extern short inv_right_item_count;
 extern short inv_left_count;
 extern void msgbox_show_string(char *, short);
 extern void msgbox_show_rsc(int, int);
@@ -60,7 +60,7 @@ void inv_draw_left_list(struct rect *rects)
         D_001AA578 = inv_left_container;
     } else if (inv_left_container == wagon_container) {
         inv_draw_container_icon(27, inv_right_icon);
-    } else if (game_mode != 4 && D_0019626F != 4 && !((struct flags8 *)&D_001940D8)->b2) {
+    } else if (game_mode != 4 && game_mode_under_popup != 4 && !((struct flags8 *)&ui_dirty_flags)->b2) {
         return;
     }
     object = inv_left_container->children;
@@ -75,7 +75,7 @@ void inv_draw_right_list(struct rect *rects)
 {
     struct record *object;
 
-    inv_right_count = D_001AA588 = 0;
+    inv_right_count = inv_right_item_count = 0;
     mc_memset((char *)inv_right_rows, 0, 20, str_inven_c, 1655, 20);
     if (inv_right_container != inv_right_container_base) {
         inv_draw_item_cell(inv_right_container, 0, rects);
@@ -86,7 +86,7 @@ void inv_draw_right_list(struct rect *rects)
         inv_list_right_item(object, rects + 1);
         object = object->next;
     }
-    inv_right_count = D_001AA588;
+    inv_right_count = inv_right_item_count;
 }
 
 void func_00095EDB(void)
@@ -124,7 +124,7 @@ void inv_equip_item(struct record *object)
         msgbox_show_rsc(29, 1);
         return;
     }
-    D_001940D8 |= 8;
+    ui_dirty_flags |= 8;
     switch (item->group) {
     case 28:
         switch (item->index) {
