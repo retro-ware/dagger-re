@@ -31,12 +31,12 @@ extern signed char key_was_down[];
 extern struct record *creature_list[];
 extern int icon_cycle_frame;
 extern int icon_cycle_last_tick;
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern signed char D_001940DA;
 extern struct record *location_grid[];
-extern struct record *D_001959E0;
+extern struct record *inventory_container_2;
 extern struct record *house_container;
 extern struct record *ship_container;
 extern struct record *room_storage_container;
@@ -83,7 +83,7 @@ extern signed char screen_active;
 extern signed char game_mode;
 extern signed char info_popup_saved_state;
 extern signed char swift_present;
-extern signed char D_00196282;
+extern signed char object_quest_filter;
 extern signed char object_filter_type;
 extern struct record *people_list[];
 extern int people_count;
@@ -267,7 +267,7 @@ int wait_key_from_list(signed char *keys, short key_count)
         xn_mouse_cursor_move((int)(short)mouse_x, (int)(short)mouse_y);
         key = xn_kbd_read_key();
         if (key != 0) {
-            if (((struct bf8_0_1 *)&D_001940D4)->f != 0 && ((int)(unsigned char)key) == 27) {
+            if (((struct bf8_0_1 *)&game_state_flags)->f != 0 && ((int)(unsigned char)key) == 27) {
                 return -1;
             }
             if (key_count != 0) {
@@ -345,7 +345,7 @@ void list_popup_open_strings(char *strings)
         picklist_add((iptr)list_popup_picklist, (iptr)strings, 0);
         strings += strlen(strings) + 1;
     }
-    D_001940D4 |= 4;
+    game_state_flags |= 4;
 }
 
 void list_popup_open(char **strings)
@@ -359,21 +359,21 @@ void list_popup_open(char **strings)
     while (*strings != 0) {
         picklist_add((iptr)list_popup_picklist, (iptr)*strings++, 0);
     }
-    D_001940D4 |= 4;
+    game_state_flags |= 4;
 }
 
 int picklist_frame(struct picklist *picklist)
 {
     slot16 choice;
 
-    if (((struct bf8_0_1 *)&D_001940D4)->f != 0 && (key_down_esc != 0 || ((int)(unsigned char)(mouse_buttons & 2)) != 0)) {
-        D_001940D4 &= 251;
+    if (((struct bf8_0_1 *)&game_state_flags)->f != 0 && (key_down_esc != 0 || ((int)(unsigned char)(mouse_buttons & 2)) != 0)) {
+        game_state_flags &= 251;
         picklist_free(picklist);
         return -2;
     }
     *(int *)&choice = picklist_poll(picklist) - 1;
     if (((int)(short)choice) > (-1)) {
-        D_001940D4 &= 251;
+        game_state_flags &= 251;
         picklist_free(picklist);
         return (int)(short)choice;
     }
@@ -628,7 +628,7 @@ void player_position_restore(int slot)
     player_object->x = *(int *)(saved_positions + (slot * 12));
     player_object->y = *(int *)(player_saved_positions_y + (slot * 12));
     player_object->z = *(int *)(player_saved_positions_z + (slot * 12));
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
 }
 
 int flat_anim_finished(struct record *object)
@@ -888,7 +888,7 @@ void gold_make_credit_letter(int amount)
 {
     struct record *letter;
 
-    letter = item_add_to_container(D_001959E0, 27, 2, 0);
+    letter = item_add_to_container(inventory_container_2, 27, 2, 0);
     letter->data.item.value = amount;
 }
 
@@ -960,7 +960,7 @@ void func_0007F6A4(void)
 
 void object_match_filters_cb(struct record *object)
 {
-    if (D_00196282 != 0 && (signed char)object->quest_id != D_00196282) {
+    if (object_quest_filter != 0 && (signed char)object->quest_id != object_quest_filter) {
         return;
     }
     if (object_filter_id != 0 && (int)object->id != object_filter_id) return;

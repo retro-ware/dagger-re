@@ -45,7 +45,7 @@ extern char scratch_190d64[];
 extern short scratch_190d6a;
 extern short levelup_attribute_floor[];
 extern char scratch_190de4[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
 extern signed char player_view_flags;
 extern struct record *player_entity;
@@ -503,7 +503,7 @@ void training_update(void)
         game_mode = 0;
         return;
     case 1236:
-        if (((struct bf8_2_1 *)&D_001940D4)->f != 0 && (row = list_popup_poll()) > (-1)) {
+        if (((struct bf8_2_1 *)&game_state_flags)->f != 0 && (row = list_popup_poll()) > (-1)) {
             skills = *(unsigned char **)scratch_190de4;
             if (player_character->skills[skills[row]].value > 50) {
                 msgbox_show_rsc(4022, 1);
@@ -518,7 +518,7 @@ void training_update(void)
             training_state = 1235;
             time_pass(180);
         }
-        if (((struct bf8_2_1 *)&D_001940D4)->f != 0) return;
+        if (((struct bf8_2_1 *)&game_state_flags)->f != 0) return;
         training_state = 1235;
     default:;
     }

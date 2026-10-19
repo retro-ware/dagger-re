@@ -16,7 +16,7 @@ extern signed char scratch_190d16;
 extern unsigned char court_state;
 extern short court_prison_days;
 extern short court_extra_days;
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern struct record *player_entity;
 extern struct record *location_object;
 extern int creature_count;
@@ -29,9 +29,9 @@ extern unsigned char D_00196271;
 extern signed char screen_active;
 extern signed char game_mode;
 extern signed char crime_current;
-extern signed char D_001962B2;
+extern signed char damage_suppressed;
 extern char court_reputation_change[];
-extern int D_001A4A70[];
+extern int weapon_swing_state[];
 extern int D_001A4A74;
 
 extern iptr faction_find_type_in_region(int, short);
@@ -63,7 +63,7 @@ void court_frame(void)
     if (court_open(0) == 0) return;
     mc_memcpy((void *)screen_buffer, (void *)window_image, 64000, str_crime_c, 172, 4);
     if (((int)(unsigned char)game_mode) == 8) return;
-    D_001940D5 |= 64;
+    ui_mode_flags |= 64;
     D_00195F34 = 194;
     switch (court_state) {
         return;
@@ -188,8 +188,8 @@ void court_reputation_restore(void)
     regions[(unsigned char)current_region].legal_reputation += *(short *)court_reputation_change - 1;
     faction = faction_find_type_in_region((int)(short)((int)(unsigned char)current_region), 15);
     faction_change_reputation(faction, (-(*(int *)court_reputation_change - 1)) / 2);
-    D_001A4A70[0] = (D_001A4A74 = 0);
-    D_001962B2 = 1;
+    weapon_swing_state[0] = (D_001A4A74 = 0);
+    damage_suppressed = 1;
 }
 
 void court_close(void)
@@ -207,7 +207,7 @@ void court_close(void)
         window_image = -1751672937;
     }
     court_remove_creatures();
-    D_001940D5 &= 191;
+    ui_mode_flags &= 191;
 }
 
 void court_remove_creatures(void)

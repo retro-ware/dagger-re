@@ -16,7 +16,7 @@ extern char D_0018DC94[];
 extern char D_0018DC98[];
 extern char D_0018DC9C[];
 extern int D_0018DD54;
-extern int D_0018DD5C;
+extern int sos_digi_driver;
 extern char D_0018DD64[];
 extern char D_0018DD86[];
 
@@ -42,7 +42,7 @@ int sos_read_settings(char *path)
         profile_close(&profile);
         return 0;
     }
-    profile.result = profile_get_item_number(&profile, str_deviceid, &D_0018DD5C);
+    profile.result = profile_get_item_number(&profile, str_deviceid, &sos_digi_driver);
     profile.result = profile_get_item_number(&profile, str_deviceport, (int *)D_0018DC94);
     profile.result = profile_get_item_number(&profile, str_devicedma, (int *)D_0018DC9C);
     profile.result = profile_get_item_number(&profile, str_deviceirq, (int *)D_0018DC98);

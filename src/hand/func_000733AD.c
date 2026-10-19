@@ -13,7 +13,7 @@ extern struct character *player_character;
 extern struct w2 *click_face_texture;
 extern unsigned char weapon_active_hand;
 extern char crime_current;
-extern char D_001962B2;
+extern char damage_suppressed;
 extern struct record *people_list[];
 extern int people_count;
 extern int engine_pick_object(int, int, struct pick_result *);
@@ -85,8 +85,8 @@ void weapon_melee_strike(struct record *attacker)
             } else
                 damage_resolve_attack(attacker, other, 19);
         }
-        if (D_001962B2 != 0) {
-            D_001962B2 = 0;
+        if (damage_suppressed != 0) {
+            damage_suppressed = 0;
             return;
         }
     }

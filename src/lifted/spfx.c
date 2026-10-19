@@ -12,26 +12,26 @@ extern char str_trap_active[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
 extern signed char region_name_races[];
-extern iptr D_00184620;
-extern iptr D_00184624;
-extern iptr D_00184628;
-extern iptr D_0018462C;
-extern iptr D_00184630;
+extern iptr text_drained;
+extern iptr text_fortified;
+extern iptr text_invisible;
+extern iptr text_levitating;
+extern iptr text_regenerating;
 extern iptr D_00184634;
-extern iptr D_00184638;
-extern iptr D_0018463C;
-extern iptr D_00184640;
+extern iptr text_blending;
+extern iptr text_shadowed;
+extern iptr text_slowfalling;
 extern iptr text_feel_somewhat_bad;
-extern iptr D_00185097;
+extern iptr text_spell_failed;
 extern signed char undead_daedra_ids[];
 extern char spell_resist_flags[];
 extern int D_0018DDD8;
 extern char saved_positions[];
-extern int D_0018DE20;
+extern int spfx_popup_hold;
 extern struct record *creature_list[];
 extern char scratch_190de4[];
 extern char scratch_190ee4[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char D_001940D6;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -48,10 +48,10 @@ extern signed char current_region;
 extern unsigned char D_00196271;
 extern signed char game_mode;
 extern signed char player_ailment_flags;
-extern int D_001A99F4;
+extern int scratch_1a99f4;
 extern int recall_anchor_location;
 extern int recall_anchor_region;
-extern int D_001A9A00;
+extern int recall_anchor_building;
 extern int recall_anchor_environment;
 extern char trade_spell_cost[];
 
@@ -120,7 +120,7 @@ void spfx_dispel(struct record *spell, int slot, struct record *target)
         *(iptr *)(scratch_190de4 + (count << PTR_SHIFT)) = 0;
         spfx_show_choice_list((iptr)scratch_190de4, (iptr)spfx_dispel_magic_cb);
         selected_spell = spell_data;
-        D_001A99F4 = slot;
+        scratch_1a99f4 = slot;
         return;
     case 1:
         spfx_dispel_creatures(spell_data->cast_chances[slot], 0);
@@ -189,7 +189,7 @@ int spfx_drain(struct record *spell, int slot, struct record *target)
             target_char->attributes[stat] -= spell_data->cast_magnitudes[slot];
         }
     }
-    if (target_char == player_character) hud_message_add(D_00184620);
+    if (target_char == player_character) hud_message_add(text_drained);
     return 1;
 }
 
@@ -218,7 +218,7 @@ int spfx_fortify_attribute(struct record *spell, int slot, struct record *target
     new_value = target_char->attributes[attribute] + spell_data->cast_magnitudes[slot];
     if (new_value > 100) spell_data->cast_magnitudes[slot] -= new_value - 100;
     target_char->attributes[attribute] += spell_data->cast_magnitudes[slot];
-    if (target_char == player_character) hud_message_add(D_00184624);
+    if (target_char == player_character) hud_message_add(text_fortified);
     return 1;
 }
 
@@ -299,7 +299,7 @@ int spfx_invisibility(struct record *spell, int slot, struct record *target)
 
     target_char = &target->data.character;
     target_char->conditions |= 4;
-    if (target_char == player_character) hud_message_add(D_00184628);
+    if (target_char == player_character) hud_message_add(text_invisible);
     return 1;
 }
 
@@ -311,7 +311,7 @@ int spfx_levitate(struct record *spell, int slot, struct record *target)
     target_char->conditions |= 8;
     if (target_char == player_character) {
         transport_choose(0);
-        hud_message_add(D_0018462C);
+        hud_message_add(text_levitating);
         player_character->flags &= ~0x600;
         player_horse_sounds_stop();
     }
@@ -357,7 +357,7 @@ int spfx_regenerate(struct record *spell, int slot, struct record *target)
 
     target_char = &target->data.character;
     target_char->conditions |= 128;
-    if (target_char == player_character) hud_message_add(D_00184630);
+    if (target_char == player_character) hud_message_add(text_regenerating);
     return 1;
 }
 
@@ -368,7 +368,7 @@ int spfx_silence(struct record *spell, int slot, struct record *target)
 
     spell_data = &spell->data.spell;
     if (rand_range(1, 100) > spell_data->cast_chances[slot]) {
-        hud_message_add(D_00185097);
+        hud_message_add(text_spell_failed);
         return 0;
     }
     target_char = &target->data.character;
@@ -410,7 +410,7 @@ int spfx_chameleon(struct record *spell, int slot, struct record *target)
 
     target_char = &target->data.character;
     target_char->conditions |= 0x1000;
-    if (target_char == player_character) hud_message_add(D_00184638);
+    if (target_char == player_character) hud_message_add(text_blending);
     return 1;
 }
 
@@ -420,7 +420,7 @@ int spfx_shadow(struct record *spell, int slot, struct record *target)
 
     target_char = &target->data.character;
     target_char->conditions |= 0x2000;
-    if (target_char == player_character) hud_message_add(D_0018463C);
+    if (target_char == player_character) hud_message_add(text_shadowed);
     return 1;
 }
 
@@ -430,7 +430,7 @@ int spfx_slowfall(struct record *spell, int slot, struct record *target)
 
     target_char = &target->data.character;
     target_char->conditions |= 0x4000;
-    if (target_char == player_character) hud_message_add(D_00184640);
+    if (target_char == player_character) hud_message_add(text_slowfalling);
     return 1;
 }
 
@@ -474,7 +474,7 @@ int spfx_morph_self(struct record *spell, int slot, struct record *target)
     spell_data = &spell->data.spell;
     target_char = &target->data.character;
     if ((target_char->conditions & 0x40000) != 0) {
-        hud_message_add(D_00185097);
+        hud_message_add(text_spell_failed);
         return 0;
     }
     target_char->conditions |= 0x40000;
@@ -519,7 +519,7 @@ int spfx_pacify(struct record *spell, int slot, struct record *target)
     target_char = &target->data.character;
     if (target->data.character.mobile_id >= 128) return 0;
     if (rand_range(1, 100) > spell_data->cast_chances[slot]) {
-        hud_message_add(D_00185097);
+        hud_message_add(text_spell_failed);
         return 0;
     }
     target_char->flags |= 0x8000;
@@ -535,7 +535,7 @@ int spfx_charm(struct record *spell, int slot, struct record *target)
     target_char = &target->data.character;
     if (target->data.character.mobile_id < 128) return 0;
     if (rand_range(1, 100) > spell_data->cast_chances[slot]) {
-        hud_message_add(D_00185097);
+        hud_message_add(text_spell_failed);
         return 0;
     }
     target_char->flags |= 0x8000;
@@ -855,22 +855,22 @@ void spfx_popup_update(void)
             recall_anchor_location = location_object->image;
             recall_anchor_region = (int)(unsigned char)current_region;
             if (((int)player_environment) == 2) {
-                D_001A9A00 = player_object->parent->image;
+                recall_anchor_building = player_object->parent->image;
             } else {
-                D_001A9A00 = 0;
+                recall_anchor_building = 0;
             }
             player_position_save(1);
-        } else if (D_0018DE20 == 0) {
+        } else if (spfx_popup_hold == 0) {
             msgbox_show_rsc(4001, 1);
         } else {
-            map_goto_location(recall_anchor_region, recall_anchor_environment, recall_anchor_location, D_001A9A00);
+            map_goto_location(recall_anchor_region, recall_anchor_environment, recall_anchor_location, recall_anchor_building);
             player_position_restore(1);
             mc_memset(saved_positions, 0, 48, str_spfx_c, 1342, 48);
         }
         spfx_popup_handler = 0;
         return;
     }
-    if (((struct bf8_2_1 *)&D_001940D4)->f == 0 || (choice = list_popup_poll()) <= (-1)) return;
+    if (((struct bf8_2_1 *)&game_state_flags)->f == 0 || (choice = list_popup_poll()) <= (-1)) return;
     ((int (*)(int))(spfx_popup_handler))(choice);
     spfx_popup_handler = 0;
 }

@@ -6,9 +6,9 @@
 
 extern struct region regions[];
 extern char str_qinit_c[];
-extern char D_00178A10[];
+extern char quest_object_serial[];
 extern short *item_group_templates[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern iptr D_00195984[4];
 extern struct record *nonworld_root;
 extern struct record *quest_root;
@@ -21,10 +21,10 @@ extern struct record *quest_tick_object;
 extern iptr qbn_opcode_arg_counts;
 extern signed char current_region;
 extern signed char D_00196299;
-extern signed char D_001962A3;
+extern signed char quest_site_found;
 extern int faction_count;
 extern struct faction *factions;
-extern signed char D_001970DC;
+extern signed char quest_init_retry;
 extern struct quest *current_quest;
 extern struct quest *quest_tick_data;
 extern short qbn_record_sizes[];
@@ -92,7 +92,7 @@ struct record *quest_init_item(struct qbn_item *qbn_item)
         if (gold_amount < 1) gold_amount = 1;
         item = object_create_child(nonworld_root, 0, 107);
         item->type = 2;
-        item->image2 = *(short *)D_00178A10;
+        item->image2 = *(short *)quest_object_serial;
         item->flags = 0;
         item->quest_id = (signed char)current_quest->id;
         item->id = object_new_id(700);
@@ -109,7 +109,7 @@ struct record *quest_init_item(struct qbn_item *qbn_item)
         }
         item = object_create_child(nonworld_root, 0, 107);
         item->type = 2;
-        item->image2 = *(short *)D_00178A10;
+        item->image2 = *(short *)quest_object_serial;
         item->flags = 0;
         item->quest_id = (signed char)current_quest->id;
         item->id = object_new_id(700);
@@ -144,7 +144,7 @@ struct record *quest_init_foe(struct qbn_foe *foe)
     foe_object->repair_due = rand();
     foe_object->id = object_new_id(700);
     foe->object = foe_object;
-    foe_object->image2 = (*(int *)D_00178A10)++;
+    foe_object->image2 = (*(int *)quest_object_serial)++;
     foe_object->quest_id = (signed char)current_quest->id;
     monster_init(foe_object, foe->type);
     character = &foe_object->data.character;
@@ -172,14 +172,14 @@ int quest_init_resources(struct quest *quest)
     pass_count = 0;
     current_quest = quest;
     qbn_person = (struct qbn_person *)((char *)quest + quest->section_offsets[3]);
-    D_001970DC = 0;
+    quest_init_retry = 0;
     for (i = 0; quest->section_counts[3] > i; i++, qbn_person++) {
         qbn_person->object = 0;
         if (quest_init_person(qbn_person) == 0) return 0;
     }
-    while (D_001970DC != 0) {
+    while (quest_init_retry != 0) {
         qbn_person = (struct qbn_person *)((char *)quest + quest->section_offsets[3]);
-        D_001970DC = 0;
+        quest_init_retry = 0;
         for (i = 0; quest->section_counts[3] > i; i++, qbn_person++) {
             if (qbn_person->object != 0) continue;
             if (quest_init_person(qbn_person) == 0) return 0;
@@ -354,7 +354,7 @@ void qaction_place_npc(struct quest *quest, struct qbn_op *op)
             player_object->y = person->y;
             player_object->z = person->z;
             player_object->yaw = camera_object->yaw;
-            D_001940D5 |= 2;
+            ui_mode_flags |= 2;
         }
         return;
     }
@@ -412,9 +412,9 @@ struct record *quest_find_site_for_building(struct building *building)
             for (i = 0; quest_tick_data->section_counts[4] > i; i++, qbn_place++) {
                 site = qbn_place->object;
                 if ((qbn_place->flags & 64) != 0) {
-                    D_001962A3 = 1;
+                    quest_site_found = 1;
                 } else {
-                    D_001962A3 = 0;
+                    quest_site_found = 0;
                 }
                 if (site != 0 && building->id == site->data.building.id) return site;
             }
@@ -422,9 +422,9 @@ struct record *quest_find_site_for_building(struct building *building)
             for (i = 0; quest_tick_data->section_counts[3] > i; i++, qbn_person++) {
                 person_building = &qbn_person->object->data.building;
                 if (((int)(short)(qbn_person->flags & 16384)) != 0) {
-                    D_001962A3 = 1;
+                    quest_site_found = 1;
                 } else {
-                    D_001962A3 = 0;
+                    quest_site_found = 0;
                 }
                 if (building->id == person_building->id) return qbn_person->object;
             }

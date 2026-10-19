@@ -3,7 +3,7 @@ extern unsigned char mouse_buttons;
 extern char str_spells_c[];
 extern unsigned char spell_effect_target_class[];
 extern char *spell_effect_names[];
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern void (*list_popup_callback)(int);
 extern char *scratch_buffer;
 extern int spellmaker_allowed_targets(void);
@@ -22,7 +22,7 @@ int spellmaker_add_effect(void)
     short mode;
 
     if ((int)(unsigned char)(mouse_buttons & 2) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1811, 1);
         return 0;
     }

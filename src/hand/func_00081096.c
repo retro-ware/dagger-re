@@ -2,7 +2,7 @@
 #include "records.h"
 
 extern int xn_snow_turn_shift;
-extern int D_001940D4;
+extern int game_state_flags;
 extern int D_001940DA;
 extern int player_motion_flags;
 extern int view_look_pitch;
@@ -26,7 +26,7 @@ void player_mouse_look(void)
     short dy;
     short dx;
 
-    if (game_mode || (D_001940D4 & 0x24))
+    if (game_mode || (game_state_flags & 0x24))
         return;
     if (mouse_control_mode == 1) {
         if (!view_cursor_active && !key_action_held(33)) {

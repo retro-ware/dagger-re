@@ -20,7 +20,7 @@ extern signed char scratch_190cee[];
 extern char scratch_190d64[];
 extern short D_00190DEA[];
 extern short scratch_190df0[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern signed char ui_dirty_flags;
 extern struct record *inventory_containers[];
@@ -101,7 +101,7 @@ int chargen_draw(void)
     }
     if (((int)(unsigned char)(chargen_screen & 16)) != 0 && ((int)(unsigned char)chargen_screen) != 255 && ((int)(unsigned char)msgbox_kind) != 4) {
         msgbox_open_rsc(307, 4);
-        D_001940D5 |= 64;
+        ui_mode_flags |= 64;
         D_00195F34 = 125;
     }
     if (((int)(unsigned char)chargen_screen) == 255 && ((int)(unsigned char)game_mode) != 8) {

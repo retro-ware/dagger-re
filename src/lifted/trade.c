@@ -17,7 +17,7 @@ extern char str_hmiset_cfg[];
 extern char str_midi_bsa[];
 extern int D_0018DC64;
 extern int D_0018DD54;
-extern int D_0018DD5C;
+extern int sos_digi_driver;
 extern signed char text_buffer[];
 extern struct building *current_building;
 extern char *scratch_buffer;
@@ -117,7 +117,7 @@ int sound_init_music(void)
     int i;
 
     if ((short)sos_read_settings(str_hmiset_cfg) == 0) return 0;
-    if (sos_init(D_0018DD5C, D_0018DD54) != 0) return 0;
+    if (sos_init(sos_digi_driver, D_0018DD54) != 0) return 0;
     D_0018DC64 = 2048;
     func_000A1D3C(127);
     midi_bsa = archive_open(str_midi_bsa, 0, 0);

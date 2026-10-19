@@ -2,7 +2,7 @@
  * ordinary source: edit them here. Keep each function where it is: Watcom aligns switch
  * tables from the start of the file, so moving functions can change the code. */
 
-extern int D_00186DEC;
+extern int sound_volume;
 extern int D_0018DD54;
 extern signed char sound_enabled;
 
@@ -13,5 +13,5 @@ void sound_set_volume(int volume)
     if (sound_enabled == 0) return;
     if (D_0018DD54 == (-1)) return;
     func_000A1D3C(volume);
-    D_00186DEC = volume;
+    sound_volume = volume;
 }

@@ -3,10 +3,10 @@
 #include "clib.h"
 
 extern char str_sound_c[];        /* __FILE__ */
-extern int D_0018DD5C;
-extern int D_0018DD60;
+extern int sos_digi_driver;
+extern int sos_digi_handle;
 extern struct sound_channel sound_channels[];
-extern int D_001A3F34;
+extern int sound_last_channel;
 extern unsigned char sound_enabled;
 extern void sound_channel_set_source(struct record *, int);
 extern void sound_volume_pan(int *, int *, int *, int *, struct record *);
@@ -22,7 +22,7 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
     loop = 0;
     if (sound_enabled == 0)
         return -1;
-    if (D_0018DD5C == -1)
+    if (sos_digi_driver == -1)
         return -1;
     if (priority == -1) {
         priority = 127;
@@ -34,7 +34,7 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
         for (i = 0; i < 3; i++) {
             if (sound_channels[i].handle == 0x12345678)
                 break;
-            if (func_000A2460(D_0018DD60, sound_channels[i].handle) != 0) {
+            if (func_000A2460(sos_digi_handle, sound_channels[i].handle) != 0) {
                 sound_channels[i].handle = 0x12345678;
                 break;
             }
@@ -46,7 +46,7 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
         if (i == 3) {
             for (i = 0; i < 3; i++) {
                 if (sound_channels[i].priority < priority) {
-                    func_000A2687(D_0018DD60, sound_channels[i].handle);
+                    func_000A2687(sos_digi_handle, sound_channels[i].handle);
                     break;
                 }
             }
@@ -54,7 +54,7 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
         if (loop == 0 && i == 3)
             return -1;
     }
-    D_001A3F34 = i;
+    sound_last_channel = i;
     sound_channel_set_source(object, i);
     if (sound_channels[i].source != 0)
         sound_volume_pan(sound_channels[i].position, &sound_channels[i].source->x, &volume, &pan, sound_channels[i].source);
@@ -72,6 +72,6 @@ int sound_play_sample(iptr sample, int length, struct record *object, int priori
     sound_channels[i].sample.pad10 = length;
     sound_channels[i].sample.bits = 8;
     sound_channels[i].sample.channels = 1;
-    sound_channels[i].handle = func_000A2504(D_0018DD60, &sound_channels[i].sample);
+    sound_channels[i].handle = func_000A2504(sos_digi_handle, &sound_channels[i].sample);
     return i;
 }

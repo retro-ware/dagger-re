@@ -3,7 +3,7 @@
 #include "clib.h"
 extern char str_note_c[];
 extern char note_colour;
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern union note_entry *note_page;
 extern iptr note_page_backup;
 extern short note_page_free;
@@ -18,7 +18,7 @@ void note_add_line(short x0, short y0, short x1, short y1)
         return;
     }
     mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 399, 4);
-    D_001940D5 |= 16;
+    ui_mode_flags |= 16;
     entry = &note_page->line;
     while (entry->kind != 0) {
         if (entry->kind == 1)

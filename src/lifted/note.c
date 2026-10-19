@@ -21,7 +21,7 @@ extern iptr D_0017D1F2;
 extern char note_colour[];
 extern signed char D_00185201[];
 extern signed char text_rsc_buffer[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern signed char ui_dirty_flags;
 extern char frame_counter[];
 extern struct record *player_object;
@@ -108,7 +108,7 @@ int note_close(void)
         screen_active = 0;
     }
     note_silent = 0;
-    D_001940D5 &= 247;
+    ui_mode_flags &= 247;
     close((int)(short)note_file);
     if (((struct bf8_5_1 *)&ui_dirty_flags)->f != 0) {
         ui_dirty_flags &= 223;
@@ -122,7 +122,7 @@ void note_click_page(void)
     struct note_text *entry;
 
     if (note_tool == 0 && note_action == 0) {
-        D_001940D5 |= 4;
+        ui_mode_flags |= 4;
         entry = (struct note_text *)note_page_walk((iptr)note_page, (iptr)note_text_hit_cb, 0);
         if (entry != 0) {
             if ((entry->flags & 1) != 0) {
@@ -223,7 +223,7 @@ void note_add_text(char *text)
         return;
     }
     mc_memcpy((void *)note_page_backup, note_page, 3640, str_note_c, 361, 4);
-    D_001940D5 |= 16;
+    ui_mode_flags |= 16;
     entry = (char *)note_page;
     while (*(signed char *)entry != 0) {
         if (((int)(unsigned char)*(signed char *)entry) == 1) {
@@ -246,8 +246,8 @@ void note_add_text(char *text)
 
 void note_save_page(void)
 {
-    if (((struct bf8_4_1 *)&D_001940D5)->f == 0) return;
-    D_001940D5 &= 239;
+    if (((struct bf8_4_1 *)&ui_mode_flags)->f == 0) return;
+    ui_mode_flags &= 239;
     lseek((int)(short)note_file, ((int)(short)note_page_index) * 3640, 0);
     write((int)(short)note_file, note_page, 3640);
     note_file_size = filelength((int)(short)note_file);

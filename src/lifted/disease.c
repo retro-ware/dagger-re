@@ -42,7 +42,7 @@ extern struct career *player_class;
 extern int game_minutes;
 extern signed char lunar_cycle_a;
 extern signed char lunar_cycle_b;
-extern char D_001961F5[];
+extern char pending_quest_file[];
 extern unsigned char game_mode_under_popup;
 extern unsigned char D_00196271;
 extern signed char game_mode;
@@ -678,7 +678,7 @@ void disease_start_cure_quest(int offer_cure)
 {
     if (player_character->race == 8) {
         if (offer_cure != 0 && rand_range(10, 100) < 30) {
-            mc_strncpy(D_001961F5, str_curevam_qbn, 13, str_disease_c, 952);
+            mc_strncpy(pending_quest_file, str_curevam_qbn, 13, str_disease_c, 952);
             return;
         }
         if (offer_cure == 0 && player_character->action != 0 && rand_range(1, 100) < 50) {
@@ -687,12 +687,12 @@ void disease_start_cure_quest(int offer_cure)
         }
         if (offer_cure == 0 && rand_range(1, 100) < 50) {
             quest_pick_file(80, 0, 48, 65, player_character->level);
-            if (*(signed char *)D_001961F5 != 0) player_character->action = 1;
+            if (*(signed char *)pending_quest_file != 0) player_character->action = 1;
         }
         return;
     }
     if (disease_is_lycanthrope() == 0 || offer_cure == 0 || rand_range(1, 100) >= 30) return;
-    mc_strncpy(D_001961F5, str_curewer_qbn, 13, str_disease_c, 971);
+    mc_strncpy(pending_quest_file, str_curewer_qbn, 13, str_disease_c, 971);
 }
 
 void reaction_mod_item_cb(struct record *item)

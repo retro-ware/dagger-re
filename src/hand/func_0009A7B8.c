@@ -12,7 +12,7 @@ struct header_copy {            /* a copy of a record's 71-byte header (found_ma
 };
 #pragma pack()
 extern char str_objcode_c[];
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern struct record *player_object;
 extern struct record *marker_find_nearest(struct record *, int);
 
@@ -42,5 +42,5 @@ void ladder_climb(void)
         player_object->y = b.y;
         player_object->z = b.z;
     }
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
 }

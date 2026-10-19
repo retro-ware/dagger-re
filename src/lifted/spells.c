@@ -13,7 +13,7 @@ extern short font_height;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_spells_c[];
-extern char D_00170B1E[];
+extern char spellmaker_prompt_fmt[];
 extern char str_you_do_not_have_a_spellbook[];
 extern char str_spells_std[];
 extern struct spell *selected_spell;
@@ -24,10 +24,10 @@ extern char spell_effect_costs[];
 extern char spell_effect_cost_index[];
 extern char spell_effect_cost_formula[];
 extern char spell_target_cost_factor[];
-extern iptr D_0017D1F6;
+extern iptr text_enter_spell_name;
 extern signed char magic_school_skills[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern char cheat_flags[];
@@ -50,11 +50,11 @@ extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern char spell_effect_cost_current[];
 extern iptr spellmaker_settings_image;
-extern short D_00199628;
-extern short D_0019962C;
+extern short spellmaker_drag_accum;
+extern short spellmaker_alter_row;
 extern char spellmaker_settings_kind[];
-extern signed char D_0019962F;
-extern signed char D_00199630;
+extern signed char spellmaker_allowed_target_class;
+extern signed char spellbook_find_id;
 
 extern int func_00037AB7(void);
 extern int spell_effect_text_index(short);
@@ -107,7 +107,7 @@ int spellmaker_close(void)
             spells_std_delete();
             return 0;
         }
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1814, 1);
         return 0;
     }
@@ -134,7 +134,7 @@ void spellmaker_enter_name(void)
 
     prompt = (iptr)scratch_buffer + 55000;
     mc_set_location(744, str_spells_c);
-    mc_sprintf((char *)prompt, D_00170B1E, D_0017D1F6);
+    mc_sprintf((char *)prompt, spellmaker_prompt_fmt, text_enter_spell_name);
     *(signed char *)((char *)(strlen((char *)prompt) + prompt) + 1) = 0;
     inpstr_begin_text((iptr)selected_spell + 47, 24);
     msgbox_show_string(prompt, 2);
@@ -143,7 +143,7 @@ void spellmaker_enter_name(void)
 int spellmaker_element_fire(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1801, 1);
         return 0;
     }
@@ -154,7 +154,7 @@ int spellmaker_element_fire(void)
 int spellmaker_element_frost(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1802, 1);
         return 0;
     }
@@ -165,7 +165,7 @@ int spellmaker_element_frost(void)
 int spellmaker_element_poison(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1803, 1);
         return 0;
     }
@@ -176,7 +176,7 @@ int spellmaker_element_poison(void)
 int spellmaker_element_shock(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1804, 1);
         return 0;
     }
@@ -187,7 +187,7 @@ int spellmaker_element_shock(void)
 int spellmaker_element_magic(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1805, 1);
         return 0;
     }
@@ -198,7 +198,7 @@ int spellmaker_element_magic(void)
 int spellmaker_target_caster(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1806, 1);
         return 0;
     }
@@ -209,7 +209,7 @@ int spellmaker_target_caster(void)
 int spellmaker_target_touch(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1807, 1);
         return 0;
     }
@@ -220,7 +220,7 @@ int spellmaker_target_touch(void)
 int spellmaker_target_distance(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1808, 1);
         return 0;
     }
@@ -231,7 +231,7 @@ int spellmaker_target_distance(void)
 int spellmaker_target_area(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1809, 1);
         return 0;
     }
@@ -242,7 +242,7 @@ int spellmaker_target_area(void)
 int spellmaker_target_area_at_distance(void)
 {
     if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1810, 1);
         return 0;
     }
@@ -252,18 +252,18 @@ int spellmaker_target_area_at_distance(void)
 
 int spellmaker_allowed_targets(void)
 {
-    D_0019962F = 2;
+    spellmaker_allowed_target_class = 2;
     spellmaker_allowed_targets_cb(selected_spell->effects[0].type);
     spellmaker_allowed_targets_cb(selected_spell->effects[1].type);
     spellmaker_allowed_targets_cb(selected_spell->effects[2].type);
-    return (int)(unsigned char)D_0019962F;
+    return (int)(unsigned char)spellmaker_allowed_target_class;
 }
 
 void spellmaker_allowed_targets_cb(unsigned char effect_type)
 {
     if (((int)(unsigned char)effect_type) == 255) return;
     if (((int)(unsigned char)spell_effect_target_class[(int)(unsigned char)effect_type]) == 2) return;
-    D_0019962F = spell_effect_target_class[(int)(unsigned char)effect_type];
+    spellmaker_allowed_target_class = spell_effect_target_class[(int)(unsigned char)effect_type];
 }
 
 int spellmaker_buy(void)
@@ -283,7 +283,7 @@ int spellmaker_buy(void)
             spells_std_append();
             return 0;
         }
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1812, 1);
         return 0;
     }
@@ -325,7 +325,7 @@ int spellmaker_new(void)
             spells_std_edit();
             return 0;
         }
-        D_001940D5 |= 1;
+        ui_mode_flags |= 1;
         msgbox_show_rsc(1813, 1);
         return 0;
     }
@@ -336,7 +336,7 @@ int spellmaker_new(void)
     selected_spell->element = 4;
     mc_memset(selected_spell, 255, 6, str_spells_c, 1015, 6);
     selected_spell->effect_costs[0] = (selected_spell->effect_costs[1] = (selected_spell->effect_costs[2] = 0));
-    D_0019962C = 65535;
+    spellmaker_alter_row = 65535;
     return 0;
 }
 
@@ -348,7 +348,7 @@ void spellmaker_pick_subtype_cb(int subtype)
     mc_memcpy(spell_effect_cost_current, (void *)(((iptr)spell_effect_costs) + (((int)(unsigned char)*(signed char *)(spell_effect_cost_index + ((((int)(short)effect_type) * 12) + ((int)(short)*(short *)&subtype)))) << 3)), 8, str_spells_c, 1030, 8);
     selected_spell->effects[(int)(short)spell_effect_slot].subtype = *(signed char *)&subtype;
     *(signed char *)spellmaker_settings_kind = *(signed char *)(spell_effect_settings + ((((int)(short)effect_type) * 12) + ((int)(short)*(short *)&subtype)));
-    D_00199628 = 0;
+    spellmaker_drag_accum = 0;
 }
 
 int spellmaker_find_effect(short effect_type)
@@ -421,7 +421,7 @@ void spellmaker_magnitude_per_level(short delta)
 
 void spellmaker_settings_close(void)
 {
-    D_001940D5 |= 32;
+    ui_mode_flags |= 32;
     *(signed char *)spellmaker_settings_kind = 0;
 }
 
@@ -433,11 +433,11 @@ void spellmaker_effect_rows(void)
     for (; ((int)(short)row) < 3; (*(int *)&row)++) {
         if (selected_spell->effects[(int)(short)row].type == 255) continue;
         if (((int)(unsigned char)(mouse_buttons & 2)) != 0 && mouse_buttons_prev != mouse_buttons && ((int)(short)mouse_y) > ((((int)(short)row) << 5) + 30) && ((int)(short)mouse_y) < (((((int)(short)row) << 5) + 30) + ((int)(short)font_height))) {
-            D_001940D5 |= 1;
+            ui_mode_flags |= 1;
             msgbox_show_rsc((int)(short)(spell_effect_text_index((int)(short)row) + 1200), 1);
         }
         if (((int)(unsigned char)(mouse_buttons & 1)) != 0 && mouse_buttons_prev != mouse_buttons && ((int)(short)mouse_y) > ((((int)(short)row) << 5) + 30) && ((int)(short)mouse_y) < (((((int)(short)row) << 5) + 30) + ((int)(short)font_height))) {
-            D_0019962C = *(int *)&row;
+            spellmaker_alter_row = *(int *)&row;
             msgbox_choice_rsc(1708, 11, 10, 0, 101, 100, 0);
         }
     }
@@ -452,13 +452,13 @@ int list_popup_poll(void)
         if (((iptr)spellmaker_pick_subtype_cb) == list_popup_callback) {
             selected_spell->effects[(int)(short)spell_effect_slot].type = 255;
         }
-        D_001940D4 &= 251;
+        game_state_flags &= 251;
         picklist_free((iptr)list_popup_picklist);
         return -2;
     }
     *(int *)&choice = picklist_poll((iptr)list_popup_picklist) - 1;
     if (((int)(short)choice) > (-1)) {
-        D_001940D4 &= 251;
+        game_state_flags &= 251;
         picklist_free((iptr)list_popup_picklist);
         return (int)(short)choice;
     }
@@ -522,7 +522,7 @@ void spell_assign_new_id(void)
 void spellbook_find_id_cb(struct record *object)
 {
     if (((int)(unsigned char)(signed char)object->type) != 9) return;
-    if ((signed char)object->data.spell.id != D_00199630) return;
+    if ((signed char)object->data.spell.id != spellbook_find_id) return;
     *(iptr *)&scratch_object = (iptr)object;
 }
 
@@ -532,7 +532,7 @@ int spellbook_has_spell_id(unsigned char id)
     int found;
 
     *(iptr *)&scratch_object = 0;
-    D_00199630 = id;
+    spellbook_find_id = id;
     spellbook = object_find_item(player_entity->children, 27, 0);
     object_foreach(spellbook->children, spellbook_find_id_cb);
     if ((iptr)scratch_object != 0) {
@@ -556,7 +556,7 @@ struct spell *spells_pick_list(void)
     xn_font_select(4);
     list_popup_open(names);
     spells = (struct spell *)scratch_buffer;
-    D_001940D4 |= 1;
+    game_state_flags |= 1;
     for (;;) {
         keys_world_actions();
         xn_mouse_poll_clamped();

@@ -19,7 +19,7 @@ extern signed char tavern_food_prices[];
 extern char scratch_190be4[];
 extern signed char tavern_state;
 extern char scratch_190d64[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern struct record *nonworld_root;
 extern struct record *player_object;
 extern struct record *location_object;
@@ -31,7 +31,7 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern int game_minutes;
 extern char *scratch_buffer;
-extern struct record *D_00195CE8;
+extern struct record *quest_person_source;
 extern int trade_price;
 extern signed char current_region;
 extern unsigned char D_00196271;
@@ -176,7 +176,7 @@ void tavern_food_button(void)
         return;
     }
     list_popup_open((iptr)(char *)tavern_food_names);
-    D_001940D4 |= 1;
+    game_state_flags |= 1;
 }
 
 void tavern_buy_food(int food)
@@ -205,7 +205,7 @@ void tavern_buy_food(int food)
 void tavern_talk_button(void)
 {
     tavern_close();
-    npc_talk((iptr)D_00195CE8);
+    npc_talk((iptr)quest_person_source);
 }
 
 void tavern_go_to_room(void)

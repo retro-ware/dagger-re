@@ -71,7 +71,7 @@ extern signed char current_region;
 extern signed char forced_material;
 extern struct house_for_sale bank_houses_for_sale[];
 extern iptr bank_bought_house_building;
-extern struct record *D_001A41E4;
+extern struct record *bank_bought_house;
 extern signed char bank_house_count;
 extern short guild_npc_seed;
 extern signed char guild_map_pending;
@@ -488,7 +488,7 @@ void guild_service_dispatch(struct record *npc)
                 if (bank_house_count == 0) break;
                 choice = rand_range(0, (unsigned char)bank_house_count - 1);
                 player_character->house = bank_houses_for_sale[choice].id;
-                D_001A41E4 = RECORD_FROM_DATA(bank_houses_for_sale[choice].block);
+                bank_bought_house = RECORD_FROM_DATA(bank_houses_for_sale[choice].block);
                 bank_bought_house_building = (iptr)bank_houses_for_sale[choice].building;
                 msgbox_show_rsc(462, 1);
                 mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_guilds_c, 413);

@@ -5,7 +5,7 @@
 extern int xn_anim_ticks;
 extern char str_you_have_no_arrows[];
 extern short cast_anim_state;
-extern char D_001875B7[];
+extern char bow_anim_script[];
 extern signed char D_001940D6;
 extern signed char D_001940DA;
 extern signed char player_motion_flags;
@@ -20,15 +20,15 @@ extern struct character *player_character;
 extern struct settings *game_settings;
 extern signed char weapon_active_hand;
 extern signed char screen_active;
-extern iptr D_001A4A30[];
-extern int D_001A4A38[];
-extern int D_001A4A48[];
-extern int D_001A4A50[];
-extern int D_001A4A54;
+extern iptr weapon_hand_item[];
+extern int weapon_hand_group[];
+extern int weapon_hand_tick[];
+extern int weapon_hand_timer[];
+extern int weapon_timer_2;
 extern iptr weapon_hand_cif[];
-extern int D_001A4A60[];
-extern iptr D_001A4A68[];
-extern int D_001A4A70[];
+extern int weapon_hand_frame[];
+extern iptr weapon_hand_anim[];
+extern int weapon_swing_state[];
 extern unsigned char *color_remap_tables;
 extern void fatigue_add(int);
 extern int weapon_start_swing(int);
@@ -54,7 +54,7 @@ void weapon_player_update(void)
     if (weapon_hand_cif[((int)(unsigned char)weapon_active_hand)] == 0) return;
     if (((struct bf8_5_1 *)&player_motion_flags)->f != 0) return;
     if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
-    if (((iptr)D_001875B7) == *(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)]) {
+    if (((iptr)bow_anim_script) == *(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)]) {
         if (inv_take_arrow(0) == 0) {
             hud_status_set(str_you_have_no_arrows);
             D_001940D6 &= 191;
@@ -63,11 +63,11 @@ void weapon_player_update(void)
         weapon_bow_update();
         return;
     }
-    if (D_001A4A30[((int)(unsigned char)weapon_active_hand)] != 0) {
+    if (weapon_hand_item[((int)(unsigned char)weapon_active_hand)] != 0) {
         /* the item's colour: its data's +56 (the record's header first) */
-        color_remap = (iptr)((char *)color_remap_tables + (((int)(unsigned char)*(signed char *)((char *)D_001A4A30[((int)(unsigned char)weapon_active_hand)] + RECORD_HEADER_SIZE + 56)) << 8));
+        color_remap = (iptr)((char *)color_remap_tables + (((int)(unsigned char)*(signed char *)((char *)weapon_hand_item[((int)(unsigned char)weapon_active_hand)] + RECORD_HEADER_SIZE + 56)) << 8));
     }
-    if (((struct bf8_6_1 *)&D_001940D6)->f != 0 && D_001A4A70[((int)(unsigned char)weapon_active_hand)] == 0) {
+    if (((struct bf8_6_1 *)&D_001940D6)->f != 0 && weapon_swing_state[((int)(unsigned char)weapon_active_hand)] == 0) {
         cif = weapon_hand_cif[((int)(unsigned char)weapon_active_hand)];
         if (((int)(unsigned short)(game_settings->view_flags & 1)) != 0) {
             bar_height = 0;
@@ -76,35 +76,35 @@ void weapon_player_update(void)
         }
         xn_draw_img_masked_remap((void *)cif, -bar_height);
     }
-    if (D_001A4A70[((int)(unsigned char)weapon_active_hand)] == 0) {
-        D_001A4A50[((int)(unsigned char)weapon_active_hand)] = 1;
-        if (D_001A4A50[((int)(unsigned char)weapon_active_hand)] < 0) {
-            D_001A4A50[((int)(unsigned char)weapon_active_hand)] = 0;
+    if (weapon_swing_state[((int)(unsigned char)weapon_active_hand)] == 0) {
+        weapon_hand_timer[((int)(unsigned char)weapon_active_hand)] = 1;
+        if (weapon_hand_timer[((int)(unsigned char)weapon_active_hand)] < 0) {
+            weapon_hand_timer[((int)(unsigned char)weapon_active_hand)] = 0;
         }
         weapon_start_swing((int)(unsigned char)weapon_active_hand);
         color_remap = (iptr)color_remap_tables;
         return;
     }
-    if (D_001A4A50[0] > 0) D_001A4A50[0] -= frame_ticks;
-    if (D_001A4A54 > 0) D_001A4A54 -= frame_ticks;
-    if (*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] != 0) {
-        xn_draw_cif_rle_frame(xn_img_cif_group((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], D_001A4A38[((int)(unsigned char)weapon_active_hand)]), (int)(unsigned char)*(signed char *)((char *)(*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)])), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
+    if (weapon_hand_timer[0] > 0) weapon_hand_timer[0] -= frame_ticks;
+    if (weapon_timer_2 > 0) weapon_timer_2 -= frame_ticks;
+    if (*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] != 0) {
+        xn_draw_cif_rle_frame(xn_img_cif_group((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], weapon_hand_group[((int)(unsigned char)weapon_active_hand)]), (int)(unsigned char)*(signed char *)((char *)(*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)])), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
     } else {
-        xn_draw_cif_rle_frame(xn_img_cif_group((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], D_001A4A38[((int)(unsigned char)weapon_active_hand)]), 5 - D_001A4A70[((int)(unsigned char)weapon_active_hand)], ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
+        xn_draw_cif_rle_frame(xn_img_cif_group((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], weapon_hand_group[((int)(unsigned char)weapon_active_hand)]), 5 - weapon_swing_state[((int)(unsigned char)weapon_active_hand)], ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
     }
-    if (D_001A4A50[((int)(unsigned char)weapon_active_hand)] <= 0) {
-        D_001A4A50[((int)(unsigned char)weapon_active_hand)] = (115 - player_character->attributes[6]) * 3;
-        D_001A4A48[((int)(unsigned char)weapon_active_hand)] = xn_anim_ticks;
-        (D_001A4A70[((int)(unsigned char)weapon_active_hand)])--;
-        (D_001A4A60[((int)(unsigned char)weapon_active_hand)])++;
-        if (*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] != 0) {
-            if (((int)(unsigned char)*(signed char *)((*(char * *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)]))) == 255) {
-                D_001A4A70[((int)(unsigned char)weapon_active_hand)] = 0;
+    if (weapon_hand_timer[((int)(unsigned char)weapon_active_hand)] <= 0) {
+        weapon_hand_timer[((int)(unsigned char)weapon_active_hand)] = (115 - player_character->attributes[6]) * 3;
+        weapon_hand_tick[((int)(unsigned char)weapon_active_hand)] = xn_anim_ticks;
+        (weapon_swing_state[((int)(unsigned char)weapon_active_hand)])--;
+        (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)])++;
+        if (*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] != 0) {
+            if (((int)(unsigned char)*(signed char *)((*(char * *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)]))) == 255) {
+                weapon_swing_state[((int)(unsigned char)weapon_active_hand)] = 0;
             } else {
-                D_001A4A70[((int)(unsigned char)weapon_active_hand)] = 2;
+                weapon_swing_state[((int)(unsigned char)weapon_active_hand)] = 2;
             }
         }
-        if ((*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] != 0 && ((int)(unsigned char)*(signed char *)((*(char * *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)]))) == 4) || (*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] == 0 && D_001A4A70[((int)(unsigned char)weapon_active_hand)] == 3)) {
+        if ((*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] != 0 && ((int)(unsigned char)*(signed char *)((*(char * *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)]))) == 4) || (*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] == 0 && weapon_swing_state[((int)(unsigned char)weapon_active_hand)] == 3)) {
             player_entity->x = player_object->x;
             player_entity->y = player_object->y;
             player_entity->z = player_object->z;

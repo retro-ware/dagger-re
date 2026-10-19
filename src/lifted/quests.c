@@ -14,8 +14,8 @@ extern char str_invalid_person_selected[];
 extern char str_unable_to_assign_questid[];
 extern unsigned char player_environment;
 extern char material_to_hit[];
-extern char D_00185128[];
-extern signed char D_0018512E[];
+extern char armor_type_bonus[];
+extern signed char shield_part_table[];
 extern signed char body_part_armor_slots[];
 extern signed char text_buffer[];
 extern char scratch_190be4[];
@@ -27,19 +27,19 @@ extern struct building *current_building;
 extern struct record *location_object;
 extern struct record *found_object;
 extern char shared_scratch[];
-extern char D_00195B85[];
+extern char quest_giver_flags[];
 extern struct character *player_character;
 extern int game_minutes;
 extern char *scratch_buffer;
 extern struct record *quest_tick_object;
 extern iptr quest_potential_questor;
-extern short D_00195F68;
-extern char D_001961F5[];
-extern signed char D_00196282;
+extern short quest_giver_faction;
+extern char pending_quest_file[];
+extern signed char object_quest_filter;
 extern struct quest *current_quest;
 extern iptr quest_debug_data;
-extern signed char D_001997AE;
-extern char D_001A5BE4[];
+extern signed char quest_test_started;
+extern char quest_test_file[];
 
 extern struct faction *faction_find(short);
 extern void *quest_section(struct quest *, int);
@@ -108,11 +108,11 @@ iptr quest_start(char *file_name)
     }
     quest_object->quest_id = (quest->id = quest_free_id());
     func_000A14E8(quest->name, file_name, 8, D_00174F47, 197, 9);
-    if (((int)(short)D_00195F68) == 240) {
-        D_00195F68 = current_building->faction_id;
+    if (((int)(short)quest_giver_faction) == 240) {
+        quest_giver_faction = current_building->faction_id;
     }
     if (toupper((int)(unsigned char)quest->name[5]) == 89) {
-        quest->faction_id = D_00195F68;
+        quest->faction_id = quest_giver_faction;
     } else {
         quest->faction_id = 0;
     }
@@ -137,9 +137,9 @@ iptr quest_start(char *file_name)
 
 void quest_start_pending(void)
 {
-    if (*(signed char *)D_001961F5 == 0) return;
-    quest_start(D_001961F5);
-    *(signed char *)D_001961F5 = 0;
+    if (*(signed char *)pending_quest_file == 0) return;
+    quest_start(pending_quest_file);
+    *(signed char *)pending_quest_file = 0;
 }
 
 int quest_file_list_add(char *file_name, int file_count)
@@ -205,7 +205,7 @@ void func_0004C588(struct record *object)
 
 void func_0004C759(void)
 {
-    D_00196282 = 0;
+    object_quest_filter = 0;
     object_foreach_open(nonworld_root, func_0004C588);
 }
 
@@ -326,7 +326,7 @@ void quest_count_givers_cb(struct record *object)
 {
     if (object->type != 8 || *(int *)shared_scratch == 0) return;
     if (((int)(unsigned char)(object->data.person.flags & 128)) == 0) return;
-    if (((struct bf8_7_1 *)&D_00195B85)->f != 0) {
+    if (((struct bf8_7_1 *)&quest_giver_flags)->f != 0) {
         (*(int *)shared_scratch)++;
     } else {
         (*(int *)shared_scratch)--;
@@ -353,12 +353,12 @@ int func_0004CD10(struct record *npc)
 
     saved_seed = rand();
     srand(npc->id);
-    *(signed char *)D_001961F5 = 0;
+    *(signed char *)pending_quest_file = 0;
     quest_pick_for_npc(npc);
     srand(saved_seed);
-    if (*(signed char *)D_001961F5 != 0) {
+    if (*(signed char *)pending_quest_file != 0) {
         quest_potential_questor = (iptr)npc;
-        *(signed char *)D_001961F5 = 0;
+        *(signed char *)pending_quest_file = 0;
         return 1;
     }
     return 0;
@@ -366,10 +366,10 @@ int func_0004CD10(struct record *npc)
 
 int func_0004CD80(struct person *person)
 {
-    if (D_001997AE != 0) return 0;
+    if (quest_test_started != 0) return 0;
     if (person->faction_id != 510) return 0;
-    D_001997AE = 1;
-    quest_start(D_001A5BE4);
+    quest_test_started = 1;
+    quest_start(quest_test_file);
     return 1;
 }
 
@@ -420,7 +420,7 @@ int item_armor_value(struct item *item)
     if (item->armor_type == 2) {
         return (((int)(short)*(short *)(material_to_hit + (item->material * 2))) + bonus) + 45;
     }
-    return bonus + ((int)(short)*(short *)(D_00185128 + (item->armor_type * 2)));
+    return bonus + ((int)(short)*(short *)(armor_type_bonus + (item->armor_type * 2)));
 }
 
 int armor_value_for_part(struct record *object, int part)
@@ -447,7 +447,7 @@ int armor_value_for_part(struct record *object, int part)
             shield_index = item->index - 7;
             if (shield_index >= 0 && shield_index <= 3) {
                 for (i = 0; i < 4; i++) {
-                    if (((int)(unsigned char)D_0018512E[(shield_index << 2) + i]) == part) {
+                    if (((int)(unsigned char)shield_part_table[(shield_index << 2) + i]) == part) {
                         armor -= (shield_index + 1) * 5;
                         break;
                     }

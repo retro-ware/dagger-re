@@ -6,11 +6,11 @@
 
 extern char str_sound_c[];
 extern unsigned char player_environment;
-extern int D_00186DEC;
-extern iptr D_0018DC34;
+extern int sound_volume;
+extern iptr music_song_buffer;
 extern int D_0018DD54;
-extern int D_0018DD5C;
-extern int D_0018DD60;
+extern int sos_digi_driver;
+extern int sos_digi_handle;
 extern struct record *player_object;
 extern struct settings *game_settings;
 extern int sound_last_size;
@@ -23,9 +23,9 @@ extern struct record *nearest_fire;
 extern int ambient_rain_channel;
 extern int ambient_crickets_channel;
 extern int ambient_fire_channel;
-extern int D_001A3F2C;
-extern int D_001A3F30;
-extern iptr D_001A3F48;
+extern int sound_pan_range;
+extern int music_song;
+extern iptr music_song_data;
 extern char music_current[];
 extern signed char sound_enabled;
 extern int riding_sound;
@@ -72,7 +72,7 @@ void sound_volume_pan(int *listener, int *source, int *volume, int *pan, struct 
         *pan = 32768;
         return;
     }
-    range = D_001A3F2C;
+    range = sound_pan_range;
     if (distance > range) {
         *volume = 0;
     } else {
@@ -102,15 +102,15 @@ int func_00069281(iptr sample, int length)
 
     loop = 1;
     if (sound_enabled == 0) return -1;
-    if (D_0018DD5C == (-1)) return -1;
+    if (sos_digi_driver == (-1)) return -1;
     for (channel = 0; channel < 3; channel++) {
         if (sound_channels[channel].handle == 305419896) break;
-        if ((short)func_000A2460(D_0018DD60, sound_channels[channel].handle) != 0) break;
+        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) != 0) break;
     }
     if (channel == 3) {
         for (channel = 0; channel < 3; channel++) {
             if (sound_channels[channel].priority < 127) {
-                func_000A2687(D_0018DD60, sound_channels[channel].handle);
+                func_000A2687(sos_digi_handle, sound_channels[channel].handle);
                 break;
             }
         }
@@ -131,7 +131,7 @@ int func_00069281(iptr sample, int length)
     sound_channels[channel].sample.bits = 8;
     sound_channels[channel].sample.channels = 1;
     sound_channels[channel].source = 0;
-    sound_channels[channel].handle = func_000A2504(D_0018DD60, &sound_channels[channel].sample);
+    sound_channels[channel].handle = func_000A2504(sos_digi_handle, &sound_channels[channel].sample);
     return channel;
 }
 
@@ -145,15 +145,15 @@ int sound_play_sample_flat(iptr sample, int length)
 
     loop = 0;
     if (sound_enabled == 0) return -1;
-    if (D_0018DD5C == (-1)) return -1;
+    if (sos_digi_driver == (-1)) return -1;
     for (channel = 0; channel < 3; channel++) {
         if (sound_channels[channel].handle == 305419896) break;
-        if ((short)func_000A2460(D_0018DD60, sound_channels[channel].handle) != 0) break;
+        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) != 0) break;
     }
     if (channel == 3) {
         for (channel = 0; channel < 3; channel++) {
             if (sound_channels[channel].priority < 90) {
-                func_000A2687(D_0018DD60, sound_channels[channel].handle);
+                func_000A2687(sos_digi_handle, sound_channels[channel].handle);
                 break;
             }
         }
@@ -170,21 +170,21 @@ int sound_play_sample_flat(iptr sample, int length)
     sound_channels[channel].sample.bits = 8;
     sound_channels[channel].sample.channels = 1;
     sound_channels[channel].source = 0;
-    sound_channels[channel].handle = func_000A2504(D_0018DD60, &sound_channels[channel].sample);
+    sound_channels[channel].handle = func_000A2504(sos_digi_handle, &sound_channels[channel].sample);
     return channel;
 }
 
 void sound_stop_channel(int channel)
 {
     if (sound_channels[channel].handle == 305419896) return;
-    func_000A2687(D_0018DD60, sound_channels[channel].handle);
+    func_000A2687(sos_digi_handle, sound_channels[channel].handle);
     sound_channels[channel].handle = 305419896;
 }
 
 int sound_channel_done(int channel)
 {
     if (sound_channels[channel].handle == 305419896) return 1;
-    return (int)(short)func_000A2460(D_0018DD60, sound_channels[channel].handle);
+    return (int)(short)func_000A2460(sos_digi_handle, sound_channels[channel].handle);
 }
 
 void music_play(char *name)
@@ -193,40 +193,40 @@ void music_play(char *name)
     if (stricmp(music_current, name) == 0) return;
     music_stop();
     mc_strncpy(music_current, name, 13, str_sound_c, 374);
-    D_001A3F30 = sos_load_song(music_current);
-    if (D_0018DC34 != 0) {
-        dpmi_lock_region(D_0018DC34, func_000A277F((void *)D_0018DC34));
+    music_song = sos_load_song(music_current);
+    if (music_song_buffer != 0) {
+        dpmi_lock_region(music_song_buffer, func_000A277F((void *)music_song_buffer));
     }
-    func_000A27A0(D_001A3F30);
+    func_000A27A0(music_song);
 }
 
 void music_stop(void)
 {
-    if (sound_enabled == 0 || D_001A3F48 == 0) return;
-    func_000A2857(D_001A3F30);
-    func_000A0517(D_001A3F30);
-    dpmi_unlock_region(D_0018DC34, func_000A277F((void *)D_0018DC34));
-    if (D_001A3F48 != 0 && D_001A3F48 != (-1751672937)) {
-        mc_free((void *)D_001A3F48, str_sound_c, 393);
-        D_001A3F48 = -1751672937;
+    if (sound_enabled == 0 || music_song_data == 0) return;
+    func_000A2857(music_song);
+    func_000A0517(music_song);
+    dpmi_unlock_region(music_song_buffer, func_000A277F((void *)music_song_buffer));
+    if (music_song_data != 0 && music_song_data != (-1751672937)) {
+        mc_free((void *)music_song_data, str_sound_c, 393);
+        music_song_data = -1751672937;
     }
-    D_0018DC34 = 0;
+    music_song_buffer = 0;
 }
 
 void func_0006987B(void)
 {
     if (sound_enabled == 0) return;
     if (D_0018DD54 == (-1)) return;
-    func_000A1D3C(D_00186DEC);
+    func_000A1D3C(sound_volume);
 }
 
 void music_update(void)
 {
     if (sound_enabled == 0) return;
-    if (D_001A3F48 == 0) return;
+    if (music_song_data == 0) return;
     if (D_0018DD54 == (-1)) return;
-    if ((short)func_000A2941(D_001A3F30) == 0) return;
-    func_000A27A0(D_001A3F30);
+    if ((short)func_000A2941(music_song) == 0) return;
+    func_000A27A0(music_song);
 }
 
 int sound_play(int id, struct record *object, int priority)
@@ -348,8 +348,8 @@ void sound_stop_all(void)
 
     for (channel = 0; channel < 4; channel++) {
         if (sound_channels[channel].handle == 305419896) continue;
-        if ((short)func_000A2460(D_0018DD60, sound_channels[channel].handle) == 0) {
-            func_000A2687(D_0018DD60, sound_channels[channel].handle);
+        if ((short)func_000A2460(sos_digi_handle, sound_channels[channel].handle) == 0) {
+            func_000A2687(sos_digi_handle, sound_channels[channel].handle);
         }
         sound_channels[channel].handle = 305419896;
     }

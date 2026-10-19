@@ -41,7 +41,7 @@ extern signed char text_rsc_buffer[];
 extern char D_00191020[];
 extern int bank_ship_price;
 extern int bank_house_price;
-extern struct record *D_001959E0;
+extern struct record *inventory_container_2;
 extern struct record *bank_accounts;
 extern struct record *player_entity;
 extern struct record *player_object;
@@ -72,7 +72,7 @@ extern iptr bank_saved_screen;
 extern struct ship_for_sale bank_ships_for_sale[];
 extern iptr bank_bought_house_building;
 extern int D_001A41E0;
-extern iptr D_001A41E4;
+extern iptr bank_bought_house;
 extern iptr D_001A41E8;
 extern struct bank_account *bank_account;
 extern signed char bank_ship_count;
@@ -128,7 +128,7 @@ int bank_open(int opening)
     }
     if (opening != 0) {
         while (mouse_buttons != 0) xn_mouse_poll_clamped();
-        D_001A41E4 = 0;
+        bank_bought_house = 0;
         window_image = disk_read_file(str_bank00i0_img, 0);
         *(iptr *)&D_00195B5C = disk_read_file(str_bank01i0_img, 0);
         D_001A41E8 = disk_read_file(str_bank01i1_img, 0);
@@ -326,7 +326,7 @@ void bank_withdraw_letter_of_credit(void)
         return;
     }
     bank_account->balance -= fee + amount;
-    letter = object_create_child(D_001959E0, 0, 107);
+    letter = object_create_child(inventory_container_2, 0, 107);
     letter->type = 2;
     letter->flags = 1;
     item_make(27, 2, &letter->data.item);
@@ -563,7 +563,7 @@ void bank_house_bought(void)
     bank_house_price = bank_houses_for_sale[(unsigned char)bank_selected].price;
     bank_account->balance -= bank_house_price;
     player_character->house = bank_houses_for_sale[(unsigned char)bank_selected].id;
-    D_001A41E4 = (iptr)RECORD_FROM_DATA(bank_houses_for_sale[(unsigned char)bank_selected].block);
+    bank_bought_house = (iptr)RECORD_FROM_DATA(bank_houses_for_sale[(unsigned char)bank_selected].block);
     bank_bought_house_building = (iptr)bank_houses_for_sale[(unsigned char)bank_selected].building;
     msgbox_show_rsc(282, 1);
     mc_strncpy(saved_region_name, region_names[((int)(unsigned char)current_region)], 32, str_bank_c, 647);

@@ -10,7 +10,7 @@ extern char str_spbk00i0_img[];
 extern char str_mask04i0_img_2[];
 extern iptr D_00184876;
 extern signed char world_running;
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
 extern struct record *player_object;
 extern iptr magic_window_image;
@@ -45,7 +45,7 @@ int spellbook_open(short force)
         xn_font_select(4);
         ui_dirty_flags &= 254;
         if (spellbook_build_list() == 0) return 0;
-        D_001940D4 |= 128;
+        game_state_flags |= 128;
         world_running = 0;
         ui_dirty_flags |= 2;
         spellbook_saved_screen = (iptr)mc_malloc(64000, str_pickbook_c, 101);

@@ -84,7 +84,7 @@ extern int rmb_origin_y;
 extern int rmb_origin_x;
 extern char rmb_origin_yaw[];
 extern struct block *rmb_record_ptr;
-extern struct record *D_00196DB0;
+extern struct record *automap_selected_object;
 extern char cfg_block_str[];
 extern char cfg_mapsave_file[];
 extern int cfg_seed;
@@ -341,7 +341,7 @@ int automap_draw_object_cb(struct record *object)
             if ((object->flags & 128) == 0 && ((struct bf8_4_1 *)&cheat_flags)->f == 0) return 0;
             if (object->type != 6 && object->type != 32) return 0;
             *(iptr *)&ticks_addr = (iptr)DOS_LOW(0x46C);
-            if ((iptr)D_00196DB0 == (iptr)object && ((struct bf8_3_1 *)(*(char **)&ticks_addr))->f == 0) {
+            if ((iptr)automap_selected_object == (iptr)object && ((struct bf8_3_1 *)(*(char **)&ticks_addr))->f == 0) {
                 return 0;
             }
         }

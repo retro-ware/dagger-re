@@ -35,7 +35,7 @@ extern char str_savevars_dat[];
 extern char str_invalid_quest_object[];
 extern unsigned char player_environment;
 extern char travel_options[];
-extern char D_00178A10[];
+extern char quest_object_serial[];
 extern int guards_timer;
 extern char savevars_version[];
 extern iptr prompt_enter_description;
@@ -54,8 +54,8 @@ extern signed char scratch_190d16;
 extern signed char text_rsc_buffer[];
 extern char enchant_text[];
 extern char arena2_path[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern unsigned char world_state_flags;
 extern signed char ui_dirty_flags;
 extern signed char quest_global_states[];
@@ -112,7 +112,7 @@ extern int sky_loaded_frame;
 extern signed char climate_weathers[];
 extern short spell_ready_cost;
 extern char saved_player_object[];
-extern char D_001961F5[];
+extern char pending_quest_file[];
 extern signed char in_knightly_order_hall;
 extern char savevars_byte[];
 extern signed char text_macro_imperial;
@@ -137,7 +137,7 @@ extern int terrain_cell_at_player;
 extern int climate_index;
 extern int recall_anchor_location;
 extern int recall_anchor_region;
-extern int D_001A9A00;
+extern int recall_anchor_building;
 extern int recall_anchor_environment;
 extern int return_region;
 extern int return_environment;
@@ -544,7 +544,7 @@ void load_requeue_s0000021(void)
         object = object->next;
     }
     if (count != 0 || load_requeue_flag_b == 0 || load_requeue_flag_c != 0) return;
-    mc_strncpy(D_001961F5, str_s0000021_qbn, 13, str_loadsave_c, 616);
+    mc_strncpy(pending_quest_file, str_s0000021_qbn, 13, str_loadsave_c, 616);
     load_requeue_flag_a = 0;
 }
 
@@ -680,8 +680,8 @@ void savevars_read(iptr slot)
     read(save_file_handle, quest_global_states, 64);
     read(save_file_handle, &spell_ready_cost, 2);
     read(save_file_handle, &is_daytime, 1);
-    read(save_file_handle, D_001961F5, 13);
-    read(save_file_handle, D_00178A10, 4);
+    read(save_file_handle, pending_quest_file, 13);
+    read(save_file_handle, quest_object_serial, 4);
     read(save_file_handle, &crime_current, 1);
     read(save_file_handle, people_witness_flags, 1);
     read(save_file_handle, &player_underwater, 1);
@@ -691,7 +691,7 @@ void savevars_read(iptr slot)
     read(save_file_handle, &location_grid_x, 4);
     read(save_file_handle, &location_grid_z, 4);
     read(save_file_handle, climate_weathers, 6);
-    read(save_file_handle, &D_001940D4, 8);
+    read(save_file_handle, &game_state_flags, 8);
     read(save_file_handle, frame_counter, 4);
     read(save_file_handle, &game_minutes, 4);
     read(save_file_handle, &realtime_clock_tick, 4);
@@ -719,7 +719,7 @@ void savevars_read(iptr slot)
     read(save_file_handle, &recall_anchor_environment, 4);
     read(save_file_handle, &recall_anchor_location, 4);
     read(save_file_handle, &recall_anchor_region, 4);
-    read(save_file_handle, &D_001A9A00, 4);
+    read(save_file_handle, &recall_anchor_building, 4);
     if (save_version >= 294) {
         read(save_file_handle, &return_region, 4);
         read(save_file_handle, &return_environment, 4);
@@ -752,8 +752,8 @@ void savevars_write(int slot)
     write(save_file_handle, quest_global_states, 64);
     write(save_file_handle, &spell_ready_cost, 2);
     write(save_file_handle, &is_daytime, 1);
-    write(save_file_handle, D_001961F5, 13);
-    write(save_file_handle, D_00178A10, 4);
+    write(save_file_handle, pending_quest_file, 13);
+    write(save_file_handle, quest_object_serial, 4);
     write(save_file_handle, &crime_current, 1);
     write(save_file_handle, people_witness_flags, 1);
     write(save_file_handle, &player_underwater, 1);
@@ -763,7 +763,7 @@ void savevars_write(int slot)
     write(save_file_handle, &location_grid_x, 4);
     write(save_file_handle, &location_grid_z, 4);
     write(save_file_handle, climate_weathers, 6);
-    write(save_file_handle, &D_001940D4, 8);
+    write(save_file_handle, &game_state_flags, 8);
     write(save_file_handle, frame_counter, 4);
     write(save_file_handle, &game_minutes, 4);
     write(save_file_handle, &realtime_clock_tick, 4);
@@ -791,7 +791,7 @@ void savevars_write(int slot)
     write(save_file_handle, &recall_anchor_environment, 4);
     write(save_file_handle, &recall_anchor_location, 4);
     write(save_file_handle, &recall_anchor_region, 4);
-    write(save_file_handle, &D_001A9A00, 4);
+    write(save_file_handle, &recall_anchor_building, 4);
     write(save_file_handle, &return_region, 4);
     write(save_file_handle, &return_environment, 4);
     write(save_file_handle, &return_location, 4);
@@ -819,7 +819,7 @@ void load_reset_state(void)
     mc_memset(hud_message_expiry, 0, 68, str_loadsave_c, 1189, 68);
     effects_last_minute = game_minutes;
     world_state_flags |= 1;
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
     ui_dirty_flags |= 8;
     current_building = 0;
     minute_of_day = ((unsigned)game_minutes) % 1440;

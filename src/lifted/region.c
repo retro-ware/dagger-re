@@ -8,7 +8,7 @@ extern int xn_world_slot_cells[];
 extern char *xn_world_tile_layer;
 extern char str_region_c[];
 extern signed char climate_categories[];
-extern int D_00187F30[];
+extern int terrain_cell_offsets[];
 extern struct region regions[];
 extern struct record *player_object;
 extern struct region *current_region_data;
@@ -141,7 +141,7 @@ unsigned char ground_tile_at(int x, int z)
         if (cell == xn_world_slot_cells[slot]) break;
     }
     if (slot == 4) return 255;
-    tile = (signed char *)(xn_world_tile_layer + D_00187F30[slot]);
+    tile = (signed char *)(xn_world_tile_layer + terrain_cell_offsets[slot]);
     tile += (127 - ((z & 32767) >> 8)) << 8;
     tile += (x & 32767) >> 8;
     return *tile & 63;

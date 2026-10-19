@@ -11,7 +11,7 @@ extern struct location *current_location;
 extern unsigned *scratch_buffer;
 extern unsigned char current_region;
 extern struct loaded_location loaded_location;
-extern short D_001970C8;
+extern short quest_location;
 extern int D_001970CC;
 extern struct location_door *D_001970D0;
 extern struct record *D_001970D4;
@@ -56,8 +56,8 @@ retry:
     if (place->scope > 0)
         place->scope--;
     if (place->scope != 0) {
-        location_free(&D_001970C8);
-        quest_pick_location(&D_001970C8, place->p1, place->p2, place->scope);
+        location_free(&quest_location);
+        quest_pick_location(&quest_location, place->p1, place->p2, place->scope);
         doors = D_001970D0;
         door_count = D_001970CC;
         loc_object = D_001970D4;
@@ -106,7 +106,7 @@ retry:
     place_object = object_create_child(nonworld_root, 0, 58);
     place_object->type = 40;
     place_object->flags = 0x202;
-    place_object->image = D_001970C8;
+    place_object->image = quest_location;
     place_object->owner = current_quest->id;
     place_object->id = (loc_object->id & 0xffff0000) + (candidates[i] & 0xffff);
     place_object->repair_due = place_object->id;
@@ -127,6 +127,6 @@ retry:
     if (place->p1 != 1)
         mc_memcpy(building, &location->buildings[candidates[i] >> 16], 26, str_qinit_c, 483, 4);
     mc_strncpy((char *)building + 26, location, 4, str_qinit_c, 485);
-    location_free(&D_001970C8);
+    location_free(&quest_location);
     return 1;
 }

@@ -12,7 +12,7 @@ extern iptr list_popup_callback;
 extern char *scratch_buffer;
 extern short spell_effect_slot;
 extern char spell_effect_cost_current[];
-extern short D_00199628;
+extern short spellmaker_drag_accum;
 extern char spellmaker_settings_kind[];
 extern int func_00037AB7(void);
 extern int spellmaker_allowed_targets(void);
@@ -36,7 +36,7 @@ void spellmaker_pick_effect_cb(short effect_type)
     }
     if ((iptr)spell_effect_subtype_names[effect_type][0] == 0) {
         mc_memcpy(spell_effect_cost_current, spell_effect_costs + (*(unsigned char *)(spell_effect_cost_index + effect_type * 12) << 3), 8, str_spells_c, 1058, 8);
-        D_00199628 = 0;
+        spellmaker_drag_accum = 0;
         *(char *)spellmaker_settings_kind = *(char *)(spell_effect_settings + effect_type * 12);
     } else {
         char *s;

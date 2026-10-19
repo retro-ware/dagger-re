@@ -11,13 +11,13 @@ extern unsigned char D_00179E7F[];
 extern unsigned char D_00179E90[];
 extern unsigned char D_00179E94[];
 extern unsigned char D_001850D4[];
-extern iptr D_001850E5[];
+extern iptr quest_letter_text_ids[];
 extern signed char text_buffer[];
 extern unsigned game_minutes;
 extern struct settings *game_settings;
 extern int trade_price;
 extern unsigned char climate_weathers[];
-extern char D_001961F5[];
+extern char pending_quest_file[];
 extern unsigned char D_00196271;
 extern struct faction *found_faction;
 extern iptr current_quest;
@@ -176,7 +176,7 @@ void daedra_summon(struct record *object)
         daedra_entry = &REGION(daedra);
         mc_memset(flc, 0, sizeof(flc), str_daedra_c, 189, 4);
         current_quest = 0;
-        flc_play_with_text(D_001850E5[daedra_entry - D_001850D4], flc, 482, 0);
+        flc_play_with_text(quest_letter_text_ids[daedra_entry - D_001850D4], flc, 482, 0);
         object = monster_summon_near_player(D_00179E90[rand_range(0, 4)]);
         if (object != 0)
             object->data.character.team = 1;
@@ -185,5 +185,5 @@ void daedra_summon(struct record *object)
     daedra->flags |= 64;
     mc_set_location(200, str_daedra_c);
     mc_sprintf(((char *)text_buffer), str_0c0_y00_qbn, REGION(daedra), quest_letter);
-    mc_strncpy(D_001961F5, ((char *)text_buffer), 13, str_daedra_c, 201);
+    mc_strncpy(pending_quest_file, ((char *)text_buffer), 13, str_daedra_c, 201);
 }

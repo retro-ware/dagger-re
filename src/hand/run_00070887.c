@@ -13,7 +13,7 @@ extern int game_minutes;
 extern int trade_total;
 extern int trade_price;
 extern char trade_container[];
-extern char D_001961F5[];
+extern char pending_quest_file[];
 extern struct membership *guild_membership;
 extern void msgbox_show_rsc(short, int);
 extern void shop_stock_soul_traps(iptr);
@@ -37,14 +37,14 @@ void guild_check_invitations(void)
     if (player_character->thieves_invite_count != 100 && player_character->thieves_invite_time != 0 && ((unsigned)player_character->thieves_invite_time) < game_minutes && ((int)player_environment) == 1) {
         player_character->thieves_invite_count = 100;
         player_character->thieves_invite_time = 0;
-        mc_strncpy(D_001961F5, str_o0a0al00_qbn, 13, str_guilds_c, 1233);
+        mc_strncpy(pending_quest_file, str_o0a0al00_qbn, 13, str_guilds_c, 1233);
     }
     if (player_character->brotherhood_invite_count == 100 || player_character->brotherhood_invite_time == 0 || ((unsigned)player_character->brotherhood_invite_time) >= game_minutes || ((int)player_environment) != 1) {
         return;
     }
     player_character->brotherhood_invite_count = 100;
     player_character->brotherhood_invite_time = 0;
-    mc_strncpy(D_001961F5, str_l0a01l00_qbn, 13, str_guilds_c, 1243);
+    mc_strncpy(pending_quest_file, str_l0a01l00_qbn, 13, str_guilds_c, 1243);
 }
 
 void guild_teleport(void)

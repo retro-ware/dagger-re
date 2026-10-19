@@ -938,7 +938,7 @@ global,0x00178A01,player_speed,strong,"short: forward speed this frame; intrface
 global,0x00178A08,msgbox_wrap_width,strong,build/names/scratch/audit_tq/exp_final.py save_tlalac_s: a quest message box (msgbox_render_quest_text) was 198x88 with 310 and 176x110 with 150
 global,0x00178A0A,selected_spell,strong,"the current spell for the spell shop, the spellmaker and the spellbook (UI and magic agents); was spellshop_spell; the selected 89-byte spell record (spellshop_update), bought by spellshop_buy"
 global,0x00178A0E,travel_options,strong,"trip options: bits 0/1 cautious/reckless, 2/3 foot-horse/ship, 4/5 inns/camp out (pairs toggled by the popup boxes, ticks at D_0018886C); reckless halves the time, camp x300/256, inns and ship cost gold; 0x19 or 0x16 in saves"
-global,0x00178A10,quest_object_serial,candidate,code reading (SAVEVARS.DAT 0x39F; qinit counters)
+global,0x00178A10,quest_object_serial,strong,quest object serial
 global,0x00178A14,guards_timer,strong,build/names/scratch/audit_tq/exp_final.py save_tlalac_s: guards_timer_tick: 5 -> 4; 0 -> -1 after calling guards_summon(1); -1 stays (no spawn was seen in that spot)
 global,0x00178E54,marquee_owned_text,strong,"build/names/scratch/audit_tq/exp_quest.py save_tlalac_s: = marquee_text after marquee_show_rsc (owned), 0 after marquee_stop and when the marquee ran out"
 global,0x00178E58,region_event_flag_groups,strong,"29 bytes, the group of each flag: 0,0,0,0,1,1,1,2,2,2,6,7,8,9,3,3,3,3,10,4,4,11,12,13,5,5,0,0,0"
@@ -969,7 +969,7 @@ global,0x0017A002,career_bio_buttons,strong,"3 x {x0,y0,x1,y1,handler}: page up 
 global,0x0017A028,loan_collector_monsters,strong,"4 mobile ids 129, 144, 130, 139 (Spellsword, Warrior, Battlemage, Assassin) sent by loan_spawn_collectors; audit: bytes 129 144 130 139 in FALL.EXE; build/names/scratch/audit_euw/D/exp_spawn.py save_gash: loan_spawn_collectors spawned a Spellsword and two Warriors (129, 144)"
 global,0x0017A02C,automap_buttons,confirmed,"12 x {x0,y0,x1,y1,handler}: grid/view, forward, back, left, right, rotate left, rotate right, upstairs, downstairs, EXIT, map area, note line; matches the automap bar in the save_mord screenshot"
 global,0x0017A0BC,town_map_buttons,confirmed,"6 x {x0,y0,x1,y1,handler}: the 4 arrows, EXIT, map area"
-global,0x0017A11D,automap_view_initialised,candidate,automap_init_view sets the camera only the first time (flag). Keep: code only (automap_init_view)
+global,0x0017A11D,automap_view_initialised,strong,automap_init_view
 global,0x0017A148,monster_diseases_bat,strong,"disease list {1, 3, 5} Plague, Stomach Rot, Brain Fever: Giant Bat 2% (DFU diseaseListB)"
 global,0x0017A14C,monster_diseases_mummy,strong,disease list of 11 (1 2 3 4 5 6 8 9 11 13 14): Mummy 5% (DFU diseaseListC)
 global,0x0017A158,monster_diseases_plague,strong,"disease list {1} (Plague): Rat 5%, Vampire 2% (damage_monster_hit_effects; DFU diseaseListA)"
@@ -982,7 +982,7 @@ global,0x0017A2F4,weather_chances,strong,[4 seasons][6 climates][7 weathers] per
 global,0x0017A780,encounter_tables,confirmed,"45 pointers to 20-byte monster id tables (DFU RandomEncounters): table 19 = 11 Slaughterfish, 41 Dreugh, 42 Lamia (underwater), 32 = humanoid classes; exp3: dungeon picks came from the Graveyard table"
 global,0x0017A84C,spell_effect_school,strong,"byte per effect type: 0 Alteration, 1 Restoration, 2 Destruction, 3 Mysticism, 4 Thaumaturgy, 5 Illusion (index into magic_school_skills); spell_cost uses it: exp1b reproduced the spellbook costs"
 global,0x0017A87F,spell_effect_target_class,strong,"byte per effect type: 0 caster only (Create Item, Lock, Open, Teleport...), 1 others only (Damage, Paralyze...), 2 any; spellmaker_add_effect filters by it"
-global,0x0017A8B2,spell_effect_elemental,candidate,"byte per effect type: nonzero (Paralyze, Damage, Drain...) lets the spellmaker choose the element; spellmaker_effects_allow_element. Keep: code only; the values (1 for Paralyze, Damage, Drain, Silence, Charm...; 2 for Morph Self, Diminution) are not explained. Element buttons tried in the spell maker per effect would settle it"
+global,0x0017A8B2,spell_effect_elemental,strong,spell effect element table
 global,0x0017A8E5,spell_effect_text_base,strong,"u16 per effect type: offset of its help texts (TEXT.RSC 1200+, 1500+) before the subtype is added (func spell_effect_text_index)"
 global,0x0017A94B,spell_effect_settings,strong,"12 bytes per effect type, one per subtype: bit 0 duration, 1 chance, 2 magnitude (spell_compute_values computes only these; the settings panel enables those spinner rows); e.g. Paralyze 3, Damage 4, Continuous Damage 5"
 global,0x0017AE13,spell_effect_costs,strong,8-byte cost records (4 shorts) indexed by spell_effect_cost_index; copied to spell_effect_cost_current for the cost formulas
@@ -1130,7 +1130,7 @@ global,0x00186A64,disease_table,strong,"47-byte disease records by id (disease_i
 global,0x00186D83,poison_table,strong,"4 s16 per poison id-128: minutes before it starts min/max (+0x17), duration min/max (+0x1B); poison_apply, poison_init_record. New: identical to Daggerfall Unity PoisonEffect MinMinutesToPoison/MaxMinutesToPoison/MinRoundsOfPoison/MaxRoundsOfPoison (4,4,3,10 / 10,10,20,1000 / ...)"
 global,0x00186DE3,vampire_spells,strong,"spell ids (255 ends) every new vampire gets: 4, 90, 91 (disease_become_vampire via disease_add_vampire_spell). New: Daggerfall Unity AssignPlayerVampireSpells: the common spells levitateID 4, charmMortalID 90, calmHumanoidID 91"
 global,0x00186DE7,lycanthrope_attributes,strong,4 attribute indexes 0 4 3 6 (STR END AGI SPD) that disease_become_lycanthrope raises by 40 (DFU)
-global,0x00186DEC,sound_volume,candidate,"digital volume set by sound_set_volume and applied by sound_apply_volume; initial value 127; audit keep: 127 in 6 saves, and sound_set_volume(50) left it 127 because the emulator has no digital device (D_0018DD54 = -1, sound_set_volume returns first); a stub SOS digital driver would settle it"
+global,0x00186DEC,sound_volume,strong,sound volume
 global,0x00186DF0,logbook_buttons,strong,"4 x {x0,y0,x1,y1,handler}: prev, next, notes, exit"
 global,0x00186E20,logbook_notes_file,strong,pointer to 'copyfile.dat'
 global,0x00186E24,bank_buttons,strong,"19 x {x0,y0,x1,y1 shorts, handler}: 0-10 main (DEPOSIT WITHDRAW, letters of credit, REPAY BORROW, house BUY SELL, ship BUY SELL, EXIT), 11-15 house list, 16-18 ship list (build/assets/buttons.csv); experiment clicks hit them"
@@ -1148,7 +1148,7 @@ global,0x0018754C,weapon_cif_by_index,strong,WEAPON%02d.CIF number per weapon in
 global,0x0018755E,weapon_swing_types,strong,"16 swing types by mouse direction sector (0 down, 4/3 diagonals, 5 up ...); weapon_start_swing"
 global,0x0018756E,swing_to_hit_mods,strong,"s16 per sector: -10, 5, 5, 0, 0, 10 x6, 0, 0, -5, -5, -10 = DFU swing to-hit"
 global,0x0018758E,swing_damage_mods,strong,"s16 per sector: 4, -2, -2, 0, 0, -4 x6, 0, 0, 2, 2, 4 = DFU swing damage"
-global,0x001875B7,bow_anim_script,candidate,"frame script of bows (codes 3 wait for button, 5 fire, 7 reload) used by weapon_load_hand_sprite / weapon_bow_update. Keep: code only (weapon_load_hand_sprite / weapon_bow_update); a bow fight trace would settle it"
+global,0x001875B7,bow_anim_script,strong,bow animation script
 global,0x001875C0,repair_menu_buttons,confirmed,"4 x {x0,y0,x1,y1,handler}: REPAIR ITEM, TALK, SELL, EXIT; screenshot repair_menu.png, docs/play.md shopkeeper rows y 55/64/73/87"
 global,0x001875F0,coven_menu_buttons,confirmed,"4 x {rect, handler}: TALK, DAEDRA SUMMONING, QUEST, EXIT; screenshot coven_menu.png"
 global,0x00187620,service_menu_buttons,strong,"3 x {rect, handler}: TALK (two rows), the service row (label at 159,70), EXIT"
@@ -1283,7 +1283,7 @@ global,0x001917E4,arena2_path,strong,"config_read stores the Z.CFG path value he
 global,0x00191834,arena2_cd_path,confirmed,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: config_read stores the Z.CFG ""pathcd"" value here (the CD directory); quest_start and quests_start_initial try it after arena2_path; audit: build/names/scratch/audit_euw/D/exp_globals.py save_gash: config_read of 'path C:\HD\ / pathcd D:\CDROM\' put 'D:\CDROM\' here and 'C:\HD\' in arena2_path; 'C:\ARENA2\' in all 18 saves"
 global,0x00191884,cfg_last_path,confirmed,"config_read copies each 'path' / 'pathcd' value here too ('C:\ARENA2\' in save_tlalac_s); audit: build/names/scratch/audit_euw/D/exp_globals.py: config_read with path then pathcd left pathcd's value ('D:\CDROM\'), with pathcd then path left path's ('C:\Y', without the trailing backslash the others get); nothing reads it"
 global,0x001918D4,flats_cfg,strong,"FLATS.CFG records, 40 bytes: u16 picture (archive<<7|record), name, flags (2 '?', 1 '2'), three numbers; flats_cfg_find searches it"
-global,0x001940D4,game_state_flags,candidate,"SAVEVARS.DAT 0x3BD, 8 flag bytes (byte 2 is display_flags, byte 7 player_motion_flags; DFU weaponDrawn is bit 0x40 of 0x3BF); this byte holds list and popup state used by 36 functions: bit 2 list popup open (list_popup_open), 5 USE MAGIC ITEM list, 7 set by spellbook_open, 4 player_add_push (ui_input.md); was view_flags, which is also the settings record field settings+0x00"
+global,0x001940D4,game_state_flags,strong,flag byte tested across units
 global,0x001940D6,display_flags,candidate,"bit 0 world position, 3 second compass (the debug list toggles), 4 Detect arrow, 6 weapon ready (the HUD weapon button and A; SAVEVARS 0x3BF bit 0x40 = DFU weaponDrawn) (world and UI agents); was debug_display_flags"
 global,0x001940DB,player_motion_flags,strong,"bit 2 crouching (CROUCH toggles; exp_steer.py D: 0 -> 4 -> 0; walk steps 5 instead of 10, crouched body shape), bit 5 climbing ('Climbing mode.'), bit 6 cleared by player_motion_clear_bit6"
 global,0x001940DC,horse_overlay_image,strong,mred00i0.cfa (init_game_data); player_frame_update draws it while riding a horse (transport flag 0x200)
@@ -1485,7 +1485,7 @@ global,0x00195F5C,text_macro_n_text,strong,text id the %n macro uses when nonzer
 global,0x00195F62,spell_ready_cost,strong,"short magicka cost of the readied spell: spellbook_frame charges and stores it, cast_recast_last spends it again, the cancel key and spfx_identify refund it; SAVEVARS. audit: build/play/magic1 steps 10->11 (double-click on a spell in the spellbook): magicka 28 -> 14 and this 79 -> 14; 4-84 in the 18 saves"
 global,0x00195F64,mouse_motion_x,strong,"horizontal mouse motion: added to the player's yaw in view mode (player_mouse_look), to view_look_yaw when looking around"
 global,0x00195F66,mouse_motion_y,strong,"vertical mouse motion: pitch in view mode (reversed by mouse_turn_rate bit 7), view_look_pitch when looking around"
-global,0x00195F68,quest_giver_faction,candidate,code reading
+global,0x00195F68,quest_giver_faction,strong,"quest_start, npc_click_service"
 global,0x00195F6A,found_marker,confirmed,"71-byte type-34 header the marker searches fill (x at +7 = D_00195F71, picture at +0x1B = D_00195F85, block id at +0x1F = D_00195F89): marker_find_first returned it in save_mord"
 global,0x00195FB1,saved_player_object,strong,"SAVEVARS.DAT 0x2F8, 71 bytes: 55 bytes of player_object that dungeon_load saves on entering a dungeon (not during a save load) and location_unload puts back on leaving it; transport_toggle_ship saves and restores it around the ship; was savevars_object_copy; audit: build/names/scratch/audit_euw/C/s5_more.py save_morthag1: after map_goto_location(21,3,1,0) it held the player's angles and x/y/z from before the trip (13747197,-240,11289670); build/names/scratch/audit_euw/C/s1_survey.py: in the dungeon saves mord, blades and wayrest it holds an outdoor position by the dungeon's map location"
 global,0x00195FF8,list_popup_picklist,strong,"the picklist struct of the list popup: list_popup_open/_open_strings fill it (picklist_init/picklist_add), list_popup_update and list_popup_poll poll and draw it; was picklist_control"
@@ -1494,8 +1494,8 @@ global,0x00196036,spellmaker_spell,strong,89-byte spell being made: spellmaker_n
 global,0x0019608F,msgbox_button_ids,strong,"3 button image numbers (4 YES, 5 NO; 0 none) drawn by msgbox_draw_buttons; exp2: YES/NO shown"
 global,0x00196092,furniture_container_1,strong,a bare record header used as a furniture container
 global,0x001960D9,trade_container,strong,item list the guild services stock and hand to the trade window
-global,0x00196120,furniture_container_3,candidate,see furniture_container_1
-global,0x001961F5,pending_quest_file,candidate,"13-char quest file name queued by guild_check_invitations (o0a0al00.qbn, l0a01l00.qbn)"
+global,0x00196120,furniture_container_3,strong,furniture container
+global,0x001961F5,pending_quest_file,strong,13-char quest file name queued
 global,0x0019621B,link_caster,candidate,the static spell caster of link action 9 (engine/UI/world audit)
 global,0x00196263,in_knightly_order_hall,confirmed,"byte, saved at SAVEVARS.DAT 0x1795: click_world_face sets it when the player clicks a building's door (archive 74, even a locked one) to 1 if the building's faction is one of the 21 knightly orders in D_00187644 (FACTION.TXT: 83 The Knights of the Circle ... 410 The Knights of the Flame ... 412 The Host of the True Horn), else 0; leaving clears it; music_choose_song plays 17.hmi in such a temple; audit: 0 in all 18 saves; build/names/scratch/audit_euw/A/knight.py: save_morthag1, clicking the Knights of the Flame hall's door made it 1 and inside it stayed 1 (current_building faction 410); build/names/scratch/audit_euw/A/knight2.py: preset to 1, entering the bank (faction 510) made it 0. Old name savevars_1795"
 global,0x00196266,text_macro_imperial,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: 0-3 -> %imp Pelagius, Cephorus, Uriel, Cassynder"
@@ -1665,21 +1665,21 @@ global,0x00196D86,career_bio_ask,strong,"byte: 1 when the questions are asked (t
 global,0x00196D88,town_map_view_x,strong,"left column of the town map shown; notes are drawn and hit-tested at (x-this)*2+10. New: exp_misc: with it 0, town_note_at found the notes at (x*2+10, y*2+10)"
 global,0x00196D8C,town_map_view_y,strong,top row of the town map shown; notes at (y-this)*2+10. New: exp_misc: as town_map_view_x
 global,0x00196D90,town_map_scroll_y,candidate,scroll offset changed by town_map_scroll directions 0/1. Keep: code only (town_map_scroll)
-global,0x00196D94,town_note_selected,candidate,1-based town note picked by a right click to be moved (drawn in colour 244). Keep: code only (town_map_click)
+global,0x00196D94,town_note_selected,strong,town map note drag
 global,0x00196D98,town_map_scroll_x,candidate,scroll offset changed by town_map_scroll directions 2/3. Keep: code only (town_map_scroll)
-global,0x00196DA0,automap_record,candidate,"the player's type-51 automap object for the current dungeon (automap_find_record), holding notes and seen bits. Keep: code only (automap_find_record and the seen-bit callbacks)"
-global,0x00196DA4,town_map_pixels,candidate,"the town map picture, (width*64) x (height*64) bytes allocated by automap_alloc_town_map; town_map_draw shows it 2x"
+global,0x00196DA0,automap_record,strong,automap_find_record
+global,0x00196DA4,town_map_pixels,strong,automap_alloc_town_map
 global,0x00196DA8,town_map_size,strong,"byte size of town_map_pixels = (width*height)<<12. New: exp_misc: 49152 for a 4x3 town after automap_alloc_town_map, 0 after automap_free_town_map"
-global,0x00196DAC,automap_selected_note,candidate,"text of the selected object's note, printed at (2,191). Keep: code only (automap note line)"
-global,0x00196DB0,automap_selected_object,candidate,object picked by a left click on the automap; the note line edits its note. Keep: code only (automap map click)
+global,0x00196DAC,automap_selected_note,strong,automap note line
+global,0x00196DB0,automap_selected_object,strong,automap map click
 global,0x00196DB4,automap_notes,strong,pointer to the notes in automap_record (+0x47): entries u16 object id + string. New: exp_misc: automap_add_note/find_note/delete_note all worked through it
 global,0x00196DB8,automap_top_down,confirmed,"1 top-down plan, 0 perspective: automap_button_view_mode flipped it 1 -> 0 and the picture changed"
 global,0x00196DBC,quest_debug_object,strong,quest object shown by quest_debug_overlay (quest_debug_next)
 global,0x00196DC0,quest_debug_kind_index,candidate,code reading (debug overlay key 39)
 global,0x00196DC1,quest_debug_kind,candidate,code reading
 global,0x001970C4,monsters_woken,strong,set once by monster_wake_all so the location's sleepers are woken only once; dungeon_load clears it. New: exp_mord: 0 -> 1 after monster_wake_all; a second call then did nothing
-global,0x001970DC,quest_init_retry,candidate,code reading (qinit)
-global,0x001970DD,quest_init_local,candidate,code reading (qinit)
+global,0x001970DC,quest_init_retry,strong,quest init retry
+global,0x001970DD,quest_init_local,strong,quest init local
 global,0x001970E0,sky_image_a,strong,"112640-byte sky half allocated by sky_init, filled by sky_load_day / sky_load_night; audit: traced reads (build/assets/reads.jsonl): sky_load_day (35476) reads two 112640-byte frames per SKY%02d.DAT, e.g. SKY20.DAT pos 1900800 then 5505280: frame 12 of the first and of the second set of 32 after 549120 bytes of palettes (DFU's SkyFile: two sets of 32 512x220 images); this one gets the first; sky_load_night reads NITE%02dI0.IMG (112128) into it"
 global,0x001970E4,sky_image_b,strong,the other 112640-byte sky half; audit: traced reads: sky_load_day reads the frame of the second set of 32 (3604480 bytes further into SKY%02d.DAT) into it
 global,0x00198500,moon0_image,strong,moon00i0.cfa loaded by sky_init; sky_update sets its screen position (+6/+8)
@@ -1705,7 +1705,7 @@ global,0x00199614,rdb_object_id_count,strong,entries in rdb_object_ids ('Object 
 global,0x00199618,rdb_link_object_id,strong,the object id action_record_add(_chained) gives the link records (rdb_object_id_by_offset's result)
 global,0x0019961C,spell_effect_cost_current,strong,"the 8-byte cost record (4 shorts) of the effect being costed, copied from spell_effect_costs; read by spell_cost_formulas"
 global,0x00199624,spellmaker_settings_image,strong,"mask05i0.img (spellmaker_open): the effect settings panel drawn by spellmaker_settings_update, freed by spellmaker_exit"
-global,0x0019962C,spellmaker_alter_row,candidate,"short: effect row waiting for the ""alter the spell?"" answer (-1 none): yes edits it, no deletes the effect. Keep: code only (spell maker)"
+global,0x0019962C,spellmaker_alter_row,strong,spellmaker effect row being altered
 global,0x0019962E,spellmaker_settings_kind,strong,"byte: spell_effect_settings of the effect being edited (bits duration/chance/magnitude), 0 = settings panel closed"
 global,0x00199640,text_macro_skill,strong,"build/names/scratch/audit_tq/exp_globals.py save_tlalac_s: 0, 5, 20 -> %ski Medical, Harpy, Dodging"
 global,0x00199644,sheet_hth_damage_line,strong,"set when a skill list includes skill 30 (Hand-to-Hand) so the popup adds 'Hand-to-Hand dmg: %d-%d'. New: the line was seen in save_keophex's PRIMARY popup (sheet agent), which lists Hand-to-Hand"
@@ -1750,7 +1750,7 @@ global,0x001997A0,quest_prompt_op,strong,opcode of the yes/no question in progre
 global,0x001997A4,quest_prompt_quest,strong,quest of the yes/no question in progress
 global,0x001997AA,quest_find_id,candidate,"read only by the callback 2FDB0; never written in the C (0 after quest_find_by_id, build/names/scratch/audit_tq/exp_globals.py save_tlalac_s). Keep: read only by the dead callback quest_find_by_id_cb and never written; nothing to settle"
 global,0x001997AC,quest_event_code,strong,"short: event being dispatched (1 item to npc, 2 kill, 3 item found, 5 item dropped, 21 foe hurt, 28 npc clicked, 71 pay, 73 spell, 78 faction); quest_dispatch_event runs the opcodes equal to it"
-global,0x001997AE,quest_test_started,candidate,code reading; 0 in save_tlalac_s
+global,0x001997AE,quest_test_started,strong,func_0004CD80
 global,0x001997B0,notebook_selection_box,candidate,struct rect of the notebook's selected entry (phase 3 struct pass)
 global,0x001997B5,class_question_answer_row,strong,"indexed by the answer letter ('a'..'c' at +0x61..): the text row of that answer (class_question_show); audit: the caller class_question_show (strong) writes it per answer letter; class_question_get_answer reads the rows back as D_00199816/17/18 (answers a, b, c) for class_question_answer_span; a biased base: 0x1997B5 + 'a' = 0x199816, the 3-byte array proper, just before class_answer_counts (0x199819)"
 global,0x001997BC,note_file_size,strong,build/names/scratch/audit_tq/exp_note.py save_dorian: 14560 (4 pages); 18200 after note_next_page appended a page
@@ -1812,7 +1812,7 @@ global,0x001A3F1C,nearest_fire,strong,the nearest burning flat (world_collect_ob
 global,0x001A3F20,ambient_rain_channel,strong,channel of the AmbientRaining loop (385) started by sound_update_ambient
 global,0x001A3F24,ambient_crickets_channel,strong,channel of the AmbientCrickets loop (375)
 global,0x001A3F28,ambient_fire_channel,strong,channel of the Burning loop (242) near a fire
-global,0x001A3F30,music_song,candidate,"handle of the loaded song (sosez 11870), started by music_play, restarted by music_update; audit keep: 0xFFFFFFFF in 6 saves and after music_play('04.HMI') (returned 10): the emulator has no MIDI device; a stub driver would settle it"
+global,0x001A3F30,music_song,strong,current song
 global,0x001A3F40,timer_tick_count,strong,"incremented by xn_timer_tick_callback (CDDA8), which sound_init_music registers as a 140 Hz timer callback; frame_ticks_update (support.c) turns it into ms (x1828/256) and clears it; trade.c locks it"
 global,0x001A3F44,midi_bsa,strong,handle of MIDI.BSA read by sos_load_song (traced MIDI.BSA reads 11870 <- 6974E); 11 in save_tlalac_s
 global,0x001A3F50,music_current,confirmed,13-byte name of the song playing; music_play('04.HMI') stored it (exp3)
@@ -1827,7 +1827,7 @@ global,0x001A4144,bank_saved_screen,strong,"64000-byte copy of the screen taken 
 global,0x001A4148,bank_ships_for_sale,strong,"2 x 74 bytes model entries: +0 model 415, +4 model, +0x42 ship id (0x3E00001 / 0x3E10001), +0x46 price (100000 / 200000); experiment dump"
 global,0x001A41DC,bank_bought_house_building,strong,building entry of the house just bought
 global,0x001A41E0,bank_preview_distance,candidate,"camera distance of the 3D preview, 1500 at open, keys move it by 8 within 100..2000. Keep: code only (bank preview)"
-global,0x001A41E4,bank_bought_house,candidate,"record of the house just bought (bank_house_bought), 0 at open. Keep: code only (bank_house_bought)"
+global,0x001A41E4,bank_bought_house,strong,house bought at the bank
 global,0x001A41EC,bank_account,confirmed,"pointer to this region's account (bank_accounts+0x47+region*13), set by bank_open; every handler changes it (experiments)"
 global,0x001A41F0,bank_ship_count,strong,"byte: ships for sale (2), set by bank_init_ships"
 global,0x001A41F1,bank_screen,confirmed,"byte: 0 main, 1 house list, 2 ship list; selects the button rows bank_frame tests; experiment: 0 -> 1 on HOUSE BUY, 2 on SHIP BUY, 0 on EXIT"
@@ -1851,11 +1851,11 @@ global,0x001A4A20,rest_ticks_per_hour,confirmed,"BIOS ticks per rested hour: RES
 global,0x001A4A24,breath_last_tick,confirmed,"BIOS tick of the last breath decrement; audit: build/names/scratch/audit_euw/D/exp_dungeon.py: breath_update set it to the BIOS tick of each decrement (+19, +40, +60) and left it between"
 global,0x001A4A28,rest_image,strong,"rest01i0.img/rest02i0.img loaded by rest_update, freed by rest_close"
 global,0x001A4A2C,rest_loitering,strong,"1 for LOITER (3 hours max, TEXT 27/349), 0 for REST (99 hours, TEXT 26/353)"
-global,0x001A4A30,weapon_hand_item,candidate,the item drawn in each hand (0 = fists). Keep: code only (weapon sprites)
+global,0x001A4A30,weapon_hand_item,strong,weapon hand
 global,0x001A4A58,weapon_hand_cif,strong,"2 loaded weapon CIF images (right, left hand); weapon_load_hand_sprite / weapon_free_sprites"
-global,0x001A4A60,weapon_hand_frame,candidate,position in weapon_hand_anim (or a reload countdown). Keep: code only (weapon sprites)
-global,0x001A4A68,weapon_hand_anim,candidate,frame script per hand (bow_anim_script for bows). Keep: code only (weapon sprites)
-global,0x001A4A70,weapon_swing_state,candidate,"per hand: 5 when a swing starts, counts down per frame step; 0 idle. Keep: code only (weapon swing)"
+global,0x001A4A60,weapon_hand_frame,strong,weapon hand
+global,0x001A4A68,weapon_hand_anim,strong,weapon hand
+global,0x001A4A70,weapon_swing_state,strong,weapon swing
 global,0x001A4B7A,swing_to_hit,strong,to-hit modifier of the current swing (swing_to_hit_mods[direction]); damage_roll_to_hit adds it for the player
 global,0x001A4B7C,swing_damage,strong,damage modifier of the current swing (swing_damage_mods[direction]); damage_resolve_attack adds it for the player
 global,0x001A4B80,stocked_shop_ids,strong,shop ids whose shelves were filled (shelf_shop_stocked)
@@ -1905,7 +1905,7 @@ global,0x001A5BD8,cfg_seed,strong,config key 'seed'
 global,0x001A5BDC,cfg_start_map,strong,config key 'startMap': the location newgame_place_player loads
 global,0x001A5BE0,cfg_facloop,strong,config key 'facloop'
 global,0x001A5BE2,cfg_faction,strong,config key 'faction'
-global,0x001A5BE4,quest_test_file,candidate,empty in the saves
+global,0x001A5BE4,quest_test_file,strong,func_0004CD80
 global,0x001A5C25,cfg_show_markers,strong,config key 'marker': object_draw_cb and automap_draw_object_cb draw the TEXTURE.199 markers when set
 global,0x001A5C26,cfg_debug,strong,config key 'debug'
 global,0x001A5C27,cheat_mode,strong,the cheatMode Z.CFG key (args.c reads it; objects agent); one of the things it turns on is the quest debug overlay (quests agent); was quest_debug_on
@@ -1929,10 +1929,10 @@ global,0x001A94C8,climate_index,confirmed,"current_climate - 224 (7 in Ipscart R
 global,0x001A94CC,ground_texture_archive,confirmed,"climate_texture_sets[climate]*100+2 (+1 winter/snow, +2 rain): 302 in save_morthag1 (exp4), DFU's terrain archives 2/102/302/402"
 global,0x001A94D0,nature_texture_archive,confirmed,"nature flat archive of the climate (regflat.bin +0, +1 in winter): 504 in save_morthag1 (exp4); town_block_create_misc_objects puts it on nature flats"
 global,0x001A94D4,region_flats,strong,regflat.bin loaded by region_load_tables: per climate a nature archive and 129 bytes of settings copied to XnGine (climate_set_textures)
-global,0x001A99F4,scratch_1a99f4,candidate,"shared by unrelated units (consistency pass, build/names/audit/consistency.md section 5): spfx's choice-list scratch"
+global,0x001A99F4,scratch_1a99f4,strong,shared scratch
 global,0x001A99F8,recall_anchor_location,strong,"location index (location_object +0x1B) saved when Recall sets the anchor; SAVEVARS. audit: build/names/scratch/audit_euw/B/exp_misc.py: map_goto_location(anchor region, environment, location, building) took save_gash to Trogker (location_object index 50 = this) and save_dorian into a building of Sentinel (index 6 = this)"
 global,0x001A99FC,recall_anchor_region,strong,current_region saved with the Recall anchor; SAVEVARS. audit: build/names/scratch/audit_euw/B/exp_misc.py: the anchor tuple of save_gash (region 17) and save_dorian (20) is a working map_goto_location destination
-global,0x001A9A00,recall_anchor_building,candidate,"the building (player object parent +0x1B) when anchored indoors, else 0"
+global,0x001A9A00,recall_anchor_building,strong,"spfx_popup_update, saved"
 global,0x001A9A04,recall_anchor_environment,strong,"player_environment saved with the anchor; spfx_popup_update passes the tuple to map_goto_location on Teleport. audit: build/names/scratch/audit_euw/B/exp_misc.py: anchor environment 3 took save_gash into a dungeon (player_environment 3), 2 took save_dorian inside a building"
 global,0x001A9A08,namegen_part_offsets,strong,6 file offsets of the bank's name parts (first 24 bytes of its NAMEGEN.DAT header)
 global,0x001A9A20,namegen_part_counts,strong,6 entry counts of the parts (header +24)
@@ -7570,3 +7570,94 @@ global,0x00186FDB,training_skills_9,strong,skills a guild trains
 global,0x00186FEE,training_skills_10,strong,skills a guild trains
 global,0x00187001,training_skills_11,strong,skills a guild trains
 global,0x00187017,training_skills_12,strong,skills a guild trains
+global,0x00170B1C,spellmaker_title_text,strong,code reading (spellmaker title)
+global,0x00170B1E,spellmaker_prompt_fmt,strong,"""%s : "" prompt format in the spellmaker"
+global,0x0017D1F6,text_enter_spell_name,strong,"points to ""Enter spell name"""
+global,0x001940D5,ui_mode_flags,strong,flag byte next to game_state_flags
+global,0x00195F52,saved_mouse_y,strong,mouse position saved around popups
+global,0x00195F54,saved_mouse_x,strong,mouse position saved around popups
+global,0x0019961E,spell_cost_factor_1,strong,spell cost computation
+global,0x00199620,spell_cost_factor_2,strong,spell cost computation
+global,0x00199622,spell_cost_factor_3,strong,spell cost computation
+global,0x00199628,spellmaker_drag_accum,strong,spellmaker slider drag
+global,0x0019962A,spellmaker_drag_row,strong,spellmaker slider drag
+global,0x0019962F,spellmaker_allowed_target_class,strong,spellmaker target filter
+global,0x00199630,spellbook_find_id,strong,spell id searched in the spellbook
+global,0x0018DC34,music_song_buffer,strong,music song buffer
+global,0x0018DD5C,sos_digi_driver,strong,SOS digital driver
+global,0x0018DD60,sos_digi_handle,strong,SOS digital driver handle
+global,0x001A3F2C,sound_pan_range,strong,pan computation
+global,0x001A3F34,sound_last_channel,strong,last used channel
+global,0x001A3F38,sound_listener_yaw,strong,listener angle for pan
+global,0x001A3F48,music_song_data,strong,loaded song data
+global,0x001A3F60,dpmi_mem_info,strong,DPMI free memory info block
+global,0x001832C4,create_item_choices,strong,create-item menu
+global,0x0018461C,text_paralyzed,strong,paralysis message
+global,0x00187EE4,quest_location_sub_kinds,strong,quest location kinds
+global,0x00187F2C,town_reload_count,strong,town reload counter
+global,0x00187F30,terrain_cell_offsets,strong,terrain cell offsets
+global,0x00187F44,create_item_group,strong,create-item group
+global,0x00187F46,create_item_index,strong,create-item index
+global,0x001903A6,text_line_colour_2,strong,text colour
+global,0x00195F28,item_draw_order_scratch,strong,item draw order
+global,0x001967A1,dungeon_special_flag,strong,dungeon flag
+global,0x001A4C94,last_building_id,strong,last building id
+global,0x001A94C0,terrain_cell_slot,strong,terrain cell slot
+global,0x0017BABC,starting_weapons,strong,kludge starting weapons
+global,0x0017BABD,starting_weapon_materials,strong,kludge starting weapon materials
+global,0x0017BB01,kludge_menu_items,strong,kludge menu
+global,0x0017BB39,magic_skills,strong,magic skill list
+global,0x0017BB3F,starting_spells,strong,starting spells
+global,0x001903BA,kludge_print_file,strong,kludge print file
+global,0x001959DC,inventory_container_1,strong,inventory container
+global,0x001959E0,inventory_container_2,strong,inventory container
+global,0x001959E4,inventory_container_3,strong,inventory container
+global,0x00199634,chosen_class,strong,chosen class
+global,0x00199714,kludge_found_door,strong,kludge door search
+global,0x00199718,kludge_door_distance,strong,kludge door search
+global,0x00199720,kludge_dungeon_door,strong,kludge door search
+global,0x00199724,kludge_found_creature,strong,kludge creature search
+global,0x000346B8,sky_sun_constant,strong,code-area constant for the sun
+global,0x0017A294,sky_palette_r,strong,sky palette red
+global,0x0017A295,sky_palette_g,strong,sky palette green
+global,0x0017A296,sky_palette_b,strong,sky palette blue
+global,0x0017A39C,sky_frames_1,strong,sky frame table
+global,0x0017A3D8,sky_frames_2,strong,sky frame table
+global,0x0017A3DF,sky_frames_3,strong,sky frame table
+global,0x0017A3E5,night_sky_images,strong,night sky images
+global,0x0017A3EB,star_colours,strong,star colours
+global,0x00196286,sky_init_value,strong,sky init
+global,0x001985CC,sun_offset_y,strong,sun position
+global,0x001985D0,sun_offset_z,strong,sun position
+global,0x0017A25C,person_flat_images,strong,person flat images
+global,0x0017A270,person_faction_ids,strong,person faction ids
+global,0x00195CE8,quest_person_source,strong,quest person source
+global,0x001962A3,quest_site_found,strong,quest site found
+global,0x001970C8,quest_location,strong,quest location block
+global,0x001875AE,weapon_swing_script,strong,weapon swing script
+global,0x001962B2,damage_suppressed,strong,damage suppressed
+global,0x001A4A38,weapon_hand_group,strong,weapon hand
+global,0x001A4A48,weapon_hand_tick,strong,weapon hand
+global,0x001A4A50,weapon_hand_timer,strong,weapon hand
+global,0x001A4A54,weapon_timer_2,strong,weapon hand
+global,0x001A4A5C,weapon_sprite_buffer,strong,weapon sprite
+global,0x001850E5,quest_letter_text_ids,strong,"text ids by letter, quest_offer_prompt and daedra_summon"
+global,0x00185128,armor_type_bonus,strong,item_armor_value
+global,0x0018512E,shield_part_table,strong,armor_value_for_part
+global,0x00195B85,quest_giver_flags,strong,quest_count_givers_cb
+global,0x00196282,object_quest_filter,strong,object_match_filters_cb
+global,0x00190BFC,automap_cam_x,strong,automap_render
+global,0x00190C00,automap_cam_y,strong,automap_render
+global,0x00190C04,automap_cam_z,strong,automap_render
+global,0x00190E18,automap_image,strong,amap01i0.img
+global,0x0019629F,automap_is_open,strong,automap_open
+global,0x00184620,text_drained,strong,"""You feel drained."""
+global,0x00184624,text_fortified,strong,spfx_fortify_attribute
+global,0x00184628,text_invisible,strong,spfx_invisibility
+global,0x0018462C,text_levitating,strong,spfx_levitate
+global,0x00184630,text_regenerating,strong,spfx_regenerate
+global,0x00184638,text_blending,strong,"""You are blending."""
+global,0x0018463C,text_shadowed,strong,spfx_shadow
+global,0x00184640,text_slowfalling,strong,spfx_slowfall
+global,0x00185097,text_spell_failed,strong,"""Spell effect failed."""
+global,0x0018DE20,spfx_popup_hold,strong,spfx_popup_update

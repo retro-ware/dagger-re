@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 extern char str_maplogic_c[];       /* __FILE__ */
-extern int D_00187EE4[];
+extern int quest_location_sub_kinds[];
 extern struct record *location_object;
 extern int region_dungeon_type_counts[];
 extern int region_dungeon_count;
@@ -39,7 +39,7 @@ void quest_pick_location(struct loaded_location *location, unsigned kind, int su
             if (sub_kind > 16) {
                 location_pick_random_town(location);
             } else {
-                sub_kind = D_00187EE4[sub_kind];
+                sub_kind = quest_location_sub_kinds[sub_kind];
                 location_pick_random_with_service(location, sub_kind, -1);
             }
             break;

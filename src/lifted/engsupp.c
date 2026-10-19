@@ -22,8 +22,8 @@ extern iptr grid_visit_func;
 extern struct block_model *picked_block_model;
 extern char picked_model_index[];
 extern struct arch3d_plane *click_face_texture;
-extern char D_00196120[];
-extern signed char D_0019629F;
+extern char furniture_container_3[];
+extern signed char automap_is_open;
 extern iptr D_00196478;
 extern iptr D_0019647C;
 extern struct pick_result *pick_result;
@@ -207,7 +207,7 @@ void interior_stock_shelves(struct record *interior, struct building *building)
     model = block->models;
     for (i = 0; block->model_count > i; i++, model++) {
         if (model->id == 418 || (model->id == 410 && furniture_is_container(model->variant) != 0)) {
-            shop_generate_stock((iptr)D_00196120, model->variant, building->quality, building->type, i);
+            shop_generate_stock((iptr)furniture_container_3, model->variant, building->quality, building->type, i);
         }
     }
 }
@@ -252,7 +252,7 @@ void world_for_each_object(iptr callback)
             object = next;
         }
     } else {
-        if (D_0019629F != 0) {
+        if (automap_is_open != 0) {
             object_find(location_object, callback);
         } else {
             func_0007E815(player_object, callback);

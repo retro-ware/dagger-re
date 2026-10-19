@@ -8,7 +8,7 @@ extern struct character *player_character;
 extern int trade_mode;
 extern int inventory_action;
 extern short picked_model_index;
-extern struct record D_00196120;   /* furniture_container_3 (candidate) */
+extern struct record furniture_container_3;   /* furniture_container_3 (candidate) */
 extern struct record *inv_selected_item;
 extern void quest_raise_event(short, struct record *, struct record *);
 extern struct record *object_reparent(struct record *, struct record *);
@@ -115,7 +115,7 @@ void inv_click_equip_slot(int slot)
             object->image = item->dropped_image;
         if (object->quest_id == 0 && trade_mode == 0)
             object_reparent(inv_right_container, object);
-        if (&D_00196120 == object->parent)
+        if (&furniture_container_3 == object->parent)
             object->owner = picked_model_index;
         object->id = object_new_id(0);
         quest_raise_event(5, object, 0);

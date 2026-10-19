@@ -30,8 +30,8 @@ extern struct collide_probe player_probe_crouched;
 extern struct move_request player_move_request;   /* the player's move */
 extern int player_momentum;
 extern signed char world_running;
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern unsigned char world_state_flags;
 extern signed char D_001940DA;
@@ -212,7 +212,7 @@ void func_0008066F(int distance)
     int yaw;
     int unused;
 
-    D_001940D4 |= 16;
+    game_state_flags |= 16;
     player_object->yaw &= ~0xF800;
     yaw = player_object->yaw;
     xn_math_yaw_offset_xz(yaw, distance << 7, &dx, &dz);
@@ -511,8 +511,8 @@ void player_movement_update(void)
         distance = (int)(short)player_speed;
         player_momentum = distance;
     }
-    if (((struct bf8_1_1 *)&D_001940D5)->f != 0) {
-        D_001940D5 &= 253;
+    if (((struct bf8_1_1 *)&ui_mode_flags)->f != 0) {
+        ui_mode_flags &= 253;
         return;
     }
     if (*(int *)turn_this_frame != 0) {

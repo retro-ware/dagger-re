@@ -4,7 +4,7 @@
 extern int dungeon_water_level;
 extern char str_maplogic_c[];       /* __FILE__ */
 extern char str_you_are_entering[];
-extern int D_00187F2C;
+extern int town_reload_count;
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
 extern unsigned loan_collectors_next;
@@ -61,9 +61,9 @@ void town_load(int location_index)
     people_clear();
     quest_mark_givers();
     object_foreach(location_object, town_door_roll_unlock);
-    if (D_00187F2C != 0) {
+    if (town_reload_count != 0) {
         player_to_nearest_marker(location_object, 8);
-        D_00187F2C = 0;
+        town_reload_count = 0;
     }
     if (world_loading == 0) {
         people_spawn_tick();

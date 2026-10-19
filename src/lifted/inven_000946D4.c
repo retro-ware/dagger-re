@@ -12,7 +12,7 @@ extern struct record *inv_right_container;
 extern int trade_mode;
 extern int inventory_action;
 extern char picked_model_index[];
-extern char D_00196120[];
+extern char furniture_container_3[];
 extern signed char inv_weight_container_only;
 extern struct record *inv_selected_item;
 
@@ -87,7 +87,7 @@ L94793:;
             object->caster = 0;
             if (object->image == 0) object->image = item->dropped_image;
             object_reparent(inv_right_container, object);
-            if (((iptr)D_00196120) == (iptr)object->parent) object->owner = *(short *)picked_model_index;
+            if (((iptr)furniture_container_3) == (iptr)object->parent) object->owner = *(short *)picked_model_index;
             object->id = object_new_id(((unsigned)location_object->id) >> 16);
             if (object->twin != 0) object->twin->id = object->id;
             quest_raise_event(5, object, 0);

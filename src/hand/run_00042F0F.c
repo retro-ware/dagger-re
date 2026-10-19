@@ -25,7 +25,7 @@ extern char *D_00183244;
 extern char *D_00184876;
 extern short player_speed_bonus;
 extern signed char text_buffer[];
-extern struct bits8 D_001940D5;
+extern struct bits8 ui_mode_flags;
 extern struct bits8 D_001940D6;
 extern struct bits8 player_view_flags;
 extern struct bits8 D_001940DA;
@@ -46,8 +46,8 @@ extern int spell_cast_busy;
 extern unsigned char mouse_control_mode;
 extern unsigned char view_cursor_active;
 extern short D_00195F2E;
-extern short D_00195F52;
-extern short D_00195F54;
+extern short saved_mouse_y;
+extern short saved_mouse_x;
 extern short spell_ready_cost;
 extern unsigned char weapon_active_hand;
 extern unsigned char screen_active;
@@ -56,7 +56,7 @@ extern unsigned char interaction_mode;
 extern unsigned char in_dungeon_water;
 extern unsigned char player_swimming;
 extern int cheat_marker_index;
-extern int D_001A4A70;
+extern int weapon_swing_state;
 extern int D_001A4A74;
 extern unsigned char cheat_mode;
 extern void automap_open(void);
@@ -147,7 +147,7 @@ void keys_world_actions(void)
         hud_toggle_weapon();
     if (key_action_pressed(12))
         rest_open();
-    if (key_action_pressed(34) && D_001940D6.b6 && (D_001A4A70 | D_001A4A74) == 0) {
+    if (key_action_pressed(34) && D_001940D6.b6 && (weapon_swing_state | D_001A4A74) == 0) {
         o = player_character->equipped[(weapon_active_hand ^ 1) ? 21 : 19];
         if (o == 0 || o->data.item.group == 3) {
             weapon_active_hand ^= 1;
@@ -192,13 +192,13 @@ void keys_world_actions(void)
         }
         if (key_action_held(23)) {
             if (!D_001940DA.b6) {
-                D_00195F54 = mouse_x;
-                D_00195F52 = mouse_y;
+                saved_mouse_x = mouse_x;
+                saved_mouse_y = mouse_y;
             }
             D_001940DA.b6 = 1;
         } else {
             if (D_001940DA.b6)
-                xn_mouse_set_position(D_00195F54, D_00195F52);
+                xn_mouse_set_position(saved_mouse_x, saved_mouse_y);
             D_001940DA.b6 = 0;
         }
     } else {
@@ -240,7 +240,7 @@ void keys_world_actions(void)
         object_set_position(player_object, o->x, o->y, o->z, o->angle_x, o->yaw, o->angle_z);
         camera_object->yaw = player_object->yaw;
         xn_tex_cache_begin_frame();
-        D_001940D5.b1 = 1;
+        ui_mode_flags.b1 = 1;
     }
     if (key_pressed_once(27) && player_environment == 3 && cheat_mode) {
         cheat_marker_index = ++cheat_marker_index % (D_001950E4 + D_001950E8);
@@ -251,7 +251,7 @@ void keys_world_actions(void)
         object_set_position(player_object, o->x, o->y, o->z, o->angle_x, o->yaw, o->angle_z);
         camera_object->yaw = player_object->yaw;
         xn_tex_cache_begin_frame();
-        D_001940D5.b1 = 1;
+        ui_mode_flags.b1 = 1;
     }
 }
 

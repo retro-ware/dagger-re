@@ -15,10 +15,10 @@ extern signed char item_group_tab[];
 extern signed char text_buffer[];
 extern signed char scratch_190ce4[];
 extern char scratch_190d64[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern signed char quest_global_states[];
 extern struct record *inventory_containers[];
-extern struct record *D_001959DC;
+extern struct record *inventory_container_1;
 extern struct record *quest_root;
 extern struct quest_face quest_faces[];
 extern struct record *camera_object;
@@ -160,7 +160,7 @@ void quest_give_item_to_player(struct record *quest_item)
 
     item_data = &quest_item->data.item;
     if (item_data->enchantments[0].type != (-1)) {
-        container = D_001959DC;
+        container = inventory_container_1;
     } else {
         container = inventory_containers[(int)(unsigned char)item_group_tab[item_data->group]];
     }
@@ -538,7 +538,7 @@ void qaction_op83_teleport_pc(struct qbn_op *op)
                 player_object->y = destination->y;
                 player_object->z = destination->z;
                 player_object->yaw = camera_object->yaw;
-                D_001940D5 |= 2;
+                ui_mode_flags |= 2;
             }
             op->flags |= 1;
             return;

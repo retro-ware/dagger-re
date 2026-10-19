@@ -1,7 +1,7 @@
 /* matched by the real Watcom C32 10.0a (-d2), lifted from 0x000339B2 */
 #include "records.h"
 
-extern char D_001970DD;
+extern char quest_init_local;
 extern struct faction *faction_find(short);
 
 int func_000339B2(struct location_door *door, struct qbn_person *qbn_person, struct building *building, int any_building)
@@ -43,9 +43,9 @@ int func_000339B2(struct location_door *door, struct qbn_person *qbn_person, str
     if ((door->flags & 0x2000) == 0)
         return 0;
     if ((int)(short)(qbn_person->flags & 0x600) != 0) {
-        if (D_001970DD != 0 && (door->flags & 0x8000) == 0)
+        if (quest_init_local != 0 && (door->flags & 0x8000) == 0)
             return 0;
-        if (D_001970DD == 0 && (door->flags & 0x8000) != 0)
+        if (quest_init_local == 0 && (door->flags & 0x8000) != 0)
             return 0;
     }
     if (qbn_person->kind == -6 && building->type < 17)

@@ -27,8 +27,8 @@ extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern char scratch_190d64[];
 extern char scratch_190de4[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern signed char ui_dirty_flags;
 extern int spell_points_bonus;
 extern struct record *player_entity;
@@ -135,7 +135,7 @@ void spellbook_frame(void)
         spellbook_close();
         if ((player_character->conditions & 0x100) != 0) {
             hud_message_add(D_00184634);
-        } else if (((struct bf8_7_1 *)&D_001940D4)->f != 0) {
+        } else if (((struct bf8_7_1 *)&game_state_flags)->f != 0) {
             cost = (spell_cost(&spell_object->data.spell, player_character) * spell_cost_item_percent()) / 100;
             if (spell_object->data.spell.id == 92) cost = 0;
             if (((int)(unsigned char)spell_object->data.spell.name[strlen(spell_object->data.spell.name) + 1]) == 36) {
@@ -185,8 +185,8 @@ void spellbook_frame(void)
 
 int spellbook_close(void)
 {
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0) {
-        D_001940D4 &= 251;
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0) {
+        game_state_flags &= 251;
         picklist_free(&shared_picklist);
     }
     while (key_down_esc != 0);
@@ -244,7 +244,7 @@ void spellbook_effect_help(int slot)
 
     if (selected_spell->effects[(int)(short)*(short *)&slot].type == 255) return;
     spell_effect_slot = slot;
-    D_001940D5 |= 1;
+    ui_mode_flags |= 1;
     msgbox_show_rsc((int)(short)(spell_effect_text_index((int)(short)*(short *)&slot) + 1200), 1);
 }
 }
@@ -290,7 +290,7 @@ int spellbook_build_list(void)
         return 0;
     }
     ui_dirty_flags &= 254;
-    D_001940D4 |= 4;
+    game_state_flags |= 4;
     return 1;
 }
 

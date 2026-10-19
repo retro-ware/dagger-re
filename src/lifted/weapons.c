@@ -13,13 +13,13 @@ extern char str_weapo1_cif[];
 extern char str_weapon_cif[];
 extern char str_you_have_no_arrows[];
 extern unsigned char player_environment;
-extern iptr D_00185097;
+extern iptr text_spell_failed;
 extern signed char weapon_cif_by_index[];
 extern signed char weapon_swing_types[];
 extern short swing_to_hit_mods[];
 extern short swing_damage_mods[];
-extern char D_001875AE[];
-extern char D_001875B7[];
+extern char weapon_swing_script[];
+extern char bow_anim_script[];
 extern signed char text_buffer[];
 extern struct record *creature_list[];
 extern signed char D_001940D6;
@@ -45,14 +45,14 @@ extern signed char mouse_buttons_prev;
 extern signed char crime_current;
 extern struct loaded_location loaded_location;
 extern char collide_flags[];
-extern iptr D_001A4A30[];
-extern int D_001A4A38[];
-extern int D_001A4A48[];
+extern iptr weapon_hand_item[];
+extern int weapon_hand_group[];
+extern int weapon_hand_tick[];
 extern iptr weapon_hand_cif[];
-extern iptr D_001A4A5C;
-extern int D_001A4A60[];
-extern iptr D_001A4A68[];
-extern int D_001A4A70[];
+extern iptr weapon_sprite_buffer;
+extern int weapon_hand_frame[];
+extern iptr weapon_hand_anim[];
+extern int weapon_swing_state[];
 extern short swing_to_hit;
 extern short swing_damage;
 
@@ -114,7 +114,7 @@ void weapon_load_hand_sprite(struct record *item, int hand)
 
     if (item == 0 || player_character->race > 8) {
 L72941:;
-        *(iptr *)&D_001A4A68[hand] = 0;
+        *(iptr *)&weapon_hand_anim[hand] = 0;
         cif_index = ((player_character->race < 9) ? 10 : 11);
         item = 0;
     } else {
@@ -122,13 +122,13 @@ L72941:;
         if (item_data->group != 3) goto L72941;
         cif_index = (int)(unsigned char)weapon_cif_by_index[item_data->index];
         if (cif_index == 9) {
-            *(iptr *)&D_001A4A68[hand] = (iptr)D_001875B7;
+            *(iptr *)&weapon_hand_anim[hand] = (iptr)bow_anim_script;
         } else {
-            *(iptr *)&D_001A4A68[hand] = 0;
+            *(iptr *)&weapon_hand_anim[hand] = 0;
         }
-        D_001A4A60[hand] = 0;
+        weapon_hand_frame[hand] = 0;
     }
-    D_001A4A30[hand] = (iptr)item;
+    weapon_hand_item[hand] = (iptr)item;
     if (item != 0 && item_data->enchantments[0].type != (-1) && item_data->index != 17 && item_data->index != 16) {
         mc_set_location(85, str_weapons_c);
         mc_sprintf((char *)text_buffer, str_weapo1_cif, cif_index);
@@ -156,18 +156,18 @@ int weapon_start_swing(int hand)
     dy = mouse_motion_y;
     motion = xn_math_approx_dist2d(0, 0, (int)(short)dx, (int)(short)dy);
     if (motion < 45) return 0;
-    D_001A4A48[hand] = xn_anim_ticks;
+    weapon_hand_tick[hand] = xn_anim_ticks;
     motion = xn_math_angle_to_point(0, 0, (int)(short)dx, (int)(short)dy) >> 7;
-    D_001A4A38[hand] = (int)(unsigned char)weapon_swing_types[motion];
+    weapon_hand_group[hand] = (int)(unsigned char)weapon_swing_types[motion];
     swing_to_hit = swing_to_hit_mods[motion];
     swing_damage = swing_damage_mods[motion];
     if (((int)(unsigned char)weapon_swing_types[motion]) == 2 && player_character->equipped[((int)(unsigned char)weapon_active_hand) * 2 + 19] == 0) {
-        *(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] = (iptr)D_001875AE;
-        D_001A4A60[((int)(unsigned char)weapon_active_hand)] = 0;
+        *(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] = (iptr)weapon_swing_script;
+        weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] = 0;
     } else {
-        *(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] = 0;
+        *(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] = 0;
     }
-    D_001A4A70[hand] = 5;
+    weapon_swing_state[hand] = 5;
     return 1;
 }
 
@@ -175,33 +175,33 @@ void weapon_bow_update(void)
 {
     if (((struct bf8_6_1 *)&D_001940D6)->f == 0) return;
     if (right_hand_ready_delay[((int)(unsigned char)weapon_active_hand)] != 0) return;
-    if (D_001A4A60[((int)(unsigned char)weapon_active_hand)] > 200) {
-        D_001A4A60[((int)(unsigned char)weapon_active_hand)] -= frame_ticks;
-        if (D_001A4A60[((int)(unsigned char)weapon_active_hand)] < 200) {
-            D_001A4A60[((int)(unsigned char)weapon_active_hand)] = 0;
+    if (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] > 200) {
+        weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] -= frame_ticks;
+        if (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] < 200) {
+            weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] = 0;
         }
         return;
     }
-    if (D_001A4A60[((int)(unsigned char)weapon_active_hand)] == 200) {
-        D_001A4A60[((int)(unsigned char)weapon_active_hand)] = 0;
+    if (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] == 200) {
+        weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] = 0;
     }
-    if (((int)(unsigned char)*(signed char *)((*(char * *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)]))) == 3) {
+    if (((int)(unsigned char)*(signed char *)((*(char * *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)]))) == 3) {
         if (((int)(unsigned char)(mouse_buttons_prev & 2)) == 0 && ((int)(unsigned char)(mouse_buttons & 2)) != 0) {
             sound_play(6, player_object, 100);
-            (D_001A4A60[((int)(unsigned char)weapon_active_hand)])++;
+            (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)])++;
         }
     } else {
-        (D_001A4A60[((int)(unsigned char)weapon_active_hand)])++;
-        if (((int)(unsigned char)*(signed char *)((char *)(*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)]))) == 5) {
+        (weapon_hand_frame[((int)(unsigned char)weapon_active_hand)])++;
+        if (((int)(unsigned char)*(signed char *)((char *)(*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)]))) == 5) {
             weapon_fire_arrow();
             fatigue_add(-11);
         }
-        if (((int)(unsigned char)*(signed char *)((*(char * *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)]))) == 7) {
-            D_001A4A60[((int)(unsigned char)weapon_active_hand)] = ((100 - player_character->attributes[6]) * 10) + 1000;
+        if (((int)(unsigned char)*(signed char *)((*(char * *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)]))) == 7) {
+            weapon_hand_frame[((int)(unsigned char)weapon_active_hand)] = ((100 - player_character->attributes[6]) * 10) + 1000;
             return;
         }
     }
-    xn_draw_cif_rle_frame((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], (int)(unsigned char)*(signed char *)((char *)(*(iptr *)&D_001A4A68[((int)(unsigned char)weapon_active_hand)] + D_001A4A60[((int)(unsigned char)weapon_active_hand)])), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
+    xn_draw_cif_rle_frame((void *)weapon_hand_cif[((int)(unsigned char)weapon_active_hand)], (int)(unsigned char)*(signed char *)((char *)(*(iptr *)&weapon_hand_anim[((int)(unsigned char)weapon_active_hand)] + weapon_hand_frame[((int)(unsigned char)weapon_active_hand)])), ((((int)(unsigned short)(game_settings->view_flags & 1)) != 0) ? 0 : -hud_bar_image->height), (int)(unsigned char)weapon_active_hand);
 }
 
 void weapon_fire_arrow(void)
@@ -339,9 +339,9 @@ void weapon_free_sprites(void)
         mc_free((void *)weapon_hand_cif[0], str_weapons_c, 542);
         weapon_hand_cif[0] = -1751672937;
     }
-    if (D_001A4A5C == 0 || D_001A4A5C == (-1751672937)) return;
-    mc_free((void *)D_001A4A5C, str_weapons_c, 543);
-    D_001A4A5C = -1751672937;
+    if (weapon_sprite_buffer == 0 || weapon_sprite_buffer == (-1751672937)) return;
+    mc_free((void *)weapon_sprite_buffer, str_weapons_c, 543);
+    weapon_sprite_buffer = -1751672937;
 }
 
 struct record *monster_nearest_to_point(int x, int y, int z)
@@ -463,7 +463,7 @@ void door_try_open(struct record *door, int lockpick)
                 if (rand_range(1, 100) <= chance && door_start_swing(door, 0) != 0) {
                     door->flags |= 320;
                 } else {
-                    hud_message_add(D_00185097);
+                    hud_message_add(text_spell_failed);
                 }
                 return;
             }

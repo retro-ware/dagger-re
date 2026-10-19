@@ -13,7 +13,7 @@ extern char str_invalid_enemy_count[];
 extern char str_rumor_dat[];
 extern char D_001704C5[];
 extern signed char D_00178630[];
-extern signed char D_0017A25C[];
+extern signed char person_flat_images[];
 extern struct record *player_entity;
 extern char shared_scratch[];
 extern struct location *current_location;
@@ -281,7 +281,7 @@ void faction_parse_flat(struct faction *faction, signed char **cursor, int *ally
     }
     *cursor = text;
     if (archive_value == (-1)) {
-        faction->flats[(int)(unsigned char)D_00196732] = ((unsigned short)(unsigned char)D_0017A25C[rand_range(0, 9)]) + 23296;
+        faction->flats[(int)(unsigned char)D_00196732] = ((unsigned short)(unsigned char)person_flat_images[rand_range(0, 9)]) + 23296;
     }
     if (D_00196732 == 0) faction->flats[1] = faction->flats[0];
     D_00196732 ^= 1;

@@ -9,8 +9,8 @@ extern unsigned char text_colour;
 extern char *screen_buffer;
 extern unsigned char xn_mouse_cursor_drawn;
 extern char str_intro_c[];
-extern unsigned char D_001940D4;
-extern unsigned char D_001940D5;
+extern unsigned char game_state_flags;
+extern unsigned char ui_mode_flags;
 extern char *scratch_buffer;
 extern unsigned char msgbox_button_keys;
 extern unsigned char D_00196034;
@@ -29,7 +29,7 @@ extern void xn_gfx_clear(int);
 int chargen_popup_choice(short text_id, short button1, short button2, char *image, unsigned char key1, unsigned char key2)
 {
     D_00196271 = 0;
-    D_001940D4 &= 254;
+    game_state_flags &= 254;
     while (mouse_buttons != 0)
         xn_mouse_poll_clamped();
     text_colour = 146;
@@ -44,7 +44,7 @@ int chargen_popup_choice(short text_id, short button1, short button2, char *imag
     } else {
         xn_gfx_clear(0);
     }
-    D_001940D5 |= 128;
+    ui_mode_flags |= 128;
     msgbox_show_rsc(text_id, 5);
     xn_mouse_cursor_drawn &= 254;
     while (D_00196271 == 0) {

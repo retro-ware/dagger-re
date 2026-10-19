@@ -33,7 +33,7 @@ extern signed char D_00190D1A;
 extern signed char scratch_190d20;
 extern short D_00190DD0;
 extern short guild_search_faction;
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
 extern signed char player_view_flags;
 extern struct building *current_building;
@@ -196,7 +196,7 @@ void spellshop_open(void)
 
 int spellshop_close(void)
 {
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0) picklist_free((iptr)shared_picklist);
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0) picklist_free((iptr)shared_picklist);
     srand((int)(short)D_001A4A18);
     ui_dirty_flags &= 253;
     game_mode = 0;

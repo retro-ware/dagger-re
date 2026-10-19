@@ -5,23 +5,23 @@
 #pragma pack(1)
 #pragma pack()
 extern char str_qinit_c[];
-extern unsigned char D_0017A25C[];
-extern short D_0017A270[];
+extern unsigned char person_flat_images[];
+extern short person_faction_ids[];
 extern struct record *nonworld_root;
 extern struct record *player_object;
 extern struct record *location_object;
 extern struct location *current_location;
 extern char *scratch_buffer;
-extern struct record *D_00195CE8;
+extern struct record *quest_person_source;
 extern unsigned char current_region;
 extern struct loaded_location loaded_location;
-extern char D_001970C8[];
+extern char quest_location[];
 extern int D_001970CC;
 extern struct location_door *D_001970D0;
 extern struct record *D_001970D4;
 extern struct location *D_001970D8;
-extern char D_001970DC;
-extern unsigned char D_001970DD;
+extern char quest_init_retry;
+extern unsigned char quest_init_local;
 extern struct quest *current_quest;
 extern struct faction *faction_find_type_in_region(short, short);
 extern struct faction *faction_find(short);
@@ -63,9 +63,9 @@ int quest_init_person(struct qbn_person *qbn_person)
     npc_faction_id = 0;
     qbn_person->flags &= 0x0fff;
     if (qbn_person->kind == 21) {
-        if (D_00195CE8 == 0 || D_00195CE8->twin != 0)
+        if (quest_person_source == 0 || quest_person_source->twin != 0)
             return 0;
-        flat_cfg = flats_cfg_find(D_00195CE8->image);
+        flat_cfg = flats_cfg_find(quest_person_source->image);
         object = object_create_child(nonworld_root, 0, 58);
         building = object_building(player_object);
         if (building != 0) {
@@ -74,23 +74,23 @@ int quest_init_person(struct qbn_person *qbn_person)
             if (building->faction_id == 0)
                 building->faction_id = faction_find_type_in_region(current_region, 15)->id;
             mc_memcpy(&object->data, building, 26, str_qinit_c, 64, 4);
-        } else if (D_00195CE8->data.person.faction_id != 0) {
-            object->data.building.faction_id = D_00195CE8->data.person.faction_id;
+        } else if (quest_person_source->data.person.faction_id != 0) {
+            object->data.building.faction_id = quest_person_source->data.person.faction_id;
         }
-        if (D_00195CE8->data.person.faction_id != 0)
-            object->faction_id = D_00195CE8->data.person.faction_id;
+        if (quest_person_source->data.person.faction_id != 0)
+            object->faction_id = quest_person_source->data.person.faction_id;
         else
             object->faction_id = building->faction_id;
         mc_strncpy(object->data.quest_npc.location_name, current_location->name, 4, str_qinit_c, 76);
-        mc_memcpy(&object->x, &D_00195CE8->x, 12, str_qinit_c, 77, 4);
+        mc_memcpy(&object->x, &quest_person_source->x, 12, str_qinit_c, 77, 4);
         object->type = 41;
-        object->image = D_00195CE8->image;
+        object->image = quest_person_source->image;
         qbn_person->object = object;
         object->flags = 514;
         object->flags |= (int)(unsigned char)(flat_cfg->flags & 1) != 0 ? 4 : 0;
         object->home_region = (unsigned short)current_region;
         object->quest_id = current_quest->id;
-        object->id = D_00195CE8->id;
+        object->id = quest_person_source->id;
         object->repair_due = object->id;
         if ((int)(unsigned short)(object->flags & 4) != 0)
             *(RECORD_DATA(object) + 2) |= 16;
@@ -132,7 +132,7 @@ int quest_init_person(struct qbn_person *qbn_person)
     }
     if (qbn_person->kind == -2) {
         if (qbn_person->faction_id == 10)
-            npc_faction_id = D_0017A270[rand_range(0, 9)];
+            npc_faction_id = person_faction_ids[rand_range(0, 9)];
         else
             npc_faction_id = faction_random_of_type(qbn_person->faction_id)->id;
         qbn_person->kind = -1;
@@ -150,13 +150,13 @@ int quest_init_person(struct qbn_person *qbn_person)
         linked_person = quest_record(current_quest, 3, qbn_person->faction_id);
         if (linked_person == 0) {
             qbn_person->object = 0;
-            D_001970DC++;
+            quest_init_retry++;
             return 1;
         }
         object = linked_person->object;
         if (object == 0) {
             qbn_person->object = 0;
-            D_001970DC++;
+            quest_init_retry++;
             return 1;
         }
         switch ((unsigned short)(qbn_person->kind + 7)) {
@@ -176,7 +176,7 @@ int quest_init_person(struct qbn_person *qbn_person)
             } else {
                 qbn_person->object = 0;
                 qbn_person->kind = -5;
-                D_001970DC++;
+                quest_init_retry++;
                 return 1;
             }
             if (faction != 0)
@@ -192,7 +192,7 @@ int quest_init_person(struct qbn_person *qbn_person)
             } else {
                 qbn_person->object = 0;
                 qbn_person->kind = -5;
-                D_001970DC++;
+                quest_init_retry++;
                 return 1;
             }
             if (faction != 0)
@@ -213,8 +213,8 @@ retry:
         loc_object = location_object;
         location = current_location;
     } else {
-        location_free(D_001970C8);
-        location_pick_random_town(D_001970C8);
+        location_free(quest_location);
+        location_pick_random_town(quest_location);
         door_count = D_001970CC;
         doors = D_001970D0;
         loc_object = D_001970D4;
@@ -224,9 +224,9 @@ retry:
     candidate_count = 0;
     any_building = 0;
     if ((int)(short)(qbn_person->flags & 0x600) != 0)
-        D_001970DD = (int)(short)(qbn_person->flags & 0x200) != 0 ? 1 : 0;
+        quest_init_local = (int)(short)(qbn_person->flags & 0x200) != 0 ? 1 : 0;
     else
-        D_001970DD = rand() & 1;
+        quest_init_local = rand() & 1;
     if ((int)(short)(qbn_person->flags & 0x100) == 0) {
         for (candidate_count = i = 0, door = doors; i < door_count; i++, door++) {
             if (door->building_index != 65535 && func_000339B2(door, qbn_person, &location->buildings[door->building_index], 0) != 0)
@@ -287,16 +287,16 @@ retry:
     }
     object->flags = 514;
     if (npc_faction_id != 0) {
-        object->image = faction_find(npc_faction_id)->flats[D_001970DD];
+        object->image = faction_find(npc_faction_id)->flats[quest_init_local];
         object->faction_id = npc_faction_id;
     } else if (qbn_person->kind == -1) {
-        object->image = faction_find(qbn_person->faction_id)->flats[D_001970DD];
+        object->image = faction_find(qbn_person->faction_id)->flats[quest_init_local];
         object->faction_id = qbn_person->faction_id;
     } else if ((short)object->data.building.faction_id > 0) {
-        object->image = faction_find(object->data.building.faction_id)->flats[D_001970DD];
+        object->image = faction_find(object->data.building.faction_id)->flats[quest_init_local];
         object->faction_id = object->data.building.faction_id;
     } else {
-        object->image = D_0017A25C[D_001970DD * 10 + rand_range(0, 9)] + 23296;
+        object->image = person_flat_images[quest_init_local * 10 + rand_range(0, 9)] + 23296;
         object->faction_id = 510;
     }
     flat_cfg = flats_cfg_find(object->image);
@@ -311,6 +311,6 @@ retry:
         object_reparent(place_object, object);
         object->id = object_new_id((unsigned)object->id >> 16);
     }
-    location_free(D_001970C8);
+    location_free(quest_location);
     return 1;
 }

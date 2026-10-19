@@ -21,15 +21,15 @@ extern char str_sky_dat[];
 extern char str_nightsky_col[];
 extern char str_nite_i0_img[];
 extern signed char month_seasons[];
-extern signed char D_0017A294[];
-extern signed char D_0017A295[];
-extern signed char D_0017A296[];
+extern signed char sky_palette_r[];
+extern signed char sky_palette_g[];
+extern signed char sky_palette_b[];
 extern signed char weather_chances[];
-extern signed char D_0017A39C[];
-extern signed char D_0017A3D8[];
-extern signed char D_0017A3DF[];
-extern signed char D_0017A3E5[];
-extern signed char D_0017A3EB[];
+extern signed char sky_frames_1[];
+extern signed char sky_frames_2[];
+extern signed char sky_frames_3[];
+extern signed char night_sky_images[];
+extern signed char star_colours[];
 extern signed char text_buffer[];
 extern int view_look_pitch;
 extern int view_look_yaw;
@@ -42,7 +42,7 @@ extern char *scratch_buffer;
 extern iptr haze_table_0;
 extern int sky_loaded_frame;
 extern signed char climate_weathers[];
-extern signed char D_00196286;
+extern signed char sky_init_value;
 extern signed char night_sky_loaded;
 extern iptr sky_image_a;
 extern iptr sky_image_b;
@@ -54,8 +54,8 @@ extern int moon1_phase;
 extern char moon1_direction[];
 extern char moon0_direction[];
 extern int sun_direction;
-extern int D_001985CC;
-extern int D_001985D0;
+extern int sun_offset_y;
+extern int sun_offset_z;
 
 extern int climate_category(void);
 extern iptr disk_read_file(char *, iptr);
@@ -90,11 +90,11 @@ void sky_init(void)
     moon1_image = (struct cfa_header *)disk_read_file(str_moon01i0_cfa, 0);
     sky_image_a = (iptr)mc_malloc(112640, D_00170A86, 93);
     sky_image_b = (iptr)mc_malloc(112640, D_00170A86, 94);
-    D_00196286 = 13;
+    sky_init_value = 13;
     for (i = 0; i < 32; i++) {
-        D_0017A294[i * 3] <<= 2;
-        D_0017A295[i * 3] <<= 2;
-        D_0017A296[i * 3] <<= 2;
+        sky_palette_r[i * 3] <<= 2;
+        sky_palette_g[i * 3] <<= 2;
+        sky_palette_b[i * 3] <<= 2;
     }
     xn_sky_init_stars();
 }
@@ -107,8 +107,8 @@ void sky_apply_sunlight(void)
 
     if (sun_light == 0) return;
     x = player_object->x + sun_direction;
-    y = player_object->y + D_001985CC;
-    z = player_object->z + D_001985D0;
+    y = player_object->y + sun_offset_y;
+    z = player_object->z + sun_offset_z;
 #ifdef DAGGER_PORT
     {
         /* the engine normalises the vector at its argument: x, y and z were consecutive locals
@@ -234,7 +234,7 @@ void sky_load_day(int minutes)
     if ((weather & 127) == 3 || (weather & 128) != 0) return;
     saved_seed = rand();
     srand(((unsigned)game_minutes) / 1440);
-    frame += ((int)(unsigned char)D_0017A39C[rand_range(0, 2) + ((((int)(unsigned char)D_0017A3D8[(int)(unsigned char)climate_weathers[climate]]) * 3) + (((int)(unsigned char)D_0017A3DF[climate]) * 15))]) << 5;
+    frame += ((int)(unsigned char)sky_frames_1[rand_range(0, 2) + ((((int)(unsigned char)sky_frames_2[(int)(unsigned char)climate_weathers[climate]]) * 3) + (((int)(unsigned char)sky_frames_3[climate]) * 15))]) << 5;
     srand(saved_seed);
     if (frame == sky_loaded_frame) return;
     sky_loaded_frame = frame;
@@ -326,7 +326,7 @@ void sky_set_time_colour(int minutes)
     } else {
         colour_row = ((unsigned)(-(minutes - 1080))) >> 2;
     }
-    xn_pal_set_range_8bit((char *)(((iptr)D_0017A294) + (colour_row * 3)), 255, 1);
+    xn_pal_set_range_8bit((char *)(((iptr)sky_palette_r) + (colour_row * 3)), 255, 1);
 }
 
 void sky_stub(int unused)
@@ -339,7 +339,7 @@ void sky_load_night(void)
     xn_pal_set_range_8bit((char *)((iptr)scratch_buffer + 11), 1, 31);
     mc_memcpy((void *)((iptr)xn_pal_current + 3), (scratch_buffer + 11), 93, D_00170A86, 671, 4);
     mc_set_location(673, D_00170A86);
-    mc_sprintf((char *)text_buffer, str_nite_i0_img, (int)(unsigned char)D_0017A3E5[climate_category()]);
+    mc_sprintf((char *)text_buffer, str_nite_i0_img, (int)(unsigned char)night_sky_images[climate_category()]);
     disk_read_file(text_buffer, sky_image_a);
     sky_add_stars((unsigned char *)sky_image_a);
     night_sky_loaded = 1;
@@ -390,6 +390,6 @@ void sky_add_stars(unsigned char *image)
         x = rand_range(0, 511);
         y_offset = rand_range(0, 199) << 9;
         if (image[x + y_offset] < 16) continue;
-        image[x + y_offset] = D_0017A3EB[rand() & 15];
+        image[x + y_offset] = star_colours[rand() & 15];
     }
 }

@@ -51,7 +51,7 @@ extern struct character *player_character;
 extern struct settings *game_settings;
 extern struct record *collide_hit_object;
 extern iptr spell_cast_anim_fire[];
-extern char D_00195F28[];
+extern char item_draw_order_scratch[];
 extern short spell_effect_slot;
 extern short spell_ready_cost;
 extern signed char D_00196291;
@@ -153,7 +153,7 @@ void cast_spell_on(struct record *spell, struct record *target, int no_save)
     extended = 0;
     if (spell->caster != player_entity && ((struct bf8_7_1 *)&cheat_flags)->f != 0) return;
     if (spell->caster == player_entity && target == player_entity && spell->data.spell.target == 3) return;
-    *(short *)D_00195F28 = 512;
+    *(short *)item_draw_order_scratch = 512;
     spell_data = &spell->data.spell;
     if (spell_data->target != 2 && spell_data->target != 4) {
         sound_play((int)(short)*(short *)(spell_cast_sounds + (spell_data->element * 2)), player_object, 110);

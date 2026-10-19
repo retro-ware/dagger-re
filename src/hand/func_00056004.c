@@ -9,7 +9,7 @@ extern short mouse_y;
 extern signed char text_colour;
 extern signed char key_down_esc;
 extern struct rect itemmaker_buttons[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern struct record *player_object;
 extern iptr list_popup_callback;
 extern iptr window_image;
@@ -25,7 +25,7 @@ extern int xn_mouse_poll_clamped(void);
 extern int xn_font_select(int);
 extern void xn_tex_cache_begin_frame(void);
 
-#define FLAG (((struct bf8_2_1 *)&D_001940D4)->f)
+#define FLAG (((struct bf8_2_1 *)&game_state_flags)->f)
 #define MX (mouse_x)
 #define MY (mouse_y)
 

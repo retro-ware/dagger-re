@@ -66,14 +66,14 @@ extern int trade_total_weight;
 extern signed char scratch_190ce4[];
 extern iptr text_macro_map_location;
 extern char enchant_text[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char D_001940D6;
 extern signed char ui_dirty_flags;
 extern signed char player_motion_flags;
 extern int right_hand_ready_delay[];
 extern int left_hand_ready_delay;
 extern struct record *inventory_containers[];
-extern struct record *D_001959DC;
+extern struct record *inventory_container_1;
 extern struct record *wagon_container;
 extern struct item *text_macro_item;
 extern struct record *camera_object;
@@ -986,10 +986,10 @@ void inv_list_left_item(struct record *object, iptr rects)
         }
     } else {
         if (trade_mode == 2 && trade_shop_takes_group(item->group) == 0) return;
-        if (((struct bf8_1_1 *)&D_001940D4)->f != 0 && item->condition == item->max_condition) {
+        if (((struct bf8_1_1 *)&game_state_flags)->f != 0 && item->condition == item->max_condition) {
             return;
         }
-        if (((struct bf8_1_1 *)&D_001940D4)->f != 0 && item->enchantments[0].type != (-1)) return;
+        if (((struct bf8_1_1 *)&game_state_flags)->f != 0 && item->enchantments[0].type != (-1)) return;
         if ((((int)(unsigned char)game_mode) == 10 || (((int)game_mode_under_popup) == 10 && ((int)(unsigned char)game_mode) == 8)) && (item->enchantments[0].type != (-1) || item->enchant_points == 0 || itemmaker_item_object == object || (item->group == 3 && item->index == 18) || (item->group == 27 && item->index == 1) || item->group == 23)) {
             return;
         }
@@ -1188,7 +1188,7 @@ void inv_store_item(struct record *object)
     object->caster = 0;
     item = &object->data.item;
     if (item->enchantments[0].type != (-1) || (item->group == 27 && item->index == 0)) {
-        object_reparent(D_001959DC, object);
+        object_reparent(inventory_container_1, object);
         return;
     }
     object_reparent(inventory_containers[(int)(unsigned char)item_group_tab[item->group]], object);

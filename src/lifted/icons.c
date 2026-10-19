@@ -20,7 +20,7 @@ extern short D_00188208[];
 extern char D_00190B44[];
 extern char scratch_190d64[];
 extern char scratch_190de4[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char D_001940D6;
 extern signed char ui_dirty_flags;
 extern struct record *wagon_container;
@@ -210,7 +210,7 @@ void magic_items_open(void)
     }
     world_running = 0;
     ui_dirty_flags &= 254;
-    D_001940D4 |= 32;
+    game_state_flags |= 32;
     magic_items_image = (struct image *)disk_read_file(str_main02i0_img, 0);
     screen_active = 1;
     magic_items_saved_screen = (iptr)mc_malloc(64000, str_icons_c, 358);
@@ -221,7 +221,7 @@ void magic_items_frame(void)
 {
     slot16 picked;
 
-    if (((struct bf8_5_1 *)&D_001940D4)->f == 0) return;
+    if (((struct bf8_5_1 *)&game_state_flags)->f == 0) return;
     mc_memcpy((void *)screen_buffer, (void *)magic_items_saved_screen, 64000, str_icons_c, 368, 4);
     xn_draw_image(magic_items_image->x, magic_items_image->y, magic_items_image->width, magic_items_image->height, magic_items_image->pixels);
     if (key_down_esc != 0 || ((int)(unsigned char)(mouse_buttons & 2)) != 0) {
@@ -242,7 +242,7 @@ void magic_items_frame(void)
 
 void magic_items_close(void)
 {
-    D_001940D4 &= 223;
+    game_state_flags &= 223;
     if ((iptr)magic_items_image != 0 && (iptr)magic_items_image != (-1751672937)) {
         mc_free(magic_items_image, str_icons_c, 396);
         magic_items_image = (struct image *)(iptr)-1751672937;

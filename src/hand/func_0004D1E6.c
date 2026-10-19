@@ -7,7 +7,7 @@ extern char str_notebook_tde[];
 extern char str_unable_to_create_new_notebook[];
 extern char str_mask02i0_img[];
 extern char str_note_rci[];
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern struct record *player_object;
 extern iptr window_image;
 extern char *scratch_buffer;
@@ -36,7 +36,7 @@ int note_open_notebook(short mode)
     if (game_mode_under_popup == 9 && game_mode == 8) return 1;
     note_silent = (mode == 100);
     if (mode != 0 || (game_mode == 0 && key_action_held(25) != 0)) {
-        D_001940D5 |= 8;
+        ui_mode_flags |= 8;
         note_search_text = 0;
         note_search_from = 0;
         note_page = mc_malloc(3640, str_note_c, 67);

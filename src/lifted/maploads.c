@@ -24,7 +24,7 @@ extern char str_invalid_map_data[];
 extern struct rect tavern_buttons[];
 extern signed char text_buffer[];
 extern signed char tavern_state;
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern struct record *player_object;
 extern struct record *location_object;
 extern struct location *current_location;
@@ -485,10 +485,10 @@ void tavern_frame(void)
     if (tavern_open(0) == 0) return;
     xn_font_select(4);
     text_colour = 146;
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0 && (row = list_popup_update()) > (-1)) {
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0 && (row = list_popup_update()) > (-1)) {
         tavern_buy_food(row);
     }
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0) return;
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0) return;
     if (((int)(signed char)tavern_state) == 1) {
         tavern_room_offer();
         return;

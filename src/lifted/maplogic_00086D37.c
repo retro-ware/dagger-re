@@ -8,7 +8,7 @@ extern int dungeon_water_level;
 extern char str_maplogic_c[];
 extern unsigned char player_environment;
 extern int last_unloaded_location;
-extern int D_00187F2C;
+extern int town_reload_count;
 extern struct record *creature_list[];
 extern struct record *camera_object;
 extern struct record *player_entity;
@@ -61,7 +61,7 @@ void location_unload(int image)
         location_object->image = 65535;
         location_object->id = -65535;
         model_cache_flush_count = 1;
-        D_00187F2C = 0;
+        town_reload_count = 0;
         location_free(&loaded_location);
         mc_memset(&loaded_location, 0, sizeof(loaded_location), str_maplogic_c, 461, 4);
         mc_memset(current_location, 0, REC_SIZEOF(struct location), str_maplogic_c, 462, 4);
@@ -79,7 +79,7 @@ void location_unload(int image)
             if ((location_id - 65536) == last_unloaded_location) {
                 mc_memcpy(player_object, saved_player_object, RECORD_LINKS_OFFSET, str_maplogic_c, 483, 4);
             } else {
-                D_00187F2C++;
+                town_reload_count++;
             }
             move_settle_frames = 5;
         }

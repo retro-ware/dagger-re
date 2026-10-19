@@ -5,9 +5,9 @@
 #include "clib.h"
 
 extern char str_sosez_c[];
-extern iptr D_0018DC34;
+extern iptr music_song_buffer;
 extern int midi_bsa;
-extern iptr D_001A3F48;
+extern iptr music_song_data;
 extern int D_001A3F4C;
 
 extern int archive_find_record(int, char *, int);
@@ -43,8 +43,8 @@ int sos_load_song(char *name)
         }
         return -1;
     }
-    D_0018DC34 = buffer;
-    D_001A3F48 = buffer;
+    music_song_buffer = buffer;
+    music_song_data = buffer;
     dpmi_lock_region(buffer, (D_001A3F4C = size + (int)sizeof(struct sos_song)));
     return song_handle;
 }

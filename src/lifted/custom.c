@@ -110,7 +110,7 @@ extern iptr classmaker_picklist;
 extern iptr classmaker_picklist_costs;
 extern iptr itemmaker_spells_file;
 extern char scratch_190ee4[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char ui_dirty_flags;
 extern struct record *player_object;
 extern iptr magic_window_image;
@@ -480,7 +480,7 @@ int classmaker_pick_from_list(iptr names, iptr background)
     } else {
         list_popup_open(names);
     }
-    D_001940D4 &= 254;
+    game_state_flags &= 254;
     for (;;) {
         keys_world_actions();
         xn_mouse_poll_clamped();
@@ -609,7 +609,7 @@ void classmaker_specials_add(void)
     if (((int)(unsigned char)classmaker_special_counts[(int)(short)classmaker_special_list]) == 7) return;
     *(signed char *)classmaker_screen |= 16;
     list_popup_open(classmaker_picklist);
-    D_001940D4 |= 1;
+    game_state_flags |= 1;
 }
 
 void classmaker_specials_picked(void)

@@ -17,13 +17,13 @@ extern char potion_recipe_values[];
 extern signed char str_stamina[];
 extern char scratch_190be4[];
 extern char scratch_190de4[];
-extern struct record *D_001959E4;
+extern struct record *inventory_container_3;
 extern struct record *player_entity;
 extern struct record *player_object;
 extern struct record *location_object;
 extern char shared_scratch[];
 extern iptr window_image;
-extern char D_00195F28[];
+extern char item_draw_order_scratch[];
 extern char spellmaker_spell[];
 extern signed char D_0019626D;
 extern signed char item_template_capacity;
@@ -174,7 +174,7 @@ void potionmaker_add_ingredient(int index)
         item_make(ingredient->data.item.group, ingredient->data.item.index, &item_buf.item);
         D_001A9BB4[item_buf.slot] = item_buf.item.variants;
         D_001A9BAC[item_buf.slot] = D_0019626D;
-        D_001A9B8C[item_buf.slot] = *(signed char *)D_00195F28;
+        D_001A9B8C[item_buf.slot] = *(signed char *)item_draw_order_scratch;
         D_001A9B94[item_buf.slot] = item_template_capacity;
     }
 }
@@ -207,7 +207,7 @@ void potion_ingredient_cb(struct record *object)
 int potion_have_ingredients(void)
 {
     *(int *)potion_ingredient_count = 0;
-    object_foreach_open(D_001959E4->children, potion_ingredient_cb);
+    object_foreach_open(inventory_container_3->children, potion_ingredient_cb);
     return *(int *)potion_ingredient_count;
 }
 

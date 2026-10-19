@@ -8,7 +8,7 @@ extern short font_height;
 extern char *screen_buffer;
 extern char str_text_c[];       /* __FILE__ */
 extern signed char text_buffer[];
-extern struct flags5 D_001940D5;
+extern struct flags5 ui_mode_flags;
 extern struct flags6 D_001940D6;
 extern short text_cursor_x;
 extern short text_cursor_y;
@@ -128,9 +128,9 @@ void msgbox_render(char *text, char **out)
     y0 = 100 - ((msgbox_h = rows * msgbox_tile_h) >> 1);
     y = y0 + 5 + ((msgbox_h - hh + 10) >> 1);
     ybase = y;
-    if (D_001940D5.b7) {
+    if (ui_mode_flags.b7) {
         draw = xn_draw_image_transparent;
-        D_001940D5.b7 = 0;
+        ui_mode_flags.b7 = 0;
     } else {
         draw = xn_draw_image;
     }

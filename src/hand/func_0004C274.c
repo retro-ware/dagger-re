@@ -10,7 +10,7 @@ extern char arena2_path[];
 extern char arena2_cd_path[];
 extern struct settings *game_settings;
 extern char *scratch_buffer;
-extern char D_001961F5[];
+extern char pending_quest_file[];
 extern int quest_file_list_add(char *, int);
 extern int rand_range(int, int);
 #pragma aux mc_set_location parm routine [];
@@ -64,6 +64,6 @@ int quest_pick_file(unsigned char group_char, unsigned char group_char2, unsigne
         entry += strlen(entry) + 1;
         file_count--;
     }
-    mc_strncpy(D_001961F5, entry, 13, D_00174F47, 365);
+    mc_strncpy(pending_quest_file, entry, 13, D_00174F47, 365);
     return 1;
 }

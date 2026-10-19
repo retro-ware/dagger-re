@@ -56,7 +56,7 @@ extern signed char D_0019628D;
 extern signed char player_moving;
 extern signed char text_macro_gender;
 extern signed char D_0019629C;
-extern signed char D_001962B2;
+extern signed char damage_suppressed;
 extern struct quest *current_quest;
 extern short swing_to_hit;
 extern short swing_damage;
@@ -542,7 +542,7 @@ int damage_apply(struct record *target, int damage, struct record *weapon)
             return 0;
         }
     }
-    if (D_001962B2 != 0) return 0;
+    if (damage_suppressed != 0) return 0;
     if (target->wait_state == 99) monster_wake_all();
     if (damage <= 0) return 0;
     character = &target->data.character;

@@ -9,7 +9,7 @@ extern struct item_template item_templates[];
 extern unsigned char item_init_count;
 extern char fatal_error_text[];
 extern struct character *player_character;
-extern short D_00195F28;
+extern short item_draw_order_scratch;
 extern unsigned char D_0019626D;
 extern unsigned char item_template_capacity;
 extern void fatal_error(char *);
@@ -106,7 +106,7 @@ void item_init_from_template(unsigned short template_id, short group, short inde
     item->draw_order = template->draw_order;
     mc_memset(item->enchantments, -1, 40, str_equip_c, 118, 40);
     D_0019626D = template->rarity;
-    D_00195F28 = template->draw_order;
+    item_draw_order_scratch = template->draw_order;
     if (group == 27 && index == 4)
         item->stack_count = rand() % 20;
     if (group == 6 || group == 12 || group == 2) {

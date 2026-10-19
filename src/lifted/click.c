@@ -49,8 +49,8 @@ extern iptr dungeon_songs_fm[];
 extern signed char text_buffer[];
 extern char shelf_book_ids[];
 extern char scratch_190be4[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern unsigned char world_state_flags;
 extern signed char player_view_flags;
@@ -71,18 +71,18 @@ extern struct location *current_location;
 extern struct character *player_character;
 extern iptr window_image;
 extern char *scratch_buffer;
-extern struct record *D_00195CE8;
+extern struct record *quest_person_source;
 extern struct block_model *picked_block_model;
 extern char picked_model_index[];
 extern struct arch3d_plane *click_face_texture;
 extern signed char climate_weathers[];
 extern short shelf_model_index;
-extern short D_00195F68;
+extern short quest_giver_faction;
 extern char furniture_container_1[];
 extern char trade_container[];
 extern iptr shelf_open_object;
-extern char D_00196120[];
-extern char D_001961F5[];
+extern char furniture_container_3[];
+extern char pending_quest_file[];
 extern signed char in_knightly_order_hall;
 extern signed char current_region;
 extern unsigned char D_00196271;
@@ -562,7 +562,7 @@ void shelf_book_list_update(void)
     int row;
 
     if (shelf_list_callback == 0) return;
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0 && (row = list_popup_poll()) != (-1)) {
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0 && (row = list_popup_poll()) != (-1)) {
         if (row > (-1)) ((int (*)(int))(shelf_list_callback))(row);
         shelf_list_callback = 0;
         shelf_list_active = 0;
@@ -580,9 +580,9 @@ void npc_click_service(struct record *npc)
     struct faction *faction;
 
     coven_menu_npc = npc;
-    D_00195CE8 = npc;
+    quest_person_source = npc;
     person = &npc->data.person;
-    D_00195F68 = person->faction_id;
+    quest_giver_faction = person->faction_id;
     building = object_building(npc);
     faction = faction_find((int)(short)person->faction_id);
     if (faction == 0) {
@@ -596,7 +596,7 @@ void npc_click_service(struct record *npc)
             }
             if (quest_active_for_faction((int)(short)faction->id) == 0) {
                 quest_pick_file(82, 0, noble_quest_letter(), 67, player_character->level);
-                if (*(signed char *)D_001961F5 != 0) return;
+                if (*(signed char *)pending_quest_file != 0) return;
             }
         }
     }
@@ -687,7 +687,7 @@ void shop_open_repair(int unused, struct record *npc)
 {
     struct record *first;
 
-    D_001940D4 &= 253;
+    game_state_flags &= 253;
     first = npc->children;
     if (first != 0) first->flags |= 1;
     inventory_open_container(npc, 3, 7);
@@ -711,7 +711,7 @@ void npc_talk(struct record *npc)
         if (((int)(unsigned char)(npc->data.person.flags & 128)) != 0) {
             quest_pick_for_npc(npc);
             npc->data.person.flags &= 127;
-            if (*(signed char *)D_001961F5 != 0) return;
+            if (*(signed char *)pending_quest_file != 0) return;
         }
     }
     talk_start(npc);
@@ -978,7 +978,7 @@ void click_interior_model(struct pick_result *hit, struct record *object)
                 }
                 if (stock_count != 0) {
                     D_001940D6 |= 4;
-                    inventory_open_container((struct record *)D_00196120, 0, 4);
+                    inventory_open_container((struct record *)furniture_container_3, 0, 4);
                 }
             }
         } else if (building != 0 && picked_block_model != 0 && picked_block_model->id == 414 && picked_block_model->variant == 9) {
@@ -1571,5 +1571,5 @@ void cheat_return_to_last_position(void)
     player_object->x = *(int *)(ground_position_history + (ground_position_history_next * 12));
     player_object->y = *(int *)(ground_position_history_y + (ground_position_history_next * 12));
     player_object->z = *(int *)(ground_position_history_z + (ground_position_history_next * 12));
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
 }

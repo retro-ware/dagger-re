@@ -55,7 +55,7 @@ extern signed char talk_face_loaded;
 extern signed char talk_hint_quest_id;
 extern signed char text_rsc_buffer[];
 extern char talk_garbled_text[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern char text_macro_fcn[];
 extern struct record *quest_root;
 extern struct character *text_macro_npc;
@@ -257,7 +257,7 @@ void talk_update(void)
         while (key_down_esc != 0);
         talk_showing_categories = 1;
     }
-    if (((struct bf8_2_1 *)&D_001940D4)->f != 0 || ((mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) && (key_down_enter == 0 && key_down_esc == 0))) {
+    if (((struct bf8_2_1 *)&game_state_flags)->f != 0 || ((mouse_buttons == 0 || (mouse_buttons != 0 && mouse_buttons_prev != 0)) && (key_down_enter == 0 && key_down_esc == 0))) {
         return;
     }
     if (talk_refused != 0) {

@@ -13,19 +13,19 @@ extern unsigned char spell_effect_cost_formula[];
 extern struct rect spellmaker_setting_buttons[34];
 extern unsigned char magic_school_skills[];
 extern signed char text_buffer[];
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern struct character *player_character;
 extern short spell_effect_slot;
 extern short D_00195F34;
-extern short D_00195F52;
-extern short D_00195F54;
+extern short saved_mouse_y;
+extern short saved_mouse_x;
 extern short mouse_motion_y;
 extern unsigned char msgbox_kind;
 extern char game_mode;
 extern unsigned char mouse_buttons_prev;
 extern iptr spellmaker_settings_image;
-extern short D_00199628;
-extern short D_0019962A;
+extern short spellmaker_drag_accum;
+extern short spellmaker_drag_row;
 extern unsigned char spellmaker_settings_kind;
 extern int spell_effect_text_index(short);
 extern void msgbox_open_rsc(int, int);
@@ -47,12 +47,12 @@ void spellmaker_settings_update(void)
     if (msgbox_kind != 4) {
         msgbox_open_rsc(spell_effect_text_index(spell_effect_slot) + 1500, 4);
         game_mode = 2;
-        D_001940D5 |= 64;
+        ui_mode_flags |= 64;
         D_00195F34 = 88;
     }
     if ((int)(unsigned char)(mouse_buttons & 1) != 0 && mouse_buttons_prev != mouse_buttons && mouse_x > 281
       && mouse_x < 304 && mouse_y > 94 && mouse_y < 109) {
-        D_001940D5 |= 32;
+        ui_mode_flags |= 32;
         msgbox_update();
         spellmaker_settings_kind = 0;
         return;
@@ -83,22 +83,22 @@ void spellmaker_settings_update(void)
         }
         if (mouse_motion_y == 0)
             goto done;
-        D_0019962A = mouse_motion_y - 1;
-        ((struct bf8_2_1 *)&D_001940D5)->f = 1;
-        D_00195F54 = mouse_x;
-        D_00195F52 = mouse_y;
-        D_00199628 = 0;
-    } else if (mouse_buttons == 0 && ((struct bf8_2_1 *)&D_001940D5)->f) {
-        ((struct bf8_2_1 *)&D_001940D5)->f = 0;
-        xn_mouse_set_position(D_00195F54, D_00195F52);
-    } else if (((struct bf8_2_1 *)&D_001940D5)->f) {
-        D_00199628 -= mouse_motion_y;
-        if (abs(D_00199628) > 30) {
-            if (D_0019962A < 3 && (int)(unsigned char)(spellmaker_settings_kind & 1) != 0
-              || D_0019962A < 6 && (int)(unsigned char)(spellmaker_settings_kind & 2) != 0
+        spellmaker_drag_row = mouse_motion_y - 1;
+        ((struct bf8_2_1 *)&ui_mode_flags)->f = 1;
+        saved_mouse_x = mouse_x;
+        saved_mouse_y = mouse_y;
+        spellmaker_drag_accum = 0;
+    } else if (mouse_buttons == 0 && ((struct bf8_2_1 *)&ui_mode_flags)->f) {
+        ((struct bf8_2_1 *)&ui_mode_flags)->f = 0;
+        xn_mouse_set_position(saved_mouse_x, saved_mouse_y);
+    } else if (((struct bf8_2_1 *)&ui_mode_flags)->f) {
+        spellmaker_drag_accum -= mouse_motion_y;
+        if (abs(spellmaker_drag_accum) > 30) {
+            if (spellmaker_drag_row < 3 && (int)(unsigned char)(spellmaker_settings_kind & 1) != 0
+              || spellmaker_drag_row < 6 && (int)(unsigned char)(spellmaker_settings_kind & 2) != 0
               || (int)(unsigned char)(spellmaker_settings_kind & 4) != 0)
-                spellmaker_setting_buttons[D_0019962A].handler(D_00199628 / 30);
-            D_00199628 = 0;
+                spellmaker_setting_buttons[spellmaker_drag_row].handler(spellmaker_drag_accum / 30);
+            spellmaker_drag_accum = 0;
         }
     }
 done:

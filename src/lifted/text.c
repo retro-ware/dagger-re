@@ -28,8 +28,8 @@ extern short D_0017B64F[];
 extern struct xz_step D_0017B657[];
 extern signed char D_0017B6CD;
 extern struct record *creature_list[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern signed char D_001940D6;
 extern signed char D_001940DA;
 extern char frame_counter[];
@@ -59,7 +59,7 @@ extern signed char screen_active;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
 extern signed char player_moving;
-extern iptr D_00196DA4;
+extern iptr town_map_pixels;
 extern iptr msgbox_spop_tiles[];
 extern iptr msgbox_mpop_tiles;
 extern char *msgbox_next_page;
@@ -318,7 +318,7 @@ void msgbox_update(void)
         return;
     }
     text_colour = 146;
-    if (((struct bf8_6_1 *)&D_001940D5)->f != 0) {
+    if (((struct bf8_6_1 *)&ui_mode_flags)->f != 0) {
         xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), ((int)(short)D_00195F34) - ((int)(short)msgbox_h), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
     } else {
         xn_draw_image_transparent(160 - (((int)(short)msgbox_w) >> 1), 100 - (((int)(short)msgbox_h) >> 1), (int)(short)msgbox_w, (int)(short)msgbox_h, (char *)*(iptr *)msgbox_image);
@@ -328,7 +328,7 @@ void msgbox_update(void)
             D_00195F2E--;
             if (D_00195F2E == 0) goto L3F47F;
         }
-        if (((struct bf8_0_1 *)&D_001940D5)->f != 0 && ((int)(unsigned char)(mouse_buttons & 3)) == 0) {
+        if (((struct bf8_0_1 *)&ui_mode_flags)->f != 0 && ((int)(unsigned char)(mouse_buttons & 3)) == 0) {
         } else if (key_pressed_once(28) == 0) {
             if (mouse_buttons == 0) return;
             if (mouse_buttons_prev != 0) return;
@@ -343,12 +343,12 @@ L3F47F:;
         if ((msgbox_input_result = inpstr_update()) != 0) msgbox_close();
         return;
     }
-    if (((int)(unsigned char)msgbox_kind) == 4 && ((struct bf8_5_1 *)&D_001940D5)->f != 0) {
+    if (((int)(unsigned char)msgbox_kind) == 4 && ((struct bf8_5_1 *)&ui_mode_flags)->f != 0) {
         msgbox_close();
         return;
     }
     if (((int)(unsigned char)msgbox_kind) != 5) return;
-    if (((struct bf8_0_1 *)&D_001940D4)->f != 0 && key_down_esc != 0) {
+    if (((struct bf8_0_1 *)&game_state_flags)->f != 0 && key_down_esc != 0) {
         msgbox_close();
         return;
     }
@@ -362,7 +362,7 @@ L3F47F:;
 void msgbox_close(void)
 {
     if (*(int *)msgbox_image == 0) return;
-    D_001940D5 &= 158;
+    ui_mode_flags &= 158;
     if (*(int *)msgbox_image != 0 && *(int *)msgbox_image != (-1751672937)) {
         mc_free((void *)*(iptr *)msgbox_image, str_text_c, 950);
         *(int *)msgbox_image = -1751672937;
@@ -394,7 +394,7 @@ void msgbox_free_borders(void)
 
 void msgbox_draw_buttons(short y)
 {
-    if (((struct bf8_6_1 *)&D_001940D5)->f != 0) {
+    if (((struct bf8_6_1 *)&ui_mode_flags)->f != 0) {
         text_cursor_y = y + ((((int)(short)D_00195F34) - ((int)(short)msgbox_h)) - (100 - (((int)(short)msgbox_h) >> 1)));
     } else {
         text_cursor_y = y;
@@ -747,7 +747,7 @@ int town_map_line_blocked(int x, int y)
     step_x = (double)dx / step_count;
     step_y = (double)dy / step_count;
     for (i = 0; (step_count + 1) > i; i++) {
-        pixel = *(signed char *)((*(char **)&D_00196DA4 + (((current_location->width << 6) * player_y) + player_x)));
+        pixel = *(signed char *)((*(char **)&town_map_pixels + (((current_location->width << 6) * player_y) + player_x)));
         if (pixel != 0 && ((int)(unsigned char)pixel) < 100) return 1;
         player_x += step_x;
         player_y += step_y;

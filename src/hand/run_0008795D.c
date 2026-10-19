@@ -8,7 +8,7 @@ extern int xn_cam_y;
 extern int xn_cam_z;
 extern char str_maplogic_c[];
 extern unsigned char player_environment;
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern struct record *camera_object;
 extern struct record *player_object;
 extern struct record *location_object;
@@ -107,7 +107,7 @@ void map_goto_location(int region, int environment, int location, int building)
         dungeon_load(location);
         automap_load();
     }
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
 }
 
 int location_has_service(struct flags *flags, int service, int subtype)

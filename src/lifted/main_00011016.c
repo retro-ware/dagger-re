@@ -6,7 +6,7 @@
 
 extern char str_melodic_bnk[];
 extern char str_drum_bnk[];
-extern iptr D_0018DC34;
+extern iptr music_song_buffer;
 extern char D_0018DC38[];
 extern int D_0018DC3C;
 extern int D_0018DC7C;
@@ -18,8 +18,8 @@ extern char D_0018DD4C[];
 extern char D_0018DD50[];
 extern int D_0018DD54;
 extern int D_0018DD58;
-extern int D_0018DD5C;
-extern int D_0018DD60;
+extern int sos_digi_driver;
+extern int sos_digi_handle;
 extern char D_0018DD64[];
 extern signed char music_uses_fm;
 
@@ -40,7 +40,7 @@ int sos_init(int digi_device, int midi_device)
     if (midi_device != (-1)) {
         *(int *)D_0018DD64 = midi_device;
         if (func_0009EC82(D_0018DD64, &D_0018DD58) != 0) {
-            func_0009F9A7(D_0018DD60, 1, 1);
+            func_0009F9A7(sos_digi_handle, 1, 1);
             func_0009E95B();
             func_0009EC0A();
             return 2;
@@ -48,7 +48,7 @@ int sos_init(int digi_device, int midi_device)
     }
     if (digi_device != (-1)) {
         D_0018DD3C = digi_device;
-        if (func_0009F4DE(D_0018DC38, &D_0018DD60) != 0) {
+        if (func_0009F4DE(D_0018DC38, &sos_digi_handle) != 0) {
             func_0009E95B();
             return 1;
         }
@@ -75,13 +75,13 @@ int sos_init(int digi_device, int midi_device)
     }
     dpmi_lock_region((iptr)D_0018DC38, 268);
     dpmi_lock_region((iptr)D_0018DD64, 46);
-    dpmi_lock_region((iptr)&D_0018DD5C, 4);
-    dpmi_lock_region((iptr)&D_0018DD60, 4);
+    dpmi_lock_region((iptr)&sos_digi_driver, 4);
+    dpmi_lock_region((iptr)&sos_digi_handle, 4);
     dpmi_lock_region((iptr)D_0018DD50, 4);
     dpmi_lock_region((iptr)&D_0018DD54, 4);
     dpmi_lock_region((iptr)&D_0018DD58, 4);
     dpmi_lock_region((iptr)D_0018DD4C, 4);
-    dpmi_lock_region((iptr)&D_0018DC34, 4);
+    dpmi_lock_region((iptr)&music_song_buffer, 4);
     dpmi_lock_region((iptr)&sos_melodic_bank, 4);
     dpmi_lock_region((iptr)&sos_drum_bank, 4);
     dpmi_lock_region(sos_melodic_bank, 8192);

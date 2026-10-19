@@ -6,7 +6,7 @@
 
 extern char str_sosez_c[];
 extern char str_riff[];
-extern iptr D_0018DC34;
+extern iptr music_song_buffer;
 extern char D_0018DC38[];
 extern iptr sos_drum_bank;
 extern iptr sos_melodic_bank;
@@ -14,10 +14,10 @@ extern char D_0018DD4C[];
 extern char D_0018DD50[];
 extern int D_0018DD54;
 extern int D_0018DD58;
-extern int D_0018DD5C;
-extern int D_0018DD60;
+extern int sos_digi_driver;
+extern int sos_digi_handle;
 extern char D_0018DD64[];
-extern iptr D_001A3F48;
+extern iptr music_song_data;
 extern int D_001A3F4C;
 
 extern int dpmi_unlock_region(iptr, int);
@@ -28,20 +28,20 @@ extern int dpmi_unlock_region(iptr, int);
 int sos_shutdown(void)
 {
     func_0009E61A(*(int *)D_0018DD50);
-    if (D_0018DD5C != (-1)) func_0009F9A7(D_0018DD60, 1, 1);
+    if (sos_digi_driver != (-1)) func_0009F9A7(sos_digi_handle, 1, 1);
     if (D_0018DD54 != (-1)) func_0009F253(D_0018DD58, 1);
     func_0009EC0A();
     func_0009E95B();
     func_0009E281(0);
     dpmi_unlock_region((iptr)D_0018DC38, 268);
     dpmi_unlock_region((iptr)D_0018DD64, 46);
-    dpmi_unlock_region((iptr)&D_0018DD5C, 4);
-    dpmi_unlock_region((iptr)&D_0018DD60, 4);
+    dpmi_unlock_region((iptr)&sos_digi_driver, 4);
+    dpmi_unlock_region((iptr)&sos_digi_handle, 4);
     dpmi_unlock_region((iptr)D_0018DD50, 4);
     dpmi_unlock_region((iptr)&D_0018DD54, 4);
     dpmi_unlock_region((iptr)&D_0018DD58, 4);
     dpmi_unlock_region((iptr)D_0018DD4C, 4);
-    dpmi_unlock_region((iptr)&D_0018DC34, 4);
+    dpmi_unlock_region((iptr)&music_song_buffer, 4);
     dpmi_unlock_region((iptr)&sos_melodic_bank, 4);
     dpmi_unlock_region((iptr)&sos_drum_bank, 4);
     if (sos_melodic_bank != 0) {
@@ -58,11 +58,11 @@ int sos_shutdown(void)
             sos_drum_bank = -1751672937;
         }
     }
-    if (D_0018DC34 != 0) {
-        dpmi_unlock_region(D_001A3F48, D_001A3F4C);
-        if (D_001A3F48 != 0 && D_001A3F48 != (-1751672937)) {
-            mc_free((void *)D_001A3F48, str_sosez_c, 203);
-            D_001A3F48 = -1751672937;
+    if (music_song_buffer != 0) {
+        dpmi_unlock_region(music_song_data, D_001A3F4C);
+        if (music_song_data != 0 && music_song_data != (-1751672937)) {
+            mc_free((void *)music_song_data, str_sosez_c, 203);
+            music_song_data = -1751672937;
         }
     }
     return 1;

@@ -16,7 +16,7 @@ extern struct location *current_location;
 extern signed char game_mode;
 extern signed char crime_current;
 extern char people_witness_flags[];
-extern iptr D_00196DA4;
+extern iptr town_map_pixels;
 extern struct record *people_list[];
 extern int people_count;
 
@@ -80,7 +80,7 @@ void people_debug_map(void)
 
     if (game_mode != 0) return;
     if (((int)player_environment) != 1) return;
-    xn_draw_image_masked_at_origin(current_location->height << 6, current_location->width << 6, (char *)D_00196DA4);
+    xn_draw_image_masked_at_origin(current_location->height << 6, current_location->width << 6, (char *)town_map_pixels);
     for (i = 0; i < people_count; i++) {
         if (people_list[i] == 0) continue;
         x = people_list[i]->x - location_object->x;

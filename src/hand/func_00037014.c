@@ -9,7 +9,7 @@ extern signed char text_colour;
 extern signed char key_down_esc;
 extern iptr screen_buffer;
 extern char str_spells_c[];
-extern char D_00170B1C[];
+extern char spellmaker_title_text[];
 extern struct spell *selected_spell;
 extern char spell_effect_settings[];
 extern char spell_effect_cost_formula[];
@@ -29,9 +29,9 @@ extern short spell_effect_slot;
 extern unsigned char D_00196271;
 extern signed char game_mode;
 extern signed char mouse_buttons_prev;
-extern short D_0019962C;
+extern short spellmaker_alter_row;
 extern char spellmaker_settings_kind[];
-extern struct { unsigned char a:2; unsigned char f:1; } D_001940D4;
+extern struct { unsigned char a:2; unsigned char f:1; } game_state_flags;
 extern int spellmaker_open(int);
 extern int spellmaker_close(void);
 extern void spellmaker_settings_update(void);
@@ -77,42 +77,42 @@ void spellmaker_update(void)
             continue;
         mc_strncpy(((char *)text_buffer), spell_effect_names[selected_spell->effects[i].type], 160, str_spells_c, 641);
         if (selected_spell->effects[i].subtype != 255 && (iptr)spell_effect_subtype_names[selected_spell->effects[i].type][selected_spell->effects[i].subtype] != 0) {
-            func_000A1054(((char *)text_buffer), D_00170B1C, str_spells_c, 644, 160);
+            func_000A1054(((char *)text_buffer), spellmaker_title_text, str_spells_c, 644, 160);
             func_000A1054(((char *)text_buffer), spell_effect_subtype_names[selected_spell->effects[i].type][selected_spell->effects[i].subtype], str_spells_c, 645, 160);
         }
         text_draw_centred(((char *)text_buffer), 160, (i << 5) + 30);
     }
     xn_font_select(4);
-    if (!*spellmaker_settings_kind && !D_001940D4.f)
+    if (!*spellmaker_settings_kind && !game_state_flags.f)
         spellmaker_effect_rows();
-    if (D_001940D4.f && (i = list_popup_poll()) > -1)
+    if (game_state_flags.f && (i = list_popup_poll()) > -1)
         (*(void (**)(int))((char *)&list_popup_callback))(((unsigned char *)scratch_buffer)[i + 32000]);
     spellmaker_settings_update();
-    if (D_0019962C > -1 && *((char *)&D_00196271)) {
+    if (spellmaker_alter_row > -1 && *((char *)&D_00196271)) {
         if (D_00196271 == 1) {
-            i = selected_spell->effects[spell_effect_slot = D_0019962C].subtype;
+            i = selected_spell->effects[spell_effect_slot = spellmaker_alter_row].subtype;
             if (i == 255)
                 i = 0;
             if ((*spellmaker_settings_kind = ((char (*)[12])spell_effect_settings)[selected_spell->effects[spell_effect_slot].type][i]) == 0)
                 selected_spell->effect_costs[spell_effect_slot] = spell_cost_formula_dispatch(*(unsigned char *)(spell_effect_cost_formula + selected_spell->effects[spell_effect_slot].type) - 1);
         } else {
-            selected_spell->effects[D_0019962C].type = selected_spell->effects[D_0019962C].subtype = 255;
-            mc_memset(&selected_spell->durations[D_0019962C], 1, 3, str_spells_c, 681, 3);
-            mc_memset(&selected_spell->chances[D_0019962C], 1, 3, str_spells_c, 682, 3);
-            mc_memset(&selected_spell->magnitudes[D_0019962C], 1, 5, str_spells_c, 683, 5);
-            selected_spell->effect_costs[D_0019962C] = 0;
+            selected_spell->effects[spellmaker_alter_row].type = selected_spell->effects[spellmaker_alter_row].subtype = 255;
+            mc_memset(&selected_spell->durations[spellmaker_alter_row], 1, 3, str_spells_c, 681, 3);
+            mc_memset(&selected_spell->chances[spellmaker_alter_row], 1, 3, str_spells_c, 682, 3);
+            mc_memset(&selected_spell->magnitudes[spellmaker_alter_row], 1, 5, str_spells_c, 683, 5);
+            selected_spell->effect_costs[spellmaker_alter_row] = 0;
         }
-        D_0019962C = -1;
+        spellmaker_alter_row = -1;
     }
-    if (D_0019962C > -1 && (unsigned char)game_mode != 8)
-        D_0019962C = -1;
-    if (!*spellmaker_settings_kind && !D_001940D4.f)
+    if (spellmaker_alter_row > -1 && (unsigned char)game_mode != 8)
+        spellmaker_alter_row = -1;
+    if (!*spellmaker_settings_kind && !game_state_flags.f)
         buttons_draw_hover_label(5, 22, 18, spellmaker_buttons, (char *)str_eg);
     if (*((char *)&key_down_esc) && !*spellmaker_settings_kind)
         spellmaker_close();
     if (!*((char *)&mouse_buttons) || *((char *)&mouse_buttons) && *((char *)&mouse_buttons_prev))
         return;
-    if ((unsigned char)game_mode == 2 && !*spellmaker_settings_kind && !D_001940D4.f) {
+    if ((unsigned char)game_mode == 2 && !*spellmaker_settings_kind && !game_state_flags.f) {
         for (i = 0; i < 18; i++) {
             if (mouse_x > spellmaker_buttons[i].x0 && mouse_x < spellmaker_buttons[i].x1 && mouse_y > spellmaker_buttons[i].y0 && mouse_y < spellmaker_buttons[i].y1) {
                 sound_play(203, player_object, 110);

@@ -2,7 +2,7 @@
 #include "records.h"
 #include "clib.h"
 
-extern char D_000346B8[];
+extern char sky_sun_constant[];
 extern int xn_cam_pitch;
 extern int xn_cam_yaw;
 extern int xn_cam_roll;
@@ -77,7 +77,7 @@ void sky_update(void)
     int unused5;
     unsigned char sun_placed;
 
-    VEC3_LOCALS_SET(point_x, point_y, point_z, D_000346B8);
+    VEC3_LOCALS_SET(point_x, point_y, point_z, sky_sun_constant);
     sun_placed = 0;
     if (world_running == 0) return;
     if (((int)player_environment) == 3) {

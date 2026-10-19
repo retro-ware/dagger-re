@@ -64,9 +64,9 @@ extern struct record *nonworld_root;
 extern struct record *logbook_object;
 extern struct record *options_object;
 extern struct record *inventory_containers[];
-extern struct record *D_001959DC;
-extern struct record *D_001959E0;
-extern struct record *D_001959E4;
+extern struct record *inventory_container_1;
+extern struct record *inventory_container_2;
+extern struct record *inventory_container_3;
 extern struct record *house_container;
 extern struct record *ship_container;
 extern struct record *room_storage_container;
@@ -133,7 +133,7 @@ extern int mouse_saved_sensitivity_x;
 extern int mouse_saved_sensitivity_y;
 extern iptr water_tint_buffer;
 extern int daylight;
-extern char D_001A3F60[];
+extern char dpmi_mem_info[];
 extern int D_001A3F7C;
 extern int D_001A3F90;
 extern int mem_used_k;
@@ -237,7 +237,7 @@ void debug_show_mem_used(void)
 
     ticks_addr = (struct bf8_0_5 *)DOS_LOW(0x46C);
     if (ticks_addr->f == 0) {
-        dpmi_get_free_memory((iptr)D_001A3F60);
+        dpmi_get_free_memory((iptr)dpmi_mem_info);
         mem_used_k = D_001A3F90 - (D_001A3F7C << 2);
     }
     mc_set_location(47, str_init_c);
@@ -685,15 +685,15 @@ void init_player_records(struct record *root)
     (inventory_containers[0] = object_create_child(player_entity, 0, 0))->type = 52;
     inventory_containers[0]->flags = 3;
     inventory_containers[0]->container_index = 0;
-    *(signed char *)((char *)(*(iptr *)&D_001959DC = (iptr)object_create_child(player_entity, 0, 0))) = 52;
-    D_001959DC->flags = 3;
-    D_001959DC->container_index = 1;
-    *(signed char *)((char *)(*(iptr *)&D_001959E0 = (iptr)object_create_child(player_entity, 0, 0))) = 52;
-    D_001959E0->flags = 3;
-    D_001959E0->container_index = 2;
-    *(signed char *)((char *)(*(iptr *)&D_001959E4 = (iptr)object_create_child(player_entity, 0, 0))) = 52;
-    D_001959E4->flags = 3;
-    D_001959E4->container_index = 3;
+    *(signed char *)((char *)(*(iptr *)&inventory_container_1 = (iptr)object_create_child(player_entity, 0, 0))) = 52;
+    inventory_container_1->flags = 3;
+    inventory_container_1->container_index = 1;
+    *(signed char *)((char *)(*(iptr *)&inventory_container_2 = (iptr)object_create_child(player_entity, 0, 0))) = 52;
+    inventory_container_2->flags = 3;
+    inventory_container_2->container_index = 2;
+    *(signed char *)((char *)(*(iptr *)&inventory_container_3 = (iptr)object_create_child(player_entity, 0, 0))) = 52;
+    inventory_container_3->flags = 3;
+    inventory_container_3->container_index = 3;
     *(signed char *)((char *)(*(iptr *)&house_container = (iptr)object_create_child(player_entity, 0, 0))) = 52;
     house_container->flags = 3;
     house_container->container_index = 5;

@@ -25,8 +25,8 @@ extern char *D_0017CCFA[];
 extern signed char text_buffer[];
 extern signed char scratch_190d16;
 extern char arena2_path[];
-extern signed char D_001940D4;
-extern signed char D_001940D5;
+extern signed char game_state_flags;
+extern signed char ui_mode_flags;
 extern struct character *player_character;
 extern struct career *player_class;
 extern int realtime_clock_tick;
@@ -38,7 +38,7 @@ extern signed char D_00196090;
 extern unsigned char D_00196271;
 extern signed char D_00196273;
 extern signed char mouse_buttons_prev;
-extern int D_00199634;
+extern int chosen_class;
 extern void career_background_summary(int, int);
 extern void intro_play_movie(void);
 extern int chargen_popup_choice(short, short, short, char *, unsigned char, unsigned char);
@@ -102,7 +102,7 @@ L3A496:;
             xn_mouse_poll_clamped();
             goto L3A496;
         }
-        D_001940D4 &= 254;
+        game_state_flags &= 254;
         pick = wait_key_from_list(D_0017B4B0, 3);
         if (((int)(signed char)pick) == (-1) || ((int)(signed char)pick) == 2 || (((int)(signed char)pick) == (-2) && point_in_rect((int)(short)mouse_x, (int)(short)mouse_y, 125, 145, 165, 158) != 0)) {
             game_exit(0);
@@ -151,7 +151,7 @@ L3A496:;
             text_draw_centred_coloured((iptr)str_please_select_your_home_province, 160, 16, 145, 156);
             disk_read_file(str_tamriel2_img, (iptr)scratch_buffer);
             xn_mouse_cursor_drawn &= 254;
-            D_001940D4 |= 1;
+            game_state_flags |= 1;
             pick = 255;
             while (pick < 0) {
                 while (((int)(signed char)pick) != (-2)) {
@@ -173,7 +173,7 @@ L3A496:;
                     xn_mouse_poll_clamped();
                     while (mouse_buttons != 0) xn_mouse_poll_clamped();
                     sound_play_ui(((int)(signed char)pick) + 208);
-                    D_001940D5 |= 128;
+                    ui_mode_flags |= 128;
                     msgbox_show_rsc((int)(short)(((unsigned short)(unsigned char)D_0017B4B8[(int)(signed char)pick - 1]) + 2000), 5);
                 }
             }
@@ -226,7 +226,7 @@ L3AABE:;
                 mc_memcpy((void *)screen_buffer, (void *)scratch_buffer, 64000, str_intro_c, 258, 4);
                 choice = list_popup_update();
                 if (((int)(short)*(short *)&choice) > (-1)) {
-                    D_00199634 = (int)(short)*(short *)&choice;
+                    chosen_class = (int)(short)*(short *)&choice;
                     if (((int)(short)*(short *)&choice) == 18) {
                         classmaker_run();
                         break;
@@ -247,7 +247,7 @@ L3AABE:;
                 mc_memcpy((void *)DOS_LOW(0xA0000), (void *)screen_buffer, 64000, str_intro_c, 283, 4);
             }
         } else {
-            if ((D_00199634 = class_questions_run()) < 0) goto L3AABE;
+            if ((chosen_class = class_questions_run()) < 0) goto L3AABE;
             disk_read_file(str_map_pal, (iptr)scratch_buffer);
             for (choice = 0; ((int)(short)*(short *)&choice) < 768; choice++) {
                 *(signed char *)((scratch_buffer + ((int)(short)*(short *)&choice))) <<= 2;
@@ -281,7 +281,7 @@ L3AABE:;
             }
         }
         player_character->gold = 100;
-        career_background_summary(D_00199634, (int)(short)*(short *)&choice);
+        career_background_summary(chosen_class, (int)(short)*(short *)&choice);
         palette_restore();
     } while (chargen_name_character() != 0);
     mc_memset((void *)DOS_LOW(0xA0000), 0, 64000, str_intro_c, 335, 4);

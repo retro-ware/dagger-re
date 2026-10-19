@@ -20,17 +20,17 @@ extern char str_dispel_magic_was_a_success[];
 extern char str_dispel_magic_failed[];
 extern unsigned char player_environment;
 extern struct spell *selected_spell;
-extern iptr D_0018461C;
-extern iptr D_00185097;
+extern iptr text_paralyzed;
+extern iptr text_spell_failed;
 extern iptr building_type_odds[];
-extern int D_00187F30[];
-extern char D_00187F44[];
-extern char D_00187F46[];
+extern int terrain_cell_offsets[];
+extern char create_item_group[];
+extern char create_item_index[];
 extern signed char text_buffer[];
 extern signed char text_line_colour;
-extern signed char D_001903A6;
+extern signed char text_line_colour_2;
 extern char scratch_190ee4[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern int D_001950E4;
 extern int D_001950E8;
 extern struct building *current_building;
@@ -49,10 +49,10 @@ extern struct xn_pick_hit *pick_hit;
 extern struct record *floor_object;
 extern iptr haze_table_0;
 extern iptr D_00195D84;
-extern char D_00195F28[];
+extern char item_draw_order_scratch[];
 extern short building_music_seed;
 extern char saved_player_object[];
-extern char D_00196120[];
+extern char furniture_container_3[];
 extern signed char current_region;
 extern unsigned char interaction_mode;
 extern signed char current_climate;
@@ -60,9 +60,9 @@ extern signed char crime_current;
 extern signed char is_daytime;
 extern signed char world_loading;
 extern signed char link_axis_state;
-extern signed char D_001962A3;
+extern signed char quest_site_found;
 extern struct dungeon_block dungeon_blocks[];
-extern signed char D_001967A1;
+extern signed char dungeon_special_flag;
 extern int region_location_count;
 extern struct rmb_file *rmb_block;
 extern struct map_location *location_here;
@@ -70,18 +70,18 @@ extern struct loaded_location loaded_location;
 extern struct map_location *region_locations;
 extern int blocks_bsa;
 extern signed char dungeon_block_count;
-extern iptr D_00196DA4;
+extern iptr town_map_pixels;
 extern signed char monsters_woken;
 extern iptr bank_bought_house_building;
-extern iptr D_001A41E4;
+extern iptr bank_bought_house;
 extern struct membership *guild_membership;
 extern signed char guild_join_asked;
 extern int stocked_shop_count;
-extern int D_001A4C94;
-extern int D_001A94C0;
+extern int last_building_id;
+extern int terrain_cell_slot;
 extern int terrain_cell_at_player;
 extern int climate_index;
-extern int D_001A99F4;
+extern int scratch_1a99f4;
 
 extern int archive_open(char *, iptr, int);
 extern int lockpick_action_door(struct building *, int, struct record *);
@@ -274,7 +274,7 @@ void dungeon_load(int dungeon_index)
     mc_memcpy(location_object, loaded_location.object, RECORD_LINKS_OFFSET, str_maplogic_c, 247, 4);
     mc_memcpy(current_location, loaded_location.data, REC_SIZEOF(struct location), str_maplogic_c, 248, 4);
     blocks_bsa = archive_open(str_blocks_bsa_2, 0, 0);
-    if ((((unsigned)location_object->id) >> 16) == 50015) D_001967A1 = 254;
+    if ((((unsigned)location_object->id) >> 16) == 50015) dungeon_special_flag = 254;
     for (i = 0; ((int)(unsigned char)dungeon_block_count) > i; i++) {
         dungeon_load_rdb_block(&dungeon_blocks[i]);
     }
@@ -307,7 +307,7 @@ void dungeon_load(int dungeon_index)
     D_001950E8 = marker_count(location_object, 16);
     xn_light_ambient = 0;
     xn_tex_cache_flush();
-    text_buffer[0] = (text_line_colour = (D_001903A6 = 0));
+    text_buffer[0] = (text_line_colour = (text_line_colour_2 = 0));
     xn_pal_set_range_8bit((char *)text_buffer, 255, 1);
 }
 
@@ -343,7 +343,7 @@ int building_try_enter(struct building *building)
     if (building->type < 17 && building_is_open(building) != 0) return 1;
     if (building->type < 17 && (building->flags & 16) != 0) return 0;
     if ((building->flags & 16) != 0) return 1;
-    if (quest_find_site_for_building(building) != 0 && D_001962A3 != 0) return 1;
+    if (quest_find_site_for_building(building) != 0 && quest_site_found != 0) return 1;
     if ((player_character->conditions & 0x40) != 0) {
         player_character->conditions &= ~0x40;
         return 1;
@@ -374,7 +374,7 @@ void building_load_interior(struct building *building)
     struct record *interior;
 
     interior = object_find_by_id(location_object, building->id);
-    object_free_children((struct record *)D_00196120);
+    object_free_children((struct record *)furniture_container_3);
     interior_stock_shelves(interior->children, building);
     if (interior == 0) return;
     if (player_to_nearest_marker(interior->children, 6) == 0) {
@@ -396,7 +396,7 @@ void building_enter(struct building *building)
     if (building_try_enter(building) == 0) return;
     current_building = building;
     D_00195D84 = building_type_odds[building->type];
-    object_free_children((struct record *)D_00196120);
+    object_free_children((struct record *)furniture_container_3);
     if (building->id != player_character->house) {
         building_grant_access(building, 5, (int)(iptr)(((char *)(iptr)game_minutes) + building_minutes_to_close(building)));
     } else {
@@ -407,13 +407,13 @@ void building_enter(struct building *building)
     sound_stop_ambient();
     position_history_reset();
     player_environment = 2;
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
     floor_object = 0;
     guild_join_asked = 0;
     if (world_loading == 0) building_update_open_state();
-    if (building->id == D_001A4C94) return;
+    if (building->id == last_building_id) return;
     stocked_shop_count = 0;
-    D_001A4C94 = building->id;
+    last_building_id = building->id;
 }
 
 void building_exit(void)
@@ -422,7 +422,7 @@ void building_exit(void)
     int unused;
 
     building = object_building(player_object->parent);
-    object_free_children((struct record *)D_00196120);
+    object_free_children((struct record *)furniture_container_3);
     building_grant_access(building, 0, 0);
     player_to_nearest_marker(player_object->parent->children, 6);
     xn_model_push_player_from_pick(pick_hit);
@@ -430,14 +430,14 @@ void building_exit(void)
     if (building->type == 24) player_to_nearest_marker(location_object, 6);
     position_history_reset();
     player_environment = 1;
-    D_001940D5 |= 2;
+    ui_mode_flags |= 2;
     guild_join_asked = 0;
     current_building = 0;
     guild_membership = 0;
     sound_stop_ambient();
-    if (D_001A41E4 == 0) return;
-    town_map_note_building(D_001A41E4, bank_bought_house_building);
-    D_001A41E4 = 0;
+    if (bank_bought_house == 0) return;
+    town_map_note_building(bank_bought_house, bank_bought_house_building);
+    bank_bought_house = 0;
 }
 
 void location_pick_random_town(struct loaded_location *location)
@@ -591,13 +591,13 @@ void town_block_apply_ground(int x, int z)
     int i;
     int count;
 
-    D_001A94C0 = 4;
+    terrain_cell_slot = 4;
     for (i = 0; i < 4; i++) {
-        if (terrain_cell_at_player == xn_world_slot_cells[i]) D_001A94C0 = i;
+        if (terrain_cell_at_player == xn_world_slot_cells[i]) terrain_cell_slot = i;
     }
-    if (D_001A94C0 == 4) return;
-    flat = (unsigned char *)(xn_world_flat_layer + D_00187F30[D_001A94C0]);
-    tile = (unsigned char *)(xn_world_tile_layer + D_00187F30[D_001A94C0]);
+    if (terrain_cell_slot == 4) return;
+    flat = (unsigned char *)(xn_world_flat_layer + terrain_cell_offsets[terrain_cell_slot]);
+    tile = (unsigned char *)(xn_world_tile_layer + terrain_cell_offsets[terrain_cell_slot]);
     if ((z & 32767) == 1) {
         z += -2;
         count = 240;
@@ -647,7 +647,7 @@ void town_map_add_block(int block_x, int block_y)
     src = 0;
     for (y = block_y; y < y_end; y++) {
         for (x = block_x; x < x_end; x++) {
-            *(signed char *)((*(char **)&D_00196DA4 + ((y * map_width) + x))) = rmb_block->automap[src++];
+            *(signed char *)((*(char **)&town_map_pixels + ((y * map_width) + x))) = rmb_block->automap[src++];
         }
     }
 }
@@ -705,12 +705,12 @@ void spfx_create_item_cb(int row)
 
     object = object_create_child(location_object, 0, 107);
     object->type = 2;
-    object->repair_due = D_001A99F4;
+    object->repair_due = scratch_1a99f4;
     item = &object->data.item;
-    if (((int)(short)*(short *)(D_00187F44 + (row << 2))) == (-1)) {
-        item_make((int)(unsigned short)*(short *)clothing_gender_group, (int)(short)*(short *)(D_00187F46 + (row << 2)), item);
+    if (((int)(short)*(short *)(create_item_group + (row << 2))) == (-1)) {
+        item_make((int)(unsigned short)*(short *)clothing_gender_group, (int)(short)*(short *)(create_item_index + (row << 2)), item);
     } else {
-        item_make((int)(unsigned short)*(short *)(D_00187F44 + (row << 2)), (int)(short)*(short *)(D_00187F46 + (row << 2)), item);
+        item_make((int)(unsigned short)*(short *)(create_item_group + (row << 2)), (int)(short)*(short *)(create_item_index + (row << 2)), item);
     }
     object->data.item.item_flags |= 0x1000;
     inv_store_item(object);
@@ -733,7 +733,7 @@ int spfx_paralyze(struct record *spell_object, int effect, struct record *target
     if ((character->conditions & 0x8000) != 0) return 0;
     if (rand_range(1, 100) > spell->cast_chances[effect]) return 0;
     character->conditions |= 1;
-    if (character == player_character) hud_message_add(D_0018461C);
+    if (character == player_character) hud_message_add(text_paralyzed);
     return 1;
 }
 
@@ -753,18 +753,18 @@ int spfx_damage(struct record *spell_object, int effect, struct record *target)
     switch (spell->effects[effect].subtype) {
     case 0:
         if (character == player_character && ((struct bf8_6_1 *)&cheat_flags)->f != 0) break;
-        *(short *)D_00195F28 = spell->cast_magnitudes[effect];
+        *(short *)item_draw_order_scratch = spell->cast_magnitudes[effect];
         damage_apply(target, spell->cast_magnitudes[effect], 0);
         break;
     case 1:
-        *(short *)D_00195F28 = spell->cast_magnitudes[effect];
+        *(short *)item_draw_order_scratch = spell->cast_magnitudes[effect];
         fatigue = character->fatigue;
         fatigue -= spell->cast_magnitudes[effect];
         if (fatigue < 0) fatigue = 0;
         character->fatigue = fatigue;
         break;
     case 2:
-        *(short *)D_00195F28 = spell->cast_magnitudes[effect];
+        *(short *)item_draw_order_scratch = spell->cast_magnitudes[effect];
         character->magicka -= spell->cast_magnitudes[effect];
         if (character->magicka < 0) character->magicka = 0;
     }
@@ -777,7 +777,7 @@ int spfx_disintegrate(struct record *spell_object, int effect, struct record *ta
 
     spell = &spell_object->data.spell;
     if (rand_range(1, 100) > spell->cast_chances[effect]) {
-        hud_message_add(D_00185097);
+        hud_message_add(text_spell_failed);
         return 0;
     }
     damage_creature_death(target);
@@ -793,7 +793,7 @@ void spfx_dispel_magic_cb(int row)
     spell = *(struct record **)(scratch_190ee4 + (row << PTR_SHIFT));
     if (spell->caster != player_entity) {
         level_bonus = (player_character->level - spell->caster->data.character.level) * 5;
-        chance = level_bonus + selected_spell->cast_chances[D_001A99F4];
+        chance = level_bonus + selected_spell->cast_chances[scratch_1a99f4];
         if (chance < 5) {
             chance = 5;
         } else if (chance > 95) {

@@ -17,7 +17,7 @@ extern char note_colour[];
 extern signed char D_00185201[];
 extern signed char text_buffer[];
 extern signed char text_rsc_buffer[];
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern char inpstr_result[];
 extern iptr window_image;
 extern unsigned short text_cursor_y;
@@ -89,7 +89,7 @@ void note_update(void)
                 mc_memset(text_rsc_buffer, 0, 81, str_note_c, 137, 2048);
                 inpstr_begin_text(text_rsc_buffer, 79);
             } else {
-                D_001940D5 &= 251;
+                ui_mode_flags &= 251;
                 note_action = 0;
             }
         }

@@ -17,7 +17,7 @@ extern char scratch_190d16;
 extern signed char scratch_190d17;
 extern char court_state;
 extern short court_prison_days;
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern struct record *location_object;
 extern int creature_count;
 extern char *window_image;
@@ -110,7 +110,7 @@ int court_open(int crime)
         xn_gfx_present_inclusive(1);
         scratch_190cac = fine;
         world_running = 0;
-        D_001940D5 |= 64;
+        ui_mode_flags |= 64;
         D_00195F34 = 194;
         membership = guild_find_membership_by_kind(0);
         if ((scratch_190d17 == 4 || scratch_190d17 == 3) && membership != 0 && membership->rank >= rand_range(0, 19)) {

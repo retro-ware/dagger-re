@@ -33,7 +33,7 @@ extern char str_at_atf_2[];
 extern char str_at_amf_2[];
 extern unsigned char player_environment;
 extern struct rect automap_buttons[];
-extern signed char D_0017A11D;
+extern signed char automap_view_initialised;
 extern signed char world_running;
 extern signed char text_buffer[];
 extern char scratch_190be4[];
@@ -41,15 +41,15 @@ extern int scratch_190be8;
 extern int scratch_190bec;
 extern int automap_pitch;
 extern int automap_yaw;
-extern int D_00190BFC;
-extern int D_00190C00;
-extern int D_00190C04;
+extern int automap_cam_x;
+extern int automap_cam_y;
+extern int automap_cam_z;
 extern signed char scratch_190ce5;
 extern short scratch_190d68;
 extern short scratch_190d6a;
 extern char scratch_190de4[];
 extern char *scratch_190de8;
-extern iptr D_00190E18;
+extern iptr automap_image;
 extern signed char player_motion_flags;
 extern struct record *location_grid[];
 extern struct record *player_entity;
@@ -64,15 +64,15 @@ extern char *scratch_buffer;
 extern struct record *floor_object;
 extern signed char screen_active;
 extern signed char mouse_buttons_prev;
-extern signed char D_0019629F;
+extern signed char automap_is_open;
 extern int town_map_view_x;
 extern int town_map_view_y;
-extern int D_00196D94;
-extern struct record *D_00196DA0;
-extern iptr D_00196DA4;
+extern int town_note_selected;
+extern struct record *automap_record;
+extern iptr town_map_pixels;
 extern int town_map_size;
-extern char *D_00196DAC;
-extern struct record *D_00196DB0;
+extern char *automap_selected_note;
+extern struct record *automap_selected_object;
 extern char *automap_notes;
 extern signed char automap_top_down;
 extern struct record *quest_event_object2;
@@ -182,11 +182,11 @@ void automap_open(void)
     xn_cam_far_z = 1048576;
     xn_render_set_mode(8);
     automap_restore_seen();
-    D_0019629F = 1;
+    automap_is_open = 1;
     saved_screen_active = (int)(unsigned char)screen_active;
     screen_active = 1;
     *(iptr *)scratch_190de4 = disk_read_file(str_amap00i0_img, 0);
-    D_00190E18 = disk_read_file(str_amap01i0_img, 0);
+    automap_image = disk_read_file(str_amap01i0_img, 0);
     *(int *)scratch_190be4 = player_object->x;
     scratch_190be8 = player_object->y;
     scratch_190bec = player_object->z;
@@ -244,9 +244,9 @@ void automap_open(void)
         mc_free((void *)*(iptr *)scratch_190de4, str_automap_c, 168);
         *(iptr *)scratch_190de4 = -1751672937;
     }
-    if (D_00190E18 != 0 && D_00190E18 != (-1751672937)) {
-        mc_free((void *)D_00190E18, str_automap_c, 169);
-        D_00190E18 = -1751672937;
+    if (automap_image != 0 && automap_image != (-1751672937)) {
+        mc_free((void *)automap_image, str_automap_c, 169);
+        automap_image = -1751672937;
     }
     if (player_marker != 0) object_free_single(player_marker);
     if (((int)(unsigned short)(game_settings->view_flags & 1)) != 0) {
@@ -258,7 +258,7 @@ void automap_open(void)
     func_00028DFD();
     screen_active = *(signed char *)&saved_screen_active;
     cfg_show_markers = *(signed char *)&saved_show_markers;
-    D_0019629F = 0;
+    automap_is_open = 0;
 }
 
 void automap_draw(void)
@@ -268,13 +268,13 @@ void automap_draw(void)
     xn_shade_set_fog(-1);
     xn_mouse_cursor_erase();
     mc_memcpy((void *)screen_buffer, (void *)*(iptr *)scratch_190de4, 64000, str_automap_c, 192, 4);
-    image = (struct image *)D_00190E18;
+    image = (struct image *)automap_image;
     if (automap_top_down == 0) {
         xn_draw_image(image->x, image->y, image->width, image->height, image->pixels);
     }
     automap_render();
     if (((int)player_environment) != 2) {
-        if (D_00196DAC != 0) text_draw_coloured(D_00196DAC, 2, 191, 145, 156);
+        if (automap_selected_note != 0) text_draw_coloured(automap_selected_note, 2, 191, 145, 156);
         automap_draw_block_overview();
     }
     hud_draw_heading_strip(1);
@@ -286,16 +286,16 @@ void automap_draw(void)
 
 int automap_button_note_line(void)
 {
-    if ((iptr)D_00196DB0 == 0) return 0;
-    if (D_00196DAC != 0) {
-        mc_strncpy((char *)text_buffer, D_00196DAC, 160, str_automap_c, 213);
+    if ((iptr)automap_selected_object == 0) return 0;
+    if (automap_selected_note != 0) {
+        mc_strncpy((char *)text_buffer, automap_selected_note, 160, str_automap_c, 213);
     } else {
         mc_memset(text_buffer, 0, 80, str_automap_c, 215, 160);
     }
     inpstr_edit(text_buffer, 2, 191, 300, 9, 50);
-    if (D_00196DAC != 0 && scratch_190de8 != 0) automap_delete_note();
-    if (text_buffer[0] != 0) automap_add_note(D_00196DB0, (char *)text_buffer);
-    D_00196DAC = automap_find_note(D_00196DB0);
+    if (automap_selected_note != 0 && scratch_190de8 != 0) automap_delete_note();
+    if (text_buffer[0] != 0) automap_add_note(automap_selected_object, (char *)text_buffer);
+    automap_selected_note = automap_find_note(automap_selected_object);
     sound_play(206, player_object, 100);
     return 0;
 }
@@ -330,9 +330,9 @@ void automap_render(void)
 
     saved_ambient = xn_light_ambient;
     xn_mat_from_angles(0, automap_yaw, 0, xn_cam_rotation);
-    xn_cam_x = D_00190BFC;
-    xn_cam_y = D_00190C00;
-    xn_cam_z = D_00190C04;
+    xn_cam_x = automap_cam_x;
+    xn_cam_y = automap_cam_y;
+    xn_cam_z = automap_cam_z;
     xn_mat_transform_ptr(&xn_cam_x, &xn_cam_y, &xn_cam_z, xn_cam_rotation);
     xn_cam_x += *(int *)scratch_190be4;
     xn_cam_y += scratch_190be8;
@@ -471,10 +471,10 @@ int automap_button_map_click(void)
         if (((int)(unsigned char)(mouse_buttons & 2)) != 0) {
             pick.object->flags |= 0x400;
         } else {
-            D_00196DAC = automap_find_note(D_00196DB0 = pick.object);
+            automap_selected_note = automap_find_note(automap_selected_object = pick.object);
         }
     } else {
-        D_00196DB0 = 0;
+        automap_selected_object = 0;
     }
     return 0;
 }
@@ -483,7 +483,7 @@ void automap_find_record(void)
 {
     struct record *object;
 
-    found_object = (struct record *)((*(iptr *)&D_00196DA0 = 0));
+    found_object = (struct record *)((*(iptr *)&automap_record = 0));
     if (player_entity == 0) return;
     object_foreach(player_entity->children, automap_match_record);
     if (found_object == 0) {
@@ -493,11 +493,11 @@ void automap_find_record(void)
         object->created_minutes = game_minutes;
         object->seen_count = (current_location->object_counter + 7) / 8;
         automap_notes = RECORD_DATA(object);
-        D_00196DA0 = object;
+        automap_record = object;
         return;
     }
     automap_notes = RECORD_DATA(found_object);
-    D_00196DA0 = found_object;
+    automap_record = found_object;
 }
 
 void automap_match_record(struct record *object)
@@ -534,16 +534,16 @@ void automap_init_view(void)
 {
     int camera_y;
 
-    if (D_0017A11D != 0) return;
-    D_0017A11D = 1;
-    D_00190BFC = 0;
+    if (automap_view_initialised != 0) return;
+    automap_view_initialised = 1;
+    automap_cam_x = 0;
     if (((int)player_environment) == 3) {
         camera_y = -1536;
     } else {
         camera_y = -1024;
     }
-    D_00190C00 = camera_y;
-    D_00190C04 = 0;
+    automap_cam_y = camera_y;
+    automap_cam_z = 0;
     automap_pitch = 512;
     automap_yaw = 0;
     automap_top_down = 1;
@@ -556,26 +556,26 @@ int automap_button_view_mode(void)
 
     if (mouse_buttons_prev != 0) return 0;
     if (automap_top_down != 0) {
-        D_00190BFC = 0;
-        D_00190C00 = -768;
+        automap_cam_x = 0;
+        automap_cam_y = -768;
         if (((int)player_environment) == 3) {
             camera_z = -2048;
         } else {
             camera_z = -1024;
         }
-        D_00190C04 = camera_z;
+        automap_cam_z = camera_z;
         automap_pitch = 128;
         automap_yaw = 0;
         automap_top_down = 0;
     } else {
-        D_00190BFC = 0;
+        automap_cam_x = 0;
         if (((int)player_environment) == 3) {
             camera_y = -1536;
         } else {
             camera_y = -1024;
         }
-        D_00190C00 = camera_y;
-        D_00190C04 = 0;
+        automap_cam_y = camera_y;
+        automap_cam_z = 0;
         automap_pitch = 512;
         automap_yaw = 0;
         automap_top_down = 1;
@@ -603,16 +603,16 @@ void automap_expire_records(void)
 void automap_alloc_town_map(void)
 {
     town_map_size = (current_location->width * current_location->height) << 12;
-    D_00196DA4 = (iptr)mc_malloc(town_map_size, str_automap_c, 582);
-    mc_memset((void *)D_00196DA4, 0, town_map_size, str_automap_c, 583, 4);
+    town_map_pixels = (iptr)mc_malloc(town_map_size, str_automap_c, 582);
+    mc_memset((void *)town_map_pixels, 0, town_map_size, str_automap_c, 583, 4);
 }
 
 void automap_free_town_map(void)
 {
     town_map_size = 0;
-    if (D_00196DA4 == 0 || D_00196DA4 == (-1751672937)) return;
-    mc_free((void *)D_00196DA4, str_automap_c, 598);
-    D_00196DA4 = -1751672937;
+    if (town_map_pixels == 0 || town_map_pixels == (-1751672937)) return;
+    mc_free((void *)town_map_pixels, str_automap_c, 598);
+    town_map_pixels = -1751672937;
 }
 
 int town_notes_size(void)
@@ -696,16 +696,16 @@ void func_00028547(void)
     scratch_190d68 = ((((int)(short)mouse_x) - 10) / 2) + town_map_view_x;
     scratch_190d6a = ((((int)(short)mouse_y) - 10) / 2) + town_map_view_y;
     note_index = town_note_at((int)(short)mouse_x, (int)(short)mouse_y);
-    if (D_00196D94 != 0 && note_index == 0 && ((int)(unsigned char)(mouse_buttons & 2)) != 0) {
+    if (town_note_selected != 0 && note_index == 0 && ((int)(unsigned char)(mouse_buttons & 2)) != 0) {
         scratch_190ce5 = 1;
-        note = town_note_get(D_00196D94 - 1);
+        note = town_note_get(town_note_selected - 1);
         entry = note;
         *(short *)entry = scratch_190d68;
         *(short *)(entry + 2) = scratch_190d6a;
         return;
     }
     if (note_index != 0 && ((int)(unsigned char)(mouse_buttons & 2)) != 0) {
-        D_00196D94 = note_index;
+        town_note_selected = note_index;
         return;
     }
     if (note_index != 0) {
@@ -741,7 +741,7 @@ void town_map_draw_notes(void)
         entry = note;
         x = ((((int)(unsigned short)*(short *)entry) - town_map_view_x) * 2) + 10;
         y = ((((int)(unsigned short)*(short *)(entry + 2)) - town_map_view_y) * 2) + 10;
-        if ((index + 1) == D_00196D94) {
+        if ((index + 1) == town_note_selected) {
             text_colour = 244;
         } else {
             text_colour = 146;
@@ -816,11 +816,11 @@ void automap_draw_block_overview(void)
 
 void automap_save(void)
 {
-    if (((int)player_environment) != 3 || (iptr)D_00196DA0 == 0) {
+    if (((int)player_environment) != 3 || (iptr)automap_record == 0) {
         return;
     }
     *(int *)scratch_buffer = game_minutes;
-    mc_memcpy((scratch_buffer + 4), D_00196DA0, 10240, str_automap_c, 1055, 4);
+    mc_memcpy((scratch_buffer + 4), automap_record, 10240, str_automap_c, 1055, 4);
     mc_set_location(1056, str_automap_c);
     mc_sprintf((char *)text_buffer, str_at_amf_2, location_object->id >> 16);
     disk_write_arena2_file(text_buffer, (iptr)scratch_buffer, 10244);
@@ -873,7 +873,7 @@ void func_00028DFD(void)
 void func_00028EAA(void)
 {
     automap_find_record();
-    D_00196DA0 = found_object;
+    automap_record = found_object;
 }
 
 void func_00028ED1(struct record *object)
@@ -881,7 +881,7 @@ void func_00028ED1(struct record *object)
     char *seen_bits;
 
     if (object->type != 6 && object->type != 34) return;
-    seen_bits = RECORD_DATA(DOS_NULL(D_00196DA0));     /* no automap yet: the zero page */
+    seen_bits = RECORD_DATA(DOS_NULL(automap_record));     /* no automap yet: the zero page */
     seen_bits += 2048;
     if ((((int)(unsigned char)*(signed char *)((((unsigned)(object->id & 65535)) >> 3) + seen_bits)) & (1 << ((object->id & 65535) & 7))) == 0) return;
     object->flags |= 128;
@@ -889,7 +889,7 @@ void func_00028ED1(struct record *object)
 
 void automap_restore_seen(void)
 {
-    if ((iptr)D_00196DA0 == 0) automap_find_record();
+    if ((iptr)automap_record == 0) automap_find_record();
     object_foreach(location_object, func_00028ED1);
 }
 

@@ -22,30 +22,30 @@ extern char str_fmt_ld_s_2[];
 extern char str_total_memory[];
 extern char str_rasing_reputation[];
 extern char str_raising_skills[];
-extern signed char D_0017BABC[];
-extern signed char D_0017BABD[];
+extern signed char starting_weapons[];
+extern signed char starting_weapon_materials[];
 extern char str_2[];
-extern char *D_0017BB01[];
-extern signed char D_0017BB39[];
-extern signed char D_0017BB3F[];
+extern char *kludge_menu_items[];
+extern signed char magic_skills[];
+extern signed char starting_spells[];
 extern char potion_recipes[];
 extern char potion_recipe_values[];
 extern char *monster_names[];
 extern struct region regions[];
 extern signed char text_buffer[];
-extern char D_001903BA[];
+extern char kludge_print_file[];
 extern signed char scratch_190ce4[];
 extern signed char scratch_190ce5;
 extern char arena2_path[];
 extern char arena2_cd_path[];
-extern signed char D_001940D4;
+extern signed char game_state_flags;
 extern signed char D_001940D6;
 extern signed char player_view_flags;
 extern signed char D_001940DA;
 extern struct record *inventory_containers[];
-extern struct record *D_001959DC;
-extern struct record *D_001959E0;
-extern struct record *D_001959E4;
+extern struct record *inventory_container_1;
+extern struct record *inventory_container_2;
+extern struct record *inventory_container_3;
 extern struct record *player_entity;
 extern struct record *location_object;
 extern struct spell *spell_records;
@@ -62,10 +62,10 @@ extern signed char forced_material;
 extern int faction_count;
 extern struct faction *factions;
 extern struct loaded_location loaded_location;
-extern int D_00199634;
-extern struct record *D_00199714;
-extern int D_00199718;
-extern struct record *D_00199724;
+extern int chosen_class;
+extern struct record *kludge_found_door;
+extern int kludge_door_distance;
+extern struct record *kludge_found_creature;
 extern signed char kludge_menu_active;
 extern signed char cfg_gender;
 
@@ -125,7 +125,7 @@ void kludge_print_build(int to_console)
         if (fd < 0) return;
     }
     read(fd, text_buffer, 80);
-    fprintf(D_001903BA, str_fmt_d_3, (iptr)&build);
+    fprintf(kludge_print_file, str_fmt_d_3, (iptr)&build);
     if (to_console != 0) {
         func_0009DA1C(90, str_kludge_c);
         printf(str_fmt_d_4, build);
@@ -139,12 +139,12 @@ void kludge_print_build(int to_console)
 void kludge_find_creature_cb(struct record *object)
 {
     if (object->type != 18) return;
-    D_00199724 = object;
+    kludge_found_creature = object;
 }
 
 void kludge_menu_open(void)
 {
-    list_popup_open((iptr)(char *)D_0017BB01);
+    list_popup_open((iptr)(char *)kludge_menu_items);
     kludge_menu_active = 1;
     game_mode = 200;
     screen_active = 1;
@@ -155,7 +155,7 @@ void kludge_menu_update(void)
     int row;
 
     if (kludge_menu_active == 0) return;
-    if (((struct bf8_2_1 *)&D_001940D4)->f == 0 || (row = list_popup_poll()) <= (-1)) return;
+    if (((struct bf8_2_1 *)&game_state_flags)->f == 0 || (row = list_popup_poll()) <= (-1)) return;
     kludge_menu_active = 0;
     game_mode = 0;
     screen_active = 0;
@@ -250,21 +250,21 @@ void kludge_make_test_character(int full)
         player_character->skills[i].pad4 = player_character->skills[i].value;
     }
     current_region_data = regions;
-    object = object_create_child(D_001959E0, 0, 107);
+    object = object_create_child(inventory_container_2, 0, 107);
     object->image2 = 202;
     object->type = 2;
     item = &object->data.item;
     item_make_in_range((int)(unsigned short)*(short *)clothing_gender_group, 10, 11, item);
-    object = object_create_child(D_001959E0, 0, 107);
+    object = object_create_child(inventory_container_2, 0, 107);
     object->image2 = 203;
     object->type = 2;
     item = &object->data.item;
     item_make_in_range((int)(unsigned short)*(short *)clothing_gender_group, 0, 4, item);
-    item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 0, 1);
-    item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 17, 1);
-    item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 9, 0);
-    item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 10, 0);
-    item_add_to_container(D_001959E0, 23, 1, 0);
+    item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 0, 1);
+    item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 17, 1);
+    item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 9, 0);
+    item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 10, 0);
+    item_add_to_container(inventory_container_2, 23, 1, 0);
     object = item_add_to_container(player_entity, 23, 0, 0);
     inv_create_wagon();
     item_add_random_to_container(inventory_containers[0], 2);
@@ -276,26 +276,26 @@ void kludge_make_test_character(int full)
     item_add_to_container(inventory_containers[0], 3, 1, 0);
     item_add_to_container(inventory_containers[0], 3, 17, 0);
     item_add_to_container(inventory_containers[0], 2, 5, 0);
-    item_add_random_to_container(D_001959E0, *(int *)clothing_gender_group);
+    item_add_random_to_container(inventory_container_2, *(int *)clothing_gender_group);
     inv_add_arrows(player_entity, 250);
-    kludge_add_random_item(D_001959DC, 4);
-    kludge_add_random_item(D_001959DC, 4);
-    kludge_add_random_item(D_001959E4, 20);
-    kludge_add_random_item(D_001959E4, 20);
-    kludge_add_random_item(D_001959E4, 17);
-    item_add_to_container(D_001959E4, 21, 4, 0);
-    item_add_to_container(D_001959E4, 17, 1, 0);
-    item_add_to_container(D_001959E0, 25, 2, 0);
-    item_add_to_container(D_001959E0, 27, 4, 0);
-    item_add_to_container(D_001959DC, 27, 0, 0);
-    item_add_to_container(D_001959E0, 27, 1, 0);
-    item_add_to_container(D_001959E0, 27, 2, 0);
-    item_add_to_container(D_001959E0, 7, 0, 0);
-    item_add_to_container(D_001959E0, 7, 0, 0);
-    item_add_to_container(D_001959E0, 7, 0, 0);
-    item_add_to_container(D_001959E0, 7, 0, 0);
-    item_add_to_container(D_001959E0, 7, 0, 0);
-    item_add_to_container(D_001959E0, 13, 0, 0);
+    kludge_add_random_item(inventory_container_1, 4);
+    kludge_add_random_item(inventory_container_1, 4);
+    kludge_add_random_item(inventory_container_3, 20);
+    kludge_add_random_item(inventory_container_3, 20);
+    kludge_add_random_item(inventory_container_3, 17);
+    item_add_to_container(inventory_container_3, 21, 4, 0);
+    item_add_to_container(inventory_container_3, 17, 1, 0);
+    item_add_to_container(inventory_container_2, 25, 2, 0);
+    item_add_to_container(inventory_container_2, 27, 4, 0);
+    item_add_to_container(inventory_container_1, 27, 0, 0);
+    item_add_to_container(inventory_container_2, 27, 1, 0);
+    item_add_to_container(inventory_container_2, 27, 2, 0);
+    item_add_to_container(inventory_container_2, 7, 0, 0);
+    item_add_to_container(inventory_container_2, 7, 0, 0);
+    item_add_to_container(inventory_container_2, 7, 0, 0);
+    item_add_to_container(inventory_container_2, 7, 0, 0);
+    item_add_to_container(inventory_container_2, 7, 0, 0);
+    item_add_to_container(inventory_container_2, 13, 0, 0);
     object = object_find_item(player_entity->children, 27, 1);
     object = object_create_child(object, 0, 0);
     object->type = 20;
@@ -313,23 +313,23 @@ void kludge_make_test_character(int full)
     object = object_create_child(object, 0, 109);
     object->type = 31;
     mc_memcpy(&object->data.potion_recipe, potion_recipes, 109, str_kludge_c, 289, 4);
-    object = object_create_child(D_001959DC, 0, 107);
+    object = object_create_child(inventory_container_1, 0, 107);
     object->type = 2;
     item = &object->data.item;
     item_make_artifact(item, 7);
-    object = object_create_child(D_001959DC, 0, 107);
+    object = object_create_child(inventory_container_1, 0, 107);
     object->type = 2;
     item = &object->data.item;
     item_make_artifact(item, 8);
-    object = object_create_child(D_001959DC, 0, 107);
+    object = object_create_child(inventory_container_1, 0, 107);
     object->type = 2;
     item = &object->data.item;
     item_make_artifact(item, 2);
-    object = object_create_child(D_001959DC, 0, 107);
+    object = object_create_child(inventory_container_1, 0, 107);
     object->type = 2;
     item = &object->data.item;
     item_make_artifact(item, 10);
-    object = object_create_child(D_001959DC, 0, 107);
+    object = object_create_child(inventory_container_1, 0, 107);
     object->type = 2;
     item = &object->data.item;
     item_make_artifact(item, (int)(unsigned char)cfg_artifact);
@@ -351,23 +351,23 @@ void starting_equipment_give(void)
         *(int *)clothing_gender_group = 6;
     }
     if (((int)(unsigned short)(player_character->flags & 1)) != 0) {
-        item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 8, 1);
+        item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 8, 1);
     } else {
-        item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 10, 1);
+        item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 10, 1);
     }
-    item_add_to_container(D_001959E0, *(int *)clothing_gender_group, 24, 1);
-    if (((int)(unsigned char)D_0017BABC[D_00199634 * 2]) != 255 && ((int)(unsigned char)D_0017BABC[D_00199634 * 2]) != 254) {
-        forced_material = D_0017BABD[D_00199634 * 2] + 1;
-        weapon = item_add_to_container(inventory_containers[0], 3, (int)(unsigned char)D_0017BABC[D_00199634 * 2], 0);
+    item_add_to_container(inventory_container_2, *(int *)clothing_gender_group, 24, 1);
+    if (((int)(unsigned char)starting_weapons[chosen_class * 2]) != 255 && ((int)(unsigned char)starting_weapons[chosen_class * 2]) != 254) {
+        forced_material = starting_weapon_materials[chosen_class * 2] + 1;
+        weapon = item_add_to_container(inventory_containers[0], 3, (int)(unsigned char)starting_weapons[chosen_class * 2], 0);
         weapon->data.item.color = weapon->data.item.material + 16;
         weapon->data.item.value = 15;
-    } else if (((int)(unsigned char)D_0017BABC[D_00199634 * 2]) == 254) {
+    } else if (((int)(unsigned char)starting_weapons[chosen_class * 2]) == 254) {
         weapon = item_add_to_container(inventory_containers[0], 3, 17, 0);
         forced_material = 1;
         weapon = item_add_to_container(inventory_containers[0], 3, 14, 0);
         inv_add_arrows(player_entity, 24);
     }
-    item_add_to_container(D_001959DC, 27, 0, 0);
+    item_add_to_container(inventory_container_1, 27, 0, 0);
     starting_spells_give(object_find_item(player_entity->children, 27, 0));
     player_refresh_paperdoll();
     player_view_flags &= 247;
@@ -495,7 +495,7 @@ int class_has_magic_skill(struct career *career)
 
     for (i = 0; i < 12; i++) {
         for (j = 0; j < 6; j++) {
-            if ((signed char)career->skills[i] == D_0017BB39[j]) return 1;
+            if ((signed char)career->skills[i] == magic_skills[j]) return 1;
         }
     }
     return 0;
@@ -533,19 +533,19 @@ void starting_spells_give(struct record *spellbook)
     struct record *spell;
 
     i = 0;
-    if (D_00199634 > 6 && D_00199634 != 18) return;
-    if (D_00199634 == 18 && class_has_magic_skill(player_class) == 0) return;
-    if (D_00199634 == 18) {
+    if (chosen_class > 6 && chosen_class != 18) return;
+    if (chosen_class == 18 && class_has_magic_skill(player_class) == 0) return;
+    if (chosen_class == 18) {
         class_id = 1;
     } else {
-        class_id = D_00199634;
+        class_id = chosen_class;
     }
-    while (((int)(unsigned char)D_0017BB3F[(class_id * 6) + i]) != 255) {
+    while (((int)(unsigned char)starting_spells[(class_id * 6) + i]) != 255) {
         spell = object_create_child(spellbook, 0, 89);
         spell->type = 9;
         spell->id = object_new_id(100);
         record_index = 0;
-        while ((signed char)spell_records[record_index].id != D_0017BB3F[(class_id * 6) + i]) {
+        while ((signed char)spell_records[record_index].id != starting_spells[(class_id * 6) + i]) {
             record_index++;
         }
         mc_memcpy(&spell->data.spell, &spell_records[record_index], 89, str_kludge_c, 582, 4);
@@ -560,15 +560,15 @@ void kludge_find_door_cb(struct record *object)
     if (object->type != 32) return;
     if (object->y < (-1300) || object->y > (-1200)) return;
     distance = xn_math_approx_dist2d(object->x, object->z, location_object->x + 664, location_object->z + 2035);
-    if (distance >= D_00199718) return;
-    D_00199714 = object;
-    D_00199718 = distance;
+    if (distance >= kludge_door_distance) return;
+    kludge_found_door = object;
+    kludge_door_distance = distance;
 }
 
 struct record *kludge_find_door(void)
 {
-    D_00199718 = 50000;
-    D_00199714 = 0;
+    kludge_door_distance = 50000;
+    kludge_found_door = 0;
     object_foreach(location_object, kludge_find_door_cb);
-    return D_00199714;
+    return kludge_found_door;
 }

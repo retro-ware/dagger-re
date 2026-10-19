@@ -3,14 +3,14 @@
 extern int xn_world_slot_cells[];
 extern char *xn_world_height_layer;
 extern char *xn_world_flat_layer;
-extern int D_00187F30[];
+extern int terrain_cell_offsets[];
 extern signed char text_rsc_buffer[];
 extern struct record *player_object;
 extern char world_loading;
 extern struct map_location *location_here;
 extern int terrain_cell_ids[];
 extern int terrain_cell_dirty[];
-extern int D_001A94C0;
+extern int terrain_cell_slot;
 extern void parse_rsc_text(int, int, int);
 extern iptr hud_message_add(char *);
 extern struct map_location *region_find_location(int);
@@ -27,12 +27,12 @@ void terrain_update_cells(void)
 
     player_cell = xn_world_cell_at(player_object->x, player_object->z);
     saved_location = location_here;
-    D_001A94C0 = 4;
+    terrain_cell_slot = 4;
     for (i = 0; i < 4; i++) {
         if (terrain_cell_ids[i] != xn_world_slot_cells[i]) {
             terrain_cell_ids[i] = xn_world_slot_cells[i];
             terrain_cell_dirty[i] = 1;
-            D_001A94C0 = i;
+            terrain_cell_slot = i;
             if ((location_here = region_find_location(terrain_cell_ids[i])) != 0) {
                 if (world_loading == 0 && player_cell == terrain_cell_ids[i]) {
                     switch ((location_here->x_type_flags << 2) >> 27) {
@@ -44,7 +44,7 @@ void terrain_update_cells(void)
                         hud_message_add(((char *)text_rsc_buffer));
                     }
                 }
-                location_flatten_terrain(xn_world_height_layer + D_00187F30[D_001A94C0], xn_world_flat_layer + D_00187F30[D_001A94C0]);
+                location_flatten_terrain(xn_world_height_layer + terrain_cell_offsets[terrain_cell_slot], xn_world_flat_layer + terrain_cell_offsets[terrain_cell_slot]);
                 xn_world_mark_nonplanar_quads();
             }
             xn_world_place_nature_flats(i);

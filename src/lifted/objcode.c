@@ -28,7 +28,7 @@ extern int scratch_190cac;
 extern signed char scratch_190ce4[];
 extern signed char scratch_190ce5;
 extern signed char scratch_190ce7;
-extern signed char D_001940D5;
+extern signed char ui_mode_flags;
 extern struct record *location_grid[];
 extern struct record *player_object;
 extern struct record *location_object;
@@ -282,7 +282,7 @@ int player_to_nearest_marker(struct record *root, int kind)
         player_object->x = D_00195F71;
         player_object->y = D_00195F75;
         player_object->z = D_00195F79;
-        D_001940D5 |= 2;
+        ui_mode_flags |= 2;
         return 1;
     }
     return 0;
@@ -297,7 +297,7 @@ int player_to_random_marker(struct record *root, int kind)
         player_object->x = D_00195F71;
         player_object->y = D_00195F75;
         player_object->z = D_00195F79;
-        D_001940D5 |= 2;
+        ui_mode_flags |= 2;
         return 1;
     }
     return 0;

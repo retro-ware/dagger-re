@@ -3,8 +3,8 @@
 struct bits { unsigned char b0:1; unsigned char b1:1; unsigned char b2:1; };
 extern short mouse_x;
 extern short mouse_y;
-extern struct bits D_001940D4;
-extern struct bits D_001940D5;
+extern struct bits game_state_flags;
+extern struct bits ui_mode_flags;
 extern unsigned char mouse_control_mode;
 extern char view_cursor_active;
 extern char screen_active;
@@ -18,8 +18,8 @@ void cursor_draw(short region)
     int unused1, unused2, unused3, unused4, unused5;   /* unused, but they have slots */
     char unused6;
 
-    if (D_001940D5.b2) return;
-    if (screen_active || D_001940D4.b2) {
+    if (ui_mode_flags.b2) return;
+    if (screen_active || game_state_flags.b2) {
         cursor_draw_arrow();
         return;
     }

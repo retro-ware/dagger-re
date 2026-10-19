@@ -26,7 +26,7 @@ extern short chargen_selected_attribute;
 extern short D_00190DEA;
 extern short scratch_190dec;
 extern short D_00190DEE;
-extern unsigned char D_001940D5;
+extern unsigned char ui_mode_flags;
 extern void *D_00195B5C;
 extern void *D_00195B60;
 extern struct character *player_character;
@@ -114,7 +114,7 @@ int chargen_name_character(void)
     chargen_screen_loop(35, 39);
     FREE(window_image, 149);
     FREE(chargen_reflex_image, 150);
-    D_001940D5 |= 32;
+    ui_mode_flags |= 32;
     msgbox_update();
     chargen_screen = 255;
     mc_set_location(155, D_00176F41);

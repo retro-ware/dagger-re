@@ -33,10 +33,10 @@ extern signed char mouse_buttons_prev;
 extern int town_map_view_x;
 extern int town_map_view_y;
 extern int D_00196D90;
-extern int D_00196D94;
+extern int town_note_selected;
 extern int D_00196D98;
 extern struct image *D_00196D9C;
-extern iptr D_00196DA4;
+extern iptr town_map_pixels;
 extern void screenshot_poll(void);
 extern int automap_move_forward(int);
 extern int automap_move_back(int);
@@ -62,7 +62,7 @@ extern void func_000A134C(short, short, int);
 
 struct kb { unsigned char _:3; unsigned char f:1; };
 #define SCR (*(unsigned char **)&screen_buffer)
-#define MAP (*(unsigned char **)&D_00196DA4)
+#define MAP (*(unsigned char **)&town_map_pixels)
 #define VX (town_map_view_x)
 #define VY (town_map_view_y)
 
@@ -84,7 +84,7 @@ void town_map_open(void)
         return;
     }
     D_00196D98 = (D_00196D90 = 0);
-    D_00196D94 = 0;
+    town_note_selected = 0;
     scratch_190ce5 = 0;
     mc_memset(scratch_buffer, 0, 50000, str_automap_c, 624, 4);
     mc_set_location(625, str_automap_c);

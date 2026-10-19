@@ -81,8 +81,8 @@ extern char scratch_190be4[];
 extern int scratch_190bec;
 extern int automap_yaw;
 extern int macro_12f_value;
-extern int D_00190BFC;
-extern int D_00190C00;
+extern int automap_cam_x;
+extern int automap_cam_y;
 extern char career_bio_seed[];
 extern int scratch_190cac;
 extern int song_hero1_seed;
@@ -1651,12 +1651,12 @@ iptr macro_12f_number(void)
 
 iptr macro_36m_number(void)
 {
-    return (iptr)itoa(D_00190BFC, (char *)text_rsc_buffer, 10);
+    return (iptr)itoa(automap_cam_x, (char *)text_rsc_buffer, 10);
 }
 
 iptr macro_36f_number(void)
 {
-    return (iptr)itoa(D_00190C00, (char *)text_rsc_buffer, 10);
+    return (iptr)itoa(automap_cam_y, (char *)text_rsc_buffer, 10);
 }
 
 iptr macro_1hn_hero1_name(void)
